@@ -18,6 +18,17 @@ export default [
     },
     rules: {
       semi: ['warn', 'always'],
+      'no-duplicate-imports': 'error',
+      'react/jsx-tag-spacing': ['error', { beforeSelfClosing: 'always' }],
+      'react/jsx-fragments': ['error', 'element'],
+      'react/self-closing-comp': 'error',
+      'react/no-array-index-key': 'error',
+      'react/no-unused-state': 'error',
+      'react/no-unused-prop-types': 'error',
+      'react/no-unused-vars': 'error',
+      'react/no-unused-imports': 'error',
+      'react/no-unused-components': 'error',
+      'react/no-unused-state': 'error',
     },
   },
   {
