@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react'; // Importing eslint-plugin-react
+import prettier from 'eslint-plugin-prettier'; // Importing eslint-plugin-prettier
 
 export default [
   {
@@ -58,9 +59,12 @@ export default [
     },
   },
   {
-    // Prettier configuration (you can add it here)
+    // Prettier configuration
+    plugins: {
+      prettier, // Adding Prettier plugin
+    },
     rules: {
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'error', // Using the prettier/prettier rule
     },
   },
 ];
