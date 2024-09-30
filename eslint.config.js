@@ -4,8 +4,8 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import react from 'eslint-plugin-react'; // Importing eslint-plugin-react
-import prettier from 'eslint-plugin-prettier'; // Importing eslint-plugin-prettier
+import react from 'eslint-plugin-react';
+import prettier from 'eslint-plugin-prettier';
 
 export default [
   {
