@@ -6,6 +6,7 @@ import LoginModal from '../modals/home-screen-modals/LoginModal';
 
 const MenuBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState<any>(null); // Store the logged-in user
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -14,6 +15,13 @@ const MenuBar = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  // Function to handle the login success and update the user info
+  const handleLoginSuccess = (user: any) => {
+    setLoggedInUser(user); // Set the user data after successful login
+  };
+
+  console.log(loggedInUser, 'llll');
 
   return (
     <>
@@ -24,20 +32,32 @@ const MenuBar = () => {
             <option value="hindi">Hindi</option>
           </select>
         </div>
+
         <div id="menu" className="ms-auto">
           <div className="flex gap-3">
             <img src={homeLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
             <img src={notificationLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
-            <div className="flex gap-2">
-              <button className="bg-white p-2 rounded hover:bg-orange-500 hover:text-white" onClick={openModal}>
-                Login
-              </button>
-              <button className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black">Sign up</button>
-            </div>
+
+            {loggedInUser ? (
+              <div className="flex items-center gap-2">
+                <img src={loggedInUser.photoURL} alt="Profile" className="w-8 h-8 rounded-full" />
+                <span>Hi, {loggedInUser.displayName}</span>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <button className="bg-white p-2 rounded hover:bg-orange-500 hover:text-white" onClick={openModal}>
+                  Login
+                </button>
+                <button className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black">
+                  Sign up
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <LoginModal isOpen={isModalOpen} onClose={closeModal} />
+
+      <LoginModal isOpen={isModalOpen} onClose={closeModal} onLoginSuccess={handleLoginSuccess} />
     </>
   );
 };
