@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
-    "test": "npm test",
+    "test": "jest",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky install"
