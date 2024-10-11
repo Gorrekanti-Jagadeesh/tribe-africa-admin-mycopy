@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Dropdown from '../../../atoms/dropdown/dropdownSearch';
+import Dropdown from '../../../atoms/dropdown/DropdownSearch';
 
 // Demo data: countries and purpose
 interface Option {
@@ -48,7 +48,7 @@ const Toggle: React.FC = () => {
   const [purpose, setPurpose] = useState<string | null>(null);
 
   return (
-    <div className="text-center relative">
+    <div className="text-center relative p-2">
       <div className="flex gap-2 bg-white p-2 m-auto rounded-xl shadow-lg" style={{ width: 'fit-content' }}>
         <div className="flex gap-2">
           <Dropdown text="Where to?" options={Countries} searchable={true} action={setCountry} />
@@ -94,7 +94,7 @@ const Logo: React.FC = () => {
 
 const HeroSection = () => {
   return (
-    <div>
+    <div className=" m-auto max-w-6xl">
       <Toggle />
       <Logo />
     </div>

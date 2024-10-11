@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import spiralBackground from '../../assets/spiral-background-dark.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
@@ -11,7 +11,7 @@ const Footer = () => {
       className="bg-black text-white py-8 text-center md:text-left"
       style={{ backgroundImage: `url(${spiralBackground})` }}
     >
-      <div className="container mx-auto p-2 md:p-8 lg:p-12 text-slate-300">
+      <div className="container mx-auto p-2 md:p-4 text-slate-300 m-auto max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-8">
           <div className="col-span-1 grid gap-2">
             <div id="about">
@@ -82,7 +82,7 @@ const Footer = () => {
               <form>
                 <input
                   type="email"
-                  className="border border-gray-700 bg-gray-600 rounded-full px-4 py-2 text-white outline-none"
+                  className="border border-gray-700 bg-transparent rounded-full px-4 py-2 text-white outline-none"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +96,7 @@ const Footer = () => {
         </div>
 
         {/* Social media links */}
-        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t-2 border-s-2 border-b-2 border-orange-500 ps-4 py-12 rounded-s-xl">
+        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
           <a
             href="https://facebook.com"
             target="_blank"

@@ -5,7 +5,7 @@ import Footer from '../../molecules/footer/Footer';
 import HeroSection from './hero-section/HeroScreen';
 import Explore from './explore-section/ExploreScreen';
 import Experience from './experience-section/ExperienceScreen';
-import Services from './experience-section/services-section/ServicesScreen';
+import Services from './services-section/ServicesScreen';
 
 const HomeScreen: React.FC = () => {
   return (

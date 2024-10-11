@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import africaLogo from '../../assets/logo.png';
 import homeLogo from '../../assets/home.png';
 import notificationLogo from '../../assets/notification.png';
@@ -32,8 +32,14 @@ interface HoverNavLinkProps {
 }
 
 const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title }) => {
+  const [hover, setHover] = useState(false);
   return (
-    <div id={id} className="m-auto cursor-pointer group">
+    <div
+      id={id}
+      className="m-auto cursor-pointer group py-4 px-2"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <span className="flex">
         {title}
         <svg
@@ -46,10 +52,12 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title }) => {
           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
         </svg>
       </span>
-      <div className="absolute left-0 p-2 mt-1 bg-white border border-gray-200 rounded invisible group-hover:visible transition-opacity">
-        This is the hidden content that appears on hover. This is the hidden content that appears on hover. This is the
-        hidden content that appears on hover. This is the hidden content that appears on hover. This is the hidden
-        content that appears on hover. This is the hidden content that appears on hover.
+      <div
+        className={`absolute left-0 p-2 mt-1  max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
+      >
+        This is the hidden {title} content that appears on hover. This is the hidden content that appears on hover. This
+        is the hidden content that appears on hover. This is the hidden content that appears on hover. This is the
+        hidden content that appears on hover. This is the hidden content that appears on hover.
       </div>
     </div>
   );
@@ -57,7 +65,7 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title }) => {
 
 const Navbar = () => {
   return (
-    <div className="grid gap-2 m-2">
+    <div className="grid gap-2 p-2 m-auto max-w-6xl">
       <div>
         <MenuBar />
       </div>

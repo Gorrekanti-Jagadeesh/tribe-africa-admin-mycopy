@@ -1,8 +1,8 @@
-import welcomeImage2 from '../../../../assets/homepage-welcome-image-2.png';
+import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
 
 const Services: React.FC = () => {
   return (
-    <div className="mx-4 my-12 grid gap-2">
+    <div className="my-12 p-2 grid gap-2 m-auto max-w-6xl">
       <h3 className="text-4xl">
         Premier <span className="font-serif text-orange-500">Services</span>
       </h3>
