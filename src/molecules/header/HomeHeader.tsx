@@ -3,22 +3,27 @@ import africaLogo from '../../assets/logo.png';
 import homeLogo from '../../assets/home.png';
 import notificationLogo from '../../assets/notification.png';
 import LoginModal from '../modals/home-screen-modals/LoginModal';
+import ProfileModal from '../modals/home-screen-modals/ProfileModal';
 
 const MenuBar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModal, setIsLoginModal] = useState(false);
+  const [isProfileModal, setIsProfileModal] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<any>(null); // Store the logged-in user
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const toggleLoginModal = () => {
+    setIsLoginModal(!isLoginModal);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const toggleProfileModal = () => {
+    setIsProfileModal(!isProfileModal);
   };
-
   // Function to handle the login success and update the user info
   const handleLoginSuccess = (user: any) => {
     setLoggedInUser(user); // Set the user data after successful login
+  };
+
+  const handleLogoutSuccess = () => {
+    setLoggedInUser(null);
   };
 
   console.log(loggedInUser, 'llll');
@@ -39,13 +44,16 @@ const MenuBar = () => {
             <img src={notificationLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
 
             {loggedInUser ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" onClick={toggleProfileModal}>
                 <img src={loggedInUser.photoURL} alt="Profile" className="w-8 h-8 rounded-full" />
                 <span>Hi, {loggedInUser.displayName}</span>
               </div>
             ) : (
               <div className="flex gap-2">
-                <button className="bg-white p-2 rounded hover:bg-orange-500 hover:text-white" onClick={openModal}>
+                <button
+                  className="bg-white p-2 rounded hover:bg-orange-500 hover:text-white"
+                  onClick={toggleLoginModal}
+                >
                   Login
                 </button>
                 <button className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black">
@@ -57,7 +65,8 @@ const MenuBar = () => {
         </div>
       </div>
 
-      <LoginModal isOpen={isModalOpen} onClose={closeModal} onLoginSuccess={handleLoginSuccess} />
+      <LoginModal isOpen={isLoginModal} onClose={toggleLoginModal} onLoginSuccess={handleLoginSuccess} />
+      <ProfileModal isOpen={isProfileModal} onClose={toggleProfileModal} onLogout={handleLogoutSuccess} />
     </>
   );
 };
