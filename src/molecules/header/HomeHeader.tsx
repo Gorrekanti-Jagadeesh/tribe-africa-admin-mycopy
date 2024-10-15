@@ -7,12 +7,15 @@ import ProfileModal from '../modals/home-page-modals/ProfileModal';
 import Cookies from 'js-cookie';
 
 export const MenuBar = () => {
-  const userCookie = Cookies.get('user');
-  const user: any = userCookie ? JSON.parse(userCookie) : null;
+  const googleUserCookie = Cookies.get('googleUser');
+  const [googleUser, setGoogleUser] = useState(googleUserCookie ? JSON.parse(googleUserCookie) : null);
+
+  const emailUserCookie = Cookies.get('emailUser');
+  const [emailUser, setEmailUser] = useState(emailUserCookie ? JSON.parse(emailUserCookie) : null);
 
   const [isLoginModal, setIsLoginModal] = useState(false);
   const [isProfileModal, setIsProfileModal] = useState(false);
-  const [isLogin, setIsLogin] = useState(user);
+  const [isLogin, setIsLogin] = useState(googleUser || emailUser);
 
   const toggleLoginModal = () => {
     setIsLoginModal(!isLoginModal);
@@ -22,13 +25,23 @@ export const MenuBar = () => {
     setIsProfileModal(!isProfileModal);
   };
 
-  const handleLoginSuccess = (user: any) => {
-    Cookies.set('user', JSON.stringify(user), { expires: 7 }); // Store user object instead of just access token
+  const handleGoogleLoginSuccess = (user: any) => {
+    Cookies.set('googleUser', JSON.stringify(user), { expires: 7 }); // Store user object instead of just access token
+    setGoogleUser(user);
+    setIsLogin(true);
+  };
+
+  const handleEmailLoginSuccess = (user: any) => {
+    Cookies.set('emailUser', JSON.stringify(user), { expires: 7 });
+    setEmailUser(user);
     setIsLogin(true);
   };
 
   const handleLogoutSuccess = () => {
-    Cookies.remove('user');
+    Cookies.remove('emailUser');
+    Cookies.remove('googleUser');
+    setGoogleUser(false);
+    setEmailUser(false);
     setIsLogin(false);
   };
 
@@ -50,10 +63,33 @@ export const MenuBar = () => {
             <img src={notificationLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
 
             {isLogin ? (
-              <div className="flex items-center gap-2" onClick={toggleProfileModal}>
-                <img src={user.photoURL || ''} alt="Profile" className="w-8 h-8 rounded-full" />
-                <span>Hi, {user.displayName || 'Guest'}</span>
-              </div>
+              googleUser ? (
+                <div className="flex items-center gap-2" onClick={toggleProfileModal}>
+                  <img
+                    src={
+                      googleUser?.photoURL
+                        ? googleUser.photoURL
+                        : 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg'
+                    }
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span>Hi, {googleUser.displayName}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2" onClick={toggleProfileModal}>
+                  <img
+                    src={
+                      emailUser?.photoURL
+                        ? emailUser?.photoURL
+                        : 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg'
+                    }
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span>Hi, {emailUser.displayName}</span>
+                </div>
+              )
             ) : (
               <div className="flex gap-2">
                 <button
@@ -71,7 +107,12 @@ export const MenuBar = () => {
         </div>
       </div>
 
-      <LoginModal isOpen={isLoginModal} onClose={toggleLoginModal} onLoginSuccess={handleLoginSuccess} />
+      <LoginModal
+        isOpen={isLoginModal}
+        onClose={toggleLoginModal}
+        onGoogleLoginSuccess={handleGoogleLoginSuccess}
+        onEmailLoginSuccess={handleEmailLoginSuccess}
+      />
       <ProfileModal isOpen={isProfileModal} onClose={toggleProfileModal} onLogout={handleLogoutSuccess} />
     </>
   );
