@@ -1,5 +1,5 @@
 import React from 'react';
-import ModalContainer from '../../../atoms/modal/BrandingModal';
+import BrandingModal from '../../../atoms/modal/BrandingModal';
 import axios from 'axios';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
@@ -108,7 +108,7 @@ const Hotel = ({ data }: { data: ContentfulEntry }) => {
 
   if (!hotelData) return <div>Loading hotel data...</div>;
 
-  return <ModalContainer trigger={<HotelCard data={hotelData} />} modalContent={<HotelView data={hotelData} />} />;
+  return <BrandingModal trigger={<HotelCard data={hotelData} />} modalContent={<HotelView data={hotelData} />} />;
 };
 
 // Rectified types for HotelCard and HotelView

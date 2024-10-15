@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-// Define the props type for the ModalContainer
+// Define the props type for the BrandingModal
 interface ModalContainerProps {
   trigger: React.ReactNode;
   modalContent: React.ReactNode;
 }
 
-const ModalContainer: React.FC<ModalContainerProps> = ({ trigger, modalContent }) => {
+const BrandingModal: React.FC<ModalContainerProps> = ({ trigger, modalContent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -64,4 +64,4 @@ const ModalContainer: React.FC<ModalContainerProps> = ({ trigger, modalContent }
   );
 };
 
-export default ModalContainer;
+export default BrandingModal;
