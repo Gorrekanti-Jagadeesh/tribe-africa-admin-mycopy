@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 
-const ModalContainer: React.FC = ({ Trigger, ModalContent }) => {
+const ModalContainer: React.FC = ({ trigger, modalContent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative z-10">
+    <div className="relative">
       {/* Trigger Button */}
-      <div onClick={() => setIsOpen(true)} className="cursor-pointer inline-block">
-        {Trigger}
+      <div onClick={() => setIsOpen(true)} className="cursor-pointer inline-block z-0">
+        {trigger}
       </div>
 
       {/* Modal Background Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity" onClick={() => setIsOpen(false)}>
+        <div
+          className="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity z-50"
+          onClick={() => setIsOpen(false)}
+        >
           {/* Modal Container */}
           <div className="fixed inset-0 flex items-center justify-center p-4">
             <div
-              className="grid bg-gray-900 text-white rounded-md shadow-lg border-2 border-orange-500 relative w-full max-w-4xl h-full overflow-hidden"
+              className="grid bg-gray-900 text-white rounded-md shadow-lg border-2 border-orange-500 relative w-full max-w-5xl h-full overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal elements */}
@@ -45,7 +48,7 @@ const ModalContainer: React.FC = ({ Trigger, ModalContent }) => {
 
               {/* Modal content */}
               <div className="absolute overflow-auto h-full w-full flex">
-                <span className="m-auto w-full">{ModalContent}</span>
+                <span className="m-auto w-full">{modalContent}</span>
               </div>
             </div>
           </div>

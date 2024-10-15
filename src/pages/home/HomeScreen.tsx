@@ -6,6 +6,7 @@ import HeroSection from './hero-section/HeroScreen';
 import Explore from './explore-section/ExploreScreen';
 import Experience from './experience-section/ExperienceScreen';
 import Services from './services-section/ServicesScreen';
+import CharmingHotels from './hotels-section/HotelsScreen';
 
 const HomeScreen: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const HomeScreen: React.FC = () => {
       <div>
         <HeroSection />
         <Explore />
+        <CharmingHotels />
         <Experience />
         <Services />
       </div>
