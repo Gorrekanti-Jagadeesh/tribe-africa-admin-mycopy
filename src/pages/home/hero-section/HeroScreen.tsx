@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Dropdown from '../../../atoms/dropdown/dropdownSearch';
+import Dropdown from '../../../atoms/dropdown/DropdownSearch';
 
 // Demo data: countries and purpose
 interface Option {

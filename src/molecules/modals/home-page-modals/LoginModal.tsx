@@ -15,12 +15,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess
     try {
       // Pass the user info to the parent component
 
-      const user = await signInWithGoogle();
-      onLoginSuccess(user);
-      console.log(user);
-
-      // Close the modal after successful login
-      onClose();
+      const user = await signInWithGoogle(); // Assume this returns the user data
+      console.log(user, 'uer afger login');
+      if (user) {
+        onLoginSuccess(user);
+        onClose(); // Close the modal after successful login
+      }
     } catch (error) {
       console.error('Error during Google sign-in:', error);
     }

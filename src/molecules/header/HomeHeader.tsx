@@ -2,13 +2,17 @@ import { useState } from 'react';
 import africaLogo from '../../assets/logo.png';
 import homeLogo from '../../assets/home.png';
 import notificationLogo from '../../assets/notification.png';
-import LoginModal from '../modals/home-screen-modals/LoginModal';
-import ProfileModal from '../modals/home-screen-modals/ProfileModal';
+import LoginModal from '../modals/home-page-modals/LoginModal';
+import ProfileModal from '../modals/home-page-modals/ProfileModal';
+import Cookies from 'js-cookie';
 
-const MenuBar = () => {
+export const MenuBar = () => {
+  const userCookie = Cookies.get('user');
+  const user: any = userCookie ? JSON.parse(userCookie) : null;
+
   const [isLoginModal, setIsLoginModal] = useState(false);
   const [isProfileModal, setIsProfileModal] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState<any>(null); // Store the logged-in user
+  const [isLogin, setIsLogin] = useState(user);
 
   const toggleLoginModal = () => {
     setIsLoginModal(!isLoginModal);
@@ -17,16 +21,16 @@ const MenuBar = () => {
   const toggleProfileModal = () => {
     setIsProfileModal(!isProfileModal);
   };
-  // Function to handle the login success and update the user info
+
   const handleLoginSuccess = (user: any) => {
-    setLoggedInUser(user); // Set the user data after successful login
+    Cookies.set('user', JSON.stringify(user), { expires: 7 }); // Store user object instead of just access token
+    setIsLogin(true);
   };
 
   const handleLogoutSuccess = () => {
-    setLoggedInUser(null);
+    Cookies.remove('user');
+    setIsLogin(false);
   };
-
-  console.log(loggedInUser, 'llll');
 
   return (
     <>
@@ -35,6 +39,8 @@ const MenuBar = () => {
           <select name="language" id="language">
             <option value="english">English</option>
             <option value="hindi">Hindi</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
           </select>
         </div>
 
@@ -43,10 +49,10 @@ const MenuBar = () => {
             <img src={homeLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
             <img src={notificationLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
 
-            {loggedInUser ? (
+            {isLogin ? (
               <div className="flex items-center gap-2" onClick={toggleProfileModal}>
-                <img src={loggedInUser.photoURL} alt="Profile" className="w-8 h-8 rounded-full" />
-                <span>Hi, {loggedInUser.displayName}</span>
+                <img src={user.photoURL || ''} alt="Profile" className="w-8 h-8 rounded-full" />
+                <span>Hi, {user.displayName || 'Guest'}</span>
               </div>
             ) : (
               <div className="flex gap-2">

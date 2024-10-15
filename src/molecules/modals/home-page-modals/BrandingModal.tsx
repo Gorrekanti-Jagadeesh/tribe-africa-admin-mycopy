@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
-const ModalContainer: React.FC = ({ Trigger, ModalContent }) => {
+interface BrandingModalProps {
+  Trigger: any;
+  ModalContent: any;
+}
+
+const BrandingModal: React.FC<BrandingModalProps> = ({ Trigger, ModalContent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -55,4 +60,4 @@ const ModalContainer: React.FC = ({ Trigger, ModalContent }) => {
   );
 };
 
-export default ModalContainer;
+export default BrandingModal;
