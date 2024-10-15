@@ -79,6 +79,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginS
             </span>
           </p>
         </div>
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-t border-gray-300" />
+          <span className="mx-4 text-gray-500">Or</span>
+          <hr className="flex-grow border-t border-gray-300" />
+        </div>
         <div className="mt-4">
           <button className="bg-red-500 text-white p-2 rounded mb-2 w-full" onClick={handleGoogleLogin}>
             Continue with Google
@@ -87,44 +92,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginS
         <button className="mt-4 bg-gray-300 text-black p-2 rounded w-full" onClick={onClose}>
           Close
         </button>
-        {isSignupModalOpen && <SignupModal onClose={toggleSignupModal} />} {/* Render signup modal if open */}
+        {isSignupModalOpen && <SignupModal onClose={toggleSignupModal} />}
       </div>
     </div>
   );
 };
 
-// Add your SignupModal component here, which should have the form for signup
-
 export default LoginModal;
-
-// const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
-//   if (!isOpen) return null;
-
-//   // Function to handle Google Sign-In
-
-//   const handleEmailLogin = async () => {
-//     try {
-//     } catch (error) {
-//       console.error('Error during Google sign-in:', error);
-//     }
-//   };
-
-//   return (
-//     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
-//       <div className="bg-white p-5 rounded-lg shadow-lg w-80">
-//         <h2 className="text-xl font-semibold mb-4">Login</h2>
-//         <button className="bg-red-500 text-white p-2 rounded mb-4 w-full" onClick={handleGoogleLogin}>
-//           Login with Google
-//         </button>
-//         <button className="bg-blue-500 text-white p-2 rounded mb-4 w-full" onClick={handleEmailLogin}>
-//           Login with Email
-//         </button>
-//         <button className="mt-4 bg-gray-300 text-black p-2 rounded w-full" onClick={onClose}>
-//           Close
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LoginModal;

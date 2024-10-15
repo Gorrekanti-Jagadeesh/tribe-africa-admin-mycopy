@@ -5,6 +5,7 @@ import notificationLogo from '../../assets/notification.png';
 import LoginModal from '../modals/home-page-modals/LoginModal';
 import ProfileModal from '../modals/home-page-modals/ProfileModal';
 import Cookies from 'js-cookie';
+import SignupModal from '../modals/home-page-modals/SignupModal';
 
 export const MenuBar = () => {
   const googleUserCookie = Cookies.get('googleUser');
@@ -13,9 +14,10 @@ export const MenuBar = () => {
   const emailUserCookie = Cookies.get('emailUser');
   const [emailUser, setEmailUser] = useState(emailUserCookie ? JSON.parse(emailUserCookie) : null);
 
+  const [isLogin, setIsLogin] = useState(googleUser || emailUser);
   const [isLoginModal, setIsLoginModal] = useState(false);
   const [isProfileModal, setIsProfileModal] = useState(false);
-  const [isLogin, setIsLogin] = useState(googleUser || emailUser);
+  const [isSignupModal, setIsSignupModal] = useState(false);
 
   const toggleLoginModal = () => {
     setIsLoginModal(!isLoginModal);
@@ -23,6 +25,10 @@ export const MenuBar = () => {
 
   const toggleProfileModal = () => {
     setIsProfileModal(!isProfileModal);
+  };
+
+  const toggleSignupModal = () => {
+    setIsSignupModal(!isSignupModal);
   };
 
   const handleGoogleLoginSuccess = (user: any) => {
@@ -87,7 +93,7 @@ export const MenuBar = () => {
                     alt="Profile"
                     className="w-8 h-8 rounded-full"
                   />
-                  <span>Hi, {emailUser.displayName}</span>
+                  <span>Hi, User</span>
                 </div>
               )
             ) : (
@@ -98,7 +104,10 @@ export const MenuBar = () => {
                 >
                   Login
                 </button>
-                <button className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black">
+                <button
+                  className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black"
+                  onClick={toggleSignupModal}
+                >
                   Sign up
                 </button>
               </div>
@@ -114,6 +123,7 @@ export const MenuBar = () => {
         onEmailLoginSuccess={handleEmailLoginSuccess}
       />
       <ProfileModal isOpen={isProfileModal} onClose={toggleProfileModal} onLogout={handleLogoutSuccess} />
+      {isSignupModal && <SignupModal onClose={toggleSignupModal} />}
     </>
   );
 };
