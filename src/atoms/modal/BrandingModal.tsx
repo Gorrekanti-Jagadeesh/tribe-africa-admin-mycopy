@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 
-const ModalContainer: React.FC = ({ trigger, modalContent }) => {
+// Define the props type for the ModalContainer
+interface ModalContainerProps {
+  trigger: React.ReactNode;
+  modalContent: React.ReactNode;
+}
+
+const ModalContainer: React.FC<ModalContainerProps> = ({ trigger, modalContent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

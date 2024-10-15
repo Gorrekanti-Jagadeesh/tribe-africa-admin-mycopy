@@ -8,9 +8,34 @@ const queryClient = new QueryClient();
 const SPACE_ID = '4b35ixzkzcwg';
 const ACCESS_TOKEN = '0dMnG2k9dSYnFw9bLX52eWPj9opUAyyczsqzY_haxLs';
 
-// Fetch function to get data from Contentful
+// Define Contentful Entry and Asset types
+interface ContentfulSys {
+  id: string;
+}
 
-const fetchContentfulEntries = async () => {
+interface ContentfulAsset {
+  sys: ContentfulSys;
+}
+
+interface HotelFields {
+  hotelName: string;
+  country: string;
+  address: string;
+  phone: string;
+  hotelImages: ContentfulAsset[];
+}
+
+interface ContentfulEntry {
+  sys: ContentfulSys;
+  fields: HotelFields;
+}
+
+interface ContentfulResponse {
+  items: ContentfulEntry[];
+}
+
+// Fetch function to get data from Contentful
+const fetchContentfulEntries = async (): Promise<ContentfulResponse> => {
   try {
     const response = await axios.get(`https://cdn.contentful.com/spaces/${SPACE_ID}/entries`, {
       headers: {
@@ -25,7 +50,7 @@ const fetchContentfulEntries = async () => {
 };
 
 // Fetch function to get image URL from Contentful
-const fetchImage = async (imageId: string) => {
+const fetchImage = async (imageId: string): Promise<string> => {
   const response = await axios.get(
     `https://cdn.contentful.com/spaces/${SPACE_ID}/assets/${imageId}?access_token=${ACCESS_TOKEN}`
   );
@@ -41,30 +66,34 @@ function QueriedHotels() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (error) return <div>An error has occurred: {error.message}</div>;
+  if (error instanceof Error) return <div>An error has occurred: {error.message}</div>;
 
   return (
-    //TODO: Caroussel need to be applied for the container
+    // TODO: Carousel needs to be applied for the container
     <div className=" max-w-6xl m-auto ">
       <h3 className="text-4xl">
         Charming <span className="font-serif text-orange-500">Hotels</span>
       </h3>
       <div className="flex overflow-auto">
-        {data && data.items.map((item: any) => <Hotel key={item.sys.id} data={item} />)}
+        {data && data.items.map((item: ContentfulEntry) => <Hotel key={item.sys.id} data={item} />)}
       </div>
     </div>
   );
 }
 
 // Change to a React component and handle async image fetching
-const Hotel = ({ data }: { data: any }) => {
-  const [hotelData, setHotelData] = React.useState<any | null>(null);
+const Hotel = ({ data }: { data: ContentfulEntry }) => {
+  const [hotelData, setHotelData] = React.useState<{
+    name: string;
+    country: string;
+    address: string;
+    phone: string;
+    images: string[];
+  } | null>(null);
 
   React.useEffect(() => {
     const fetchHotelData = async () => {
-      const images = await Promise.all(
-        data.fields.hotelImages.map((image: { sys: { id: string } }) => fetchImage(image.sys.id))
-      );
+      const images = await Promise.all(data.fields.hotelImages.map((image) => fetchImage(image.sys.id)));
 
       setHotelData({
         name: data.fields.hotelName,
@@ -74,22 +103,16 @@ const Hotel = ({ data }: { data: any }) => {
         images,
       });
     };
-    console.log(data);
-
     fetchHotelData();
   }, [data]);
 
   if (!hotelData) return <div>Loading hotel data...</div>;
 
-  return (
-    // <div className="m-2">
-    <ModalContainer trigger={<HotelCard data={hotelData} />} modalContent={<HotelView data={hotelData} />} />
-    // </div>
-  );
+  return <ModalContainer trigger={<HotelCard data={hotelData} />} modalContent={<HotelView data={hotelData} />} />;
 };
 
-//TODO: Rectify the Styling for cards and the layout based on caroussel
-const HotelCard = ({ data }: { data: any }) => {
+// Rectified types for HotelCard and HotelView
+const HotelCard = ({ data }: { data: { name: string; images: string[] } }) => {
   return (
     <div id="hotels" className="m-2 z-0">
       <div className="w-fit inline-block">
@@ -106,7 +129,11 @@ const HotelCard = ({ data }: { data: any }) => {
   );
 };
 
-const HotelView = ({ data }: { data: any }) => {
+const HotelView = ({
+  data,
+}: {
+  data: { name: string; country: string; address: string; phone: string; images: string[] };
+}) => {
   return (
     <div id="hotel-view" className="grid justify-center md:flex gap-4 p-2 md:p-4">
       <div id="collage" className="flex md:grid gap-4 md:w-4/6 max-w-xl overflow-auto">
