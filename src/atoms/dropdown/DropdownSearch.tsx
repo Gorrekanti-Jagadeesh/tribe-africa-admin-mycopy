@@ -53,7 +53,7 @@ const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }
         {searchable && (
           <input
             type="text"
-            className="p-2 border border-gray-300 rounded-md w-full"
+            className="p-2 border border-gray-300 rounded-md w-full text-center"
             placeholder="Search..."
             value={searchTerm}
             onChange={handleSearchInputChange}

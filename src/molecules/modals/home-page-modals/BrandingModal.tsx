@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-// Define the props type for the BrandingModal
-interface ModalContainerProps {
+interface BrandingModalProps {
   trigger: React.ReactNode;
   modalContent: React.ReactNode;
 }
 
-const BrandingModal: React.FC<ModalContainerProps> = ({ trigger, modalContent }) => {
+const BrandingModal: React.FC<BrandingModalProps> = ({ trigger, modalContent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
