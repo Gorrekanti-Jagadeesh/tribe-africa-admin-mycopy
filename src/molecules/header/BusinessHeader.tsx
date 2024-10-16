@@ -23,7 +23,7 @@ export const HoverNavLink = ({ id, title }: { id: string; title: string }) => (
   </div>
 );
 
-export const HomeHeader = () => {
+export const BusinessHeader = () => {
   return (
     <div className="grid gap-2 m-2">
       <div>

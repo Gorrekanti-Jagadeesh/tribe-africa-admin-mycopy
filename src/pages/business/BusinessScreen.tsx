@@ -1,7 +1,12 @@
+import Footer from '../../molecules/footer/Footer';
+import { BusinessHeader } from '../../molecules/header/BusinessHeader';
+
 const BusinessScreen = () => {
   return (
     <div>
-      <h1>Thsi is business page</h1>
+      <BusinessHeader />
+      <div className="text-center bg-slate-200 m-6">Business Content</div>
+      <Footer />
     </div>
   );
 };
