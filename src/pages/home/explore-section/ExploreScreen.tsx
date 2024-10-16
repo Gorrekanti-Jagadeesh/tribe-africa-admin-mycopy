@@ -6,10 +6,10 @@ import welcomeImage3 from '../../../assets/homepage-welcome-image-3.png';
 const Explore: React.FC = () => {
   return (
     <div
-      className="relative bg-cover bg-center text-white p-2 md:p-4 "
+      className="relative bg-cover bg-center text-white p-2 md:p-4"
       style={{ backgroundImage: `url(${spiralBackground})` }}
     >
-      <span className="m-auto max-w-6xl grid md:flex gap-4 md:gap-8 lg:gap-28">
+      <span className="m-auto max-w-6xl grid md:flex gap-4 md:gap-8 lg:gap-28 animate-on-scroll">
         <div id="welcome-content" className="grid gap-8 p-4">
           <h4 className="text-4xl">
             Explore Africa For <br />

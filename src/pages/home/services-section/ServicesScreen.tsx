@@ -2,7 +2,7 @@ import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
 
 const Services: React.FC = () => {
   return (
-    <div className="my-12 p-2 grid gap-2 m-auto max-w-6xl">
+    <div className="my-12 p-2 grid gap-2 m-auto max-w-6xl animate-on-scroll">
       <h3 className="text-4xl">
         Premier <span className="font-serif text-orange-500">Services</span>
       </h3>

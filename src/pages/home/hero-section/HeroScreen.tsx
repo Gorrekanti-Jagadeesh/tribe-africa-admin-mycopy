@@ -48,7 +48,7 @@ const Toggle: React.FC = () => {
   const [purpose, setPurpose] = useState<string | null>(null);
 
   return (
-    <div className="text-center relative p-2">
+    <div className="text-center relative p-2 animate-on-scroll">
       <div className="flex gap-2 bg-white p-2 m-auto rounded-xl shadow-lg" style={{ width: 'fit-content' }}>
         <div className="flex gap-2">
           <Dropdown text="Where to?" options={Countries} searchable={true} action={setCountry} />
@@ -79,12 +79,11 @@ const Toggle: React.FC = () => {
 // Logo Component
 const Logo: React.FC = () => {
   return (
-    <div id="landing-logo" className="">
+    <div id="landing-logo" className=" animate-on-scroll">
       <img
-        className="m-auto"
+        className="m-auto w-100 p-4"
         role="presentation"
         loading="lazy"
-        style={{ width: '100%', maxWidth: '400px', maxHeight: '100%' }}
         src="https://firebasestorage.googleapis.com/v0/b/deep-byte-410311.appspot.com/o/tribe-africa-map.png?alt=media&amp;token=b982ee6d-a687-4467-b7e7-6f0fb22d4ede"
         sizes="(max-width: 638px) 89vw, (max-width: 998px) 39vw, 35vw"
       />

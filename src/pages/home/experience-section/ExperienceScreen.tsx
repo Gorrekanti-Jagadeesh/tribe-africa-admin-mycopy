@@ -14,7 +14,7 @@ const Experience: React.FC = () => {
   };
 
   return (
-    <div className="p-2 md:p-4 grid gap-6 my-8 m-auto max-w-6xl">
+    <div className="p-2 md:p-4 grid gap-6 my-8 m-auto max-w-6xl animate-on-scroll">
       <h3 className="text-4xl text-center">
         Get Ready for a <span className="font-serif text-orange-500">Life Changing Experience</span>
       </h3>
