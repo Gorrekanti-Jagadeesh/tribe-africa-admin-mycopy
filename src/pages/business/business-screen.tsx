@@ -1,5 +1,5 @@
-import Footer from '../../molecules/footer/Footer';
-import { BusinessHeader } from '../../molecules/header/BusinessHeader';
+import Footer from '../../molecules/footer/footer';
+import { BusinessHeader } from '../../molecules/header/business-header';
 
 const BusinessScreen = () => {
   return (

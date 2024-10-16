@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import spiralBackground from '../../assets/spiral-background-dark.png';
+import spiralBackground from '../../assets/branding-bg-dark.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 

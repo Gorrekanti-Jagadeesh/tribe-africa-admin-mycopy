@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MenuBar } from '../menu/MenuBar';
 import africaLogo from '../../assets/logo.png';
-import Discover from '../../pages/home/navbar-section/discover-section/DiscoverScreen';
+import Discover from '../../pages/home/navbar-section/discover-section/discover-screen';
 
 interface HoverNavLinkProps {
   id: string;

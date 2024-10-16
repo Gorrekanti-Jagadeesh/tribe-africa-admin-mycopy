@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Dropdown from '../../../atoms/dropdown/DropdownSearch';
+import Dropdown from '../../../atoms/dropdown/dropdown-search';
 import { useNavigate } from 'react-router';
 
 // Demo data: countries and purpose

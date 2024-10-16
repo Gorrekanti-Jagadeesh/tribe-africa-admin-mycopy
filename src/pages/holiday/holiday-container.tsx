@@ -1,4 +1,4 @@
-import HolidayScreen from './HolidayScreen';
+import HolidayScreen from './holiday-screen';
 
 const HolidayContainer = () => {
   return <HolidayScreen />;

@@ -1,4 +1,4 @@
-import spiralBackground from '../../../assets/spiral-background-dark.png';
+import spiralBackground from '../../../assets/branding-bg-dark.png';
 import welcomeImage1 from '../../../assets/homepage-welcome-image.png';
 import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
 import welcomeImage3 from '../../../assets/homepage-welcome-image-3.png';
