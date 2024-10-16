@@ -1,5 +1,5 @@
 import React from 'react';
-import BrandingModal from '../../../atoms/modal/BrandingModal';
+import BrandingModal from '../../../molecules/modals/home-page-modals/BrandingModal';
 import axios from 'axios';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
