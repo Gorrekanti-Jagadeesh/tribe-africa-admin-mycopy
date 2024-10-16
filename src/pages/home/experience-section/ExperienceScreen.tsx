@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import videoPlay from '../../../assets/Frame.png';
+import videoPlay from '../../../assets/play-button.png';
 
 // Experience/Video section
 const Experience: React.FC = () => {

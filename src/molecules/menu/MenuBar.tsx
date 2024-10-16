@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import homeLogo from '../../assets/home.png';
 import notificationLogo from '../../assets/notification.png';
+import calculatorLogo from '../../assets/calculator.png';
 import LoginModal from '../modals/home-page-modals/LoginModal';
 import ProfileModal from '../modals/home-page-modals/ProfileModal';
 import Cookies from 'js-cookie';
 import SignupModal from '../modals/home-page-modals/SignupModal';
+import { CalculatorModal } from '../modals/business-page-modals/calculator-modal';
 
 interface User {
   email: string | null;
@@ -21,9 +23,14 @@ export const MenuBar = () => {
   const [isLoginModal, setIsLoginModal] = useState(false);
   const [isProfileModal, setIsProfileModal] = useState(false);
   const [isSignupModal, setIsSignupModal] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleLoginModal = () => {
     setIsLoginModal(!isLoginModal);
+  };
+
+  const toggleCalculatorModal = () => {
+    setModalOpen(!isModalOpen);
   };
 
   const toggleProfileModal = () => {
@@ -69,8 +76,14 @@ export const MenuBar = () => {
         <div id="menu" className="ms-auto">
           <div className="flex gap-3">
             <img src={homeLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
+            <img
+              src={calculatorLogo}
+              className="m-auto"
+              style={{ width: '14px', height: 'fit-content', cursor: 'pointer' }} // Add cursor pointer
+              alt="Calculator"
+              onClick={() => setModalOpen(true)} // Open modal on click
+            />
             <img src={notificationLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
-
             {isLogin ? (
               googleUser ? (
                 <div className="flex items-center gap-2" onClick={toggleProfileModal}>
@@ -127,6 +140,7 @@ export const MenuBar = () => {
       />
       <ProfileModal isOpen={isProfileModal} onClose={toggleProfileModal} onLogout={handleLogoutSuccess} />
       {isSignupModal && <SignupModal onClose={toggleSignupModal} />}
+      {isModalOpen && <CalculatorModal onClose={toggleCalculatorModal} />}
     </>
   );
 };

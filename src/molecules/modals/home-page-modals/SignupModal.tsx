@@ -45,7 +45,7 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       const userId: string = user.uid ? user.uid : '';
 
       // Save user details to Firestore
-      const userDocRef = doc(db, 'users', userId); // Ensure user.uid is a valid string
+      const userDocRef = doc(db, 'users', userId);
       await setDoc(userDocRef, {
         displayName: `${firstName} ${lastName}`,
         email: user.email,
