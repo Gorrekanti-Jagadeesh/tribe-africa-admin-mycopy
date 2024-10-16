@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface CurrencyConverterModalProps {
   onClose: () => void;
@@ -16,10 +16,10 @@ const exchangeRates: { [key: string]: number } = {
 const currencies = Object.keys(exchangeRates);
 
 export const CalculatorModal: React.FC<CurrencyConverterModalProps> = ({ onClose }) => {
-  const [amount, setAmount] = useState<number>(1); // Amount to convert
-  const [fromCurrency, setFromCurrency] = useState<string>('USD'); // Currency to convert from
-  const [toCurrency, setToCurrency] = useState<string>('INR'); // Currency to convert to
-  const [convertedAmount, setConvertedAmount] = useState<number | null>(null); // Result of the conversion
+  const [amount, setAmount] = useState<number>(1);
+  const [fromCurrency, setFromCurrency] = useState<string>('USD');
+  const [toCurrency, setToCurrency] = useState<string>('INR');
+  const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
 
   // Handle currency conversion
   const handleConvert = () => {
@@ -27,16 +27,6 @@ export const CalculatorModal: React.FC<CurrencyConverterModalProps> = ({ onClose
     const result = amount * rate;
     setConvertedAmount(result);
   };
-
-  // Close the modal when isOpen becomes false
-  // useEffect(() => {
-  //   if (!isOpen) {
-  //     setAmount(1);
-  //     setFromCurrency('USD');
-  //     setToCurrency('INR');
-  //     setConvertedAmount(null);
-  //   }
-  // }, [isOpen]);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
