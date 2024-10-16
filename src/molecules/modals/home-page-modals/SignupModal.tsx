@@ -39,13 +39,13 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       const user: User = {
         accessToken: accessToken,
         uid: firebaseUser.uid,
-        email: firebaseUser.email, // Email can be null, ensure it is handled
+        email: firebaseUser.email,
       };
 
       const userId: string = user.uid ? user.uid : '';
 
       // Save user details to Firestore
-      const userDocRef = doc(db, 'users', userId); // Ensure user.uid is a valid string
+      const userDocRef = doc(db, 'users', userId);
       await setDoc(userDocRef, {
         displayName: `${firstName} ${lastName}`,
         email: user.email,
@@ -63,7 +63,7 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       // Check if the error is an instance of Error before accessing the message
       if (error instanceof Error) {
         console.error('Error during signup:', error.message);
-        setError(error.message); // Show the error message
+        setError(error.message);
       } else {
         console.error('An unknown error occurred:', error);
         setError('An unknown error occurred');

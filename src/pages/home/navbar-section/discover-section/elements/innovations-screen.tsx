@@ -34,7 +34,7 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, subtitle, description, lin
 const InnovationsScreen: React.FC = () => {
   const inventions = [
     {
-      imageUrl: view, // Add image URL here
+      imageUrl: view,
       title: 'WAGA Power Pack, Tanzania',
       subtitle: 'Giving new life to trashed lithium-ion batteries',
       description:
@@ -42,7 +42,7 @@ const InnovationsScreen: React.FC = () => {
       link: 'https://wagatanzania.com',
     },
     {
-      imageUrl: view, // Add image URL here
+      imageUrl: view,
       title: 'EAT-SET, Nigeria',
       subtitle: 'The Emergency Autotransfusion Set',
       description:

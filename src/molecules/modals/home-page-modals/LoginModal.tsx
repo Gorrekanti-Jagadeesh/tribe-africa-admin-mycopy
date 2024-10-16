@@ -5,13 +5,13 @@ import SignupModal from './SignupModal';
 
 interface User {
   email: string | null;
-  displayName: string | null; // Also update displayName as it can be null too
+  displayName: string | null;
 }
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onGoogleLoginSuccess: (user: User) => void; // Pass the logged-in user back to parent
-  onEmailLoginSuccess: (user: User) => void; // Pass the logged-in user back to parent
+  onGoogleLoginSuccess: (user: User) => void;
+  onEmailLoginSuccess: (user: User) => void;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginSuccess, onEmailLoginSuccess }) => {
@@ -20,7 +20,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginS
   const [error, setError] = useState('');
   const [isSignupModalOpen, setSignupModalOpen] = useState(false);
 
-  const auth = getAuth(); // Initialize Firebase Auth
+  // Initialize Firebase Auth
+  const auth = getAuth();
 
   if (!isOpen) return null;
 
@@ -29,7 +30,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginS
       const user = await signInWithGoogle();
       if (user) {
         onGoogleLoginSuccess(user);
-        onClose(); // Close the modal after successful login
+        onClose();
       }
     } catch (error) {
       console.error('Error during Google sign-in:', error);
@@ -41,16 +42,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginS
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      onEmailLoginSuccess(user); // Call the success callback
-      onClose(); // Close the modal
+      onEmailLoginSuccess(user);
+      onClose();
     } catch (error) {
-      setError('Incorrect username/password'); // Set error message
+      setError('Incorrect username/password');
       console.error('Error during email sign-in:', error);
     }
   };
 
+  // Toggle the signup modal
   const toggleSignupModal = () => {
-    setSignupModalOpen(!isSignupModalOpen); // Toggle the signup modal
+    setSignupModalOpen(!isSignupModalOpen);
   };
 
   return (

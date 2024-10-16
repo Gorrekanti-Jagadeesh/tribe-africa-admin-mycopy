@@ -41,9 +41,13 @@ const fetchContentfulEntries = async (): Promise<ContentfulResponse> => {
       headers: {
         Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
+      params: {
+        content_type: 'hotels',
+        'fields.isCharming': true,
+      },
     });
 
-    return response.data; // Return the JSON data
+    return response.data;
   } catch (error) {
     throw new Error('Failed to fetch data from Contentful');
   }
@@ -55,7 +59,7 @@ const fetchImage = async (imageId: string): Promise<string> => {
     `https://cdn.contentful.com/spaces/${SPACE_ID}/assets/${imageId}?access_token=${ACCESS_TOKEN}`
   );
 
-  return 'https:' + response.data.fields.file.url; // Return the image URL
+  return 'https:' + response.data.fields.file.url;
 };
 
 function QueriedHotels() {
@@ -67,6 +71,8 @@ function QueriedHotels() {
   if (isLoading) return <div>Loading...</div>;
 
   if (error instanceof Error) return <div>An error has occurred: {error.message}</div>;
+
+  console.log(data);
 
   return (
     // TODO: Carousel needs to be applied for the container
