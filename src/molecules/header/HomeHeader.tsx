@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import africaLogo from '../../assets/logo.png';
 import homeLogo from '../../assets/home.png';
 import notificationLogo from '../../assets/notification.png';
+import Discover from '../../pages/home/navbar-section/discover-section/DiscoverScreen';
 
 const MenuBar = () => {
   return (
@@ -29,18 +30,19 @@ const MenuBar = () => {
 interface HoverNavLinkProps {
   id: string;
   title: string;
+  content: React.ReactNode;
 }
 
-const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title }) => {
+const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
   const [hover, setHover] = useState(false);
   return (
     <div
       id={id}
-      className="m-auto cursor-pointer group py-4 px-2"
+      className="m-auto group py-4 px-2"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <span className="flex">
+      <span className="flex cursor-pointer">
         {title}
         <svg
           className="w-2.5 h-2.5 ms-3 m-auto"
@@ -53,11 +55,9 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title }) => {
         </svg>
       </span>
       <div
-        className={`absolute left-0 p-2 mt-1  max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
+        className={`absolute left-0 p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
       >
-        This is the hidden {title} content that appears on hover. This is the hidden content that appears on hover. This
-        is the hidden content that appears on hover. This is the hidden content that appears on hover. This is the
-        hidden content that appears on hover. This is the hidden content that appears on hover.
+        {content}
       </div>
     </div>
   );
@@ -70,13 +70,13 @@ const Navbar = () => {
         <MenuBar />
       </div>
       <div className="hidden text-center border-2 rounded-lg relative md:flex">
-        <HoverNavLink id="getting-there" title="Getting three" />
-        <HoverNavLink id="discover" title="Discover" />
-        <HoverNavLink id="events" title="Events" />
+        <HoverNavLink id="getting-there" title="Getting three" content={<>Content</>} />
+        <HoverNavLink id="discover" title="Discover" content={<Discover />} />
+        <HoverNavLink id="events" title="Events" content={<>Content</>} />
         <div id="logo" className="m-auto cursor-pointer">
           <img src={africaLogo} style={{ maxWidth: '150px' }} />
         </div>
-        <HoverNavLink id="institute-collaboration" title={'Peace & Prosperity Institute'} />
+        <HoverNavLink id="institute-collaboration" title={'Peace & Prosperity Institute'} content={<>Content</>} />
         <div id="blog" className="m-auto cursor-pointer">
           <span>Blog</span>
         </div>
