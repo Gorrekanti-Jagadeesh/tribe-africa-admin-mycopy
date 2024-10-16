@@ -3,11 +3,15 @@ import { signInWithGoogle } from '../../../../firebaseDB';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'; // Import Firebase Auth functions
 import SignupModal from './SignupModal';
 
+interface User {
+  email: string | null;
+  displayName: string | null; // Also update displayName as it can be null too
+}
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onGoogleLoginSuccess: (user: any) => void; // Pass the logged-in user back to parent
-  onEmailLoginSuccess: (user: any) => void; // Pass the logged-in user back to parent
+  onGoogleLoginSuccess: (user: User) => void; // Pass the logged-in user back to parent
+  onEmailLoginSuccess: (user: User) => void; // Pass the logged-in user back to parent
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onGoogleLoginSuccess, onEmailLoginSuccess }) => {

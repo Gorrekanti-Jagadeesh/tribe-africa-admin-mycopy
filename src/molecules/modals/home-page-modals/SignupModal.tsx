@@ -2,6 +2,12 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth, db, doc, setDoc } from '../../../../firebaseDB';
 
+interface User {
+  accessToken: string | null;
+  uid: string | null;
+  email: string | null;
+}
+
 const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -19,10 +25,27 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     try {
       // Create a new user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user: any = userCredential.user; // Get the user object
+      const firebaseUser = userCredential.user; // Firebase User object
+
+      // Get the accessToken from the Firebase user
+      const accessToken = await firebaseUser.getIdToken();
+
+      // Ensure uid is not null
+      if (!firebaseUser.uid) {
+        throw new Error('User UID is missing');
+      }
+
+      // Create a custom User object that matches your interface
+      const user: User = {
+        accessToken: accessToken,
+        uid: firebaseUser.uid,
+        email: firebaseUser.email, // Email can be null, ensure it is handled
+      };
+
+      const userId: string = user.uid ? user.uid : '';
 
       // Save user details to Firestore
-      const userDocRef = doc(db, 'users', user.uid); // Save by user ID
+      const userDocRef = doc(db, 'users', userId); // Ensure user.uid is a valid string
       await setDoc(userDocRef, {
         displayName: `${firstName} ${lastName}`,
         email: user.email,
@@ -36,9 +59,15 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
       // Close the signup modal
       onClose();
-    } catch (error: any) {
-      console.error('Error during signup:', error);
-      setError(error.message); // Show the error message
+    } catch (error) {
+      // Check if the error is an instance of Error before accessing the message
+      if (error instanceof Error) {
+        console.error('Error during signup:', error.message);
+        setError(error.message); // Show the error message
+      } else {
+        console.error('An unknown error occurred:', error);
+        setError('An unknown error occurred');
+      }
     }
   };
 

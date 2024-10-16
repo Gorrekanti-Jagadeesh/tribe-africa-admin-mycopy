@@ -6,6 +6,10 @@ import ProfileModal from '../modals/home-page-modals/ProfileModal';
 import Cookies from 'js-cookie';
 import SignupModal from '../modals/home-page-modals/SignupModal';
 
+interface User {
+  email: string | null;
+  displayName: string | null;
+}
 export const MenuBar = () => {
   const googleUserCookie = Cookies.get('googleUser');
   const [googleUser, setGoogleUser] = useState(googleUserCookie ? JSON.parse(googleUserCookie) : null);
@@ -30,13 +34,13 @@ export const MenuBar = () => {
     setIsSignupModal(!isSignupModal);
   };
 
-  const handleGoogleLoginSuccess = (user: any) => {
+  const handleGoogleLoginSuccess = (user: User) => {
     Cookies.set('googleUser', JSON.stringify(user), { expires: 7 }); // Store user object instead of just access token
     setGoogleUser(user);
     setIsLogin(true);
   };
 
-  const handleEmailLoginSuccess = (user: any) => {
+  const handleEmailLoginSuccess = (user: User) => {
     Cookies.set('emailUser', JSON.stringify(user), { expires: 7 });
     setEmailUser(user);
     setIsLogin(true);
