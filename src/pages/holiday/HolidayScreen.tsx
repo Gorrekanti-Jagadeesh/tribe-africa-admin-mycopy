@@ -1,7 +1,14 @@
+import Footer from '../../molecules/footer/Footer';
+import { HolidayHeader } from '../../molecules/header/holiday-header';
+
 const HolidayScreen = () => {
   return (
     <div>
-      <h1>This is Holiday page</h1>
+      <div>
+        <HolidayHeader />
+        <div className="text-center bg-slate-200 m-6">Holiday Content</div>
+        <Footer />
+      </div>
     </div>
   );
 };
