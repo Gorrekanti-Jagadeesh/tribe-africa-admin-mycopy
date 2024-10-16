@@ -15,7 +15,7 @@ const HomeScreen: React.FC = () => {
       <div>
         <HeroSection />
         <Explore />
-        {/* <CharmingHotels /> */}
+        <CharmingHotels />
         <Experience />
         <Services />
       </div>
