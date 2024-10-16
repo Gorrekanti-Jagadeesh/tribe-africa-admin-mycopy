@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Dropdown from '../../../atoms/dropdown/DropdownSearch';
+import { useNavigate } from 'react-router';
 
 // Demo data: countries and purpose
 interface Option {
@@ -10,34 +11,34 @@ interface Option {
 // Countries and Purpose data
 const Countries: Option[] = [
   {
-    value: 'algeria',
+    value: 'Algeria',
     label: 'Algeria',
   },
   {
-    value: 'angola',
+    value: 'Angola',
     label: 'Angola',
   },
   {
-    value: 'benin',
+    value: 'Benin',
     label: 'Benin',
   },
   {
-    value: 'botswana',
+    value: 'Botswana',
     label: 'Botswana',
   },
   {
-    value: 'burkina-faso',
+    value: 'Burkina-faso',
     label: 'Burkina Faso',
   },
 ];
 
 const Purpose: Option[] = [
   {
-    value: 'business',
+    value: 'Business',
     label: 'Business',
   },
   {
-    value: 'holiday',
+    value: 'Holiday',
     label: 'Holiday',
   },
 ];
@@ -46,6 +47,12 @@ const Purpose: Option[] = [
 const Toggle: React.FC = () => {
   const [country, setCountry] = useState<string | null>(null);
   const [purpose, setPurpose] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+
+  const handleGoClick = () => {
+    purpose === 'Business' ? navigate(`/${country}/business`) : navigate(`/${country}/holiday`);
+  };
 
   return (
     <div className="text-center relative">
@@ -56,6 +63,7 @@ const Toggle: React.FC = () => {
         </div>
         <button
           className={`border rounded-lg text-white px-4 ${country && purpose ? 'bg-orange-500' : 'bg-slate-400'}`}
+          onClick={handleGoClick}
         >
           <span className="">Go</span>
         </button>
