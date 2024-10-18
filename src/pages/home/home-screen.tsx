@@ -2,9 +2,9 @@ import React from 'react';
 import { HomeHeader } from '../../molecules/header/home-header';
 import Footer from '../../molecules/footer/footer';
 // Components importing from sections folder
-import HeroSection from './hero-section/hero-screen';
-import Explore from './explore-section/explore-screen';
-import Experience from './experience-section/experience-screen';
+import HeroContainer from './hero-section/hero-container';
+import ExploreContainer from './explore-section/explore-container';
+import ExperienceContainer from './experience-section/experience-container';
 import Services from './services-section/services-screen';
 import CharmingHotels from './hotels-section/hotels-screen';
 
@@ -13,10 +13,10 @@ const HomeScreen: React.FC = () => {
     <div className="max-w-screen-2xl m-auto">
       <HomeHeader />
       <div>
-        <HeroSection />
-        <Explore />
+        <HeroContainer />
+        <ExploreContainer />
         <CharmingHotels />
-        <Experience />
+        <ExperienceContainer />
         <Services />
       </div>
       <Footer />

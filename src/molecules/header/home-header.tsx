@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { MenuBar } from '../menu/MenuBar';
 import africaLogo from '../../assets/logo.png';
-import Discover from '../../pages/home/navbar-section/discover-section/discover-screen';
+import DiscoverContaner from '../../pages/home/navbar-section/discover-section/discover-container';
+import EventsContainer from '../../pages/home/navbar-section/events-section/events-container';
 
 interface HoverNavLinkProps {
   id: string;
@@ -47,8 +48,8 @@ export const HomeHeader = () => {
       </div>
       <div className="hidden text-center border-2 rounded-lg relative md:flex">
         <HoverNavLink id="getting-there" title="Getting there" content={<>Content</>} />
-        <HoverNavLink id="discover" title="Discover" content={<Discover />} />
-        <HoverNavLink id="events" title="Events" content={<>Content</>} />
+        <HoverNavLink id="discover" title="Discover" content={<DiscoverContaner />} />
+        <HoverNavLink id="events" title="Events" content={<EventsContainer />} />
         <div id="logo" className="m-auto cursor-pointer">
           <img src={africaLogo} style={{ maxWidth: '150px' }} />
         </div>

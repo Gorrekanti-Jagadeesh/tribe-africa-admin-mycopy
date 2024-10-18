@@ -1,10 +1,21 @@
-import spiralBackground from '../../../assets/branding-bg-dark.png';
-import welcomeImage1 from '../../../assets/homepage-welcome-image.png';
-import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
-import welcomeImage3 from '../../../assets/homepage-welcome-image-3.png';
-import TAlogo from '../../../assets/tribe-africa-logo.png';
+// explore-screen.tsx
+import React from 'react';
 
-const Explore: React.FC = () => {
+interface ExploreScreenProps {
+  spiralBackground: string;
+  welcomeImage1: string;
+  welcomeImage2: string;
+  welcomeImage3: string;
+  TAlogo: string;
+}
+
+const ExploreScreen: React.FC<ExploreScreenProps> = ({
+  spiralBackground,
+  welcomeImage1,
+  welcomeImage2,
+  welcomeImage3,
+  TAlogo,
+}) => {
   return (
     <div
       className="relative bg-cover bg-center text-white p-2 md:p-4"
@@ -29,13 +40,13 @@ const Explore: React.FC = () => {
               world.
             </p>
             <p>
-              From the cradle of humanity to the captivating mysteries an melodies that stir the soul, every corner of
+              From the cradle of humanity to the captivating mysteries and melodies that stir the soul, every corner of
               this land tells a unique story.
             </p>
           </div>
           <div id="welcome-footer" className="text-sm flex gap-2">
             <span>join</span>
-            <img src={TAlogo} className=" max-h-4 m-0" alt="" />
+            <img src={TAlogo} className=" max-h-4 m-0" alt="Tribe Africa Logo" />
             <span>and be a part of the future. welcome to the tribe.</span>
           </div>
         </div>
@@ -70,4 +81,4 @@ const Explore: React.FC = () => {
   );
 };
 
-export default Explore;
+export default ExploreScreen;
