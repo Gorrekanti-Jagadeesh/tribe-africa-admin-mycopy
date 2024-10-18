@@ -26,16 +26,16 @@ const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }
     },
   });
 
-  const filteredOptions = options.filter((option) => option.value.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: string) => {
-    setPlaceholder(option);
+  const handleOptionClick = (option: Option) => {
+    setPlaceholder(option.label);
     setIsOpen(false);
-    action(option);
+    action(option.value);
   };
 
   const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +63,7 @@ const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }
           <li
             key={option.value}
             className="p-2 cursor-pointer hover:bg-gray-100"
-            onClick={() => handleOptionClick(option.value)}
+            onClick={() => handleOptionClick(option)}
           >
             {option.label}
           </li>

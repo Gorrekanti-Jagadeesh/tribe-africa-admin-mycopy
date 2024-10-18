@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply font-poppins;
+}
+
 @keyframes appear {
   from {
     opacity: 0;

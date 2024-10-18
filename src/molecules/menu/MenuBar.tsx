@@ -10,7 +10,7 @@ interface User {
   email: string | null;
   displayName: string | null;
 }
-export const MenuBar = () => {
+export const MenuBar = ({ purpose, country }: { purpose: string | null; country: string | null }) => {
   const googleUserCookie = Cookies.get('googleUser');
   const [googleUser, setGoogleUser] = useState(googleUserCookie ? JSON.parse(googleUserCookie) : null);
 
@@ -65,6 +65,13 @@ export const MenuBar = () => {
             <option value="french">French</option>
           </select>
         </div>
+        {country && (
+          <div className="mx-4">
+            <p>
+              {purpose == 'business' ? 'Business' : 'Holiday'} in {country}
+            </p>
+          </div>
+        )}
 
         <div id="menu" className="ms-auto">
           <div className="flex gap-3">

@@ -1,7 +1,9 @@
 import BusinessScreen from './business-screen';
+import { useParams } from 'react-router';
 
 const BusinessContainer = () => {
-  return <BusinessScreen />;
+  const { country } = useParams();
+  return <BusinessScreen country={country} />;
 };
 
 export default BusinessContainer;

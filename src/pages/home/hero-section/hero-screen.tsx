@@ -62,8 +62,9 @@ const Toggle: React.FC = () => {
           <Dropdown text="Purpose?" options={Purpose} searchable={false} action={setPurpose} />
         </div>
         <button
-          className={`border rounded-lg text-white px-4 ${country && purpose ? 'bg-orange-500' : 'bg-slate-400'}`}
+          className={`border rounded-lg text-white px-4 bg-orange-500 disabled:bg-slate-400`}
           onClick={handleGoClick}
+          disabled={country && purpose ? false : true}
         >
           <span className="">Go</span>
         </button>

@@ -1,5 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import view from '../../../../../assets/homepage-welcome-image-3.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 interface CardProps {
   imageUrl: string;
@@ -32,6 +35,7 @@ const Card: React.FC<CardProps> = ({ imageUrl, title, subtitle, description, lin
 };
 
 const InnovationsScreen: React.FC = () => {
+  const navigate = useNavigate();
   const inventions = [
     {
       imageUrl: view,
@@ -55,8 +59,13 @@ const InnovationsScreen: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="p-4 mb-8">
-          <h1 className="text-5xl">
-            <span className="text-orange-500 font-serif">Amazing</span> Inventions
+          <h1 className="text-4xl md:text-5xl flex">
+            <p>
+              <span className="text-orange-500 font-serif">Amazing</span> Inventions
+            </p>
+            <button className="ms-auto p-2 py-0" onClick={() => navigate('/')}>
+              <FontAwesomeIcon className=" max-w-6" icon={faArrowLeft} />
+            </button>
           </h1>
         </header>
 

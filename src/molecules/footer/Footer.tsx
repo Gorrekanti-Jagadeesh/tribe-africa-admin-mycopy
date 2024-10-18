@@ -30,14 +30,14 @@ const Footer = () => {
             </div>
             <div id="about-business" className="mt-auto">
               <h3 className="text-xl text-orange-500 font-bold mb-4">Biz with Tribe Africa</h3>
-              <div className="grid">
-                <a href="#" className=" hover:text-gray-300">
-                  Investment with us
-                </a>
-                <a href="#" className=" hover:text-gray-300">
-                  Advertise with us
-                </a>
-              </div>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#">Investment with us</a>
+                </li>
+                <li>
+                  <a href="#">Advertise with us</a>
+                </li>
+              </ul>
             </div>
           </div>
           <div className="col-span-2 mt-4 md:mt-0">
@@ -67,14 +67,14 @@ const Footer = () => {
               </div>
               <div className="col-span-1 md:ms-auto md:w-48">
                 <h3 className="text-xl text-orange-500 font-bold mb-4 text-center md:text-left">Get the App</h3>
-                <div className="grid gap-2">
-                  <a href="#" className="hover:text-gray-300">
-                    iPhone App
-                  </a>
-                  <a href="#" className="hover:text-gray-300">
-                    Android App
-                  </a>
-                </div>
+                <ul className="space-y-2">
+                  <li>
+                    <a href="#">iPhone App</a>
+                  </li>
+                  <li>
+                    <a href="#">Android App</a>
+                  </li>
+                </ul>
               </div>
             </div>
             <div>

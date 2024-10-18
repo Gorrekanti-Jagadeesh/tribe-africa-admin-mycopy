@@ -43,7 +43,7 @@ export const HomeHeader = () => {
   return (
     <div className="grid gap-2 p-2 m-auto max-w-6xl">
       <div>
-        <MenuBar />
+        <MenuBar purpose={null} country={null} />
       </div>
       <div className="hidden text-center border-2 rounded-lg relative md:flex">
         <HoverNavLink id="getting-there" title="Getting there" content={<>Content</>} />

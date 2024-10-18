@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 interface DiscoverProps {
   setParentContent: (value: boolean) => void;
 }
 
 const Innovations: React.FC<DiscoverProps> = ({ setParentContent }) => {
+  const navigate = useNavigate();
   const smartInnovation =
     'https://s3-alpha-sig.figma.com/img/2025/80e1/3c3b0ed9d628d74f53ece69e78e39ba5?Expires=1730073600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=XlE5DRxoCZ1DrmNCcIK9Gn0-YQiAKoemz5PH3EMmWt1lvDmbP4klSIqxGiUF5KYyqwfAw61oEGGuVhH2vc4DKo5wNhSPQn6OcqxCty2S64rgmfmcZogBG9Yixb4AMFdgWRGHF6q8GQUfsrHjs~NqA7bWNhE0aQszkETQJoMSJa3VEgQmr2si2CIjUuO~AAMTJDQ3322YVjxePEciYijBblhRK4EKHFC31pCSwX1qebrBcLl9MwRR6OxNFgIWXHTGxakOrn5toi33y1DravP-Uaj-81yeoYpLp5V8wYjuXhgw8V5toS~YlXbVWlAydVyHf4b69sjpbax4dTYEhk1rkQ__';
   const smartCities =
@@ -19,7 +21,10 @@ const Innovations: React.FC<DiscoverProps> = ({ setParentContent }) => {
         &larr; Innovations
       </h4>
       <div id="innovations-cards" className=" grid grid-cols-3">
-        <div className=" inline-block p-2 my-2">
+        <div
+          className=" inline-block p-2 my-2 cursor-pointer w-fit"
+          onClick={() => navigate('/africa/smart-innovations')}
+        >
           <div
             className="aspect-square bg-cover rounded-md"
             style={{
@@ -29,7 +34,7 @@ const Innovations: React.FC<DiscoverProps> = ({ setParentContent }) => {
           ></div>
           <p className="text-left">Amazing Smart Innovations</p>
         </div>
-        <div className=" inline-block p-2 my-2">
+        <div className=" inline-block p-2 my-2 cursor-pointer w-fit">
           <div
             className="aspect-square bg-cover rounded-md"
             style={{
