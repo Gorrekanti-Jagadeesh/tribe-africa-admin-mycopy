@@ -15,7 +15,7 @@ const HomeScreen: React.FC = () => {
       <div>
         <HeroContainer />
         <ExploreContainer />
-        <CharmingHotels />
+        {/* <CharmingHotels /> */}
         <ExperienceContainer />
         <Services />
       </div>

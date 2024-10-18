@@ -1,5 +1,6 @@
 // discover-screen.tsx
 import React from 'react';
+import { NavigateFunction } from 'react-router';
 
 interface DiscoverScreenProps {
   parentContent: boolean;
@@ -14,7 +15,7 @@ interface DiscoverScreenProps {
     pilgrimageView: string;
     weddingDestinationView: string;
   };
-  navigate: any;
+  navigate: NavigateFunction;
 }
 
 const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
@@ -128,7 +129,7 @@ const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
 
 export default DiscoverScreen;
 
-const InnovationsScreen: React.FC<{ setParentContent: () => void; navigate: any }> = ({
+const InnovationsScreen: React.FC<{ setParentContent: () => void; navigate: NavigateFunction }> = ({
   setParentContent,
   navigate,
 }) => (
