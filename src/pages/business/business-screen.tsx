@@ -1,14 +1,47 @@
 import Footer from '../../molecules/footer/footer';
 import { BusinessHeader } from '../../molecules/header/business-header';
+import heroBackground from '../../assets/homepage-welcome-image-2.png';
+import CardsGrid from '../../molecules/layout/cards-grid';
+import featuredBG from '../../assets/branding-bg-dark.png';
 
-const BusinessScreen = ({ country }: { country: string }) => {
+const BusinessScreen = ({ country }: { country: string | undefined }) => {
   return (
-    <div>
+    <div className="max-w-screen-2xl m-auto">
       <div className="bg-orange-500 p-4 text-white text-xl text-center">
         <p>Getting there - Book Flight and accomodation</p>
       </div>
       <BusinessHeader country={country} />
-      <div className="text-center bg-slate-200 m-6">Business Content</div>
+      {/* Hero section */}
+      <div className="m-auto max-w-6xl p-4">
+        <div className="relative">
+          <div
+            className="aspect-video bg-cover rounded-md w-full brightness-50"
+            style={{
+              backgroundImage: `url(${heroBackground})`,
+            }}
+          ></div>
+          <div className="text-white text-lg flex flex-col gap-6 p-8 absolute bottom-0 brightness-200">
+            <p className="">Weather: 28 °/cloudy</p>
+            <p>Internet speed: 1gbps</p>
+            <p>Time: 12:58 pm</p>
+          </div>
+        </div>
+      </div>
+      {/* Cards layout for 'Key Invesment Sectors' */}
+      <CardsGrid
+        heading={
+          <>
+            Key <span className="font-serif text-orange-500">Investment Sectors</span> in {country}
+          </>
+        }
+        data={[]}
+        featuredCard={{
+          imageURL: featuredBG,
+          info: 'featured',
+          redirect: 'https://google.com',
+          placeholder: 'Click to know more',
+        }}
+      />
       <Footer />
     </div>
   );

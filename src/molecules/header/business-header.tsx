@@ -38,14 +38,13 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
   );
 };
 
-export const BusinessHeader = ({ country }: { country: string }) => {
+export const BusinessHeader = ({ country }: { country: string | undefined }) => {
   return (
-    <div className="grid gap-2 p-2 m-auto my-4 max-w-6xl">
+    <div className="grid gap-2 p-4 m-auto my-4 max-w-6xl overflow-clip">
       <div>
         <MenuBar purpose={'business'} country={country} />
       </div>
       <div className="hidden text-center border-2 rounded-lg relative md:flex">
-        {/* <HoverNavLink id="country" title={ country } content={<>Content</>} /> */}
         <div id="country" className="m-auto cursor-pointer" title="know more">
           <span>{country}</span>
         </div>
