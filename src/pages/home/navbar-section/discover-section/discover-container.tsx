@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import DiscoverScreen from './discover-screen';
-import innovationsView from '../../../../assets/home/discover/innovations.jpg';
-import didYouKnowView from '../../../../assets/home/discover/did-you-know.jpg';
-import bucketListView from '../../../../assets/home/discover/bucket-list.jpg';
-import greatOutdoorsView from '../../../../assets/home/discover/great-outdoors.jpg';
-import pilgrimageView from '../../../../assets/home/discover/pilgrimage.jpg';
-import weddingDestinationView from '../../../../assets/home/discover/destination-weddings.jpg';
+import innovationsView from '../../../../assets/home/discover/innovations.png';
+import didYouKnowView from '../../../../assets/home/discover/did-you-know.png';
+import bucketListView from '../../../../assets/home/discover/bucket-list.png';
+import greatOutdoorsView from '../../../../assets/home/discover/great-outdoors.png';
+import pilgrimageView from '../../../../assets/home/discover/pilgrimage.png';
+import weddingDestinationView from '../../../../assets/home/discover/destination-weddings.png';
 
 const DiscoverContainer: React.FC = () => {
   const [content, setContent] = useState<React.ReactNode>();

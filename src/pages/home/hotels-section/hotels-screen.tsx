@@ -142,35 +142,10 @@ const HotelView = ({
 }) => {
   return (
     <div id="hotel-view" className="grid justify-center md:flex gap-4 p-2 md:p-4">
-      <div id="collage" className="flex md:grid gap-4 md:w-4/6 max-w-xl overflow-auto">
-        <div className="flex gap-4 w-fit">
-          <img
-            src={data.images[0]}
-            alt=""
-            className="aspect-square m-auto rounded-lg min-w-60 md:min-w-0"
-            style={{ width: 'calc(50% - 20px)' }}
-          />
-          <img
-            src={data.images[1]}
-            alt=""
-            className="aspect-square m-auto rounded-lg min-w-60 md:min-w-0"
-            style={{ width: 'calc(50% - 20px)' }}
-          />
-        </div>
-        <div className="flex gap-4 w-fit">
-          <img
-            src={data.images[2]}
-            alt=""
-            className="aspect-square m-auto rounded-lg min-w-60 md:min-w-0"
-            style={{ width: 'calc(50% - 20px)' }}
-          />
-          <img
-            src={data.images[3]}
-            alt=""
-            className="aspect-square m-auto rounded-lg min-w-60 md:min-w-0"
-            style={{ width: 'calc(50% - 20px)' }}
-          />
-        </div>
+      <div id="collage" className="flex md:grid md:grid-cols-2 gap-4 md:w-4/6 max-w-xl overflow-auto">
+        {data.images.map((image) => (
+          <img src={image} alt="" className="aspect-square w-full m-auto rounded-lg min-w-60 md:min-w-0" />
+        ))}
       </div>
       <div id="hotel-content" className="flex flex-grow flex-col">
         <h3 className="font-bold text-lg">{data.name}</h3>

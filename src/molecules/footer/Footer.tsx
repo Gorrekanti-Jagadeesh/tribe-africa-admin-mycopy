@@ -3,6 +3,88 @@ import spiralBackground from '../../assets/branding-bg-dark.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
+const footerLinks = {
+  about: [
+    {
+      label: 'About us',
+      link: '',
+    },
+    {
+      label: 'Resources & Policies',
+      link: '',
+    },
+    {
+      label: 'Trust & Safety',
+      link: '',
+    },
+  ],
+  business: [
+    {
+      label: 'Invest with us',
+      link: '',
+    },
+    {
+      label: 'Advertise with us',
+      link: '',
+    },
+  ],
+  join: [
+    {
+      label: 'Add your business',
+      link: '',
+    },
+    {
+      label: 'Add your service',
+      link: '',
+    },
+    {
+      label: 'Add a place',
+      link: '',
+    },
+    {
+      label: 'Add your event',
+      link: '',
+    },
+    {
+      label: 'Work with the Tribe',
+      link: '',
+    },
+    {
+      label: 'Contribute to our blog',
+      link: '',
+    },
+  ],
+  apps: [
+    {
+      label: 'Android App',
+      link: '',
+    },
+    {
+      label: 'iPhone App',
+      link: '',
+    },
+  ],
+};
+
+const socialMediaLinks = [
+  {
+    icon: faFacebookF,
+    link: 'https://facebook.com',
+  },
+  {
+    icon: faTwitter,
+    link: 'https://twitter.com',
+  },
+  {
+    icon: faInstagram,
+    link: 'https://instagram.com',
+  },
+  {
+    icon: faLinkedinIn,
+    link: 'https://linkedin.com',
+  },
+];
+
 const Footer = () => {
   const [email, setEmail] = useState('');
 
@@ -17,26 +99,21 @@ const Footer = () => {
             <div id="about">
               <h3 className="text-xl text-orange-500 font-bold mb-4">About Tribe Africa</h3>
               <ul className="space-y-2">
-                <li>
-                  <a href="#">About us</a>
-                </li>
-                <li>
-                  <a href="#">Resources & Policies</a>
-                </li>
-                <li>
-                  <a href="#">Trust & Safety</a>
-                </li>
+                {footerLinks.about.map((link) => (
+                  <li>
+                    <a href={link.link}>{link.label}</a>
+                  </li>
+                ))}
               </ul>
             </div>
             <div id="about-business" className="mt-auto">
               <h3 className="text-xl text-orange-500 font-bold mb-4">Biz with Tribe Africa</h3>
               <ul className="space-y-2">
-                <li>
-                  <a href="#">Investment with us</a>
-                </li>
-                <li>
-                  <a href="#">Advertise with us</a>
-                </li>
+                {footerLinks.business.map((link) => (
+                  <li>
+                    <a href={link.link}>{link.label}</a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -45,35 +122,21 @@ const Footer = () => {
               <div>
                 <h3 className="text-xl text-orange-500 font-bold mb-4">Join Tribe Africa</h3>
                 <ul className="space-y-2">
-                  <li>
-                    <a href="#">Add your business</a>
-                  </li>
-                  <li>
-                    <a href="#">Add your service</a>
-                  </li>
-                  <li>
-                    <a href="#">Add a place</a>
-                  </li>
-                  <li>
-                    <a href="#">Add your event</a>
-                  </li>
-                  <li>
-                    <a href="#">Work with the Tribe</a>
-                  </li>
-                  <li>
-                    <a href="#">Contribute to our blog</a>
-                  </li>
+                  {footerLinks.join.map((link) => (
+                    <li>
+                      <a href={link.link}>{link.label}</a>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="col-span-1 md:ms-auto md:w-48">
                 <h3 className="text-xl text-orange-500 font-bold mb-4 text-center md:text-left">Get the App</h3>
                 <ul className="space-y-2">
-                  <li>
-                    <a href="#">iPhone App</a>
-                  </li>
-                  <li>
-                    <a href="#">Android App</a>
-                  </li>
+                  {footerLinks.apps.map((link) => (
+                    <li>
+                      <a href={link.link}>{link.label}</a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -97,38 +160,16 @@ const Footer = () => {
 
         {/* Social media links */}
         <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white bg-slate-700 p-2 rounded-full shadow-lg hover:bg-blue-500 transition duration-300"
-          >
-            <FontAwesomeIcon icon={faFacebookF} size="lg" />
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white bg-slate-700 p-2 rounded-full shadow-lg hover:bg-blue-300 transition duration-300"
-          >
-            <FontAwesomeIcon icon={faTwitter} size="lg" />
-          </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white bg-slate-700 p-2 rounded-full shadow-lg hover:bg-pink-400 transition duration-300"
-          >
-            <FontAwesomeIcon icon={faInstagram} size="lg" />
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white bg-slate-700 p-2 rounded-full shadow-lg hover:bg-blue-600 transition duration-300"
-          >
-            <FontAwesomeIcon icon={faLinkedinIn} size="lg" />
-          </a>
+          {socialMediaLinks.map((link) => (
+            <a
+              href={link.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white bg-slate-700 p-2 rounded-full shadow-lg border hover:bg-white hover:border-orange-400 hover:text-black transition duration-300"
+            >
+              <FontAwesomeIcon icon={link.icon} size="lg" />
+            </a>
+          ))}
         </div>
       </div>
     </footer>
