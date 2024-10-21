@@ -99,8 +99,8 @@ const Footer = () => {
             <div id="about">
               <h3 className="text-xl text-orange-500 font-bold mb-4">About Tribe Africa</h3>
               <ul className="space-y-2">
-                {footerLinks.about.map((link) => (
-                  <li>
+                {footerLinks.about.map((link, index) => (
+                  <li key={index}>
                     <a href={link.link}>{link.label}</a>
                   </li>
                 ))}
@@ -109,8 +109,8 @@ const Footer = () => {
             <div id="about-business" className="mt-auto">
               <h3 className="text-xl text-orange-500 font-bold mb-4">Biz with Tribe Africa</h3>
               <ul className="space-y-2">
-                {footerLinks.business.map((link) => (
-                  <li>
+                {footerLinks.business.map((link, index) => (
+                  <li key={index}>
                     <a href={link.link}>{link.label}</a>
                   </li>
                 ))}
@@ -122,8 +122,8 @@ const Footer = () => {
               <div>
                 <h3 className="text-xl text-orange-500 font-bold mb-4">Join Tribe Africa</h3>
                 <ul className="space-y-2">
-                  {footerLinks.join.map((link) => (
-                    <li>
+                  {footerLinks.join.map((link, index) => (
+                    <li key={index}>
                       <a href={link.link}>{link.label}</a>
                     </li>
                   ))}
@@ -132,8 +132,8 @@ const Footer = () => {
               <div className="col-span-1 md:ms-auto md:w-48">
                 <h3 className="text-xl text-orange-500 font-bold mb-4 text-center md:text-left">Get the App</h3>
                 <ul className="space-y-2">
-                  {footerLinks.apps.map((link) => (
-                    <li>
+                  {footerLinks.apps.map((link, index) => (
+                    <li key={index}>
                       <a href={link.link}>{link.label}</a>
                     </li>
                   ))}
@@ -160,8 +160,9 @@ const Footer = () => {
 
         {/* Social media links */}
         <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
-          {socialMediaLinks.map((link) => (
+          {socialMediaLinks.map((link, index) => (
             <a
+              key={index}
               href={link.link}
               target="_blank"
               rel="noopener noreferrer"

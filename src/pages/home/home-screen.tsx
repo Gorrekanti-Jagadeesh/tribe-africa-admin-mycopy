@@ -6,7 +6,9 @@ import HeroContainer from './hero-section/hero-container';
 import ExploreContainer from './explore-section/explore-container';
 import ExperienceContainer from './experience-section/experience-container';
 import Services from './services-section/services-screen';
-import CharmingHotels from './hotels-section/hotels-screen';
+// import CharmingHotels from './hotels-section/hotels-screen';
+import CharmingHotelsContainer from './charming-hotel-section/charming-hotel-container';
+import HolidayDestinationContainer from './holiday-destination-section/holiday-destination-container';
 
 const HomeScreen: React.FC = () => {
   return (
@@ -15,7 +17,8 @@ const HomeScreen: React.FC = () => {
       <div>
         <HeroContainer />
         <ExploreContainer />
-        <CharmingHotels />
+        <CharmingHotelsContainer />
+        <HolidayDestinationContainer />
         <ExperienceContainer />
         <Services />
       </div>
