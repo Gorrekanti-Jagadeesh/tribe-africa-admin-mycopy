@@ -8,7 +8,13 @@ interface carouselData {
 const CharmingHotelsScreen: React.FC<carouselData> = ({ images }) => {
   return (
     <div className="container mx-auto mt-12">
-      <CustomeSectionHeadingComponent title="Charming" subPartTitle="Hotels" buttonTitle="List Your Accommodation" />
+      <CustomeSectionHeadingComponent
+        title="Charming"
+        subPartTitle="Hotels"
+        buttonTitle="List Your Accommodation"
+        titleStyles="font-[Poppins]"
+        subTitleStyles="text-[#FF6600] font-[Rufina]"
+      />
       <CommonCarousel images={images} />;
     </div>
   );

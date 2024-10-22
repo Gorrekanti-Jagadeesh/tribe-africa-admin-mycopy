@@ -30,9 +30,10 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
     <div className="container bg-[#2B170A] mx-auto py-8">
       <CustomeSectionHeadingComponent
         title="Favourite"
-        titleStyles="text-[#fff]"
         subPartTitle="Holiday Destination"
         buttonTitle="Advertise with Us"
+        titleStyles="font-[Poppins] text-[#fff]"
+        subTitleStyles="text-[#FF6600] font-[Rufina]"
       />
       <div id="slider" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <div className="mt-8">

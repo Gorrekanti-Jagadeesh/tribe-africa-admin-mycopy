@@ -85,7 +85,7 @@ const socialMediaLinks = [
   },
 ];
 
-const Footer = () => {
+const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
 
   return (

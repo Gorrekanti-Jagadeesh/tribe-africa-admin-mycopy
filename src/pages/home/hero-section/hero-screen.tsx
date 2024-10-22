@@ -41,7 +41,7 @@ const HeroScreen: React.FC<HeroScreenProps> = ({
         <div className="bg-slate-800 relative bottom-8 rounded-lg" style={{ zIndex: '-1' }}>
           <video autoPlay={true} loop={true} muted={true} className="rounded-lg">
             <source
-              src="https://s3-figma-videos-production-sig.figma.com/video/1140530022219550208/TEAM/35df/ad4f/-0df9-42cc-8dbf-31a770951344?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=c0N438-gTU9-AH0PTknkSn3aF-BkBSGpuY2XYaiZUmYK-FxIMnrUlZu5DZvCcguU5qAjTGoB5Ld8dZ3oR4n~qt9ggbOpnl~yfBAzFV~gXIEiTQOJvm4BrQHpAON-oHril5Kk8LCgQb1dQzWV48AmTT~5MSS7QkuZ0vUH4Tue4VotNxTcn9pLP~OvS0CdfKwltfHcal5YrJ2LksgLhUluqA-t5XyTa3dfjG-Uf~sYuOF~rsP56wxPe7JvQLdRYRC1hBG7yFyYkIVyuQ4VM6Xqboo3T5jnfT5myfuUe4jCBdI1fTpLivoWhacau~jCRFs2K8u74ZmXuXcC4nPJnnJ2oQ__"
+              src="https://s3-figma-videos-production-sig.figma.com/video/1140530022219550208/TEAM/35df/ad4f/-0df9-42cc-8dbf-31a770951344?Expires=1730678400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=puNVfQdm3~hGUculdZ-XbsJyi4-OcR6DHCzDz3Th~XMfJjvqW9AqEP9HGRK3IWruDNz6Y6KkStL1AalESbTYe8-sYYodjddl8qf1VS5nPDR7vyoaSrKa0G7lHBAxbMYWwHNVMZBDf-PIzaxqWZHdUWMFTXrYQ0wsk31WdrlGS-ivOBtENsRC0MFkm7xKxJIqOmE09ev~fTjcL8jALXoKpraIw1y3MkmkXtjoFkZd~ntix40o9pyifWaZ~BDvviz9e4U7KrrYq4UYXsZ3TJHjNI1YVYDp6R5M0OjN3borMndRJn4tGHzUPiocnS83ZbRabIlSuhEtgaxZPUu7MBD8CA__"
               type="video/mp4"
             />
             Your browser does not support the video tag.
