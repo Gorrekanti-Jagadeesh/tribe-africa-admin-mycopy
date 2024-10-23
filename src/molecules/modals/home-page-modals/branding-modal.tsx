@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
+import branding from '../../../assets/branding.png';
 
 interface BrandingModalProps {
-  trigger: React.ReactNode;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  trigger?: React.ReactNode;
   modalContent: React.ReactNode;
 }
 
-const BrandingModal: React.FC<BrandingModalProps> = ({ trigger, modalContent }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const BrandingModal: React.FC<BrandingModalProps> = ({ isOpen, setIsOpen, trigger, modalContent }) => {
+  // const [isOpen, setIsOpen] = useState(open);
 
   return (
     <div className="relative">
       {/* Trigger Button */}
-      <div onClick={() => setIsOpen(true)} className="cursor-pointer inline-block z-0">
-        {trigger}
-      </div>
+      {trigger && (
+        <div onClick={() => setIsOpen(true)} className="cursor-pointer inline-block z-0">
+          {trigger}
+        </div>
+      )}
 
-      {/* Modal Background Overlay */}
+      {/* Modal Background */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity z-50"
@@ -44,7 +49,7 @@ const BrandingModal: React.FC<BrandingModalProps> = ({ trigger, modalContent }) 
                   style={{
                     bottom: '-100px',
                     right: '-40px',
-                    backgroundImage: `url('https://s3-alpha-sig.figma.com/img/c10d/31ac/f6510f49a600ee4012f68d99c9b2f87d?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=KasIX6eAigMBROC-yKTXZ9zDphORdFr6EZ8QGQX4RwWXZ-1hZu1fbwaUx3x2ELmyQ6jO86Ok06SBqi3kb14EUElQagnnZ7DuWYxKdrWo2ftFKjdu5WcWxE1fXf6u4un6FCA4svzAyyqouX8GLdLJwt3qcJVugegkw~kly3B9ndj6aTyKBRfk82RAR7NS2pSpZtFCH7~lyZXiern4ULPo4kzgbiRjk9nyDQMRyPdVhrkqFy1RqtqICIQNPmbCo1xQmuZ9lcRAklvQITGVvb~EzPI8m2z-OZXkJseVP9yjGl6OdZNGrQJg1WXywshEaSztNp7731UUgFBGP1YC0kKoPQ__')`,
+                    backgroundImage: `url(${branding})`,
                     backgroundSize: 'contain',
                     zIndex: 0,
                   }}

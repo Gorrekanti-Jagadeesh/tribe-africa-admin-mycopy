@@ -5,8 +5,7 @@ import HeroContainer from './hero-section/hero-container';
 import ExploreContainer from './explore-section/explore-container';
 import ExperienceContainer from './experience-section/experience-container';
 import Services from './services-section/services-screen';
-// import CharmingHotels from './hotels-section/hotels-screen';
-import CharmingHotelsContainer from './charming-hotel-section/charming-hotel-container';
+import CharmingHotels from './hotels-section/hotels-screen';
 import HolidayDestinationContainer from './holiday-destination-section/holiday-destination-container';
 import WorkingRemotelyContainer from './working-remotely-section/working-remotely-container';
 import BusinessFriendlyContainer from './business-friendly-section/business-friendly-container';
@@ -19,7 +18,7 @@ const HomeScreen: React.FC = () => {
       <div>
         <HeroContainer />
         <ExploreContainer />
-        <CharmingHotelsContainer />
+        <CharmingHotels />
         <HolidayDestinationContainer />
         <ExperienceContainer />
         <WorkingRemotelyContainer />

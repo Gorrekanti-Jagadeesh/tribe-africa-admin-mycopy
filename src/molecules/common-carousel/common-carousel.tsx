@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 
-interface commonCarouselData {
-  images: string[];
+interface carouselCardProps {
+  image: string | undefined;
+  title: string;
+  handleClick: () => void;
 }
 
-const CommonCarousel: React.FC<commonCarouselData> = ({ images }) => {
+interface commonCarouselData {
+  data: carouselCardProps[];
+}
+
+const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   let itemsPerPage = 0;
 
@@ -19,19 +25,19 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ images }) => {
   }
 
   const handleNext = () => {
-    if (currentIndex + itemsPerPage < images.length) {
+    if (currentIndex + itemsPerPage < data.length) {
       setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handlePrev = () => {
-    if (currentIndex - itemsPerPage >= 0) {
+    if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
   };
 
-  const isNextDisabled = currentIndex >= images.length - itemsPerPage;
-  const isPrevDisabled = currentIndex === 0;
+  const isNextDisabled = currentIndex >= data.length - itemsPerPage;
+  const isPrevDisabled = currentIndex == 0;
 
   return (
     <div>
@@ -55,17 +61,19 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ images }) => {
               transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
             }}
           >
-            {images.map((image, index) => (
+            {data.map((item: carouselCardProps, index: number) => (
               <div
                 key={index}
-                className="w-full px-2 sm:w-1/1 md:w-1/2 lg:w-1/3 flex-shrink-0 p-6"
+                className="w-full px-2 sm:w-1/1 md:w-1/2 lg:w-1/3 flex-shrink-0 p-6 cursor-pointer"
                 style={{ minWidth: '33.3333%' }}
+                onClick={item.handleClick}
               >
                 <img
-                  src={image}
+                  src={item.image}
                   alt={`carousel-${index}`}
                   className="w-full h-full object-cover rounded-lg cursor-pointer"
                 />
+                <p>{item.title}</p>
               </div>
             ))}
           </div>
@@ -82,24 +90,24 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ images }) => {
         </button>
       </div>
       {/* Image title */}
-      <div className="flex overflow-hidden w-11/12 mx-auto">
+      {/* <div className="flex overflow-hidden w-11/12 mx-auto">
         <div
           className="flex transition-transform duration-500 ease-in-out"
           style={{
             transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
           }}
         >
-          {images.map((_, index) => (
+          {data.map(( item, index) => (
             <div
               key={index}
               className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 flex-shrink-0 px-2"
               style={{ minWidth: '33.3333%' }}
             >
-              <p className="text-lg font-semibold text-ellipsis">This is images carousel index-{index}</p>
+              <p className="text-lg font-semibold text-ellipsis">{item.title}</p>
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
