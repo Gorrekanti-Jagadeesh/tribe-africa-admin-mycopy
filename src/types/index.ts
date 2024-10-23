@@ -1,5 +1,4 @@
 import { NavigateFunction } from 'react-router';
-import { MouseEventHandler } from 'react';
 
 export interface ContentfulSys {
   id: string;
@@ -29,8 +28,8 @@ export interface ContentfulEntry {
   fields: HotelFields;
 }
 
-export interface ContentfulResponse {
-  items: ContentfulEntry[];
+export interface ContentfulResponse<T> {
+  items: T[];
 }
 
 export interface customeBtnProps {

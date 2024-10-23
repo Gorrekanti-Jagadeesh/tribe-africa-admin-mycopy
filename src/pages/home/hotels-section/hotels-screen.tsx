@@ -3,6 +3,7 @@ import BrandingModal from '../../../molecules/modals/home-page-modals/branding-m
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { fetchHotelEntries, fetchImageByEntryId } from '../../../api';
 import CommonCarousel from '../../../molecules/common-carousel/common-carousel';
+import { ContentfulResponse } from '../../../types';
 
 const queryClient = new QueryClient();
 
@@ -46,7 +47,7 @@ function QueriedHotels() {
     return imagesAssets;
   };
 
-  const processData = async (data: any) => {
+  const processData = async (data: ContentfulResponse<ContentfulEntry>) => {
     const processedData = await Promise.all(
       data.items.map(async (item: ContentfulEntry) => {
         const hotelImages = await customHotelObject(item.fields.hotelImages, [0]);

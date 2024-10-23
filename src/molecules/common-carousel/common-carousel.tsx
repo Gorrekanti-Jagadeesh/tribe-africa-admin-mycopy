@@ -11,8 +11,6 @@ interface commonCarouselData {
 }
 
 const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
-  if (!data) return;
-  console.log(data);
   const [currentIndex, setCurrentIndex] = useState(0);
   let itemsPerPage = 0;
 
