@@ -3,6 +3,7 @@ import { MenuBar } from '../menu/MenuBar';
 import africaLogo from '../../assets/logo.png';
 import DiscoverContaner from '../../pages/home/navbar-section/discover-section/discover-container';
 import EventsContainer from '../../pages/home/navbar-section/events-section/events-container';
+import Blogs from '../../pages/home/navbar-section/blog-section/blog-container';
 
 interface HoverNavLinkProps {
   id: string;
@@ -44,7 +45,7 @@ export const HomeHeader = () => {
   return (
     <div className="grid gap-2 p-2 m-auto max-w-6xl">
       <div>
-        <MenuBar purpose={null} country={null} />
+        <MenuBar purpose={null} country={undefined} />
       </div>
       <div className="hidden text-center border-2 rounded-lg relative md:flex">
         <HoverNavLink id="getting-there" title="Getting there" content={<>Content</>} />
@@ -54,9 +55,10 @@ export const HomeHeader = () => {
           <img src={africaLogo} style={{ maxWidth: '150px' }} />
         </div>
         <HoverNavLink id="institute-collaboration" title={'Peace & Prosperity Institute'} content={<>Content</>} />
-        <div id="blog" className="m-auto cursor-pointer">
+        <HoverNavLink id="blogs" title="Blogs" content={<Blogs />} />
+        {/* <div id="blog" className="m-auto cursor-pointer">
           <span>Blog</span>
-        </div>
+        </div> */}
         <div id="contact" className="m-auto cursor-pointer">
           <span>Contact</span>
         </div>
