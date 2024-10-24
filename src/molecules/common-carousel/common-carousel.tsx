@@ -41,12 +41,12 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
 
   return (
     <div>
-      <div className="relative w-full flex items-center justify-center">
+      <div className="relative w-full flex ">
         {/* Left Arrow */}
         <button
           onClick={handlePrev}
           disabled={isPrevDisabled}
-          className={`absolute left-0 md:left-2 lg:left-7 top-1/2 border-2 border-slate-200 transform -translate-y-1/2 z-10 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
+          className={`absolute left-0 md:-left-2 lg:-left-7 top-1/2 transform -translate-y-1/2 z-10 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
             isPrevDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
           }`}
         >
@@ -54,7 +54,7 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
         </button>
 
         {/* Carousel Images */}
-        <div className="flex overflow-hidden w-11/12">
+        <div className="flex overflow-hidden w-full">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
@@ -78,11 +78,12 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
             ))}
           </div>
         </div>
+
         {/* Right Arrow */}
         <button
           onClick={handleNext}
           disabled={isNextDisabled}
-          className={`absolute right-0 md:right-2 lg:right-7 border-2 border-slate-200 top-1/2 transform -translate-y-1/2 z-10 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
+          className={`absolute right-0 md:-right-2 lg:-right-7 top-1/2 z-10  w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
             isNextDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
           }`}
         >

@@ -14,7 +14,7 @@ const CustomeSectionHeadingComponent: React.FC<customHeadingProps> = ({
   titleStyles,
 }) => {
   return (
-    <div className="flex justify-between items-center flex-wrap mx-6 md:mx-10 lg:mx-16 my-8">
+    <div className="flex justify-between items-center flex-wrap my-8">
       <h2 className={`text-4xl ${titleStyles}`}>
         {title} <span className="text-[#FF6600] font-[Rufina]">{subPartTitle}</span>
       </h2>

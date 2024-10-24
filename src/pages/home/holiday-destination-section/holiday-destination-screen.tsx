@@ -27,41 +27,43 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
   handleRightClick,
 }) => {
   return (
-    <div className="container bg-[#2B170A] mx-auto py-8">
-      <CustomeSectionHeadingComponent
-        title="Favourite"
-        titleStyles="text-[#fff]"
-        subPartTitle="Holiday Destination"
-        buttonTitle="Advertise with Us"
-      />
-      <div id="slider" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        <div className="mt-8">
-          {images.map((img, index) => (
-            <label
-              key={index}
-              className={`slider-item ${getClassNames(index)} ${
-                activeIndex === index && isHovered ? 'transparent' : ''
-              }`}
-              id={`slider${index + 1}`}
-            >
-              <img src={img} alt={`image${index + 1}`} />
-              <h1 className="text-sm">{titles[index]}</h1>
-              {activeIndex === index && isHovered && <span className="click-here-text">Click here</span>}
-            </label>
-          ))}
+    <div className="bg-[#2B170A] py-8 -2 md:p-4">
+      <div className="max-w-6xl m-auto">
+        <CustomeSectionHeadingComponent
+          title="Favourite"
+          titleStyles="text-[#fff]"
+          subPartTitle="Holiday Destination"
+          buttonTitle="Advertise with Us"
+        />
+        <div id="slider" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+          <div className="mt-8">
+            {images.map((img, index) => (
+              <label
+                key={index}
+                className={`slider-item ${getClassNames(index)} ${
+                  activeIndex === index && isHovered ? 'transparent' : ''
+                }`}
+                id={`slider${index + 1}`}
+              >
+                <img src={img} alt={`image${index + 1}`} />
+                <h1 className="text-sm">{titles[index]}</h1>
+                {activeIndex === index && isHovered && <span className="click-here-text">Click here</span>}
+              </label>
+            ))}
+          </div>
+          {/* Indicators */}
         </div>
-        {/* Indicators */}
-      </div>
-      <div className="indicators">
-        <FaArrowLeftLong className="mr-5 cursor-pointer" onClick={handleLeftClick} color="#fff" />
-        {images.map((_, index) => (
-          <span
-            key={index}
-            className={`indicator ${activeIndex === index ? 'active' : ''}`}
-            onClick={() => handleDotClick(index)}
-          ></span>
-        ))}
-        <FaArrowRightLong className="ml-5 cursor-pointer" onClick={() => handleRightClick()} color="#fff" />
+        <div className="indicators">
+          <FaArrowLeftLong className="mr-5 cursor-pointer" onClick={handleLeftClick} color="#fff" />
+          {images.map((_, index) => (
+            <span
+              key={index}
+              className={`indicator ${activeIndex === index ? 'active' : ''}`}
+              onClick={() => handleDotClick(index)}
+            ></span>
+          ))}
+          <FaArrowRightLong className="ml-5 cursor-pointer" onClick={() => handleRightClick()} color="#fff" />
+        </div>
       </div>
     </div>
   );

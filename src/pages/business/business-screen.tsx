@@ -35,9 +35,44 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
           </>
         }
         data={[]}
+      />
+      {/* Upcoming events */}
+      <CardsGrid
+        heading={
+          <>
+            Upcoming <span className="font-serif text-orange-500">Events</span>
+          </>
+        }
+        max={6}
+        data={[
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+        ]}
         featuredCard={{
-          imageURL: featuredBG,
-          info: 'featured',
+          title: 'List your event here',
           redirect: 'https://google.com',
           placeholder: 'Click to know more',
         }}

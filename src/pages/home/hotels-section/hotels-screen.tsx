@@ -81,7 +81,7 @@ function QueriedHotels() {
   if (error instanceof Error) return <div>An error has occurred: {error.message}</div>;
 
   return (
-    <div className="max-w-6xl m-auto">
+    <div className="max-w-6xl m-auto p-8 my-4">
       <h3 className="text-4xl">
         Charming <span className="font-serif text-orange-500">Hotels</span>
       </h3>
