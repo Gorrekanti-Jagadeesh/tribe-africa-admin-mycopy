@@ -1,5 +1,4 @@
 import React from 'react';
-import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import './holiday-destination-styles.css';
 import CustomeSectionHeadingComponent from '../../../atoms/custom-section-heading/custom-section-heading-component';
 
