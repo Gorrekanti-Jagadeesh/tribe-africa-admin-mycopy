@@ -1,5 +1,5 @@
 interface customeBtnProps {
-  title: string;
+  title?: string;
 }
 
 const CustomeButton: React.FC<customeBtnProps> = ({ title }) => {

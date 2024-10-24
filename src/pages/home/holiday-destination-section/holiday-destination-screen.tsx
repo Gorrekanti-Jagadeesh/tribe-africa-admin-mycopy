@@ -22,18 +22,16 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
   isHovered,
   setIsHovered,
   getClassNames,
-  handleDotClick,
-  handleLeftClick,
-  handleRightClick,
 }) => {
   return (
     <div className="bg-[#2B170A] py-8 -2 md:p-4">
       <div className="max-w-6xl m-auto">
         <CustomeSectionHeadingComponent
           title="Favourite"
-          titleStyles="text-[#fff]"
           subPartTitle="Holiday Destination"
           buttonTitle="Advertise with Us"
+          titleStyles="font-[Poppins] text-[#fff]"
+          subTitleStyles="text-[#FF6600] font-[Rufina]"
         />
         <div id="slider" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           <div className="mt-8">
@@ -51,18 +49,6 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
               </label>
             ))}
           </div>
-          {/* Indicators */}
-        </div>
-        <div className="indicators">
-          <FaArrowLeftLong className="mr-5 cursor-pointer" onClick={handleLeftClick} color="#fff" />
-          {images.map((_, index) => (
-            <span
-              key={index}
-              className={`indicator ${activeIndex === index ? 'active' : ''}`}
-              onClick={() => handleDotClick(index)}
-            ></span>
-          ))}
-          <FaArrowRightLong className="ml-5 cursor-pointer" onClick={() => handleRightClick()} color="#fff" />
         </div>
       </div>
     </div>
