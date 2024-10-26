@@ -3,6 +3,8 @@ import { BusinessHeader } from '../../molecules/header/business-header';
 import heroBackground from '../../assets/homepage-welcome-image-2.png';
 import CardsGrid from '../../molecules/layout/cards-grid';
 import featuredBG from '../../assets/branding-bg-dark.png';
+import CustomOverLayCard from '../../atoms/custome-overlay-card/custom-overlay-card';
+import InvestmentSectorsContainer from './investment-sectors-section/investment-sector-container';
 
 const BusinessScreen = ({ country }: { country: string | undefined }) => {
   return (
@@ -28,7 +30,7 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
         </div>
       </div>
       {/* Cards layout for 'Key Invesment Sectors' */}
-      <CardsGrid
+      {/* <CardsGrid
         heading={
           <>
             Key <span className="font-serif text-orange-500">Investment Sectors</span> in {country}
@@ -42,6 +44,8 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
           placeholder: 'Click to know more',
         }}
       />
+       */}
+      <InvestmentSectorsContainer />
       <Footer />
     </div>
   );
