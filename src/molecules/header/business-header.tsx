@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import africaLogo from '../../assets/logo.png';
 import { MenuBar } from '../menu/MenuBar';
+import { TravelKnowledge } from '../../pages/business/navbar-section/travel-knowledge/travel-knowledge';
+import Blogs from '../../pages/home/navbar-section/blog-section/blog-container';
+import Network from '../../pages/business/navbar-section/network/network-container';
 
 interface HoverNavLinkProps {
   id: string;
@@ -40,7 +43,7 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
 
 export const BusinessHeader = ({ country }: { country: string | undefined }) => {
   return (
-    <div className="grid gap-2 p-4 m-auto my-4 max-w-6xl overflow-clip">
+    <div className="grid gap-2 p-4 m-auto my-4 max-w-6xl">
       <div>
         <MenuBar purpose={'business'} country={country} />
       </div>
@@ -48,18 +51,14 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
         <div id="country" className="m-auto cursor-pointer" title="know more">
           <span>{country}</span>
         </div>
-        <HoverNavLink id="network" title="Network" content={<>Content</>} />
+        <HoverNavLink id="network" title="Network" content={<Network />} />
         <HoverNavLink id="market-place" title="Market Place" content={<>Content</>} />
         <div id="logo" className="m-auto cursor-pointer">
           <img src={africaLogo} style={{ maxWidth: '150px' }} />
         </div>
         <HoverNavLink id="after-work" title={'After Work'} content={<>Content</>} />
-        <div id="travel" className="m-auto cursor-pointer">
-          <span>Travel Knowledge</span>
-        </div>
-        <div id="blog" className="m-auto cursor-pointer">
-          <span>Blog</span>
-        </div>
+        <HoverNavLink id="travel-knowledge" title={'Travel Knowledge'} content={<TravelKnowledge />} />
+        <HoverNavLink id="blogs" title="Blogs" content={<Blogs />} />
       </div>
     </div>
   );

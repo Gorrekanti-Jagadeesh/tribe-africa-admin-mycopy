@@ -57,11 +57,12 @@ const BlogScreen: React.FC = () => {
           <div className="bg-gray-700 text-white rounded-md aspect-video flex">
             <div className=" gap-2 m-auto">
               <p>Our Podcast</p>
-              <span className="text-white m-4">
+              <span className="text-white m-4 text-2xl relative top-1">
                 {/* Add appropriate icons */}
                 <FontAwesomeIcon icon={faYoutube} />
               </span>
-              <span className="text-white m-4">
+              |
+              <span className="text-white m-4 text-2xl relative top-1">
                 <FontAwesomeIcon icon={faSpotify} />
               </span>
             </div>

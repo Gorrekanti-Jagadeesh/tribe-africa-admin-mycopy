@@ -21,7 +21,7 @@ const BusinessFriendlyScreen: React.FC<BusinessFriendlyCarouselProps> = ({
   handlePrev,
 }) => {
   return (
-    <div className="container w-full max-w-6xl mx-auto px-8 py-8 md:px-2 md:py-2">
+    <div className="mx-auto w-full max-w-6xl p-2 md:p-4">
       <CustomSectionHeadingComponent
         title="Business"
         subPartTitle="Friendly"
@@ -35,7 +35,7 @@ const BusinessFriendlyScreen: React.FC<BusinessFriendlyCarouselProps> = ({
       <div className="relative flex sm:flex-col items-center">
         {/* Left Arrow */}
         <button
-          className={`absolute left-0 md:-left-2 lg:-left-7 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg z-20 border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
+          className={`absolute left-0 md:-left-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg z-20 border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
             currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           onClick={handlePrev}
@@ -46,7 +46,7 @@ const BusinessFriendlyScreen: React.FC<BusinessFriendlyCarouselProps> = ({
         </button>
 
         {/* Text and Image */}
-        <div className="w-full flex flex-col md:flex-row-reverse relative items-center">
+        <div className="w-full flex flex-col md:flex-row-reverse relative items-center p-4">
           {/* Text container */}
           <div className="w-full md:-ml-10 mb-3 md:mb-0 z-10 relative bg-white rounded-lg shadow-lg">
             <div className="bg-white p-8 md:-ml-10 rounded-lg w-full md:max-w-[53rem]">
@@ -67,7 +67,7 @@ const BusinessFriendlyScreen: React.FC<BusinessFriendlyCarouselProps> = ({
 
         {/* Right Arrow */}
         <button
-          className={`absolute z-30  right-0 md:-right-2 lg:-right-7 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full w-12 h-12 md:w-16 md:h-16 shadow-lg border-slate-300 ${
+          className={`absolute z-30  right-0 md:-right-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full w-12 h-12 md:w-16 md:h-16 shadow-lg border-slate-300 ${
             currentIndex === carouselData.length - 1 ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           onClick={handleNext}

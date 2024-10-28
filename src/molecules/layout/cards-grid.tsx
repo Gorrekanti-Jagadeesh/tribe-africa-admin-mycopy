@@ -16,7 +16,7 @@ interface content {
 interface cardsProps {
   heading: ReactNode;
   data: content[];
-  max: number;
+  max?: number;
   featuredCard?: featured;
 }
 
@@ -37,7 +37,7 @@ const CardsGrid: React.FC<cardsProps> = ({ heading, data, max, featuredCard }) =
             <p>{item.title}</p>
           </div>
         ))}
-        {featuredCard && data.length < max && (
+        {featuredCard && max && data.length < max && (
           <div className="w-full inline-block">
             <div className="w-full aspect-square flex rounded-lg bg-black border-2 border-orange-500">
               <div className="text-white text-left m-auto p-4">
