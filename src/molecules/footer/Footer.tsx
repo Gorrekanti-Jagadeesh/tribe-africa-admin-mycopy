@@ -154,7 +154,7 @@ const Footer = () => {
             <div>
               <h3 className="text-xl text-orange-500 font-bold mb-4 mt-4">Subscribe to our newsletter</h3>
               <form>
-                <div className="bg-white w-fit rounded-full sm:m-auto md:m-0">
+                <div className="bg-white w-fit rounded-full m-auto md:m-0">
                   <input
                     type="email"
                     className="bg-transparent rounded-full px-4 py-2 text-white outline-none"

@@ -171,9 +171,7 @@ const DidYouKnowScreen: React.FC<{ setParentContent: (value: boolean) => void }>
       >
         &larr; Did You know?
       </h4>
-      <div id="innovations-cards" className=" grid grid-cols-3">
-        {/* Content in the form of card layout */}
-      </div>
+      <p>Coming Soon..</p>
     </div>
   );
 };
@@ -187,9 +185,7 @@ const BucketListScreen: React.FC<{ setParentContent: (value: boolean) => void }>
       >
         &larr; Bucket List
       </h4>
-      <div id="innovations-cards" className=" grid grid-cols-3">
-        {/* Content in the form of card layout */}
-      </div>
+      <p>Coming Soon..</p>
     </div>
   );
 };
@@ -203,9 +199,7 @@ const GreatOutdoorsScreen: React.FC<{ setParentContent: (value: boolean) => void
       >
         &larr; The Great Outdoors
       </h4>
-      <div id="innovations-cards" className=" grid grid-cols-3">
-        {/* Content in the form of card layout */}
-      </div>
+      <p>Coming Soon..</p>
     </div>
   );
 };
@@ -219,9 +213,7 @@ const PilgrimageScreen: React.FC<{ setParentContent: (value: boolean) => void }>
       >
         &larr; Pilgrimages
       </h4>
-      <div id="innovations-cards" className=" grid grid-cols-3">
-        {/* Content in the form of card layout */}
-      </div>
+      <p>Coming Soon..</p>
     </div>
   );
 };
@@ -235,9 +227,7 @@ const DestinationWeddingScreen: React.FC<{ setParentContent: (value: boolean) =>
       >
         &larr; Wedding destinations
       </h4>
-      <div id="innovations-cards" className=" grid grid-cols-3">
-        {/* Content in the form of card layout */}
-      </div>
+      <p>Coming Soon..</p>
     </div>
   );
 };

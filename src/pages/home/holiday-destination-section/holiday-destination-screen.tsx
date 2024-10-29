@@ -23,7 +23,7 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
   getClassNames,
 }) => {
   return (
-    <div className="bg-[#2B170A] py-8 -2 md:p-4">
+    <div className="bg-[#2B170A] py-8 p-2 md:p-4">
       <div className="max-w-6xl m-auto">
         <CustomeSectionHeadingComponent
           title="Favourite"

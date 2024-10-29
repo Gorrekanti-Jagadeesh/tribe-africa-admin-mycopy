@@ -2,7 +2,7 @@ import homeLogo from '../../assets/home.png';
 import notificationLogo from '../../assets/notification.png';
 import { Auth } from '../auth';
 
-export const MenuBar = ({ purpose, country }: { purpose: string | null; country: string | undefined }) => {
+export const MenuBar = ({ purpose, country }: { purpose: string | undefined; country: string | undefined }) => {
   return (
     <>
       <div className="flex">
@@ -26,7 +26,8 @@ export const MenuBar = ({ purpose, country }: { purpose: string | null; country:
           <div className="flex gap-3">
             <img src={homeLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
             <img src={notificationLogo} className="m-auto" style={{ width: '14px', height: 'fit-content' }} />
-            {/* Authentication elements */}
+
+            {/* Authentication component */}
             <Auth />
           </div>
         </div>
