@@ -64,7 +64,7 @@ export const fetchCurrencies = async () => {
   try {
     const res = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/codes`);
     const data = await res.json();
-    return data.supported_codes.map((code: any[]) => {
+    return data.supported_codes.map((code: string[]) => {
       return {
         currencyCode: code[0],
         currencyName: code[1],
@@ -75,7 +75,7 @@ export const fetchCurrencies = async () => {
   }
 };
 
-export const convertCurrency = async (fromCurrency: any, toCurrency: any, amount: any) => {
+export const convertCurrency = async (fromCurrency: string, toCurrency: string, amount: number) => {
   try {
     const res = await fetch(
       `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${fromCurrency}/${toCurrency}/${amount}`
