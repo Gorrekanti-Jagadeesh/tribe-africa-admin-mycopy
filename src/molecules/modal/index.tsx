@@ -10,12 +10,12 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, trigger, customClasses, children }) => {
   return (
-    <div className="relative">
+    <div className="m-auto">
       {/* Trigger Button */}
       {trigger && (
-        <div onClick={() => setIsOpen(true)} className="cursor-pointer inline-block z-0">
+        <span onClick={() => setIsOpen(true)} className="cursor-pointer">
           {trigger}
-        </div>
+        </span>
       )}
 
       {/* Modal Background */}
@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, trigger, customClasses
         >
           {/* Modal Container */}
           <div
-            className={`grid shadow-lg relative max-w-5xl mx-auto overflow-hidden px-4 ${customClasses}`}
+            className={`grid relative max-w-5xl mx-auto overflow-hidden ${customClasses}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button

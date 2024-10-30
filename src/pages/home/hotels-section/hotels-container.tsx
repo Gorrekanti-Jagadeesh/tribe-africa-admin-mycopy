@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchHotelEntries, fetchImageByEntryId } from '../../../api';
 import { ContentfulResponse } from '../../../types';
 import HotelsScreen from './hotels-screen';
-
-const queryClient = new QueryClient();
 
 interface ContentfulSys {
   id: string;
@@ -70,7 +68,7 @@ const processHotelImages = async (
   }
 };
 
-function Hotels() {
+function CharmingHotels() {
   const [content, setContent] = useState<HotelFields | null>(null);
   const [hotelData, setHotelData] = useState<HotelFields[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -98,13 +96,5 @@ function Hotels() {
     />
   );
 }
-
-const CharmingHotels = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Hotels />
-    </QueryClientProvider>
-  );
-};
 
 export default CharmingHotels;

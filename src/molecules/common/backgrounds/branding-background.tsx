@@ -16,12 +16,11 @@ const BrandingCorner: React.FC<BrandingCornerProps> = ({ children }) => {
           right: '-40px',
           backgroundImage: `url(${branding})`,
           backgroundSize: 'contain',
-          zIndex: 0,
         }}
       ></div>
 
-      <div className="overflow-auto h-fit w-full flex py-4 z-10 ">
-        <span className="m-auto w-full">{children}</span>
+      <div className="overflow-auto h-fit w-full flex py-4">
+        <span className="m-auto w-full z-10">{children}</span>
       </div>
     </div>
   );

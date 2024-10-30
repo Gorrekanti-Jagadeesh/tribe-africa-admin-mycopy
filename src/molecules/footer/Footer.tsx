@@ -162,7 +162,11 @@ const Footer = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <button type="submit" className="bg-orange-500 text-white px-4 py-2 rounded-full ml-2">
+                  <button
+                    type="submit"
+                    className="bg-orange-500 text-white px-4 py-2 rounded-full ml-2"
+                    onClick={() => console.log('submitted')}
+                  >
                     Subscribe
                   </button>
                 </div>
