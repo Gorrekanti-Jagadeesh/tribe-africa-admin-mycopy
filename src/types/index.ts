@@ -1,5 +1,16 @@
 import { NavigateFunction } from 'react-router';
 
+// data
+export interface ServicesProps {
+  heading: string;
+  image: string;
+  location: string;
+}
+
+export interface ServicesScreenProps {
+  data: ServicesProps[];
+}
+
 export interface ContentfulSys {
   id: string;
 }

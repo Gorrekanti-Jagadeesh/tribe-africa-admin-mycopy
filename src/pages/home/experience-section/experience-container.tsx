@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import ExperienceScreen from './experience-screen';
 
-const ExperienceContainer: React.FC = () => {
+const Experience: React.FC = () => {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -22,4 +22,4 @@ const ExperienceContainer: React.FC = () => {
   );
 };
 
-export default ExperienceContainer;
+export default Experience;

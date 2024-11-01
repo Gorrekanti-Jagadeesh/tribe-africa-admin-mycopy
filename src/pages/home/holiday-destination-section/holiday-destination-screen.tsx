@@ -2,9 +2,8 @@ import React from 'react';
 import './holiday-destination-styles.css';
 import CustomeSectionHeadingComponent from '../../../atoms/custom-section-heading/custom-section-heading-component';
 
-interface holidayDestinationCarouselData {
-  images: string[];
-  titles: string[];
+interface HolidayDestinationCarouselData {
+  data: { title: string; image: string }[];
   activeIndex: number;
   isHovered: boolean;
   setIsHovered: (hovered: boolean) => void;
@@ -14,9 +13,8 @@ interface holidayDestinationCarouselData {
   handleLeftClick: () => void;
 }
 
-const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
-  images,
-  titles,
+const HolidayDestinationScreen: React.FC<HolidayDestinationCarouselData> = ({
+  data,
   activeIndex,
   isHovered,
   setIsHovered,
@@ -34,7 +32,7 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
         />
         <div id="slider" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           <div className="mt-8">
-            {images.map((img, index) => (
+            {data.map((item, index) => (
               <label
                 key={index}
                 className={`slider-item ${getClassNames(index)} ${
@@ -42,8 +40,8 @@ const HolidayDestinationScreen: React.FC<holidayDestinationCarouselData> = ({
                 }`}
                 id={`slider${index + 1}`}
               >
-                <img src={img} alt={`image${index + 1}`} />
-                <h1 className="text-sm">{titles[index]}</h1>
+                <img src={item.image} alt={`image${index + 1}`} />
+                <h1 className="text-sm">{item.title}</h1>
                 {activeIndex === index && isHovered && <span className="click-here-text">Click here</span>}
               </label>
             ))}

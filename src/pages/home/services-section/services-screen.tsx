@@ -1,6 +1,6 @@
-import cardImage from '../../../assets/homepage-welcome-image-3.png';
+import { ServicesScreenProps } from '../../../types';
 
-const Services: React.FC = () => {
+const ServicesScreen: React.FC<ServicesScreenProps> = ({ data }) => {
   return (
     <div className="my-12 grid gap-2 m-auto max-w-6xl p-2 md:p-4">
       <h3 className="text-4xl animate-on-scroll">
@@ -8,17 +8,17 @@ const Services: React.FC = () => {
       </h3>
       <div id="services-container" className="grid grid-cols-3 gap-3 animate-on-scroll">
         {/* Cards */}
-        {[1, 2, 3].map((index) => (
+        {data.map((service, index) => (
           <div className="my-4" key={index}>
             <div className="border-2 border-gray-300 p-2 rounded" style={{ aspectRatio: '4/3' }}>
               <div
                 className="relative bg-cover bg-center p-2 w-full h-full"
-                style={{ backgroundImage: `url(${cardImage})` }}
+                style={{ backgroundImage: `url(${service.image})` }}
               ></div>
             </div>
             <div>
-              <h6 className="font-semibold">Executive Logistics</h6>
-              <p className="text-sm">Fajara, The gambia</p>
+              <h6 className="font-semibold">{service.heading}</h6>
+              <p className="text-sm">{service.location}</p>
             </div>
           </div>
         ))}
@@ -36,4 +36,4 @@ const Services: React.FC = () => {
   );
 };
 
-export default Services;
+export default ServicesScreen;
