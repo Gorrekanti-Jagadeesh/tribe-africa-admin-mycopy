@@ -1,6 +1,6 @@
 // experience-screen.tsx
 import React from 'react';
-import videoPlay from '../../../assets/Frame.png';
+import videoPlay from '../../../assets/play-button.png';
 
 interface ExperienceScreenProps {
   playing: boolean;
