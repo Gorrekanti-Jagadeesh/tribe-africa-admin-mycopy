@@ -21,7 +21,7 @@ const WorkingRemotelyScreen: React.FC<wokingRemotelyCarouselProps> = ({
   handlePrev,
 }) => {
   return (
-    <div className="container mx-auto container w-full max-w-6xl px-8 py-8 md:px-2 md:py-2">
+    <div className="mx-auto w-full max-w-6xl p-2 md:p-4">
       <CustomSectionHeadingComponent
         title="Great For"
         subPartTitle="Working Remotely"
@@ -31,10 +31,10 @@ const WorkingRemotelyScreen: React.FC<wokingRemotelyCarouselProps> = ({
         titleStyles="font-[Poppins]"
         subTitleStyles="text-[#FF6600] font-[Rufina]"
       />
-      <div className="relative flex sm:flex-col items-center">
+      <div className="relative flex sm:flex-col items-center p-4">
         {/* Left Arrow */}
         <button
-          className={`absolute -left-7 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg z-20 border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
+          className={`absolute left-0 md:-left-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg z-20 border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
             currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           onClick={handlePrev}
@@ -47,7 +47,7 @@ const WorkingRemotelyScreen: React.FC<wokingRemotelyCarouselProps> = ({
         {/* Text and Image */}
         <div className="w-full flex flex-col md:flex-row relative items-center">
           {/* Text container */}
-          <div className="w-full mb-3 relative z-10 bg-white rounded-lg shadow-lg w-full md:max-w-md">
+          <div className="w-full mb-3 relative z-10 bg-white rounded-lg shadow-lg md:max-w-md">
             <div className="bg-white p-8 pl-10 rounded-lg shadow-lg w-full md:max-w-[53rem] md:w-[130%]">
               <h2 className="text-xl font-semibold mb-2">{carouselData[currentIndex].title}</h2>
               <p className="text-gray-600">{carouselData[currentIndex].description}</p>
@@ -66,13 +66,12 @@ const WorkingRemotelyScreen: React.FC<wokingRemotelyCarouselProps> = ({
 
         {/* Right Arrow */}
         <button
-          className={`absolute -right-7 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full w-12 h-12 md:w-16 md:h-16 shadow-lg border border-slate-300 ${
+          className={`absolute right-0 md:-right-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full w-12 md:w-16 aspect-square shadow-lg border border-slate-300 ${
             currentIndex === carouselData.length - 1 ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           onClick={handleNext}
           disabled={currentIndex === carouselData.length - 1}
         >
-          {/* ▶ */}
           <span className="text-4xl leading-6">&#8250;</span>
         </button>
       </div>

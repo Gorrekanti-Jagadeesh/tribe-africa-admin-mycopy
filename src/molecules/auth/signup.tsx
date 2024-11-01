@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
-import { auth, db, doc, setDoc } from '../../../../firebaseDB';
+import { auth, db, doc, setDoc } from '../../../firebaseDB';
 
 interface User {
   accessToken: string | null;
@@ -8,7 +8,7 @@ interface User {
   email: string | null;
 }
 
-const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -58,7 +58,7 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       });
 
       // Close the signup modal
-      onClose();
+      setIsOpen(false);
     } catch (error) {
       // Check if the error is an instance of Error before accessing the message
       if (error instanceof Error) {
@@ -72,54 +72,52 @@ const SignupModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-5 rounded-lg shadow-lg w-80">
-        <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
-        <input
-          type="text"
-          placeholder="First Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        {error && <p className="text-red-500 mb-2">{error}</p>} {/* Show error message */}
-        <button className="bg-purple-600 text-white p-2 rounded w-full" onClick={handleSignup}>
-          Sign Up
-        </button>
-        <button className="mt-4 bg-gray-300 text-black p-2 rounded w-full" onClick={onClose}>
-          Close
-        </button>
-      </div>
+    <div className="bg-white p-5 rounded-lg shadow-lg w-80">
+      <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
+      <input
+        type="text"
+        placeholder="First Name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+        className="border p-2 w-full mb-2"
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+        className="border p-2 w-full mb-2"
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="border p-2 w-full mb-2"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="border p-2 w-full mb-2"
+      />
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        className="border p-2 w-full mb-2"
+      />
+      {error && <p className="text-red-500 mb-2">{error}</p>} {/* Show error message */}
+      <button className="bg-purple-600 text-white p-2 rounded w-full" onClick={handleSignup}>
+        Sign Up
+      </button>
+      <button className="mt-4 bg-gray-300 text-black p-2 rounded w-full" onClick={() => setIsOpen(false)}>
+        Close
+      </button>
     </div>
   );
 };
 
-export default SignupModal;
+export default Signup;

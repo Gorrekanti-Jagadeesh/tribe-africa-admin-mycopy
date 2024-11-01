@@ -1,9 +1,9 @@
-import Footer from '../../molecules/footer/Footer';
-import { BusinessHeader } from '../../molecules/header/business-header';
+import Footer from '../../molecules/footer/footer';
+import { BusinessHeader } from '../../molecules/header';
 import heroBackground from '../../assets/homepage-welcome-image-2.png';
 import CardsGrid from '../../molecules/layout/cards-grid';
 import featuredBG from '../../assets/branding-bg-dark.png';
-import CustomOverLayCard from '../../atoms/custome-overlay-card/custom-overlay-card';
+// import CustomOverLayCard from '../../atoms/custome-overlay-card/custom-overlay-card';
 import InvestmentSectorsContainer from './investment-sectors-section/investment-sector-container';
 
 const BusinessScreen = ({ country }: { country: string | undefined }) => {
@@ -37,14 +37,48 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
           </>
         }
         data={[]}
+      />
+      {/* Upcoming events */}
+      <CardsGrid
+        heading={
+          <>
+            Upcoming <span className="font-serif text-orange-500">Events</span>
+          </>
+        }
+        max={6}
+        data={[
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+          {
+            image: featuredBG,
+            title: 'List your event here',
+            redirect: 'https://google.com',
+          },
+        ]}
         featuredCard={{
-          imageURL: featuredBG,
-          info: 'featured',
+          title: 'List your event here',
           redirect: 'https://google.com',
           placeholder: 'Click to know more',
         }}
       />
-       */}
       <InvestmentSectorsContainer />
       <Footer />
     </div>

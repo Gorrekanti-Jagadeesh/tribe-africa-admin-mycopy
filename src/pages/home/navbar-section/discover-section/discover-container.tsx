@@ -9,7 +9,7 @@ import greatOutdoorsView from '../../../../assets/home/discover/great-outdoors.p
 import pilgrimageView from '../../../../assets/home/discover/pilgrimage.png';
 import weddingDestinationView from '../../../../assets/home/discover/destination-weddings.png';
 
-const DiscoverContainer: React.FC = () => {
+const Discover: React.FC = () => {
   const [content, setContent] = useState<React.ReactNode>();
   const [parentContent, setParentContent] = useState(true);
 
@@ -46,4 +46,4 @@ const DiscoverContainer: React.FC = () => {
   );
 };
 
-export default DiscoverContainer;
+export default Discover;

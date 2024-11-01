@@ -6,7 +6,7 @@ import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
 import welcomeImage3 from '../../../assets/homepage-welcome-image-3.png';
 import TAlogo from '../../../assets/tribe-africa-logo.png';
 
-const ExploreContainer: React.FC = () => {
+const Explore: React.FC = () => {
   return (
     <ExploreScreen
       spiralBackground={spiralBackground}
@@ -18,4 +18,4 @@ const ExploreContainer: React.FC = () => {
   );
 };
 
-export default ExploreContainer;
+export default Explore;
