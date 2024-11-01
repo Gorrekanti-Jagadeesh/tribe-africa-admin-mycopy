@@ -1,4 +1,5 @@
 import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
+import Button from '../../../atoms/custom-button/button';
 
 const Services: React.FC = () => {
   return (
@@ -49,9 +50,10 @@ const Services: React.FC = () => {
         <div className="bg-black border-2 border-orange-500 rounded-md text-white text-center p-8 grid gap-4">
           <h4 className=" text-lg font-bold">Want to List your business in Tribe Africa</h4>
           <p className="text-sm">Advertise your business on tribe africa and get massive traffic to your business</p>
-          <button className="px-4 py-2 bg-orange-500 rounded-md text-white m-auto" style={{ width: 'fit-content' }}>
+          {/* <button className="px-4 py-2 bg-orange-500 rounded-md text-white m-auto" style={{ width: 'fit-content' }}>
             Fill the form
-          </button>
+          </button> */}
+          <Button style={{ width: 'fit-content' }}> Fill the form</Button>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import LoginModal from '../modals/home-page-modals/LoginModal';
 import ProfileModal from '../modals/home-page-modals/ProfileModal';
 import Cookies from 'js-cookie';
 import SignupModal from '../modals/home-page-modals/SignupModal';
+import Button from '../../atoms/custom-button/button';
 
 interface User {
   email: string | null;
@@ -114,12 +115,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | null; country:
                 >
                   Login
                 </button>
-                <button
-                  className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black"
-                  onClick={toggleSignupModal}
-                >
-                  Sign up
-                </button>
+                <Button onClick={toggleSignupModal}>Sign</Button>
               </div>
             )}
           </div>

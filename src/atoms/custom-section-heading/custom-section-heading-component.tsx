@@ -1,3 +1,4 @@
+import Button from '../custom-button/button';
 import CustomeButton from '../custom-button/custom-button-component';
 
 interface CustomHeadingProps {
@@ -35,7 +36,7 @@ const CustomSectionHeadingComponent: React.FC<CustomHeadingProps> = ({
         {description && <p className={`mt-2 text-lg text-gray-600 ${descriptionStyles}`}>{description}</p>}{' '}
         {/* Conditional rendering of description */}
       </div>
-      {showButton && <CustomeButton title={buttonTitle} />} {/* Conditionally render the button */}
+      {showButton && <Button onClick={() => {}}>{buttonTitle}</Button>}
     </div>
   );
 };
