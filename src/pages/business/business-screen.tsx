@@ -1,10 +1,9 @@
+import UpcomingEvents from './upcoming-events/upcoming-events-container';
+
 import Footer from '../../molecules/footer/footer';
 import { BusinessHeader } from '../../molecules/header';
 import heroBackground from '../../assets/homepage-welcome-image-2.png';
 import CardsGrid from '../../molecules/layout/cards-grid';
-import featuredBG from '../../assets/branding-bg-dark.png';
-// import CustomOverLayCard from '../../atoms/custome-overlay-card/custom-overlay-card';
-import InvestmentSectorsContainer from './investment-sectors-section/investment-sector-container';
 
 const BusinessScreen = ({ country }: { country: string | undefined }) => {
   return (
@@ -29,8 +28,9 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
           </div>
         </div>
       </div>
+
       {/* Cards layout for 'Key Invesment Sectors' */}
-      {/* <CardsGrid
+      <CardsGrid
         heading={
           <>
             Key <span className="font-serif text-orange-500">Investment Sectors</span> in {country}
@@ -38,48 +38,9 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
         }
         data={[]}
       />
+
       {/* Upcoming events */}
-      <CardsGrid
-        heading={
-          <>
-            Upcoming <span className="font-serif text-orange-500">Events</span>
-          </>
-        }
-        max={6}
-        data={[
-          {
-            image: featuredBG,
-            title: 'List your event here',
-            redirect: 'https://google.com',
-          },
-          {
-            image: featuredBG,
-            title: 'List your event here',
-            redirect: 'https://google.com',
-          },
-          {
-            image: featuredBG,
-            title: 'List your event here',
-            redirect: 'https://google.com',
-          },
-          {
-            image: featuredBG,
-            title: 'List your event here',
-            redirect: 'https://google.com',
-          },
-          {
-            image: featuredBG,
-            title: 'List your event here',
-            redirect: 'https://google.com',
-          },
-        ]}
-        featuredCard={{
-          title: 'List your event here',
-          redirect: 'https://google.com',
-          placeholder: 'Click to know more',
-        }}
-      />
-      <InvestmentSectorsContainer />
+      <UpcomingEvents />
       <Footer />
     </div>
   );
