@@ -21,7 +21,7 @@ const CustomSectionHeadingComponent: React.FC<CustomHeadingProps> = ({
   titleStyles,
   containerStyles = '',
   description,
-  showButton = true, // Default to true, but can be set to false
+  showButton = true,
   descriptionStyles,
   subTitleStyles,
   subPartTitle2,

@@ -90,25 +90,6 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
           <span className="text-4xl">&#8250;</span>
         </button>
       </div>
-      {/* Image title */}
-      {/* <div className="flex overflow-hidden w-11/12 mx-auto">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
-          }}
-        >
-          {data.map(( item, index) => (
-            <div
-              key={index}
-              className="w-full sm:w-1/1 md:w-1/2 lg:w-1/3 flex-shrink-0 px-2"
-              style={{ minWidth: '33.3333%' }}
-            >
-              <p className="text-lg font-semibold text-ellipsis">{item.title}</p>
-            </div>
-          ))}
-        </div>
-      </div> */}
     </div>
   );
 };

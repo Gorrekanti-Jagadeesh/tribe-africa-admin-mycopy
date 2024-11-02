@@ -25,13 +25,12 @@ const ServicesScreen: React.FC<ServicesScreenProps> = ({ data }) => {
         ))}
       </div>
       <div id="add-service" className=" animate-on-scroll">
-        <div className="bg-black border-2 border-orange-500 rounded-md text-white text-center p-8 grid gap-4">
-          <h4 className=" text-lg font-bold">Want to List your business in Tribe Africa</h4>
-          <p className="text-sm">Advertise your business on tribe africa and get massive traffic to your business</p>
-          {/* <button className="px-4 py-2 bg-orange-500 rounded-md text-white m-auto" style={{ width: 'fit-content' }}>
-            Fill the form
-          </button> */}
-          <Button style={{ width: 'fit-content' }}> Fill the form</Button>
+        <div className="bg-black border-2 border-orange-500 rounded-md text-white text-center p-12 grid">
+          <h4 className=" text-lg font-bold mb-3">Want to List your business on Tribe Africa pages?</h4>
+          <p className="text-sm text-gray-200 mb-2">List your business and get massive traffic !</p>
+          <button className="px-4 py-2 bg-orange-500 rounded-md text-white m-auto" style={{ width: 'fit-content' }}>
+            List your business
+          </button>
         </div>
       </div>
     </div>
