@@ -19,7 +19,7 @@ const CustomSectionHeadingComponent: React.FC<CustomHeadingProps> = ({
   subPartTitle,
   buttonTitle,
   titleStyles,
-  containerStyles = 'mx-6 md:mx-10 lg:mx-16',
+  containerStyles = '',
   description,
   showButton = true, // Default to true, but can be set to false
   descriptionStyles,

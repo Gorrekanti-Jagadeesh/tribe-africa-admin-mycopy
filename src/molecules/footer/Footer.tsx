@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import spiralBackground from '../../assets/branding-bg-dark.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import TAlogo from '../../assets/tribe-africa-logo.png';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
 const footerLinks = {
@@ -85,7 +86,11 @@ const socialMediaLinks = [
   },
 ];
 
-const Footer: React.FC = () => {
+const TribeAfrica = () => {
+  return <img src={TAlogo} alt="" className=" max-h-4 m-0 inline-block relative" style={{ bottom: '2px' }} />;
+};
+
+const Footer = () => {
   const [email, setEmail] = useState('');
 
   return (
@@ -97,7 +102,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-8">
           <div className="col-span-1 grid gap-2">
             <div id="about">
-              <h3 className="text-xl text-orange-500 font-bold mb-4">About Tribe Africa</h3>
+              <h3 className="text-xl text-orange-500 font-bold mb-4">
+                About <TribeAfrica />
+              </h3>
               <ul className="space-y-2">
                 {footerLinks.about.map((link, index) => (
                   <li key={index}>
@@ -107,7 +114,9 @@ const Footer: React.FC = () => {
               </ul>
             </div>
             <div id="about-business" className="mt-auto">
-              <h3 className="text-xl text-orange-500 font-bold mb-4">Biz with Tribe Africa</h3>
+              <h3 className="text-xl text-orange-500 font-bold mb-4">
+                Biz with <TribeAfrica />
+              </h3>
               <ul className="space-y-2">
                 {footerLinks.business.map((link, index) => (
                   <li key={index}>
@@ -120,7 +129,9 @@ const Footer: React.FC = () => {
           <div className="col-span-2 mt-4 md:mt-0">
             <div className="grid md:flex gap-3 w-full">
               <div>
-                <h3 className="text-xl text-orange-500 font-bold mb-4">Join Tribe Africa</h3>
+                <h3 className="text-xl text-orange-500 font-bold mb-4">
+                  Join <TribeAfrica />
+                </h3>
                 <ul className="space-y-2">
                   {footerLinks.join.map((link, index) => (
                     <li key={index}>
@@ -141,18 +152,24 @@ const Footer: React.FC = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-xl text-white font-bold mb-4 mt-4">Subscribe to our newsletter</h3>
+              <h3 className="text-xl text-orange-500 font-bold mb-4 mt-4">Subscribe to our newsletter</h3>
               <form>
-                <input
-                  type="email"
-                  className="border border-gray-700 bg-transparent rounded-full px-4 py-2 text-white outline-none"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <button type="submit" className="bg-orange-500 text-white px-4 py-2 rounded-full ml-2">
-                  Subscribe
-                </button>
+                <div className="bg-white w-fit rounded-full m-auto md:m-0">
+                  <input
+                    type="email"
+                    className="bg-transparent rounded-full px-4 py-2 text-white outline-none"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="bg-orange-500 text-white px-4 py-2 rounded-full ml-2"
+                    onClick={() => console.log('submitted')}
+                  >
+                    Subscribe
+                  </button>
+                </div>
               </form>
             </div>
           </div>

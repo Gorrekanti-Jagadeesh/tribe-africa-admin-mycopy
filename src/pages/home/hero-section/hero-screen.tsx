@@ -1,5 +1,7 @@
 import React from 'react';
 import Dropdown from '../../../atoms/dropdown/dropdown-search';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMessage } from '@fortawesome/free-solid-svg-icons';
 
 // Props interface for HeroScreen
 interface HeroScreenProps {
@@ -25,10 +27,10 @@ const HeroScreen: React.FC<HeroScreenProps> = ({
   return (
     <div className="m-auto max-w-6xl">
       <div className="text-center relative p-2 animate-on-scroll">
-        <div className="flex gap-2 bg-white p-2 m-auto rounded-xl shadow-lg" style={{ width: 'fit-content' }}>
+        <div className="flex gap-2 p-4 py-2 bg-white m-auto rounded-xl shadow-lg" style={{ width: 'fit-content' }}>
           <div className="flex gap-2">
             <Dropdown text="Where to?" options={countries} searchable={true} action={setCountry} />
-            <Dropdown text="Purpose?" options={purposes} searchable={false} action={setPurpose} />
+            <Dropdown text="For?" options={purposes} searchable={false} action={setPurpose} />
           </div>
           <button
             className={`border rounded-lg text-white px-4 bg-orange-500 disabled:bg-slate-400`}
@@ -48,7 +50,9 @@ const HeroScreen: React.FC<HeroScreenProps> = ({
           </video>
         </div>
         <div className="float-right">
-          <p className="bg-yellow-500 p-3 rounded cursor-pointer">chatbot</p>
+          <p className="bg-orange-500 text-white p-2 rounded cursor-pointer">
+            <FontAwesomeIcon icon={faMessage} className="relative top-1 mx-2" /> Ask me anything!
+          </p>
         </div>
       </div>
       <Logo />
@@ -59,7 +63,7 @@ const HeroScreen: React.FC<HeroScreenProps> = ({
 // Logo Component
 const Logo: React.FC = () => {
   return (
-    <div id="landing-logo" className="animate-on-scroll">
+    <div id="landing-logo" className="animate-on-scroll max-w-xl m-auto">
       <img
         className="m-auto w-100 p-4"
         role="presentation"

@@ -1,5 +1,5 @@
-import Footer from '../../molecules/footer/Footer';
-import { HolidayHeader } from '../../molecules/header/holiday-header';
+import Footer from '../../molecules/footer/footer';
+import { HolidayHeader } from '../../molecules/header';
 
 const HolidayScreen = () => {
   return (

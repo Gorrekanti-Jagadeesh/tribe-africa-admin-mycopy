@@ -44,7 +44,7 @@ const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }
 
   return (
     <div className="relative inline-block" ref={ref}>
-      <button className="w-24 md:w-48 bg-slate-200 p-2 rounded-md cursor-pointer truncate" onClick={handleButtonClick}>
+      <button className="w-24 md:w-48 bg-slate-200 p-4 rounded-md cursor-pointer truncate" onClick={handleButtonClick}>
         {placeholder}
       </button>
       <ul
