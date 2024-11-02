@@ -1,6 +1,7 @@
 import React from 'react';
 import './holiday-destination-styles.css';
-import CustomeSectionHeadingComponent from '../../../atoms/custom-section-heading/custom-section-heading-component';
+import DualHeading from '../../../atoms/heading/dual-heading';
+import Button from '../../../atoms/custom-button/button';
 
 interface HolidayDestinationCarouselData {
   data: { title: string; image: string }[];
@@ -23,13 +24,10 @@ const HolidayDestinationScreen: React.FC<HolidayDestinationCarouselData> = ({
   return (
     <div className="bg-[#2B170A] py-8 p-2 md:p-4">
       <div className="max-w-6xl m-auto">
-        <CustomeSectionHeadingComponent
-          title="Favourite"
-          subPartTitle="Holiday Destination"
-          buttonTitle="Advertise with Us"
-          titleStyles="font-[Poppins] text-[#fff]"
-          subTitleStyles="text-[#FF6600] font-[Rufina]"
-        />
+        <div className="flex">
+          <DualHeading className="text-white">Favourite *Holiday Destinations*</DualHeading>
+          <Button className="ms-auto">Advertise with Us</Button>
+        </div>
         <div id="slider" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           <div className="mt-8">
             {data.map((item, index) => (

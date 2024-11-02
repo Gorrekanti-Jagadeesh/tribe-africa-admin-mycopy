@@ -1,4 +1,4 @@
-import CustomSectionHeadingComponent from '../../../atoms/custom-section-heading/custom-section-heading-component';
+import DualHeading from '../../../atoms/heading/dual-heading';
 
 interface CarouselItem {
   id: number;
@@ -21,17 +21,11 @@ const BusinessFriendlyScreen: React.FC<BusinessFriendlyCarouselProps> = ({
   handlePrev,
 }) => {
   return (
-    <div className="mx-auto w-full max-w-6xl p-2 md:p-4">
-      <CustomSectionHeadingComponent
-        title="Business"
-        subPartTitle="Friendly"
-        showButton={false}
-        description="Great work-life balance"
-        containerStyles=""
-        titleStyles="ml-auto text-[#FF6600] font-[Rufina]"
-        subTitleStyles="text-[#000] font-[Poppins]"
-        descriptionStyles="ml-auto"
-      />
+    <div className="mx-auto w-full flex flex-col max-w-6xl p-2 md:p-4">
+      <div className="ms-auto">
+        <DualHeading>Business *Friendly*</DualHeading>
+        <p className={`mt-2 text-lg text-gray-600`}>Great work-life balance</p>
+      </div>
       <div className="relative flex sm:flex-col items-center">
         {/* Left Arrow */}
         <button
