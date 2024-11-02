@@ -1,6 +1,6 @@
 import { Option, ServicesProps } from '../types';
 import demoImage from '../assets/homepage-welcome-image-3.png';
-import featuredBG from '../../../assets/branding.png';
+import featuredBG from '../assets/branding-bg-dark.png';
 
 interface CarouselItem {
   id: number;
