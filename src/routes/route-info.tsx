@@ -32,6 +32,11 @@ const appRoutes: RouteConfig[] = [
     element: <BlogPage />,
   },
   {
+    name: 'blogs',
+    path: '/blogs/:blogId',
+    element: <BlogPage />,
+  },
+  {
     name: 'innovations',
     path: '/africa/smart-innovations',
     element: <InnovationsScreen />,

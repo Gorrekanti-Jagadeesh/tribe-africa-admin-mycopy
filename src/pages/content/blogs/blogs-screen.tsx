@@ -1,19 +1,23 @@
-import demo from '../../../assets/homepage-welcome-image.png';
-
 import Button from '../../../atoms/custom-button/button';
 import BlogView from '../../../molecules/blogs/blog-view';
 import BlogListing from '../../../molecules/blogs/blog-listing';
 
 interface BlogPageScreenProps {
   blogId: string | undefined;
+  banner: string;
   blogData: {
     title: string;
     image: string;
     content: string;
   };
+  blogsList: {
+    image: string;
+    title?: string;
+    redirectUrl: string;
+  }[];
 }
 
-const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, blogData }) => {
+const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, banner, blogData, blogsList }) => {
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       {blogId ? (
@@ -25,17 +29,17 @@ const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, blogData }) => 
             <Button className="ms-auto">Get Featured</Button>
           </div>
           <div id="banner" className="bg-gray-100 flex justify-center p-12">
-            <img className="aspect-square max-w-80" src={demo} />
+            <img className="aspect-square max-w-80" src={banner} />
             <div className="flex flex-col gap-4 bg-white p-4 max-h-48 my-auto relative right-4">
               <h4 className="text-lg font-semibold">Top Businesses in 2024</h4>
               <div className="overflow-auto flex flex-col gap-2">
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <p>{item}</p>
+                {[1, 2, 3, 4, 5].map((item, index) => (
+                  <p key={index}>{item}</p>
                 ))}
               </div>
             </div>
           </div>
-          <BlogListing heading={'Recent Articles'} data={[]} />
+          <BlogListing heading={'Recent Articles'} data={blogsList} />
         </div>
       )}
     </div>
