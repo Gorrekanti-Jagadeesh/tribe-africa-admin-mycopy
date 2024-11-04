@@ -1,6 +1,7 @@
 import HomeContainer from '../pages/home/home-container';
 import BusinessContainer from '../pages/business/business-container';
 import HolidayContainer from '../pages/holiday/holiday-container';
+import Accomodation from '../pages/content/accomodation/accomodation-container';
 import InnovationsScreen from '../pages/home/navbar-section/discover-section/elements/innovations-screen';
 
 export interface RouteConfig {
@@ -24,6 +25,11 @@ const appRoutes: RouteConfig[] = [
     name: 'holiday',
     path: '/:country/holiday',
     element: <HolidayContainer />,
+  },
+  {
+    name: 'accomodation',
+    path: '/accomodations',
+    element: <Accomodation />,
   },
   {
     name: 'innovations',
