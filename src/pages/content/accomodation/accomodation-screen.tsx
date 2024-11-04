@@ -1,18 +1,36 @@
-import React from 'react';
 import AccommodationCard from '../../../atoms/card/accomodation-card';
-import demo from '../../../assets/homepage-welcome-image.png';
+import Button from '../../../atoms/custom-button/button';
 
-const AccomodationScreen = () => {
+interface AccomodationProps {
+  data: {
+    name: string;
+    image: string;
+    rating: string;
+    reviewCount: string;
+    distance: string;
+    price: string;
+  }[];
+}
+
+const AccomodationScreen: React.FC<AccomodationProps> = ({ data }) => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <AccommodationCard
-        image={demo}
-        name="Hotel XYZ"
-        rating={4} // The number of filled stars
-        reviewCount={50}
-        distance="1.7 km"
-        price="AFN 9,430"
-      />
+    <div className="p-2 md:p-4 max-w-6xl m-auto">
+      <div className="flex mb-4">
+        <h1 className="text-4xl font-bold">Accomodations</h1>
+        <Button className="ms-auto">List your accomodation</Button>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+        {data.map((item) => (
+          <AccommodationCard
+            image={item.image}
+            name={item.name}
+            rating={item.rating}
+            reviewCount={item.reviewCount}
+            distance={item.distance}
+            price={item.price}
+          />
+        ))}
+      </div>
     </div>
   );
 };
