@@ -1,6 +1,6 @@
 import EventsScreen from './events-screen';
 
-import demo from '../../../assets/branding-bg-dark.png';
+import demo from '../../../assets/homepage-welcome-image-3.png';
 
 const data = [
   {
@@ -8,7 +8,8 @@ const data = [
     date: '30th sep, 2024',
     time: '11pm',
     title: 'DJ Suresh',
-    description: '',
+    description:
+      'A textaul descriptionA textaul descriptionA textaul descriptionA textaul descriptionA textaul descriptionA textaul descriptionA textaul descriptionA textaul description',
     location: 'beach mida',
     country: 'gambia',
     website: 'www.mana-event.com',

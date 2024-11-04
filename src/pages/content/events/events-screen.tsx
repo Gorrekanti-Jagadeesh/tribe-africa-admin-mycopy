@@ -9,6 +9,7 @@ interface EventsScreenProps {
   data: {
     title: string;
     image: string;
+    description: string;
     date: string;
     time: string;
     location: string;
@@ -30,11 +31,17 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
             {data.map((item, index) => (
               <div className="w-full inline-block cursor-pointer" key={index}>
                 <div
-                  className="aspect-video bg-cover rounded-md"
+                  className="aspect-video bg-cover rounded-md group relative overflow-auto"
                   style={{
                     backgroundImage: `url(${item.image})`,
                   }}
-                ></div>
+                >
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-black rounded-md hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
+                    <div className="text-white">
+                      {item.description} {item.description.length}
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <p id="title" className="font-semibold text-lg">
                     {item.title}
