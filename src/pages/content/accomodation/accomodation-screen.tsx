@@ -1,5 +1,8 @@
+import AccomodationView from '../../../molecules/accomodations/accomodation-view';
+
 import AccommodationCard from '../../../atoms/card/accomodation-card';
 import Button from '../../../atoms/custom-button/button';
+import AccomodationsList from '../../../molecules/accomodations/accomodations-list';
 
 interface AccomodationProps {
   data: {
@@ -15,22 +18,8 @@ interface AccomodationProps {
 const AccomodationScreen: React.FC<AccomodationProps> = ({ data }) => {
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
-      <div className="flex mb-4">
-        <h1 className="text-4xl font-bold">Accomodations</h1>
-        <Button className="ms-auto">List your accomodation</Button>
-      </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
-        {data.map((item) => (
-          <AccommodationCard
-            image={item.image}
-            name={item.name}
-            rating={item.rating}
-            reviewCount={item.reviewCount}
-            distance={item.distance}
-            price={item.price}
-          />
-        ))}
-      </div>
+      {/* <AccomodationsList data = {data}/> */}
+      <AccomodationView />
     </div>
   );
 };
