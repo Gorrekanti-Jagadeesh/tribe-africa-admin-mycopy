@@ -1,4 +1,4 @@
-import CustomSectionHeadingComponent from '../../../atoms/custom-section-heading/custom-section-heading-component';
+import DualHeading from '../../../atoms/heading/dual-heading';
 
 interface CarouselItem {
   id: number;
@@ -22,15 +22,10 @@ const WorkingRemotelyScreen: React.FC<wokingRemotelyCarouselProps> = ({
 }) => {
   return (
     <div className="mx-auto w-full max-w-6xl p-2 md:p-4">
-      <CustomSectionHeadingComponent
-        title="Great For"
-        subPartTitle="Working Remotely"
-        showButton={false}
-        description="Best degital Nomand Destinations in aftrica"
-        containerStyles=""
-        titleStyles="font-[Poppins]"
-        subTitleStyles="text-[#FF6600] font-[Rufina]"
-      />
+      <div>
+        <DualHeading>Great For *Working Remotely*</DualHeading>
+        <p className={`mt-2 text-lg text-gray-600`}>Best degital Nomand Destinations in aftrica</p>
+      </div>
       <div className="relative flex sm:flex-col items-center p-4">
         {/* Left Arrow */}
         <button

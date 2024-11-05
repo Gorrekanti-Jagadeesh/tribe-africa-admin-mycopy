@@ -1,6 +1,7 @@
 // experience-screen.tsx
 import React from 'react';
-import videoPlay from '../../../assets/play-button.png';
+import DualHeading from '../../../atoms/heading/dual-heading';
+import videoPlay from '../../../assets/Frame.png';
 
 interface ExperienceScreenProps {
   playing: boolean;
@@ -12,9 +13,8 @@ interface ExperienceScreenProps {
 const ExperienceScreen: React.FC<ExperienceScreenProps> = ({ playing, handlePlay, videoRef, handleVideoEnd }) => {
   return (
     <div className="p-2 md:p-4 grid gap-6 my-8 m-auto max-w-6xl animate-on-scroll">
-      <h3 className="text-4xl text-center">
-        Get Ready for a <span className="font-serif text-orange-500">Life Changing Experience</span>
-      </h3>
+      <
+      className="text-center">Get Ready for a *Life Changing Experience*</DualHeading>
       <div className="bg-slate-800 rounded-lg relative">
         {!playing && (
           <button
