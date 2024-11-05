@@ -13,7 +13,8 @@ interface ExperienceScreenProps {
 const ExperienceScreen: React.FC<ExperienceScreenProps> = ({ playing, handlePlay, videoRef, handleVideoEnd }) => {
   return (
     <div className="p-2 md:p-4 grid gap-6 my-8 m-auto max-w-6xl animate-on-scroll">
-      <DualHeading className="text-center">Get Ready for a *Life Changing Experience*</DualHeading>
+      <
+      className="text-center">Get Ready for a *Life Changing Experience*</DualHeading>
       <div className="bg-slate-800 rounded-lg relative">
         {!playing && (
           <button
