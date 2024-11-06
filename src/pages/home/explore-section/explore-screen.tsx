@@ -1,25 +1,20 @@
 // explore-screen.tsx
 import React from 'react';
 
+import { TribeAfrica } from '../../../atoms/common/internal-logo';
+
 interface ExploreScreenProps {
-  spiralBackground: string;
+  background: string;
   welcomeImage1: string;
   welcomeImage2: string;
   welcomeImage3: string;
-  TAlogo: string;
 }
 
-const ExploreScreen: React.FC<ExploreScreenProps> = ({
-  spiralBackground,
-  welcomeImage1,
-  welcomeImage2,
-  welcomeImage3,
-  TAlogo,
-}) => {
+const ExploreScreen: React.FC<ExploreScreenProps> = ({ background, welcomeImage1, welcomeImage2, welcomeImage3 }) => {
   return (
     <div
       className="relative bg-cover bg-center text-white p-2 md:p-4"
-      style={{ backgroundImage: `url(${spiralBackground})` }}
+      style={{ backgroundImage: `url(${background})` }}
     >
       <span className="m-auto my-4 max-w-6xl grid md:flex gap-4 md:gap-8 lg:gap-28">
         <div id="welcome-content" className="grid gap-8 animate-on-scroll">
@@ -62,8 +57,9 @@ const ExploreScreen: React.FC<ExploreScreenProps> = ({
             </p>
           </div>
           <div id="welcome-footer" className="text-sm flex gap-2">
-            <span>join</span>
-            <img src={TAlogo} className=" max-h-4 m-0" alt="Tribe Africa Logo" />
+            <span>
+              join <TribeAfrica />
+            </span>
             <span>and be a part of the future. welcome to the tribe.</span>
           </div>
         </div>
