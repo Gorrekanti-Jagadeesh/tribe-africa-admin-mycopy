@@ -210,14 +210,24 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
                 >
                   {marker.name}
                 </text>
-                <circle
-                  r={6}
-                  fill="#fff"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  onClick={() => handleMarkerClick(marker)}
-                  style={{ cursor: 'pointer' }}
-                />
+                <foreignObject x={10} y={10} width={20} height={20}>
+                  <p
+                    key={index}
+                    style={{
+                      fontWeight: 300,
+                      fontSize: 13,
+                      backgroundColor: '#fff',
+                      borderRadius: '50%',
+                      width: 20, // Circle diameter
+                      height: 20, // Circle diameter
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {index + 1}
+                  </p>
+                </foreignObject>
               </Marker>
             </>
           ))}
@@ -239,14 +249,24 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
                 >
                   {marker.name}
                 </text>
-                <circle
-                  r={6}
-                  fill="#fff"
-                  stroke="#fff"
-                  strokeWidth={2}
-                  onClick={() => handleMarkerClick(marker)}
-                  style={{ cursor: 'pointer' }}
-                />
+                <foreignObject x={10} y={10} width={20} height={20}>
+                  <p
+                    key={index}
+                    style={{
+                      fontWeight: 300,
+                      fontSize: 13,
+                      backgroundColor: '#fff',
+                      borderRadius: '50%',
+                      width: 20, // Circle diameter
+                      height: 20, // Circle diameter
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {index + 1}
+                  </p>
+                </foreignObject>
               </Marker>
             </>
           ))}
