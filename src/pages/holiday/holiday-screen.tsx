@@ -75,10 +75,10 @@ const countryData: Record<string, CountryDataType> = {
         subCategory: 'Soar through sky',
       },
       { name: 'Tipaza', coordinates: [2.4496, 36.5897], category: 'Action Enthusiasts', subCategory: 'Surf the waves' },
-      { name: 'Beni Hammad Fort', coordinates: [4.7667, 35.8333], category: 'Nature' },
-      { name: 'El Kala National Park', coordinates: [8.4667, 36.8833], category: 'Nature' },
-      { name: 'Chréa National Park', coordinates: [2.8172, 36.4628], category: 'Nature' },
-      { name: 'Ahaggar National Park', coordinates: [5.8735, 23.2856], category: 'Nature' },
+      { name: 'Beni Hammad Fort', coordinates: [4.7667, 35.8333], category: 'Nature', subCategory: 'Nature1' },
+      { name: 'El Kala National Park', coordinates: [8.4667, 36.8833], category: 'Nature', subCategory: 'Nature1' },
+      { name: 'Chréa National Park', coordinates: [2.8172, 36.4628], category: 'Nature', subCategory: 'Nature2' },
+      { name: 'Ahaggar National Park', coordinates: [5.8735, 23.2856], category: 'Nature', subCategory: 'Nature2' },
       { name: 'Casbah of Algiers', coordinates: [3.0588, 36.7665], category: 'Historical & Cultural' },
       { name: 'Mzab Valley', coordinates: [3.6667, 32.4911], category: 'Historical & Cultural' },
       { name: 'Sidi Okba Mosque', coordinates: [5.743, 34.7059], category: 'Sacred Sites' },
@@ -148,43 +148,7 @@ const countryData: Record<string, CountryDataType> = {
 
 const HolidayScreen = () => {
   const { country } = useParams<{ country: string }>();
-  // const markers: MarkerType[] = [
-  //   // Cities
-  //   { name: 'Algiers', coordinates: [3.0588, 36.7323], category: 'Cities' },
-  //   { name: 'Oran', coordinates: [-0.6299, 35.6971], category: 'Cities' },
-  //   { name: 'Constantine', coordinates: [6.6147, 36.365], category: 'Cities' },
-  //   { name: 'Annaba', coordinates: [7.7662, 36.8969], category: 'Cities' },
-  //   { name: 'Batna', coordinates: [6.1739, 35.555], category: 'Cities' },
 
-  //   // Action Enthusiasts
-  //   { name: 'Hoggar Mountains', coordinates: [5.7749, 23.6854], category: 'Action Enthusiasts' },
-  //   { name: 'Tassili n’Ajjer', coordinates: [9.2195, 24.7986], category: 'Action Enthusiasts' },
-  //   { name: 'Djurdjura Mountains', coordinates: [4.3286, 36.5661], category: 'Action Enthusiasts' },
-  //   { name: 'Tlemcen National Park', coordinates: [-1.2974, 34.8828], category: 'Action Enthusiasts' },
-
-  //   // Nature
-  //   { name: 'Tamanrasset', coordinates: [5.5228, 22.785], category: 'Nature' },
-  //   { name: 'Beni Hammad Fort', coordinates: [4.7667, 35.8333], category: 'Nature' },
-  //   { name: 'El Kala National Park', coordinates: [8.4667, 36.8833], category: 'Nature' },
-  //   { name: 'Chréa National Park', coordinates: [2.8172, 36.4628], category: 'Nature' },
-  //   { name: 'Ahaggar National Park', coordinates: [5.8735, 23.2856], category: 'Nature' },
-
-  //   // Historical & Cultural
-  //   { name: 'Timgad', coordinates: [6.4674, 35.4881], category: 'Historical & Cultural' },
-  //   { name: 'Djemila', coordinates: [5.7382, 36.3147], category: 'Historical & Cultural' },
-  //   { name: 'Tipaza', coordinates: [2.4496, 36.5897], category: 'Historical & Cultural' },
-  //   { name: 'Casbah of Algiers', coordinates: [3.0588, 36.7665], category: 'Historical & Cultural' },
-  //   { name: 'Mzab Valley', coordinates: [3.6667, 32.4911], category: 'Historical & Cultural' },
-
-  //   // Sacred Sites
-  //   { name: 'Djanet', coordinates: [8.7, 24.55], category: 'Sacred Sites' },
-  //   { name: 'Sidi Boumediene Mosque', coordinates: [-1.3369, 34.8783], category: 'Sacred Sites' },
-  //   { name: 'Sidi Okba Mosque', coordinates: [5.743, 34.7059], category: 'Sacred Sites' },
-  //   { name: "Qal'a of Beni Hammad", coordinates: [4.7782, 35.863], category: 'Sacred Sites' },
-  //   { name: 'Sidi Abderrahmane', coordinates: [3.046, 36.7809], category: 'Sacred Sites' },
-  // ];
-
-  // const center: [number, number] = [2.6328, 28.0339]; // This is for Algeria
   if (!country || !countryData[country]) {
     // Render a fallback component or message if the country is undefined or not in countryData
     return <div>Country data not available</div>;
