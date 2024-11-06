@@ -49,7 +49,21 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
   const renderCategoryMarkers = (cat: string) => {
     const entries = markers.filter((each) => each.category === cat);
     return entries.map((entry, index) => (
-      <p key={index} className="ml-3" style={{ color: '#fff', fontWeight: 300, fontSize: 15 }}>
+      <p
+        key={index}
+        className="ml-2"
+        style={{
+          fontWeight: 300,
+          fontSize: 13,
+          backgroundColor: '#fff',
+          borderRadius: '50%',
+          width: 15, // Circle diameter
+          height: 15, // Circle diameter
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         {index + 1}
       </p>
     ));
@@ -58,7 +72,21 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
   const renderSubcategoryMarkers = (subCat: string) => {
     const entries = markers.filter((each) => each.subCategory === subCat);
     return entries.map((entry, index) => (
-      <p key={index} className="ml-3" style={{ color: '#fff', fontWeight: 300, fontSize: 15 }}>
+      <p
+        key={index}
+        className="ml-2"
+        style={{
+          fontWeight: 300,
+          fontSize: 13,
+          backgroundColor: '#fff',
+          borderRadius: '50%',
+          width: 15, // Circle diameter
+          height: 15, // Circle diameter
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         {index + 1}
       </p>
     ));
@@ -74,7 +102,7 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
         <div className="flex flex-col justify-start items-start mt-10">
           {categories.map((cat) => (
             <div>
-              <div className="flex">
+              <div className="flex items-center">
                 <p
                   key={cat}
                   onClick={() => {
@@ -98,7 +126,7 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
               {selectedCategory === cat &&
                 subCategories[selectedCategory].map((each) => {
                   return (
-                    <div className="flex">
+                    <div className="flex items-center">
                       <p
                         className="ml-3"
                         style={{
