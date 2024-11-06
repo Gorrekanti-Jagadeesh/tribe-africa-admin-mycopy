@@ -7,6 +7,7 @@ interface MarkerType {
   name: string;
   coordinates: [number, number];
   category: string;
+  subCategory?: string;
 }
 
 interface MapChartProps {
@@ -20,9 +21,16 @@ const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
 // Categories to filter markers
 const categories: string[] = ['Cities', 'Action Enthusiasts', 'Nature', 'Historical & Cultural', 'Sacred Sites'];
-
+const subCategories: { [key: string]: string[] } = {
+  'Action Enthusiasts': ['Conquer the Sahara', 'Sahara search'],
+  Cities: ['City1', 'City2'],
+  Nature: ['Nature1', 'Nature2'],
+  'Historical & Cultural': ['HC1', 'HC2'],
+  'Sacred Sites': [],
+};
 const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Cities');
+  const [selectedCategory, setSelectedCategory] = useState<string>('Action Enthusiasts');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>(subCategories['Cities'][0]);
   const navigate = useNavigate();
 
   // Filter markers based on selected category
@@ -55,6 +63,22 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
                   <u> {cat}</u>
                 </i>
               </p>
+              {selectedCategory === cat &&
+                subCategories[selectedCategory].map((each) => {
+                  return (
+                    <p
+                      className="ml-3"
+                      style={{
+                        color: '#fff',
+                        fontWeight: 300,
+                        fontSize: 15,
+                      }}
+                      onClick={() => setSelectedSubcategory(each)}
+                    >
+                      {each}
+                    </p>
+                  );
+                })}
             </div>
           ))}
         </div>
@@ -71,7 +95,6 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
                 const isSelectedCountry = geo.properties.name === country;
                 // fc813e or ff943f for main country
                 // b34302 or c35300for others
-                console.log(geo.properties, 'Country name from Package');
                 return (
                   <Geography
                     key={geo.rsmKey}
@@ -101,20 +124,34 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
               })
             }
           </Geographies>
-          {filteredMarkers.map((marker) => (
-            <Marker key={marker.name} coordinates={marker.coordinates}>
-              <circle
-                r={6}
-                fill="#F00"
-                stroke="#fff"
-                strokeWidth={2}
-                onClick={() => handleMarkerClick(marker)}
-                style={{ cursor: 'pointer' }}
-              />
-              <text textAnchor="middle" y={-10} style={{ fontFamily: 'system-ui', fill: '#fff' }}>
-                {marker.name}
-              </text>
-            </Marker>
+          {filteredMarkers.map((marker, index) => (
+            <>
+              <Marker key={marker.name} coordinates={marker.coordinates}>
+                <circle
+                  r={6}
+                  fill="#fff"
+                  stroke="#fff"
+                  strokeWidth={2}
+                  onClick={() => handleMarkerClick(marker)}
+                  style={{ cursor: 'pointer' }}
+                />
+                <text
+                  textAnchor="middle"
+                  y={-10}
+                  style={{ fontFamily: 'system-ui', fill: '#fff', textDecoration: 'underline' }}
+                >
+                  {marker.name}
+                </text>
+                <circle
+                  r={6}
+                  fill="#fff"
+                  stroke="#fff"
+                  strokeWidth={2}
+                  onClick={() => handleMarkerClick(marker)}
+                  style={{ cursor: 'pointer' }}
+                />
+              </Marker>
+            </>
           ))}
         </ComposableMap>
       </div>
