@@ -1,16 +1,19 @@
 import Button from '../../../atoms/custom-button/button';
 import BlogView from '../../../molecules/blogs/blog-view';
 import BlogListing from '../../../molecules/blogs/blog-listing';
+import BlogCompose from '../../../molecules/blogs/blog-compose';
 
 interface BlogPageScreenProps {
   blogId: string | undefined;
   banner: string;
   blogData: {
+    _id: string;
     title: string;
     image: string;
     content: string;
   };
   blogsList: {
+    _id: string;
     image: string;
     title?: string;
     redirectUrl: string;
@@ -40,6 +43,7 @@ const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, banner, blogDat
             </div>
           </div>
           <BlogListing heading={'Recent Articles'} data={blogsList} />
+          <BlogCompose className="mt-6" />
         </div>
       )}
     </div>

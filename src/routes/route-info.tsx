@@ -27,7 +27,7 @@ const appRoutes: RouteConfig[] = [
     element: <HolidayContainer />,
   },
   {
-    name: 'blogs',
+    name: 'blogs list',
     path: '/blogs',
     element: <BlogPage />,
   },

@@ -7,6 +7,7 @@ const BlogPage = () => {
   const { blogId } = useParams();
 
   const blogData = {
+    _id: 'randomstringofnumbers',
     title: 'title1',
     image: demo,
     content: '<p>HTML content goes here</p>',
@@ -19,19 +20,22 @@ const BlogPage = () => {
       blogData={blogData}
       blogsList={[
         {
+          _id: '1',
           image: demo,
           title: 'card1',
-          redirectUrl: '/blogs/1',
+          redirectUrl: '/blogs/',
         },
         {
+          _id: '2',
           image: demo,
           title: 'card1',
-          redirectUrl: '/blogs/1',
+          redirectUrl: '/blogs/',
         },
         {
+          _id: '3',
           image: demo,
           title: 'card1',
-          redirectUrl: '/blogs/1',
+          redirectUrl: '/blogs/',
         },
       ]}
     />

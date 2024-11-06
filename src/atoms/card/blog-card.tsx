@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 
 interface BlogCardDataProps {
+  _id: string;
   image: string;
   title?: string;
   redirectUrl: string;
@@ -22,7 +23,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ data }) => {
         }}
       ></div>
       <p>{data.title}</p>
-      <button className="bg-gray-300 p-2 px-6 rounded-lg text-sm m-auto" onClick={() => navigate(data.redirectUrl)}>
+      <button className="bg-gray-300 p-2 px-6 rounded-lg text-sm m-auto" onClick={() => navigate('/blogs/' + data._id)}>
         Know more
       </button>
     </div>
