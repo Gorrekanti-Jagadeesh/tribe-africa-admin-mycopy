@@ -3,8 +3,8 @@ interface customeBtnProps {
   onClick?: () => void;
   children?: React.ReactNode;
   className?: string;
-  props?: any;
-  style?: any;
+  props?: React.HTMLAttributes<HTMLButtonElement>;
+  style?: React.CSSProperties;
 }
 
 const Button: React.FC<customeBtnProps> = ({ title, onClick, children, className, style, ...props }) => {
@@ -14,6 +14,7 @@ const Button: React.FC<customeBtnProps> = ({ title, onClick, children, className
       onClick={onClick}
       style={style}
       {...props}
+      title={title}
     >
       {children}
     </button>

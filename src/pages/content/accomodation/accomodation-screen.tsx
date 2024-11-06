@@ -1,25 +1,46 @@
-import AccomodationView from '../../../molecules/accomodations/accomodation-view';
+// screens/AccomodationScreen.tsx
 
-import AccommodationCard from '../../../atoms/card/accomodation-card';
-import Button from '../../../atoms/custom-button/button';
+import AccomodationView from '../../../molecules/accomodations/accomodation-view';
 import AccomodationsList from '../../../molecules/accomodations/accomodations-list';
 
-interface AccomodationProps {
+interface Review {
+  user_name: string;
+  user_image: string;
+  date: string;
+  description: string;
+  images: string[];
+  ratings: { title: string; rating: string }[];
+}
+
+interface HotelData {
+  name: string;
+  rating: string;
+  images: string[];
+  description: string;
+  reviewCount: string;
+  address: string;
+  phone: string;
+  website: string;
+}
+
+interface AccomodationScreenProps {
+  accomodationId?: string;
   data: {
     name: string;
     image: string;
     rating: string;
-    reviewCount: string;
+    review_count: string;
     distance: string;
     price: string;
   }[];
+  hotelData: HotelData;
+  reviews: Review[];
 }
 
-const AccomodationScreen: React.FC<AccomodationProps> = ({ data }) => {
+const AccomodationScreen: React.FC<AccomodationScreenProps> = ({ accomodationId, data, hotelData, reviews }) => {
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
-      {/* <AccomodationsList data = {data}/> */}
-      <AccomodationView />
+      {!accomodationId ? <AccomodationsList data={data} /> : <AccomodationView data={hotelData} reviews={reviews} />}
     </div>
   );
 };

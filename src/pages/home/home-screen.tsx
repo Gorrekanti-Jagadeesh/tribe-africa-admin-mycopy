@@ -9,7 +9,7 @@ import CharmingHotels from './hotels-section/hotels-container';
 import HolidayDestination from './holiday-destination-section/holiday-destination-container';
 import WorkingRemotely from './working-remotely-section/working-remotely-container';
 import BusinessFriendly from './business-friendly-section/business-friendly-container';
-import Footer from '../../molecules/footer/footer';
+import Footer from '../../molecules/footer';
 
 const HomeScreen: React.FC = () => {
   return (
