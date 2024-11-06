@@ -48,17 +48,17 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
 
   const renderCategoryMarkers = (cat: string) => {
     const entries = markers.filter((each) => each.category === cat);
-    return entries.map((entry, index) => (
+    return entries.map((_entry, index) => (
       <p
         key={index}
         className="ml-2"
         style={{
           fontWeight: 300,
-          fontSize: 13,
+          fontSize: 12,
           backgroundColor: '#fff',
           borderRadius: '50%',
-          width: 15, // Circle diameter
-          height: 15, // Circle diameter
+          width: 13, // Circle diameter
+          height: 13, // Circle diameter
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -71,17 +71,17 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
 
   const renderSubcategoryMarkers = (subCat: string) => {
     const entries = markers.filter((each) => each.subCategory === subCat);
-    return entries.map((entry, index) => (
+    return entries.map((_entry, index) => (
       <p
         key={index}
         className="ml-2"
         style={{
           fontWeight: 300,
-          fontSize: 13,
+          fontSize: 12,
           backgroundColor: '#fff',
           borderRadius: '50%',
-          width: 15, // Circle diameter
-          height: 15, // Circle diameter
+          width: 13, // Circle diameter
+          height: 13, // Circle diameter
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -97,9 +97,9 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
       className="flex flex-row justify-center items-start my-12 p-5 gap-2 m-auto max-w-6xl animate-on-scroll"
       style={{ backgroundColor: '#b34302' }}
     >
-      <div className="w-[2px] bg-white mx-4" style={{ height: 500 }}></div>
-      <div className="flex flex-row">
-        <div className="flex flex-col justify-start items-start mt-10">
+      <div className="w-[2px] bg-white mx-4 " style={{ height: 500 }}></div>
+      <div className="flex flex-row min-w-64">
+        <div className="flex flex-col justify-start items-start mt-14">
           {categories.map((cat) => (
             <div>
               <div className="flex items-center">
@@ -150,8 +150,8 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
             </div>
           ))}
         </div>
-        <img src={algeriaMap} width={200} />
       </div>
+      <img src={algeriaMap} width={160} />
       <div className="ml-10">
         <ComposableMap
           projectionConfig={{ scale: scale, center: center }}
@@ -206,7 +206,7 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
                 <text
                   textAnchor="middle"
                   y={-10}
-                  style={{ fontFamily: 'system-ui', fill: '#fff', textDecoration: 'underline' }}
+                  style={{ fontFamily: 'system-ui', fill: '#fff', textDecoration: 'underline', fontStyle: 'italic' }}
                 >
                   {marker.name}
                 </text>
@@ -245,7 +245,7 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
                 <text
                   textAnchor="middle"
                   y={-10}
-                  style={{ fontFamily: 'system-ui', fill: '#fff', textDecoration: 'underline' }}
+                  style={{ fontFamily: 'system-ui', fill: '#fff', textDecoration: 'underline', fontStyle: 'italic' }}
                 >
                   {marker.name}
                 </text>
