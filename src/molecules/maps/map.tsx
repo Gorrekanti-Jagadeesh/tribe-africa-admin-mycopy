@@ -30,7 +30,7 @@ const subCategories: { [key: string]: string[] } = {
 };
 const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Cities');
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string>(subCategories['Action Enthusiasts'][0]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>(subCategories['Cities'][0]);
   const navigate = useNavigate();
 
   // Filter markers based on selected category
