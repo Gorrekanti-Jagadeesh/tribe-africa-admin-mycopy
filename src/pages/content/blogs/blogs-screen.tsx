@@ -2,33 +2,18 @@ import Button from '../../../atoms/custom-button/button';
 import BlogView from '../../../molecules/blogs/blog-view';
 import BlogListing from '../../../molecules/blogs/blog-listing';
 import BlogCompose from '../../../molecules/blogs/blog-compose';
+import UnderlineHeading from '../../../atoms/heading/underline-heading';
+import { BlogPageScreenProps } from '../../../types';
 
-interface BlogPageScreenProps {
-  blogId: string | undefined;
-  banner: string;
-  blogData: {
-    _id: string;
-    title: string;
-    image: string;
-    content: string;
-  };
-  blogsList: {
-    _id: string;
-    image: string;
-    title?: string;
-    redirectUrl: string;
-  }[];
-}
-
-const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, banner, blogData, blogsList }) => {
+const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, parseImageUrl, banner, blogsList }) => {
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       {blogId ? (
-        <BlogView title={blogData.title} image={blogData.image} content={blogData.content} />
+        <BlogView blogId={blogId} parseImageUrl={parseImageUrl} />
       ) : (
-        <div className="">
+        <div className="flex flex-col gap-4">
           <div id="header" className="flex mb-4">
-            <h1 className="flex-grow border-b-2 border-orange-500 text-4xl max-w-md">Business Articles</h1>
+            <UnderlineHeading>Business Articles</UnderlineHeading>
             <Button className="ms-auto">Get Featured</Button>
           </div>
           <div id="banner" className="bg-gray-100 flex justify-center p-12">
@@ -42,7 +27,7 @@ const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, banner, blogDat
               </div>
             </div>
           </div>
-          <BlogListing heading={'Recent Articles'} data={blogsList} />
+          <BlogListing heading={'Recent *Articles*'} blogList={blogsList} />
           <BlogCompose className="mt-6" />
         </div>
       )}

@@ -1,28 +1,17 @@
-import React from 'react';
 import { useNavigate } from 'react-router';
+import { BlogContentProps } from '../../types';
 
-interface BlogCardDataProps {
-  _id: string;
-  image: string;
-  title?: string;
-  redirectUrl: string;
-}
-
-interface BlogCardProps {
-  data: BlogCardDataProps;
-}
-
-const BlogCard: React.FC<BlogCardProps> = ({ data }) => {
+const BlogCard = ({ data }: { data: BlogContentProps }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full relative grid">
+    <div className="w-full relative grid gap-2">
       <div
-        className="aspect-square bg-cover rounded-md relative"
+        className="aspect-square bg-cover bg-center rounded-md relative"
         style={{
           backgroundImage: `url(${data.image})`,
         }}
       ></div>
-      <p>{data.title}</p>
+      <p className=" text-nowrap truncate">{data.title}</p>
       <button className="bg-gray-300 p-2 px-6 rounded-lg text-sm m-auto" onClick={() => navigate('/blogs/' + data._id)}>
         Know more
       </button>
