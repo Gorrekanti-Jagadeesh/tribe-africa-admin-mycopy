@@ -22,3 +22,12 @@ body {
   animation-timeline: view();
   animation-range: entry 0% cover 25%;
 }
+
+/* Rich text editor - quill - styling using tailwindCSS */
+.ql-toolbar {
+  @apply bg-gray-100 border-b border-gray-300 rounded-lg;
+}
+
+.ql-container {
+  @apply rounded-b-lg p-1 !important;
+}

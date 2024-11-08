@@ -1,7 +1,6 @@
 import Button from '../../../atoms/custom-button/button';
 import BlogView from '../../../molecules/blogs/blog-view';
 import BlogListing from '../../../molecules/blogs/blog-listing';
-import BlogCompose from '../../../molecules/blogs/blog-compose';
 import UnderlineHeading from '../../../atoms/heading/underline-heading';
 import { BlogPageScreenProps } from '../../../types';
 
@@ -28,7 +27,6 @@ const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, parseImageUrl, 
             </div>
           </div>
           <BlogListing heading={'Recent *Articles*'} blogList={blogsList} />
-          <BlogCompose className="mt-6" />
         </div>
       )}
     </div>

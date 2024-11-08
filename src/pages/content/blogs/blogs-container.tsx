@@ -11,6 +11,7 @@ const BlogPage = () => {
   const { blogId } = useParams();
 
   const [blogList, setBlogList] = useState<BlogContentProps[]>([]);
+  console.log(blogList);
 
   const parseImageUrl = (imageStr: string) => {
     // for reference: https://cdn.sanity.io/images/0oezgboa/production/ac70bcb6e7211fe6f057d4f90a754901a299f5c3-800x488.jpg
