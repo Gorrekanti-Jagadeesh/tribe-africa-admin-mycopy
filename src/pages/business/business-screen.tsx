@@ -5,11 +5,21 @@ import { BusinessHeader } from '../../molecules/header';
 import heroBackground from '../../assets/homepage-welcome-image-2.png';
 import CardsGrid from '../../molecules/layout/cards-grid';
 
-const BusinessScreen = ({ country }: { country: string | undefined }) => {
+const BusinessScreen = ({
+  country,
+  weatherData,
+  currentTime,
+  isLoading,
+}: {
+  country: string | undefined;
+  weatherData: { temperature: number; condition: string } | undefined;
+  currentTime: string;
+  isLoading: boolean;
+}) => {
   return (
     <div className="max-w-screen-2xl m-auto">
       <div className="bg-orange-500 p-4 text-white text-xl text-center">
-        <p>Getting there - Book Flight and accomodation</p>
+        <p>Getting there - Book Flight and accommodation</p>
       </div>
       <BusinessHeader country={country} />
       {/* Hero section */}
@@ -22,14 +32,21 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
             }}
           ></div>
           <div className="text-white text-lg flex flex-col gap-6 p-8 absolute bottom-0 brightness-200">
-            <p className="">Weather: 28 °/cloudy</p>
+            <p>
+              Weather:{' '}
+              {isLoading
+                ? 'Loading...'
+                : weatherData
+                  ? `${weatherData.temperature} °/${weatherData.condition}`
+                  : 'No data available'}
+            </p>
             <p>Internet speed: 1gbps</p>
-            <p>Time: 12:58 pm</p>
+            <p>Time: {currentTime}</p>
           </div>
         </div>
       </div>
 
-      {/* Cards layout for 'Key Invesment Sectors' */}
+      {/* Cards layout for 'Key Investment Sectors' */}
       <CardsGrid
         heading={
           <>

@@ -29,7 +29,6 @@ const spaceId = '4b35ixzkzcwg';
 const accessToken = '0dMnG2k9dSYnFw9bLX52eWPj9opUAyyczsqzY_haxLs';
 
 export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
-  console.log('called');
   try {
     const response = await axios.get(`https://cdn.contentful.com/spaces/${spaceId}/entries`, {
       headers: {
@@ -84,5 +83,19 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
     return data;
   } catch (error) {
     throw new Error(`Error Fetching ${error}`);
+  }
+};
+
+export const fetchWeatherData = async () => {
+  const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
+  const city = 'hyderabad';
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  try {
+    const response = await axios.get(apiUrl);
+    const { temp } = response.data.main;
+    const description = response.data.weather[0].description;
+    return { temperature: temp, description };
+  } catch (error) {
+    throw new Error('Error fetching weather data');
   }
 };
