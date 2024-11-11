@@ -200,7 +200,7 @@ export interface BlogContentProps {
 
 export interface BlogPageScreenProps {
   blogId: string | undefined;
-  parseImageUrl: (imageRef: string) => string;
+  // parseImageUrl: (imageRef: string) => string;
   banner: string;
-  blogsList: BlogContentProps[];
+  // blogsList: BlogContentProps[];
 }

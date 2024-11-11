@@ -4,11 +4,11 @@ import BlogListing from '../../../molecules/blogs/blog-listing';
 import UnderlineHeading from '../../../atoms/heading/underline-heading';
 import { BlogPageScreenProps } from '../../../types';
 
-const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, parseImageUrl, banner, blogsList }) => {
+const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, banner }) => {
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       {blogId ? (
-        <BlogView blogId={blogId} parseImageUrl={parseImageUrl} />
+        <BlogView blogId={blogId} />
       ) : (
         <div className="flex flex-col gap-4">
           <div id="header" className="flex mb-4">
@@ -26,7 +26,7 @@ const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, parseImageUrl, 
               </div>
             </div>
           </div>
-          <BlogListing heading={'Recent *Articles*'} blogList={blogsList} />
+          <BlogListing heading={'Recent *Articles*'} />
         </div>
       )}
     </div>

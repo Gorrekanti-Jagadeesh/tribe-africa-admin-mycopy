@@ -1,11 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-interface ImageUploaderProps {
+interface ImageDragAndDropProps {
   onFileSelect: (file: File | null) => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
+export const disableDragAndDrop = (selector: string) => {
+  document.querySelector(selector)?.addEventListener('onmousedown', () => {
+    return false;
+  });
+};
+
+export const ImageDragAndDrop: React.FC<ImageDragAndDropProps> = ({ onFileSelect }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const onDrop = useCallback(
@@ -24,7 +30,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
         }
 
         setImagePreview(URL.createObjectURL(file));
-        onFileSelect(file); // Pass the file back to the parent component
+        onFileSelect(file);
       }
     },
     [onFileSelect]
@@ -40,12 +46,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
     <div
       {...getRootProps()}
       className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-4 text-center transition-colors min-h-64 duration-200 ${
-        isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-50'
+        isDragActive ? 'border-orange-500 bg-blue-50' : 'border-gray-300 bg-gray-50'
       }`}
     >
       <input {...getInputProps()} />
       {isDragActive ? (
-        <p className="text-blue-500">Drop the image here...</p>
+        <p className="text-orange-500">Drop the image here...</p>
       ) : (
         <div className="text-center cursor-pointer">
           {imagePreview ? (
@@ -74,7 +80,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
             className="bg-orange-500 px-2 rounded-full absolute -right-2 -top-2"
             onClick={() => {
               setImagePreview(null);
-              onFileSelect(null); // Reset file in parent when cleared
+              onFileSelect(null);
             }}
           >
             x
@@ -84,5 +90,3 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
     </div>
   );
 };
-
-export default ImageUploader;

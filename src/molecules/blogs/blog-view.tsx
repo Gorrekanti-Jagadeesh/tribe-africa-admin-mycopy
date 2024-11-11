@@ -2,10 +2,11 @@ import { useState, useEffect, SetStateAction } from 'react';
 
 import { PortableText } from '@portabletext/react';
 import { getEntryDataById } from '../../api';
+import { parseImageUrl } from '../../utils/sanity';
 
 import { BlogContentProps } from '../../types';
 
-const BlogView = ({ blogId, parseImageUrl }: { blogId: string; parseImageUrl: (imageRef: string) => string }) => {
+const BlogView = ({ blogId }: { blogId: string }) => {
   const [data, setData] = useState<BlogContentProps>({
     _id: '1',
     title: '',
@@ -17,6 +18,7 @@ const BlogView = ({ blogId, parseImageUrl }: { blogId: string; parseImageUrl: (i
   useEffect(() => {
     getEntryDataById(blogId).then((res: SetStateAction<BlogContentProps>[]) => {
       setData(res[0]);
+      console.log(res[0]);
     });
   }, [blogId]);
 
@@ -35,7 +37,7 @@ const BlogView = ({ blogId, parseImageUrl }: { blogId: string; parseImageUrl: (i
           value={data.content}
           components={{
             types: {
-              image: ({ value }) => <img src={value.asset.url} alt={value.alt || 'Blog Image'} />,
+              image: ({ value }) => <img src={parseImageUrl(value.asset._ref)} alt={value.alt || 'Blog Image'} />,
             },
             marks: {
               link: ({ children, value }) => (

@@ -20,19 +20,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ className, onCon
         value={text}
         onTextChange={(e: EditorTextChangeEvent) => handleChange(e.htmlValue ? e.htmlValue : '')}
         onLoad={() => {
-          document.querySelector('.ql-editor')?.addEventListener('onmousedown', () => {
-            return false;
-          });
-
           // Loop through the class names and remove elements of each class
-          ['.ql-bold', '.ql-color', '.ql-font', '.ql-background', '.ql-image', '.ql-code-block'].forEach(
-            (className) => {
-              const elements = document.querySelectorAll(className);
-              elements.forEach((element) => {
-                element.remove();
-              });
-            }
-          );
+          ['.ql-color', '.ql-font', '.ql-background', '.ql-code-block'].forEach((className) => {
+            const elements = document.querySelectorAll(className);
+            elements.forEach((element) => {
+              element.remove();
+            });
+          });
         }}
         style={{
           height: '320px',

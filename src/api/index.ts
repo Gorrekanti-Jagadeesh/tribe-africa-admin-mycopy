@@ -1,5 +1,7 @@
 import axios from 'axios';
 import sanityClient from '../sanityClient';
+import { UploadBody } from '@sanity/client';
+import { base64ToBlob } from '../utils/common';
 
 interface ContentfulSys {
   id: string;
@@ -150,4 +152,15 @@ export const getHotelsInLocationWithLimit = (countryId: any) => {
       return res;
     })
     .catch((err: any) => console.error(err));
+};
+
+// Upload image to Sanity
+export const uploadImage = async (file: UploadBody | string): Promise<any> => {
+  try {
+    const imageAsset = await sanityClient.assets.upload('image', typeof file === 'string' ? base64ToBlob(file) : file);
+    return imageAsset;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
 };
