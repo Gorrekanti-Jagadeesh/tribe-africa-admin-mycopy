@@ -1,5 +1,6 @@
 interface customeBtnProps {
   title?: string;
+  type?: 'button' | 'submit' | 'reset' | undefined;
   onClick?: () => void;
   children?: React.ReactNode;
   className?: string;
@@ -7,10 +8,19 @@ interface customeBtnProps {
   style?: React.CSSProperties;
 }
 
-const Button: React.FC<customeBtnProps> = ({ title, onClick, children, className, style, ...props }) => {
+const Button: React.FC<customeBtnProps> = ({
+  title,
+  type = 'button',
+  onClick,
+  children,
+  className,
+  style,
+  ...props
+}) => {
   return (
     <button
-      className={`bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black ${className}`}
+      className={`bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black duration-300 ${className}`}
+      type={type}
       onClick={onClick}
       style={style}
       {...props}
