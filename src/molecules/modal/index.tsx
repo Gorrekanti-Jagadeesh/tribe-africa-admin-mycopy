@@ -3,14 +3,15 @@ import React from 'react';
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  containerClasses?: string;
   customClasses?: string;
   trigger?: React.ReactNode;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, trigger, customClasses, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, containerClasses, trigger, customClasses, children }) => {
   return (
-    <div className="m-auto">
+    <div className={`inline-block ${containerClasses}`}>
       {/* Trigger Button */}
       {trigger && (
         <span onClick={() => setIsOpen(true)} className="cursor-pointer">
@@ -26,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, trigger, customClasses
         >
           {/* Modal Container */}
           <div
-            className={`grid relative max-w-5xl mx-auto overflow-hidden ${customClasses}`}
+            className={`grid relative max-w-5xl mx-auto max-h-full overflow-auto ${customClasses}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
