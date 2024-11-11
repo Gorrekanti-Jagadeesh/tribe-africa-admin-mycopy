@@ -4,16 +4,14 @@ import spiralBackground from '../../../assets/branding-bg-dark.png';
 import welcomeImage1 from '../../../assets/homepage-welcome-image.png';
 import welcomeImage2 from '../../../assets/homepage-welcome-image-2.png';
 import welcomeImage3 from '../../../assets/homepage-welcome-image-3.png';
-import TAlogo from '../../../assets/tribe-africa-logo.png';
 
 const Explore: React.FC = () => {
   return (
     <ExploreScreen
-      spiralBackground={spiralBackground}
+      background={spiralBackground}
       welcomeImage1={welcomeImage1}
       welcomeImage2={welcomeImage2}
       welcomeImage3={welcomeImage3}
-      TAlogo={TAlogo}
     />
   );
 };

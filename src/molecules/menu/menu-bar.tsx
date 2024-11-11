@@ -4,7 +4,7 @@ import homeLogo from '../../assets/icons/home.png';
 import notificationLogo from '../../assets/icons/notification.png';
 import calculatorLogo from '../../assets/icons/calculator.png';
 
-import CurrencyConverter from '../common/currency-converter';
+import CurrencyCalculator from '../common/currency-calculator';
 import Modal from '../modal';
 import { Auth } from '../auth';
 
@@ -36,7 +36,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
 
             {/* Currency converter */}
             <Modal isOpen={isOpen} setIsOpen={setIsOpen} trigger={<img src={calculatorLogo} className="m-auto w-4" />}>
-              <CurrencyConverter />
+              <CurrencyCalculator />
             </Modal>
 
             {/* Authentication component */}

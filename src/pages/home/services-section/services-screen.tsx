@@ -1,12 +1,10 @@
-import Button from '../../../atoms/custom-button/button';
+import DualHeading from '../../../atoms/heading/dual-heading';
 import { ServicesScreenProps } from '../../../types';
 
 const ServicesScreen: React.FC<ServicesScreenProps> = ({ data }) => {
   return (
     <div className="my-12 grid gap-2 m-auto max-w-6xl p-2 md:p-4">
-      <h3 className="text-4xl animate-on-scroll">
-        Premier <span className="font-serif text-orange-500">Services</span>
-      </h3>
+      <DualHeading>Premier *Services*</DualHeading>
       <div id="services-container" className="grid grid-cols-3 gap-3 animate-on-scroll">
         {/* Cards */}
         {data.map((service, index) => (
