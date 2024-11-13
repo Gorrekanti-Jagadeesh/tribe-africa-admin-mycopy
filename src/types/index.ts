@@ -189,3 +189,18 @@ export interface EventCategory {
 export interface EventsScreenProps {
   eventCategories: EventCategory[];
 }
+
+// ------- Blogs interfaces ------------
+export interface BlogContentProps {
+  _id: string;
+  image: string | { asset: { _ref: string } };
+  title?: string;
+  content: string;
+}
+
+export interface BlogPageScreenProps {
+  blogId: string | undefined;
+  // parseImageUrl: (imageRef: string) => string;
+  banner: string;
+  // blogsList: BlogContentProps[];
+}

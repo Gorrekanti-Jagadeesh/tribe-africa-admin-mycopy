@@ -5,6 +5,7 @@ import Accomodation from '../pages/content/accomodation/accomodation-container';
 import EventsPage from '../pages/content/events/events-container';
 import InnovationsScreen from '../pages/home/navbar-section/discover-section/elements/innovations-screen';
 import DestinationDetailsContainer from '../pages/content/destination-details/details-container';
+import BlogPage from '../pages/content/blogs/blogs-container';
 
 export interface RouteConfig {
   name: string;
@@ -42,6 +43,16 @@ const appRoutes: RouteConfig[] = [
     name: 'events',
     path: '/events',
     element: <EventsPage />,
+  },
+  {
+    name: 'blogs list',
+    path: '/blogs',
+    element: <BlogPage />,
+  },
+  {
+    name: 'blogs',
+    path: '/blogs/:blogId',
+    element: <BlogPage />,
   },
   {
     name: 'innovations',

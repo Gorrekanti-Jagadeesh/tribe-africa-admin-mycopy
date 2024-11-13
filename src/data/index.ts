@@ -1,5 +1,6 @@
 import { Option, ServicesProps } from '../types';
 import demoImage from '../assets/homepage-welcome-image-3.png';
+import featuredBG from '../assets/branding.png';
 
 interface CarouselItem {
   id: number;
@@ -138,4 +139,23 @@ export const africanCurrencies = [
   'UGX',
   'ZMW',
   'ZWL',
+];
+
+export const upcomingEvents = [
+  {
+    image: featuredBG,
+    title: 'List your event here',
+    redirectUrl: 'https://google.com',
+    description: 'asdf',
+  },
+  {
+    image: featuredBG,
+    title: 'List your event here',
+    redirectUrl: 'https://google.com',
+  },
+  {
+    image: featuredBG,
+    title: 'List your event here',
+    redirectUrl: 'https://google.com',
+  },
 ];

@@ -1,4 +1,7 @@
 import axios from 'axios';
+import sanityClient from '../sanityClient';
+import { UploadBody } from '@sanity/client';
+import { base64ToBlob } from '../utils/common';
 
 interface ContentfulSys {
   id: string;
@@ -25,8 +28,8 @@ interface ContentfulResponse {
   items: ContentfulEntry[];
 }
 
-const spaceId = '4b35ixzkzcwg';
-const accessToken = '0dMnG2k9dSYnFw9bLX52eWPj9opUAyyczsqzY_haxLs';
+const spaceId = import.meta.env.VITE_SPACE_ID;
+const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 
 export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
   console.log('called');
@@ -58,7 +61,7 @@ export const fetchImageByEntryId = async (entryId: string): Promise<string> => {
 
 // ------------- Currency Converter --------------------
 
-const API_KEY = 'be8ebd0ca41d4b904111474d';
+const API_KEY = import.meta.env.VITE_CURRENCY_API_KEY;
 
 export const fetchCurrencies = async () => {
   try {
@@ -84,5 +87,80 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
     return data;
   } catch (error) {
     throw new Error(`Error Fetching ${error}`);
+  }
+};
+
+// --------------- Sanity SDK ---------------------
+// ------------------ Blogs -----------------------
+
+export const addNewEntry = (countryId: string) => {
+  const newHotel = {
+    _type: 'Blog',
+    name: 'Sunrise Hotel',
+    location: {
+      _type: 'reference',
+      _ref: countryId,
+    },
+    hotelCategory: 'Luxury',
+  };
+
+  return sanityClient.create(newHotel).then((res: { _id: string }) => {
+    return console.log(`Hotel was created with ID: ${res._id}`);
+  });
+};
+
+export const handleUpdate = async (hotelId: string) => {
+  try {
+    const updatedHotel = await sanityClient
+      .patch(hotelId) // ID of the document to update
+      .set({
+        name: 'Updated Sunrise Hotel', // New hotel name
+        hotelCategory: 'Updated Luxury', // Updated hotel category
+      })
+      .commit(); // Commit the changes
+
+    console.log(`Hotel was updated:`, updatedHotel);
+  } catch (err) {
+    console.error('Error updating hotel:', err);
+  }
+};
+
+export const getAllEntryTypes = () => {
+  sanityClient
+    .fetch('*[defined(_type)]._type')
+    .then((types: Iterable<unknown> | null | undefined) => {
+      const uniqueTypes = [...new Set(types)];
+      console.log('All entry types:', uniqueTypes);
+    })
+    .catch((error: string) => {
+      console.error('Error fetching entry types:', error);
+    });
+};
+
+export const getDataByEntryType = (entryType: string) => {
+  return sanityClient.fetch(`*[_type == "${entryType}"]{_id, image, title}`); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
+};
+
+export const getEntryDataById = (id: any) => {
+  return sanityClient.fetch(`*[_id == '${id}']`);
+};
+
+export const getHotelsInLocationWithLimit = (countryId: any) => {
+  sanityClient
+    .fetch(`*[_type == "Hotels" && location._ref == '${countryId}'] [0...4]`) // Replace with your document type
+    .then((res: any) => {
+      return res;
+    })
+    .catch((err: any) => console.error(err));
+};
+
+// Upload image to Sanity
+export const uploadImage = async (file: UploadBody | string): Promise<any> => {
+  try {
+    const imageAsset = await sanityClient.assets.upload('image', typeof file === 'string' ? base64ToBlob(file) : file);
+    return imageAsset;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
   }
 };
