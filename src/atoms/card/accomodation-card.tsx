@@ -17,7 +17,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ image, name, rati
   return (
     <div className="border rounded-lg shadow-sm overflow-hidden">
       <img src={image} alt={name} className="w-full aspect-video rounded-lg h-48 object-cover" />
-      <div className="p-4">
+      {/* <div className="p-4">
         <h3 className="text-lg font-semibold">{name}</h3>
         <div className="flex items-center text-orange-500 mt-1">
           <StarRating rating={rating} />
@@ -37,7 +37,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ image, name, rati
             View Hotel
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

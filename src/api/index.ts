@@ -1,4 +1,7 @@
 import axios from 'axios';
+import sanityClient from '../sanityClient';
+
+import Cookies from 'js-cookie';
 
 interface ContentfulSys {
   id: string;
@@ -84,5 +87,56 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
     return data;
   } catch (error) {
     throw new Error(`Error Fetching ${error}`);
+  }
+};
+
+// --------------- Sanity SDK ---------------------
+// ------------------ Blogs -----------------------
+
+// ------------------- QNA ------------------------
+
+export const getAllEntryTypes = () => {
+  sanityClient
+    .fetch('*[defined(_type)]._type')
+    .then((types: Iterable<unknown> | null | undefined) => {
+      const uniqueTypes = [...new Set(types)];
+      console.log('All entry types:', uniqueTypes);
+    })
+    .catch((error: string) => {
+      console.error('Error fetching entry types:', error);
+    });
+};
+
+export const getDataByEntryType = async (entryType: string, key?: string, format?: string[]) => {
+  return sanityClient.fetch(
+    `*[_type == "${entryType}" ${key ? '&& ' + key : ''}] ${format ? '{' + format.join(',') + '}' : ''}`
+  ); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
+};
+
+export const getEntryDataById = (id: any) => {
+  return sanityClient.fetch(`*[_id == '${id}']`);
+};
+
+export const addQuestion = async (data) => {
+  let req = {
+    ...data,
+    _type: 'qna',
+    author: JSON.parse(Cookies.get('googleUser')).email,
+    date: new Date(),
+    replies_count: 0,
+  };
+
+  if (req.level != 'primary') {
+    console.log(req.title.slice(6));
+    const result = await sanityClient.patch(req.title.slice(6)).inc({ replies_count: 1 }).commit();
+    console.log('Multiple fields updated:', result);
+  }
+
+  try {
+    const res = await sanityClient.create(req);
+    return res;
+  } catch (error) {
+    console.error('Error uploading data:', error);
+    throw error;
   }
 };

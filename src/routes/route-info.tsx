@@ -5,6 +5,7 @@ import Accomodation from '../pages/content/accomodation/accomodation-container';
 import EventsPage from '../pages/content/events/events-container';
 import InnovationsScreen from '../pages/home/navbar-section/discover-section/elements/innovations-screen';
 import DestinationDetailsContainer from '../pages/content/destination-details/details-container';
+import { QNA } from '../pages/content/qna-form/qna-container';
 
 export interface RouteConfig {
   name: string;
@@ -42,6 +43,11 @@ const appRoutes: RouteConfig[] = [
     name: 'events',
     path: '/events',
     element: <EventsPage />,
+  },
+  {
+    name: 'qna',
+    path: '/qna',
+    element: <QNA />,
   },
   {
     name: 'innovations',
