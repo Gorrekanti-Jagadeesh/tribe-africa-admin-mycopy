@@ -3,6 +3,8 @@ import sanityClient from '../sanityClient';
 import { UploadBody } from '@sanity/client';
 import { base64ToBlob } from '../utils/common';
 
+import Cookies from 'js-cookie';
+
 interface ContentfulSys {
   id: string;
 }
@@ -124,6 +126,7 @@ export const handleUpdate = async (hotelId: string) => {
     console.error('Error updating hotel:', err);
   }
 };
+// ------------------- QNA ------------------------
 
 export const getAllEntryTypes = () => {
   sanityClient
@@ -137,8 +140,10 @@ export const getAllEntryTypes = () => {
     });
 };
 
-export const getDataByEntryType = (entryType: string) => {
-  return sanityClient.fetch(`*[_type == "${entryType}"]{_id, image, title}`); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
+export const getDataByEntryType = async (entryType: string, key?: string, format?: string[]) => {
+  return sanityClient.fetch(
+    `*[_type == "${entryType}" ${key ? '&& ' + key : ''}] ${format ? '{' + format.join(',') + '}' : ''}`
+  ); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
 };
 
 export const getEntryDataById = (id: any) => {
@@ -161,6 +166,29 @@ export const uploadImage = async (file: UploadBody | string): Promise<any> => {
     return imageAsset;
   } catch (error) {
     console.error('Error uploading image:', error);
+  }
+};
+
+export const addQuestion = async (data) => {
+  let req = {
+    ...data,
+    _type: 'qna',
+    author: JSON.parse(Cookies.get('googleUser')).email,
+    date: new Date(),
+    replies_count: 0,
+  };
+
+  if (req.level != 'primary') {
+    console.log(req.title.slice(6));
+    const result = await sanityClient.patch(req.title.slice(6)).inc({ replies_count: 1 }).commit();
+    console.log('Multiple fields updated:', result);
+  }
+
+  try {
+    const res = await sanityClient.create(req);
+    return res;
+  } catch (error) {
+    console.error('Error uploading data:', error);
     throw error;
   }
 };

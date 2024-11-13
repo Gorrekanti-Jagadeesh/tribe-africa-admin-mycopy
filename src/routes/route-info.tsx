@@ -6,6 +6,7 @@ import EventsPage from '../pages/content/events/events-container';
 import InnovationsScreen from '../pages/home/navbar-section/discover-section/elements/innovations-screen';
 import DestinationDetailsContainer from '../pages/content/destination-details/details-container';
 import BlogPage from '../pages/content/blogs/blogs-container';
+import { QNA } from '../pages/content/qna-form/qna-container';
 
 export interface RouteConfig {
   name: string;
@@ -53,6 +54,11 @@ const appRoutes: RouteConfig[] = [
     name: 'blogs',
     path: '/blogs/:blogId',
     element: <BlogPage />,
+  },
+  {
+    name: 'qna',
+    path: '/qna',
+    element: <QNA />,
   },
   {
     name: 'innovations',

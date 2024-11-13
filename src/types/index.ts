@@ -204,3 +204,14 @@ export interface BlogPageScreenProps {
   banner: string;
   // blogsList: BlogContentProps[];
 }
+
+// QNA
+export interface QNAProps {
+  _id: string;
+  title: string;
+  content: string;
+  level: string;
+  date: string;
+  author: string;
+  replies_count: string;
+}

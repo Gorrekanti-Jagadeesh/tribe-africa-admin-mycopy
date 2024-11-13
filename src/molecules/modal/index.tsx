@@ -32,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, containerClasses, trig
           >
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white rounded-full p-2 px-4 bg-slate-800 w-fit ms-auto my-4 text-xl"
+              className="text-white rounded-full p-2 px-4 bg-slate-800 w-fit ms-auto mb-4 text-xl"
               style={{ zIndex: 2 }}
             >
               X
