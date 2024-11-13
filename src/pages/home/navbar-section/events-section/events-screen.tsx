@@ -1,17 +1,8 @@
 import React from 'react';
 
-// Define the structure for the props
-interface EventCategory {
-  title: string;
-  items: string[];
-  imageUrl: string;
-}
+import { EventCategory } from '../../../../types';
 
-interface EventsScreenProps {
-  eventCategories: EventCategory[];
-}
-
-const EventsScreen: React.FC<EventsScreenProps> = ({ eventCategories }) => {
+const EventsScreen: React.FC<{ eventCategories: EventCategory[] }> = ({ eventCategories }) => {
   return (
     <section className="flex flex-col p-4">
       <div className="text-lg font-semibold flex">

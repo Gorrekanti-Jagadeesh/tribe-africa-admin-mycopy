@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import EventsScreen from './events-screen';
+import BusinessEventsPlaceholder from '../../../../assets/home/events/business-events.png';
+import EntertainmentEventsPlaceholder from '../../../../assets/home/events/entertainment-events.png';
+import SportsEventsPlaceholder from '../../../../assets/home/events/sports-events.png';
 
 // Define the structure for each event category
 interface EventCategory {
@@ -17,17 +20,17 @@ const EventsContainer: React.FC = () => {
       {
         title: 'Business Events',
         items: ['Trade Shows', 'Conferences & Seminars', 'Product Launches', 'Training & Workshops', 'Networking'],
-        imageUrl: '/path/to/business-image.jpg',
+        imageUrl: BusinessEventsPlaceholder,
       },
       {
         title: 'Entertainment',
         items: ['Arts', 'Cultural Events & Festivals', 'Dance', 'Fashion', 'Music', 'Theater & Comedy'],
-        imageUrl: '/path/to/entertainment-image.jpg',
+        imageUrl: EntertainmentEventsPlaceholder,
       },
       {
         title: 'Sports',
         items: ['Boxing', 'Football', 'Marathons', 'Races', 'Racket sports', 'Wrestling'],
-        imageUrl: '/path/to/sports-image.jpg',
+        imageUrl: SportsEventsPlaceholder,
       },
     ];
 

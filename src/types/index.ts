@@ -185,7 +185,3 @@ export interface EventCategory {
   items: string[];
   imageUrl: string;
 }
-
-export interface EventsScreenProps {
-  eventCategories: EventCategory[];
-}
