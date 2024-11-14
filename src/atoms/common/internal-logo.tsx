@@ -1,6 +1,6 @@
 import TAlogo from '../../assets/tribe-africa-logo.png';
 
-export const TribeAfrica = ({ className, style }: { className?: string; style?: any }) => {
+export const TribeAfrica = ({ className, style }: { className?: string; style?: React.CSSProperties }) => {
   return (
     <img
       src={TAlogo}

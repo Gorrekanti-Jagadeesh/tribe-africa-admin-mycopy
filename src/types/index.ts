@@ -215,3 +215,14 @@ export interface QNAProps {
   author: string;
   replies_count: string;
 }
+
+// APIs
+export interface ImageAsset {
+  _id: string;
+  url: string;
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+}

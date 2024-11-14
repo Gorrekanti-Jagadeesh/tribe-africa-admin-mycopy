@@ -3,6 +3,8 @@ import sanityClient from '../sanityClient';
 import { UploadBody } from '@sanity/client';
 import { base64ToBlob } from '../utils/common';
 
+import { ImageAsset } from '@types';
+
 import Cookies from 'js-cookie';
 
 interface ContentfulSys {
@@ -146,21 +148,22 @@ export const getDataByEntryType = async (entryType: string, key?: string, format
   ); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
 };
 
-export const getEntryDataById = (id: any) => {
+export const getEntryDataById = (id: string) => {
   return sanityClient.fetch(`*[_id == '${id}']`);
 };
 
-export const getHotelsInLocationWithLimit = (countryId: any) => {
+export const getHotelsInLocationWithLimit = (countryId: string) => {
   sanityClient
     .fetch(`*[_type == "Hotels" && location._ref == '${countryId}'] [0...4]`) // Replace with your document type
-    .then((res: any) => {
+    .then((res) => {
       return res;
     })
-    .catch((err: any) => console.error(err));
+    .catch((err) => console.error(err));
 };
 
 // Upload image to Sanity
-export const uploadImage = async (file: UploadBody | string): Promise<any> => {
+
+export const uploadImage = async (file: UploadBody | string): Promise<ImageAsset | undefined> => {
   try {
     const imageAsset = await sanityClient.assets.upload('image', typeof file === 'string' ? base64ToBlob(file) : file);
     return imageAsset;
@@ -169,7 +172,7 @@ export const uploadImage = async (file: UploadBody | string): Promise<any> => {
   }
 };
 
-export const addQuestion = async (data) => {
+export const addQuestion = async (data: { title: string; level: string }) => {
   let req = {
     ...data,
     _type: 'qna',

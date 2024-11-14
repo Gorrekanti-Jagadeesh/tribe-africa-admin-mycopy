@@ -30,13 +30,13 @@ const HolidayDestination: React.FC = () => {
     setActiveIndex(index);
   };
 
-  const handleRightClick = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % destinations.length);
-  };
+  // const handleRightClick = () => {
+  //   setActiveIndex((prevIndex) => (prevIndex + 1) % destinations.length);
+  // };
 
-  const handleLeftClick = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + destinations.length) % destinations.length);
-  };
+  // const handleLeftClick = () => {
+  //   setActiveIndex((prevIndex) => (prevIndex - 1 + destinations.length) % destinations.length);
+  // };
 
   return (
     <div className="bg-[#2B170A] py-8 p-2 md:p-4">

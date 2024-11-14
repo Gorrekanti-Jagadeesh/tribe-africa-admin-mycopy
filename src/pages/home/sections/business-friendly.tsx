@@ -2,13 +2,6 @@ import { useState } from 'react';
 import DualHeading from '@atoms/heading/dual-heading';
 import { carouselData } from '@data';
 
-interface CarouselItem {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-}
-
 const BusinessFriendly: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
