@@ -1,5 +1,3 @@
-import React from 'react';
-
 const AfterWork = () => {
   return (
     <div className="p-4">

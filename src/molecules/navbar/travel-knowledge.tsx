@@ -1,6 +1,6 @@
-import servicesBG from '../../../../assets/business/travel-knowledge/services.png';
+import servicesBG from '@assets/business/travel-knowledge/services.png';
 
-export const TravelKnowledge = () => {
+const TravelKnowledge = () => {
   return (
     <div className="flex gap-6 text-left px-5 py-2">
       <div id="addresses" className="w-1/3">
@@ -43,6 +43,8 @@ export const TravelKnowledge = () => {
     </div>
   );
 };
+
+export default TravelKnowledge;
 
 const links = [
   {

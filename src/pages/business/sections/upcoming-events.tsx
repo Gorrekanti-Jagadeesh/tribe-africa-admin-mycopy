@@ -1,9 +1,7 @@
-// containers/UpcomingEventsContainer.tsx
-
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useEffect, useState } from 'react';
 import { upcomingEvents } from '../../../data';
-import UpcomingEventsScreen from './upcoming-events-screen';
+import CardsGrid from '../../../molecules/layout/cards-grid';
 
 interface EventData {
   image: string;
@@ -13,7 +11,7 @@ interface EventData {
   overlayText?: string;
 }
 
-const UpcomingEventsContainer = () => {
+const UpcomingEvents: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<EventData[]>([]);
 
@@ -29,7 +27,24 @@ const UpcomingEventsContainer = () => {
     );
   }, [navigate]);
 
-  return <UpcomingEventsScreen data={data} />;
+  return (
+    <div>
+      <CardsGrid
+        heading={
+          <>
+            Upcoming <span className="font-serif text-orange-500">Events</span>
+          </>
+        }
+        max={6}
+        data={data}
+        featuredCard={{
+          title: 'List your event here',
+          redirectUrl: 'https://google.com',
+          urlPlaceholder: 'Click to know more',
+        }}
+      />
+    </div>
+  );
 };
 
-export default UpcomingEventsContainer;
+export default UpcomingEvents;

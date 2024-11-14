@@ -1,11 +1,10 @@
 import { Header } from './header';
 
-import Discover from '../../molecules/navbar/discover';
-import Events from '../../molecules/navbar/events';
-import Blogs from '../../molecules/navbar/blogs';
-
-import { TravelKnowledge } from '../../pages/business/navbar-section/travel-knowledge/travel-knowledge';
-import Network from '../../pages/business/navbar-section/network/network-container';
+import Discover from '../navbar/discover';
+import Events from '../navbar/events';
+import Blogs from '../navbar/blogs';
+import TravelKnowledge from '../navbar/travel-knowledge';
+import Network from '../navbar/network';
 
 export const HomeHeader = () => {
   const menuItems = [

@@ -1,7 +1,9 @@
-import Footer from '../../molecules/footer';
-import { BusinessHeader } from '../../molecules/header';
-import heroBackground from '../../assets/homepage-welcome-image-2.png';
-import CardsGrid from '../../molecules/layout/cards-grid';
+import UpcomingEvents from './sections/upcoming-events';
+
+import Footer from '@molecules/footer';
+import { BusinessHeader } from '@molecules/header';
+import heroBackground from '@assets/homepage-welcome-image-2.png';
+import CardsGrid from '@molecules/layout/cards-grid';
 
 const BusinessScreen = ({ country }: { country: string | undefined }) => {
   return (
@@ -36,6 +38,9 @@ const BusinessScreen = ({ country }: { country: string | undefined }) => {
         }
         data={[]}
       />
+
+      {/* Upcoming events */}
+      <UpcomingEvents />
       <Footer />
     </div>
   );
