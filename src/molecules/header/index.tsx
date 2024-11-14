@@ -1,8 +1,8 @@
 import { Header } from './header';
 
-import Discover from '../../pages/home/navbar-section/discover-section/discover-container';
-import EventsContainer from '../../pages/home/navbar-section/events-section/events-container';
-import Blogs from '../../pages/home/navbar-section/blog-section/blog-container';
+import Discover from '../../molecules/navbar/discover';
+import Events from '../../molecules/navbar/events';
+import Blogs from '../../molecules/navbar/blogs';
 
 import { TravelKnowledge } from '../../pages/business/navbar-section/travel-knowledge/travel-knowledge';
 import Network from '../../pages/business/navbar-section/network/network-container';
@@ -11,7 +11,7 @@ export const HomeHeader = () => {
   const menuItems = [
     { id: 'getting-there', title: 'Getting there', isNavLink: true, content: <>Content</> },
     { id: 'discover', title: 'Discover', isNavLink: true, content: <Discover /> },
-    { id: 'events', title: 'Events', isNavLink: true, content: <EventsContainer /> },
+    { id: 'events', title: 'Events', isNavLink: true, content: <Events /> },
     { id: 'institute-collaboration', title: 'Peace & Prosperity Institute', isNavLink: true, content: <>Content</> },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
     { id: 'contact', title: 'Contact', isNavLink: false, content: null },
