@@ -1,4 +1,4 @@
-import UpcomingEvents from './upcoming-events/upcoming-events-container';
+import UpcomingEvents from './sections/upcoming-events';
 
 import Footer from '@molecules/footer';
 import { BusinessHeader } from '@molecules/header';
