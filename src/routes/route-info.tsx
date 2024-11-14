@@ -2,6 +2,7 @@ import HomeContainer from '../pages/home/home-container';
 import BusinessContainer from '../pages/business/business-container';
 import HolidayContainer from '../pages/holiday/holiday-container';
 import Accomodation from '../pages/accomodation/accomodation-container';
+import Events from '../molecules/navbar/events';
 import EventsPage from '../pages/events/events-container';
 import InnovationsScreen from '../pages/innovations/innovations-screen';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
@@ -43,6 +44,11 @@ const appRoutes: RouteConfig[] = [
   {
     name: 'events',
     path: '/events',
+    element: <Events />,
+  },
+  {
+    name: 'events',
+    path: '/events/:event-type',
     element: <EventsPage />,
   },
   {

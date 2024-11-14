@@ -182,7 +182,10 @@ export interface CardProps {
 
 export interface EventCategory {
   title: string;
-  items: string[];
+  items: {
+    label: string;
+    url: string;
+  }[];
   imageUrl: string;
 }
 

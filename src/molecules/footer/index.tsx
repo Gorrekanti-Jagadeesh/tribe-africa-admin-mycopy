@@ -1,5 +1,5 @@
 import { default as SubscribeEmail } from '../../atoms/common/input-action';
-import { LinkList } from './link-list';
+import { LinkList } from '../layout/link-list';
 import { TribeAfrica } from '../../atoms/common/internal-logo';
 
 import spiralBackground from '../../assets/branding-bg-dark.png';
@@ -10,61 +10,61 @@ const footerLinks = {
   about: [
     {
       label: 'About us',
-      link: '',
+      url: '',
     },
     {
       label: 'Resources & Policies',
-      link: '',
+      url: '',
     },
     {
       label: 'Trust & Safety',
-      link: '',
+      url: '',
     },
   ],
   business: [
     {
       label: 'Invest with us',
-      link: '',
+      url: '',
     },
     {
       label: 'Advertise with us',
-      link: '',
+      url: '',
     },
   ],
   join: [
     {
       label: 'Add your business',
-      link: '',
+      url: '',
     },
     {
       label: 'Add your service',
-      link: '',
+      url: '',
     },
     {
       label: 'Add a place',
-      link: '',
+      url: '',
     },
     {
       label: 'Add your event',
-      link: '',
+      url: '',
     },
     {
       label: 'Work with the Tribe',
-      link: '',
+      url: '',
     },
     {
       label: 'Contribute to our blog',
-      link: '',
+      url: '',
     },
   ],
   apps: [
     {
       label: 'Android App',
-      link: '',
+      url: '',
     },
     {
       label: 'iPhone App',
-      link: '',
+      url: '',
     },
   ],
 };
@@ -72,19 +72,19 @@ const footerLinks = {
 const socialMediaLinks = [
   {
     icon: faFacebookF,
-    link: 'https://facebook.com',
+    url: 'https://facebook.com',
   },
   {
     icon: faTwitter,
-    link: 'https://twitter.com',
+    url: 'https://twitter.com',
   },
   {
     icon: faInstagram,
-    link: 'https://instagram.com',
+    url: 'https://instagram.com',
   },
   {
     icon: faLinkedinIn,
-    link: 'https://linkedin.com',
+    url: 'https://linkedin.com',
   },
 ];
 
@@ -99,17 +99,17 @@ const Footer = () => {
           <div className="col-span-1 grid gap-2">
             <LinkList
               heading={
-                <>
+                <h3 className="text-xl text-orange-500 font-bold mb-4">
                   About <TribeAfrica />
-                </>
+                </h3>
               }
               links={footerLinks.about}
             />
             <LinkList
               heading={
-                <>
+                <h3 className="text-xl text-orange-500 font-bold mb-4">
                   Biz with <TribeAfrica />
-                </>
+                </h3>
               }
               links={footerLinks.business}
             />
@@ -118,14 +118,17 @@ const Footer = () => {
             <div className="grid md:flex gap-3 w-full">
               <LinkList
                 heading={
-                  <>
+                  <h3 className="text-xl text-orange-500 font-bold mb-4">
                     Join <TribeAfrica />
-                  </>
+                  </h3>
                 }
                 links={footerLinks.apps}
               />
               <div className="col-span-1 md:ms-auto md:w-48">
-                <LinkList heading={<>Get the App</>} links={footerLinks.join} />
+                <LinkList
+                  heading={<h3 className="text-xl text-orange-500 font-bold mb-4">Get the App</h3>}
+                  links={footerLinks.join}
+                />
               </div>
             </div>
             <div>
@@ -145,7 +148,7 @@ const Footer = () => {
           {socialMediaLinks.map((link, index) => (
             <a
               key={index}
-              href={link.link}
+              href={link.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-white bg-slate-700 p-2 rounded-full shadow-lg border hover:bg-white hover:border-orange-400 hover:text-black transition duration-300"

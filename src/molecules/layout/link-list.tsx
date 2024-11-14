@@ -3,17 +3,19 @@ import React from 'react';
 export const LinkList = ({
   heading,
   links,
+  className,
 }: {
   heading: React.ReactNode;
-  links: { link: string; label: string }[];
+  links: { url: string; label: string }[];
+  className?: string;
 }) => {
   return (
-    <div id="about">
-      <h3 className="text-xl text-orange-500 font-bold mb-4">{heading}</h3>
+    <div id="about" className={`m-2 ${className} space-y-2`}>
+      <div>{heading}</div>
       <ul className="space-y-2">
         {links.map((link, index) => (
           <li key={index}>
-            <a href={link.link}>{link.label}</a>
+            <a href={link.url}>{link.label}</a>
           </li>
         ))}
       </ul>
