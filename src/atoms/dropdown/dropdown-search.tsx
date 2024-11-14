@@ -48,7 +48,7 @@ const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }
         {placeholder}
       </button>
       <ul
-        className={`absolute top-100% left-0 z-10 w-full bg-white border border-gray-300 rounded-md max-h-200 overflow-y-auto p-0 m-0 list-none ${isOpen ? 'block' : 'hidden'}`}
+        className={`absolute top-full left-0 z-10 w-full bg-white border border-gray-300 rounded-md max-h-[200px] overflow-y-auto p-0 m-0 list-none ${isOpen ? 'block' : 'hidden'}`}
       >
         {searchable && (
           <input

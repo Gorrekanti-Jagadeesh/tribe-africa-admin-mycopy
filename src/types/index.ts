@@ -189,3 +189,40 @@ export interface EventCategory {
 export interface EventsScreenProps {
   eventCategories: EventCategory[];
 }
+
+// ------- Blogs interfaces ------------
+export interface BlogContentProps {
+  _id: string;
+  image: string | { asset: { _ref: string } };
+  title?: string;
+  content: string;
+}
+
+export interface BlogPageScreenProps {
+  blogId: string | undefined;
+  // parseImageUrl: (imageRef: string) => string;
+  banner: string;
+  // blogsList: BlogContentProps[];
+}
+
+// QNA
+export interface QNAProps {
+  _id: string;
+  title: string;
+  content: string;
+  level: string;
+  date: string;
+  author: string;
+  replies_count: string;
+}
+
+// APIs
+export interface ImageAsset {
+  _id: string;
+  url: string;
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+}

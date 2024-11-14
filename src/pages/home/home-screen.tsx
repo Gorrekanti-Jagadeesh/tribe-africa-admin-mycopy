@@ -1,15 +1,15 @@
 import React from 'react';
 import { HomeHeader } from '../../molecules/header';
 // Components importing from sections folder
-import HeroSection from './hero-section/hero-container';
-import Explore from './explore-section/explore-container';
-import Experience from './experience-section/experience-container';
-import Services from './services-section/services-container';
-import CharmingHotels from './hotels-section/hotels-container';
-import HolidayDestination from './holiday-destination-section/holiday-destination-container';
-import WorkingRemotely from './working-remotely-section/working-remotely-container';
-import BusinessFriendly from './business-friendly-section/business-friendly-container';
-import Footer from '../../molecules/footer/footer';
+import HeroSection from './sections/hero-section';
+import Explore from './sections/explore';
+import Experience from './sections/experience';
+import Services from './sections/services';
+import CharmingHotels from './sections/charming-hotels';
+import HolidayDestination from './sections/holiday-destination';
+import WorkingRemotely from './sections/working-remotely';
+import BusinessFriendly from './sections/business-friendly';
+import Footer from '../../molecules/footer';
 
 const HomeScreen: React.FC = () => {
   return (

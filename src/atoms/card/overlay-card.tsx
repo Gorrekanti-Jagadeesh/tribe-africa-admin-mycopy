@@ -1,4 +1,4 @@
-interface CardDataProps {
+interface CardElementsProps {
   image: string;
   title?: string;
   isOverlay?: boolean;
@@ -7,14 +7,17 @@ interface CardDataProps {
 }
 
 interface OverLayCardProps {
-  data: CardDataProps;
+  data: CardElementsProps;
+  className?: string;
+  imageClassName?: string;
+  textClassName?: string;
 }
 
-const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
+const OverLayCard: React.FC<OverLayCardProps> = ({ data, className, imageClassName, textClassName }) => {
   return (
-    <div className="w-full inline-block cursor-pointer group relative" onClick={data.onClick}>
+    <div className={`w-full inline-block cursor-pointer group relative ${className}`} onClick={data.onClick}>
       <div
-        className="aspect-square bg-cover rounded-md relative"
+        className={`aspect-square bg-cover rounded-md relative ${imageClassName}`}
         style={{
           backgroundImage: `url(${data.image})`,
         }}
@@ -25,7 +28,7 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
           </div>
         )}
       </div>
-      <p>{data.title}</p>
+      <p className={textClassName}>{data.title}</p>
     </div>
   );
 };

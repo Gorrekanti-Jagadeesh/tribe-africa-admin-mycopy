@@ -1,9 +1,9 @@
 import UpcomingEvents from './upcoming-events/upcoming-events-container';
 
-import Footer from '../../molecules/footer/footer';
-import { BusinessHeader } from '../../molecules/header';
-import heroBackground from '../../assets/homepage-welcome-image-2.png';
-import CardsGrid from '../../molecules/layout/cards-grid';
+import Footer from '@molecules/footer';
+import { BusinessHeader } from '@molecules/header';
+import heroBackground from '@assets/homepage-welcome-image-2.png';
+import CardsGrid from '@molecules/layout/cards-grid';
 
 const BusinessScreen = ({ country }: { country: string | undefined }) => {
   return (
