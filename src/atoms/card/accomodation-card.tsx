@@ -1,8 +1,8 @@
 import React from 'react';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StarRating } from '../rating/star-rating';
-
-import { FaMapMarkerAlt } from 'react-icons/fa';
 
 interface AccommodationCardProps {
   image: string;
@@ -24,7 +24,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ image, name, rati
           <span className="text-gray-500 ml-2 text-sm">{reviewCount} reviews</span>
         </div>
         <div className="flex items-center text-gray-500 text-sm mt-2">
-          <FaMapMarkerAlt className="mr-1" />
+          <FontAwesomeIcon icon={faMap} />
           <span>{distance}</span>
         </div>
         <hr className="my-2" />

@@ -1,5 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+
+import { ImageDragAndDrop } from '@atoms/input-elements/drag-and-drop';
+import { uploadImage } from '@api';
+import { parseImageUrl } from '@utils/sanity';
+import { generateId } from '@utils/common';
+import sanityClient from '../../sanityClient';
+import { eventTypes } from '../../data';
 
 type FormData = {
   title: string;
@@ -13,124 +20,152 @@ type FormData = {
   phone: string;
   whatsapp: string;
   amount: string;
+  category: string;
+  type: string;
 };
 
+const categories = eventTypes;
+
 const EventForm: React.FC = () => {
+  const [image, setImage] = useState('');
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<FormData>();
-
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
+    uploadImage(image)
+      .then((res) => {
+        const jsonData = {
+          ...data,
+          _type: 'event',
+          image: parseImageUrl(res._id),
+          _id: `drafts.${generateId()}`,
+        };
+        console.log(jsonData);
+        sanityClient.create(jsonData).then(() => alert('submitted successfully'));
+      })
+      .catch((error) => {
+        console.error('Error uploading image:', error);
+      });
   };
 
+  const handleFileSelect = (file: File | null): void => setImage(file);
+
+  const selectedCategory = watch('category');
+  const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>Title</label>
-        <input {...register('title', { required: 'Title is required' })} />
-        {errors.title && <p>{errors.title.message}</p>}
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4 bg-white text-black rounded-lg shadow-md">
+      <input
+        {...register('title', { required: 'Title is required' })}
+        type="text"
+        placeholder="Title"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.title && <span className="text-red-500">{errors.title.message}</span>}
 
-      <div>
-        <label>Image URL</label>
-        <input {...register('image', { required: 'Image URL is required' })} />
-        {errors.image && <p>{errors.image.message}</p>}
-      </div>
+      <ImageDragAndDrop onFileSelect={handleFileSelect} />
 
-      <div>
-        <label>Description</label>
-        <textarea {...register('description', { required: 'Description is required' })} />
-        {errors.description && <p>{errors.description.message}</p>}
-      </div>
+      <textarea
+        {...register('description', { required: 'Description is required' })}
+        placeholder="Description"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.description && <span className="text-red-500">{errors.description.message}</span>}
 
-      <div>
-        <label>Date</label>
-        <input type="date" {...register('date', { required: 'Date is required' })} />
-        {errors.date && <p>{errors.date.message}</p>}
-      </div>
+      <input
+        {...register('date', { required: 'Date is required' })}
+        type="date"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.date && <span className="text-red-500">{errors.date.message}</span>}
 
-      <div>
-        <label>Time</label>
-        <input type="time" {...register('time', { required: 'Time is required' })} />
-        {errors.time && <p>{errors.time.message}</p>}
-      </div>
+      <input
+        {...register('time', { required: 'Time is required' })}
+        type="time"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.time && <span className="text-red-500">{errors.time.message}</span>}
 
-      <div>
-        <label>Location</label>
-        <input {...register('location', { required: 'Location is required' })} />
-        {errors.location && <p>{errors.location.message}</p>}
-      </div>
+      <input
+        {...register('location', { required: 'Location is required' })}
+        type="text"
+        placeholder="Location"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.location && <span className="text-red-500">{errors.location.message}</span>}
 
-      <div>
-        <label>Country</label>
-        <input {...register('country', { required: 'Country is required' })} />
-        {errors.country && <p>{errors.country.message}</p>}
-      </div>
+      <input
+        {...register('country', { required: 'Country is required' })}
+        type="text"
+        placeholder="Country"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.country && <span className="text-red-500">{errors.country.message}</span>}
 
-      <div>
-        <label>Website</label>
-        <input
-          type="url"
-          {...register('website', {
-            required: 'Website is required',
-            pattern: {
-              value: /^(https?:\/\/)?([\w.-]+)+[\w-]+(\/[\w-]*)*\/?$/,
-              message: 'Enter a valid URL',
-            },
-          })}
-        />
-        {errors.website && <p>{errors.website.message}</p>}
-      </div>
+      <input
+        {...register('website')}
+        type="url"
+        placeholder="Website"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
 
-      <div>
-        <label>Phone</label>
-        <input
-          type="tel"
-          {...register('phone', {
-            required: 'Phone number is required',
-            pattern: {
-              value: /^\d{10,15}$/,
-              message: 'Phone number should be 10-15 digits',
-            },
-          })}
-        />
-        {errors.phone && <p>{errors.phone.message}</p>}
-      </div>
+      <input
+        {...register('phone', { required: 'Phone is required' })}
+        type="tel"
+        placeholder="Phone"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
 
-      <div>
-        <label>WhatsApp</label>
-        <input
-          type="tel"
-          {...register('whatsapp', {
-            required: 'WhatsApp number is required',
-            pattern: {
-              value: /^\d{10,15}$/,
-              message: 'WhatsApp number should be 10-15 digits',
-            },
-          })}
-        />
-        {errors.whatsapp && <p>{errors.whatsapp.message}</p>}
-      </div>
+      <input
+        {...register('whatsapp')}
+        type="text"
+        placeholder="WhatsApp"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
 
-      <div>
-        <label>Amount</label>
-        <input
-          type="number"
-          {...register('amount', {
-            required: 'Amount is required',
-            min: {
-              value: 0,
-              message: 'Amount cannot be negative',
-            },
-          })}
-        />
-        {errors.amount && <p>{errors.amount.message}</p>}
-      </div>
+      <input
+        {...register('amount', { required: 'Amount is required' })}
+        type="number"
+        placeholder="Amount"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.amount && <span className="text-red-500">{errors.amount.message}</span>}
 
-      <button type="submit">Submit</button>
+      <select
+        {...register('category', { required: 'Category is required' })}
+        className="w-full p-2 border border-gray-300 rounded"
+      >
+        <option value="">Select Event Category</option>
+        {categories.map((category) => (
+          <option key={category.title} value={category.value}>
+            {category.title}
+          </option>
+        ))}
+      </select>
+      {errors.category && <span className="text-red-500">{errors.category.message}</span>}
+
+      {selectedCategoryOptions && (
+        <select
+          {...register('type', { required: 'Type is required' })}
+          className="w-full p-2 border border-gray-300 rounded"
+        >
+          <option value="">Select Event Type</option>
+          {selectedCategoryOptions.items.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.title}
+            </option>
+          ))}
+        </select>
+      )}
+      {errors.type && selectedCategoryOptions && <span className="text-red-500">{errors.type.message}</span>}
+
+      <button type="submit" className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+        Submit
+      </button>
     </form>
   );
 };

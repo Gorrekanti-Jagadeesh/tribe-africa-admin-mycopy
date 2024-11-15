@@ -159,3 +159,81 @@ export const upcomingEvents = [
     redirectUrl: 'https://google.com',
   },
 ];
+
+// ----------- Events -------------------
+
+export const eventURLs = [
+  {
+    title: 'Business Events',
+    items: [
+      { label: 'Trade Shows', url: '/events/trade-shows' },
+      { label: 'Conferences & Seminars', url: '/events/conferences-seminars' },
+      { label: 'Product Launches', url: '/events/product-launches' },
+      { label: 'Training & Workshops', url: '/events/training-workshops' },
+      { label: 'Networking', url: '/events/networking' },
+    ],
+    imageUrl: '/path/to/business-image.jpg',
+  },
+  {
+    title: 'Entertainment',
+    items: [
+      { label: 'Arts', url: '/events/arts' },
+      { label: 'Cultural Events & Festivals', url: '/events/cultural-events-festivals' },
+      { label: 'Dance', url: '/events/dance' },
+      { label: 'Fashion', url: '/events/fashion' },
+      { label: 'Music', url: '/events/music' },
+      { label: 'Theater & Comedy', url: '/events/theater-comedy' },
+    ],
+    imageUrl: '/path/to/entertainment-image.jpg',
+  },
+  {
+    title: 'Sports',
+    items: [
+      { label: 'Boxing', url: '/events/boxing' },
+      { label: 'Football', url: '/events/football' },
+      { label: 'Marathons', url: '/events/marathons' },
+      { label: 'Races', url: '/events/races' },
+      { label: 'Racket sports', url: '/events/racket-sports' },
+      { label: 'Wrestling', url: '/events/wrestling' },
+    ],
+    imageUrl: '/path/to/sports-image.jpg',
+  },
+];
+
+export const eventTypes = [
+  {
+    title: 'Business Events',
+    value: 'business',
+    items: [
+      { title: 'Trade Shows', value: 'trade-shows' },
+      { title: 'Conferences & Seminars', value: 'conferences-seminars' },
+      { title: 'Product Launches', value: 'product-launches' },
+      { title: 'Training & Workshops', value: 'training-workshops' },
+      { title: 'Networking', value: 'networking' },
+    ],
+  },
+  {
+    title: 'Entertainment',
+    value: 'entertainment',
+    items: [
+      { title: 'Arts', value: 'arts' },
+      { title: 'Cultural Events & Festivals', value: 'cultural-events-festivals' },
+      { title: 'Dance', value: 'dance' },
+      { title: 'Fashion', value: 'fashion' },
+      { title: 'Music', value: 'music' },
+      { title: 'Theater & Comedy', value: 'theater-comedy' },
+    ],
+  },
+  {
+    title: 'Sports',
+    value: 'sports',
+    items: [
+      { title: 'Boxing', value: 'boxing' },
+      { title: 'Football', value: 'football' },
+      { title: 'Marathons', value: 'marathons' },
+      { title: 'Races', value: 'races' },
+      { title: 'Racket sports', value: 'racket-sports' },
+      { title: 'Wrestling', value: 'wrestling' },
+    ],
+  },
+];
