@@ -2,6 +2,7 @@ import axios from 'axios';
 import sanityClient from '../sanityClient';
 import { UploadBody } from '@sanity/client';
 import { base64ToBlob } from '../utils/common';
+import imageUrlBuilder from '@sanity/image-url';
 
 interface ContentfulSys {
   id: string;
@@ -150,8 +151,17 @@ export const getAllEntryTypes = () => {
     });
 };
 
-export const getDataByEntryType = (entryType: string) => {
-  return sanityClient.fetch(`*[_type == "${entryType}"]{_id, image, title}`); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
+export const getDataByDocumentType = (entryType: string, fields?: string[]) => {
+  const fieldsQuery = fields ? fields.join(', ') : '*';
+  return sanityClient.fetch(`*[_type == "${entryType}"]{${fieldsQuery}}`);
+};
+
+export const getDataByDocumentTypeWithId = (entryType: string, fieldType: string, id?: string, fields?: string[]) => {
+  const fieldsQuery = fields ? fields.join(', ') : '*';
+  const query = `*[_type == "${entryType}" && ${fieldType} == "${id}"]{
+    ${fieldsQuery}
+  }`;
+  return sanityClient.fetch(query);
 };
 
 export const getEntryDataById = (id: any) => {
@@ -176,4 +186,9 @@ export const uploadImage = async (file: UploadBody | string): Promise<any> => {
     console.error('Error uploading image:', error);
     throw error;
   }
+};
+
+export const sanityImageUrlBuilder = (image: string) => {
+  const builder = imageUrlBuilder(sanityClient);
+  return builder.image(image);
 };

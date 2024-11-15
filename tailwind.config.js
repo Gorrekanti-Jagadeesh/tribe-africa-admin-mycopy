@@ -5,8 +5,9 @@ export default {
     extend: {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
+        scrollbar: ['rounded'],
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
 };
