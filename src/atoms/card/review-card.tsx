@@ -26,7 +26,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
     <div className="border rounded-lg p-4 shadow-sm flex">
       {/* User Information */}
       <div className="flex-shrink-0 mr-2">
-        <img src={reviewer_image} alt={reviewer_name} className="w-12 h-12 rounded-full" />
+        {reviewer_image ? (
+          <img src={reviewer_image} alt={reviewer_name} className="w-12 h-12 rounded-full" />
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center text-white text-xl font-semibold">
+            {reviewer_name?.charAt(0).toUpperCase()}
+          </div>
+        )}
       </div>
       <div className="flex-grow">
         <div className="flex gap-4 items-center">
@@ -55,7 +61,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
         <div className="space-y-2 min-w-56">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold whitespace-nowrap">In Total</span>
-            <StarRating rating={total_rating.toString()} />
+            <StarRating rating={total_rating} />
           </div>
           <hr className="border border-black" />
           {/* {ratings.map((rating) => (
@@ -66,24 +72,24 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
           ))} */}
           <div className="flex gap-2 justify-between items-center">
             <span className="text-sm w-[40%]">Quality of Service</span>
-            <StarRating rating={quality_of_service.toString()} />
+            <StarRating rating={quality_of_service} />
           </div>
           <div className="flex gap-2 justify-between items-center">
             <span className="text-sm w-[40%]">Location</span>
-            <StarRating rating={location.toString()} />
+            <StarRating rating={location} />
           </div>
           <div className="flex gap-2 justify-between items-center">
             <span className="text-sm w-[40%]">Comfort</span>
-            <StarRating rating={comfort.toString()} />
+            <StarRating rating={comfort} />
           </div>
           <div className="flex gap-2 justify-between items-center">
             <span className="text-sm w-[40%]">Food and Beverage</span>
-            <StarRating rating={food_and_beverage.toString()} />
+            <StarRating rating={food_and_beverage} />
           </div>
 
           <div className="flex gap-2 justify-between items-center">
             <span className="text-sm w-[40%]">Cleanliness</span>
-            <StarRating rating={cleanliness.toString()} />
+            <StarRating rating={cleanliness} />
           </div>
         </div>
       </div>

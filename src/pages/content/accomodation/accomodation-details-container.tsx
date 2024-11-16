@@ -22,6 +22,15 @@ const AccommodationDetailsContainer = () => {
       'reviewer_name',
       'reviewer_image',
     ]);
+
+    // Define the type for reviews
+    type Review = {
+      created_at: string;
+    };
+
+    // Sort reviews by created_at in descending order
+    reviews.sort((a: Review, b: Review) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
     return reviews;
   };
 

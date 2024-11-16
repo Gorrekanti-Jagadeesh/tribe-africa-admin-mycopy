@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Controller } from 'react-hook-form';
+import { FaCamera } from 'react-icons/fa';
 
 const FileUploadWithPreview = ({ control }: { control: any }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileURLs, setFileURLs] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const maxFiles = 3;
 
-  // Handle file input change
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: any) => {
     if (event.target.files) {
       const newFiles = Array.from(event.target.files);
       const newFileURLs = newFiles.map((file) => URL.createObjectURL(file));
-      setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
-      setFileURLs((prevURLs) => [...prevURLs, ...newFileURLs]);
+      const updatedFiles = [...selectedFiles, ...newFiles];
+      const updatedFileURLs = [...fileURLs, ...newFileURLs];
 
-      // Update the field value with the actual file objects
-      field.onChange([...selectedFiles, ...newFiles]);
+      setSelectedFiles(updatedFiles);
+      setFileURLs(updatedFileURLs);
+
+      field.onChange(updatedFiles);
     }
   };
 
-  // Remove selected file from state and revoke its object URL
   const removeFile = (file: File, field: any) => {
-    setSelectedFiles((prevFiles) => prevFiles.filter((f) => f !== file));
+    const updatedFiles = selectedFiles.filter((f) => f !== file);
+    const index = selectedFiles.indexOf(file);
+
+    setSelectedFiles(updatedFiles);
     setFileURLs((prevURLs) => {
-      const index = selectedFiles.indexOf(file);
       if (index !== -1) {
         URL.revokeObjectURL(prevURLs[index]);
         return prevURLs.filter((_, i) => i !== index);
@@ -30,47 +35,52 @@ const FileUploadWithPreview = ({ control }: { control: any }) => {
       return prevURLs;
     });
 
-    // Update the field value to remove the file
-    field.onChange(selectedFiles.filter((f) => f !== file));
+    field.onChange(updatedFiles);
+  };
+
+  const handleCameraClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   return (
-    <div className="border p-4 w-80">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Choose Files to Upload</h3>
-      </div>
-
-      {/* File input for selecting multiple files */}
+    <div className="">
       <Controller
         name="images"
         control={control}
         defaultValue={[]}
         render={({ field }) => (
-          <>
+          <div className="flex gap-4">
+            <div
+              className="flex flex-col items-center justify-center border border-gray-300 rounded-lg p-4 w-40 bg-gray-100 cursor-pointer"
+              onClick={handleCameraClick}
+            >
+              <FaCamera size={40} className="text-gray-500" />
+              <span className="text-gray-500">(Up to {maxFiles})</span>
+            </div>
             <input
+              ref={fileInputRef}
               type="file"
               multiple
               onChange={(e) => handleFileChange(e, field)}
-              className="mb-4 border p-2 w-full"
+              className="hidden"
+              disabled={selectedFiles.length >= maxFiles}
             />
-            {/* Display selected files as previews */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {selectedFiles.map((file, index) => (
-                <div key={file.name} className="relative w-20 h-20 border rounded overflow-hidden">
-                  {/* Remove button */}
+                <div key={`${file.name}-${index}`} className="relative w-20 h-20 border rounded overflow-hidden">
                   <button
                     onClick={() => removeFile(file, field)}
                     className="absolute p-0 m-0 w-5 h-5 rounded-full top-0 right-0 bg-white bg-opacity-75 text-black"
                   >
                     ×
                   </button>
-
-                  {/* Image preview */}
                   <img src={fileURLs[index]} alt={`preview ${index}`} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
       />
     </div>

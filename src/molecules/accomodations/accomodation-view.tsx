@@ -45,6 +45,7 @@ const AccommodationView: React.FC<AccommodationViewProps> = ({ hotelData, review
       formData.location,
       formData.cleanliness,
     ];
+
     const totalRating = ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length;
 
     // Upload images using the uploadImage function
@@ -107,7 +108,7 @@ const AccommodationView: React.FC<AccommodationViewProps> = ({ hotelData, review
           <h1 className="text-3xl font-bold">{hotelData.name}</h1>
           {/* Rating */}
           <div className="flex mt-2">
-            <StarRating rating={'3'} />
+            <StarRating rating={3} />
             <p className="ml-2 m-auto text-gray-600 text-sm">{102} reviews</p>
           </div>
           {/* Address and Contact */}
@@ -190,42 +191,59 @@ const AccommodationView: React.FC<AccommodationViewProps> = ({ hotelData, review
 
       {/* Modal for writing a review */}
       <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-        <form onSubmit={handleSubmit(onSubmit)} className="p-8 bg-white rounded-lg w-[550px]">
-          <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>
-          <Controller
-            name="review"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <textarea
-                {...field}
-                aria-multiline
-                className="w-full p-2 border rounded outline-none"
-                placeholder="Write your review here..."
+        <form onSubmit={handleSubmit(onSubmit)} className="p-8 bg-white rounded-lg w-full lg:w-[1000px] mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
+            {/* Review Section */}
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Add a written review</h2>
+              <Controller
+                name="review"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <textarea
+                    {...field}
+                    className="w-full h-48 p-2 border rounded outline-none"
+                    placeholder="Write your review..."
+                  />
+                )}
               />
-            )}
-          />
-          <div className="mt-4">
-            <h3 className="font-semibold">Rate the following:</h3>
-            {['Quality of Service', 'Comfort', 'Food and Beverage', 'Location', 'Cleanliness'].map((aspect) => (
-              <div key={aspect} className="flex justify-between items-center mt-2">
-                <label className="mr-2">{aspect}:</label>
-                <Controller
-                  name={aspect.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_')}
-                  control={control}
-                  defaultValue={0}
-                  render={({ field }) => <StarRatingInput {...field} />}
-                />
+            </div>
+
+            {/* Rating Section */}
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Rate your Experience</h2>
+              <div className="border border-gray-300 rounded-lg p-4">
+                {['Quality of Service', 'Comfort', 'Food and beverage', 'Location', 'Cleanliness'].map((aspect) => (
+                  <div key={aspect} className="flex justify-between items-center mt-2">
+                    <label className="mr-2">{aspect}:</label>
+                    <Controller
+                      name={aspect.toLowerCase().replace(/ & /g, '_').replace(/ /g, '_')}
+                      control={control}
+                      defaultValue={0}
+                      render={({ field }) => <StarRatingInput {...field} />}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
+
+          {/* Image Upload Section */}
           <div className="mt-4">
-            <h3 className="font-semibold mb-2">Upload Images</h3>
-            <FileUploadWithPreview control={control} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-semibold mb-2">Add some Photos</h3>
+                <FileUploadWithPreview control={control} />
+              </div>
+              {/* Submit Button */}
+              <div className="flex items-end justify-end">
+                <button type="submit" className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">
+                  Submit
+                </button>
+              </div>
+            </div>
           </div>
-          <button type="submit" className="mt-4 bg-orange-500 text-white px-4 py-2 rounded">
-            Submit
-          </button>
         </form>
       </Modal>
     </div>
