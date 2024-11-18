@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDetectClickOutside } from 'react-detect-click-outside';
+import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
 
 interface Option {
   value: string;
@@ -8,17 +9,26 @@ interface Option {
 
 // Dropdown with Search
 interface DropdownProps {
-  text: string;
+  placeholderText: string;
   options: Option[];
   searchable: boolean;
   action: (selectedOption: string) => void;
+  iconVisible: boolean;
+  buttonStyles?: string;
 }
 
 // Dropdown component
-const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  placeholderText,
+  options,
+  searchable,
+  action,
+  iconVisible,
+  buttonStyles,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [placeholder, setPlaceholder] = useState(text);
+  const [placeholder, setPlaceholder] = useState(placeholderText);
 
   const ref = useDetectClickOutside({
     onTriggered: () => {
@@ -44,8 +54,11 @@ const Dropdown: React.FC<DropdownProps> = ({ text, options, searchable, action }
 
   return (
     <div className="relative inline-block" ref={ref}>
-      <button className="w-24 md:w-48 bg-slate-200 p-4 rounded-md cursor-pointer truncate" onClick={handleButtonClick}>
-        {placeholder}
+      <button
+        className={`flex justify-center align-center w-24 ${buttonStyles} p-2 rounded-md cursor-pointer truncate`}
+        onClick={handleButtonClick}
+      >
+        {placeholder} {iconVisible && <ChevronDownSVG />}
       </button>
       <ul
         className={`absolute top-100% left-0 z-10 w-full bg-white border border-gray-300 rounded-md max-h-200 overflow-y-auto p-0 m-0 list-none ${isOpen ? 'block' : 'hidden'}`}

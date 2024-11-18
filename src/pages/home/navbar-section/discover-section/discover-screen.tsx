@@ -32,91 +32,43 @@ const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
       {parentContent ? (
         <div id="grid-layout" className="grid grid-cols-3">
           {/* Innovations card */}
-          <div
-            className="inline-block p-2 my-2 cursor-pointer w-fit"
+          <Card
+            title="Innovations"
+            imageUrl={images.innovationsView}
             onClick={() =>
               handleClick(<InnovationsScreen navigate={navigate} setParentContent={handleBackToDiscover} />)
             }
-          >
-            <div
-              className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
-              style={{
-                width: '200px',
-                backgroundImage: `url(${images.innovationsView})`,
-              }}
-            ></div>
-            <p className="text-left">Innovations</p>
-          </div>
+          />
           {/* Did you know? card */}
-          <div
-            className="inline-block p-2 my-2 cursor-pointer w-fit"
+          <Card
+            title="Did you know?"
+            imageUrl={images.didYouKnowView}
             onClick={() => handleClick(<DidYouKnowScreen setParentContent={handleBackToDiscover} />)}
-          >
-            <div
-              className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
-              style={{
-                width: '200px',
-                backgroundImage: `url(${images.didYouKnowView})`,
-              }}
-            ></div>
-            <p className="text-left">Did you know?</p>
-          </div>
+          />
           {/* Bucket list card */}
-          <div
-            className="inline-block p-2 my-2 cursor-pointer w-fit"
+          <Card
+            title="For the bucket list"
+            imageUrl={images.bucketListView}
             onClick={() => handleClick(<BucketListScreen setParentContent={handleBackToDiscover} />)}
-          >
-            <div
-              className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
-              style={{
-                width: '200px',
-                backgroundImage: `url(${images.bucketListView})`,
-              }}
-            ></div>
-            <p className="text-left">For the bucket list</p>
-          </div>
+          />
           {/* The Great Outdoors */}
-          <div
-            className="inline-block p-2 my-2 cursor-pointer w-fit"
+          <Card
+            title="The Great Outdoors"
+            imageUrl={images.greatOutdoorsView}
             onClick={() => handleClick(<GreatOutdoorsScreen setParentContent={handleBackToDiscover} />)}
-          >
-            <div
-              className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
-              style={{
-                width: '200px',
-                backgroundImage: `url(${images.greatOutdoorsView})`,
-              }}
-            ></div>
-            <p className="text-left">The Great Outdoors</p>
-          </div>
+          />
           {/* Pilgrimage card */}
-          <div
-            className="inline-block p-2 my-2 cursor-pointer w-fit"
+          <Card
+            title="Pilgrimage"
+            imageUrl={images.pilgrimageView}
             onClick={() => handleClick(<PilgrimageScreen setParentContent={handleBackToDiscover} />)}
-          >
-            <div
-              className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
-              style={{
-                width: '200px',
-                backgroundImage: `url(${images.pilgrimageView})`,
-              }}
-            ></div>
-            <p className="text-left">Pilgrimage</p>
-          </div>
+          />
           {/* Wedding destinations */}
-          <div
-            className="inline-block p-2 my-2 cursor-pointer w-fit"
+          <Card
+            title="Destination Weddings"
+            imageUrl={images.weddingDestinationView}
             onClick={() => handleClick(<DestinationWeddingScreen setParentContent={handleBackToDiscover} />)}
-          >
-            <div
-              className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
-              style={{
-                width: '200px',
-                backgroundImage: `url(${images.weddingDestinationView})`,
-              }}
-            ></div>
-            <p className="text-left">Destination Weddings</p>
-          </div>
+          />
         </div>
       ) : (
         <div id="sub-layout" className="p-8 m-2 text-left bg-white text-black rounded-2xl">
@@ -129,105 +81,85 @@ const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
 
 export default DiscoverScreen;
 
+const ContentScreen: React.FC<{
+  title: string;
+  setParentContent: (value: boolean) => void;
+  navigate?: NavigateFunction; // Optional for screens that don't use navigate
+  link?: string; // Optional for screens that have a link
+}> = ({ title, setParentContent, navigate, link }) => {
+  const handleClick = () => {
+    if (navigate && link) {
+      navigate(link);
+    } else {
+      setParentContent(true);
+    }
+  };
+
+  return (
+    <div>
+      <h4 className="text-orange-500 text-lg hover:underline cursor-pointer w-fit" onClick={handleClick}>
+        &larr; {title}
+      </h4>
+      <p>Coming Soon..</p>
+    </div>
+  );
+};
+
 const InnovationsScreen: React.FC<{ setParentContent: () => void; navigate: NavigateFunction }> = ({
   setParentContent,
   navigate,
 }) => (
   <div>
-    <h4 className="text-orange-500 text-lg hover:underline cursor-pointer w-fit" onClick={setParentContent}>
-      &larr; Innovations
-    </h4>
+    <ContentScreen
+      title="Innovations"
+      setParentContent={setParentContent}
+      navigate={navigate}
+      // link="/africa/smart-innovations"
+    />
     <div id="innovations-cards" className="grid grid-cols-3">
-      <div className="inline-block p-2 my-2 cursor-pointer w-fit" onClick={() => navigate('/africa/smart-innovations')}>
-        <div
-          className="aspect-square bg-cover rounded-md"
-          style={{
-            width: '200px',
-            backgroundImage: `url(demo image)`,
-          }}
-        ></div>
-        <p className="text-left">Amazing Smart Innovations</p>
-      </div>
-      <div className="inline-block p-2 my-2 cursor-pointer w-fit">
-        <div
-          className="aspect-square bg-cover rounded-md"
-          style={{
-            width: '200px',
-            backgroundImage: `url(demo image)`,
-          }}
-        ></div>
-        <p className="text-left">Upcoming Smart Cities</p>
-      </div>
+      <Card
+        title="Amazing Smart Innovations"
+        imageUrl={`url(demo image)`}
+        onClick={() => navigate('/africa/smart-innovations')}
+      />
+      <Card title="Upcoming Smart Cities" imageUrl={`url(demo image)`} onClick={() => {}} />
     </div>
   </div>
 );
 
-const DidYouKnowScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => {
-  return (
-    <div>
-      <h4
-        className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-        onClick={() => setParentContent(true)}
-      >
-        &larr; Did You know?
-      </h4>
-      <p>Coming Soon..</p>
-    </div>
-  );
-};
+const DidYouKnowScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => (
+  <ContentScreen title="Did You know?" setParentContent={setParentContent} />
+);
 
-const BucketListScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => {
-  return (
-    <div>
-      <h4
-        className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-        onClick={() => setParentContent(true)}
-      >
-        &larr; Bucket List
-      </h4>
-      <p>Coming Soon..</p>
-    </div>
-  );
-};
+const BucketListScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => (
+  <ContentScreen title="Bucket List" setParentContent={setParentContent} />
+);
 
-const GreatOutdoorsScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => {
-  return (
-    <div>
-      <h4
-        className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-        onClick={() => setParentContent(true)}
-      >
-        &larr; The Great Outdoors
-      </h4>
-      <p>Coming Soon..</p>
-    </div>
-  );
-};
+const GreatOutdoorsScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => (
+  <ContentScreen title="The Great Outdoors" setParentContent={setParentContent} />
+);
 
-const PilgrimageScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => {
-  return (
-    <div>
-      <h4
-        className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-        onClick={() => setParentContent(true)}
-      >
-        &larr; Pilgrimages
-      </h4>
-      <p>Coming Soon..</p>
-    </div>
-  );
-};
+const PilgrimageScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => (
+  <ContentScreen title="Pilgrimages" setParentContent={setParentContent} />
+);
 
-const DestinationWeddingScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => {
-  return (
-    <div>
-      <h4
-        className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-        onClick={() => setParentContent(true)}
-      >
-        &larr; Wedding destinations
-      </h4>
-      <p>Coming Soon..</p>
-    </div>
-  );
-};
+const DestinationWeddingScreen: React.FC<{ setParentContent: (value: boolean) => void }> = ({ setParentContent }) => (
+  <ContentScreen title="Wedding destinations" setParentContent={setParentContent} />
+);
+
+const Card: React.FC<{
+  title: string;
+  imageUrl: string;
+  onClick: () => void;
+}> = ({ title, imageUrl, onClick }) => (
+  <div className="inline-block p-2 my-2 cursor-pointer w-fit" onClick={onClick}>
+    <div
+      className="aspect-square bg-cover bg-center rounded-md border border-orange-500"
+      style={{
+        width: '200px',
+        backgroundImage: `url(${imageUrl})`,
+      }}
+    ></div>
+    <p className="text-left">{title}</p>
+  </div>
+);

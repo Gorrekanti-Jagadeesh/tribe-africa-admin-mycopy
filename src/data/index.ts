@@ -22,6 +22,13 @@ export const Purpose: Option[] = [
   { value: 'Holiday', label: 'Holiday' },
 ];
 
+export const Languages: Option[] = [
+  { value: 'English', label: 'English' },
+  { value: 'Hindi', label: 'Hindi' },
+  { value: 'Spanish', label: 'Spanish' },
+  { value: 'French', label: 'French' },
+];
+
 export const HolidayDestinationData = [
   {
     image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(19).webp',

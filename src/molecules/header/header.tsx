@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import africaLogo from '../../assets/logo.png';
 
 import { MenuBar } from '../menu/menu-bar';
+import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
 
 interface HoverNavLinkProps {
   id: string;
@@ -20,15 +21,7 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
     >
       <span className="flex cursor-pointer">
         {title}
-        <svg
-          className="w-2.5 h-2.5 ms-3 m-auto"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 10 6"
-        >
-          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-        </svg>
+        <ChevronDownSVG />
       </span>
       <div
         className={`absolute left-0 p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
