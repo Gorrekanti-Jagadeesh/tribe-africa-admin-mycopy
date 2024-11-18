@@ -4,7 +4,7 @@ import BlogCard from '../../atoms/card/blog-card';
 import DualHeading from '../../atoms/heading/dual-heading';
 import BlogCompose from './blog-compose';
 
-import { getDataByEntryType } from '../../api';
+import { getDataByDocumentType } from '../../api';
 import { parseImageUrl } from '../../utils/sanity';
 
 import { BlogContentProps } from '../../types';
@@ -13,7 +13,7 @@ import Modal from '../modal';
 const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
   const [blogList, setBlogList] = useState<BlogContentProps[]>([]);
   useEffect(() => {
-    getDataByEntryType('blog')
+    getDataByDocumentType('blog', ['_id', 'title', 'image'])
       .then((res: any[]) => {
         setBlogList(
           res.map((item: { _id: any; title: any; image: { asset: { _ref: string } }; content: any }) => {

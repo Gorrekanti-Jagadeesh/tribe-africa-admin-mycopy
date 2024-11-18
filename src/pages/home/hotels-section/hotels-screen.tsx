@@ -2,6 +2,7 @@ import React from 'react';
 import CommonCarousel from '../../../molecules/carousel/common-carousel';
 import Modal from '../../../molecules/modal';
 import BrandingCorner from '../../../molecules/common/backgrounds/branding-background';
+import DualHeading from '../../../atoms/heading/dual-heading';
 
 interface CustomContentfulAsset {
   url?: string;
@@ -66,9 +67,7 @@ const HotelsScreen: React.FC<HotelsScreenProps> = ({
 
   return (
     <div className="max-w-6xl m-auto p-2 md:p-4 my-4">
-      <h3 className="text-4xl">
-        Charming <span className="font-serif text-orange-500">Hotels</span>
-      </h3>
+      <DualHeading>Charming *Hotels*</DualHeading>
       <CommonCarousel
         data={hotelData.map((item, index) => ({
           image: item.hotelImages[0]?.url,

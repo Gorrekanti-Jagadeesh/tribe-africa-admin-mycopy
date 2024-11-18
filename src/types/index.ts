@@ -204,3 +204,35 @@ export interface BlogPageScreenProps {
   banner: string;
   // blogsList: BlogContentProps[];
 }
+export interface Review {
+  hotel_id: string;
+  review_text: string;
+  quality_of_service: number;
+  comfort: number;
+  food_and_beverage: number;
+  location: number;
+  cleanliness: number;
+  total_rating: number;
+  created_at: string;
+  images?: Array<{
+    _type: 'image';
+    asset: {
+      _ref: string;
+      _type: 'reference';
+    };
+    _key: string;
+  }>;
+  reviewer_name: string;
+  reviewer_image: string;
+}
+export interface HotelData {
+  _id: string;
+  name: string;
+  phone_number: string;
+  website_url: string;
+  location: string;
+  rate: number;
+  description: string;
+  created_at: string;
+  images: string[];
+}

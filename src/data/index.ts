@@ -1,6 +1,6 @@
 import { Option, ServicesProps } from '../types';
 import demoImage from '../assets/homepage-welcome-image-3.png';
-import featuredBG from '../assets/branding.png';
+import featuredBG from '../assets/branding-bg-dark.png';
 
 interface CarouselItem {
   id: number;
@@ -103,21 +103,47 @@ export const servicesData: ServicesProps[] = [
   },
 ];
 
-export const upcomingEvents = [
-  {
-    image: featuredBG,
-    title: 'List your event here',
-    redirectUrl: 'https://google.com',
-    description: 'asdf',
-  },
-  {
-    image: featuredBG,
-    title: 'List your event here',
-    redirectUrl: 'https://google.com',
-  },
-  {
-    image: featuredBG,
-    title: 'List your event here',
-    redirectUrl: 'https://google.com',
-  },
+export const africanCurrencies = [
+  'DZD',
+  'AOA',
+  'XOF',
+  'BWP',
+  'BIF',
+  'CVE',
+  'XAF',
+  'KMF',
+  'CDF',
+  'DJF',
+  'EGP',
+  'ERN',
+  'ETB',
+  'GMD',
+  'GHS',
+  'GNF',
+  'KES',
+  'LSL',
+  'LRD',
+  'LYD',
+  'MGA',
+  'MWK',
+  'MRO',
+  'MUR',
+  'MAD',
+  'MZN',
+  'NAD',
+  'NGN',
+  'RWF',
+  'STD',
+  'SCR',
+  'SLL',
+  'SOS',
+  'ZAR',
+  'SSP',
+  'SDG',
+  'SZL',
+  'TZS',
+  'TND',
+  'UGX',
+  'ZMW',
+  'ZWL',
 ];

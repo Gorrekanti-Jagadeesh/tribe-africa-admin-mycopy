@@ -1,6 +1,6 @@
 // experience-screen.tsx
 import React from 'react';
-import videoPlay from '../../../assets/Frame.png';
+import videoPlay from '../../../assets/play-button.png';
 
 interface ExperienceScreenProps {
   playing: boolean;
@@ -12,9 +12,6 @@ interface ExperienceScreenProps {
 const ExperienceScreen: React.FC<ExperienceScreenProps> = ({ playing, handlePlay, videoRef, handleVideoEnd }) => {
   return (
     <div className="p-2 md:p-4 grid gap-6 my-8 m-auto max-w-6xl animate-on-scroll">
-      <h3 className="text-4xl text-center">
-        Get Ready for a <span className="font-serif text-orange-500">Life Changing Experience</span>
-      </h3>
       <div className="bg-slate-800 rounded-lg relative">
         {!playing && (
           <button

@@ -7,8 +7,10 @@ export const TravelKnowledge = () => {
         <img src={servicesBG} alt="" className="aspect-video object-cover object-left-center max-w-64 rounded-md" />
         <h4 className="font-bold text-xl my-2">Important Addresses</h4>
         <ul className="space-y-1">
-          {links.map((link) => (
-            <li className="text-gray-400">{link.title}</li>
+          {links.map((link, index) => (
+            <li className="text-gray-400" key={index}>
+              {link.title}
+            </li>
           ))}
         </ul>
       </div>
@@ -18,8 +20,10 @@ export const TravelKnowledge = () => {
             <img src={servicesBG} alt="" className="aspect-video object-cover object-left-center max-w-64 rounded-md" />
             <h4 className="font-bold text-xl my-2">Useful Services</h4>
             <ul className="space-y-1">
-              {links.map((link) => (
-                <li className="text-gray-400">{link.title}</li>
+              {links.map((link, index) => (
+                <li className="text-gray-400" key={index}>
+                  {link.title}
+                </li>
               ))}
             </ul>
             <h4 className="font-bold text-lg mt-4">For more Services, checkout</h4>
@@ -28,8 +32,10 @@ export const TravelKnowledge = () => {
           <div id="main" className="flex-1">
             <h3 className="text-orange-500 text-2xl">&rarr; Travel Knowlegde</h3>
             <ul className="space-y-1 ml-8">
-              {links.map((link) => (
-                <li className="text-gray-400">{link.title}</li>
+              {links.map((link, index) => (
+                <li className="text-gray-400" key={index}>
+                  {link.title}
+                </li>
               ))}
             </ul>
           </div>
