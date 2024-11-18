@@ -73,7 +73,7 @@ export const Auth = () => {
   const [type, setType] = useState('login');
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
+    <div className="flex items-center">
       {isLogin ? (
         <UserPlaceholder user={googleUser ? googleUser : emailUser} handleLogout={handleLogout} />
       ) : (

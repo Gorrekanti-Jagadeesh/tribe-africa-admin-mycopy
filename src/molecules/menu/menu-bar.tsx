@@ -12,7 +12,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <div className="flex">
+      <div className="flex items-center">
         <div id="languages" className="border-2 outline-0 rounded" style={{ height: 'fit-content' }}>
           <select name="language" id="language">
             <option value="english">English</option>
@@ -31,19 +31,21 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
 
         <div id="menu" className="ms-auto">
           <div className="flex gap-3">
-            <img src={homeLogo} className="m-auto w-4" />
-            <img src={notificationLogo} className="m-auto w-4" />
-
-            {/* Currency converter */}
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} trigger={<img src={calculatorLogo} className="m-auto w-4" />}>
-              <CurrencyCalculator />
-            </Modal>
-
+            <div className="flex items-center gap-3">
+              <img src={homeLogo} className="w-6" />
+              <img src={notificationLogo} className="w-6" />
+              <img src={calculatorLogo} className="w-6" onClick={() => setIsOpen(true)} />
+            </div>
             {/* Authentication component */}
             <Auth />
           </div>
         </div>
       </div>
+      {/* Currency converter */}
+
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <CurrencyCalculator />
+      </Modal>
     </>
   );
 };
