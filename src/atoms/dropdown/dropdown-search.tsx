@@ -55,7 +55,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div className="relative inline-block" ref={ref}>
       <button
-        className={`flex justify-center align-center w-24 ${buttonStyles} p-2 rounded-md cursor-pointer truncate`}
+        className={`flex justify-center align-center w-24 ${buttonStyles} md:p-2 rounded-md cursor-pointer truncate`}
         onClick={handleButtonClick}
       >
         {placeholder} {iconVisible && <ChevronDownSVG />}

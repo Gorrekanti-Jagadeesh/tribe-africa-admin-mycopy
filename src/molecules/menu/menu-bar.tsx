@@ -12,7 +12,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <div className="flex justify-center align-center">
+      <div className="flex items-center">
         <div id="languages" className="border-2 outline-0 rounded hidden md:block" style={{ height: 'fit-content' }}>
           <Dropdown
             iconVisible={true}
@@ -27,7 +27,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
         <Modal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          trigger={<img src={calculatorLogo} className="m-auto w-8 md:hidden" />}
+          trigger={<img src={calculatorLogo} className="m-auto w-6 md:hidden" />}
         >
           <CurrencyCalculator />
         </Modal>
@@ -40,15 +40,16 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
           </div>
         )}
         <div id="menu" className="ms-auto">
-          <div className="flex justify-center gap-3">
-            <img src={homeLogo} className="m-auto w-6" />
-            <img src={notificationLogo} className="m-auto w-6" />
-
-            {/* Currency converter */}
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} trigger={<img src={calculatorLogo} className="w-6" />}>
-              <CurrencyCalculator />
-            </Modal>
-
+          <div className="flex gap-3">
+            <div className="flex items-center gap-3">
+              <img src={homeLogo} className="m-auto w-6 cursor-pointer" />
+              <img src={notificationLogo} className="m-auto w-6 cursor-pointer" />
+              <img
+                src={calculatorLogo}
+                className="w-6 cursor-pointer hidden md:block"
+                onClick={() => setIsOpen(true)}
+              />
+            </div>
             {/* Authentication component */}
             <Auth />
           </div>

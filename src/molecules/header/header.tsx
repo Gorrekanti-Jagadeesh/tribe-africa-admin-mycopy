@@ -3,6 +3,9 @@ import africaLogo from '../../assets/logo.png';
 
 import { MenuBar } from '../menu/menu-bar';
 import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
+import { IoMenu } from 'react-icons/io5';
+import Dropdown from '../../atoms/dropdown/dropdown-search';
+import { Languages } from '../../data';
 
 interface HoverNavLinkProps {
   id: string;
@@ -15,13 +18,15 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
   return (
     <div
       id={id}
-      className="m-auto group py-4 px-2"
+      className="md:m-auto group py-2 md:py-4 px-2"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <span className="flex cursor-pointer">
+      <span className="flex md:justify-center md:items-center cursor-pointer text-white md:text-black">
         {title}
-        <ChevronDownSVG />
+        <span className="hidden md:block">
+          <ChevronDownSVG />
+        </span>
       </span>
       <div
         className={`absolute left-0 p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
@@ -47,12 +52,55 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
   const midIndex = Math.floor(menuItems.length / 2);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="grid gap-2 p-4 m-auto my-4 max-w-6xl">
-      <div>
-        <MenuBar purpose={purpose} country={country} />
+    <div className="grid gap-2 p-4 m-auto my-4 max-w-6xl relative">
+      <MenuBar purpose={purpose} country={country} />
+
+      {/* Mobile Header */}
+      <div className="flex justify-between items-center md:hidden">
+        <div className="relative">
+          <button className="border rounded">
+            {/* English <span className="caret" /> */}
+            <Dropdown
+              iconVisible={true}
+              placeholderText="English"
+              searchable={false}
+              options={Languages}
+              action={() => {}}
+              buttonStyles={'md:w-24 py-1 px-2'}
+            />
+          </button>
+        </div>
+        <div id="logo" className="m-auto cursor-pointer">
+          <img src={africaLogo} style={{ maxWidth: '100px' }} />
+        </div>
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="border rounded px-2 py-1 flex justify-center items-center"
+        >
+          <IoMenu />
+          Menu
+        </button>
       </div>
+
+      {/* Menu Items for Mobile */}
+      {isMenuOpen && (
+        <div className="flex flex-col bg-slate-950 mt-2 md:hidden">
+          {menuItems.map((item) =>
+            item.isNavLink ? (
+              <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
+            ) : (
+              <div key={item.id} id={item.id} className="m-auto cursor-pointer" title="know more">
+                <span>{item.title}</span>
+              </div>
+            )
+          )}
+        </div>
+      )}
+
+      {/* Desktop Header */}
       <div className="hidden justify-center items-center text-center border-2 rounded-lg relative md:flex">
         {/* Splitting the menuitems to bring logo in center position */}
         {menuItems.slice(0, midIndex).map((item) =>

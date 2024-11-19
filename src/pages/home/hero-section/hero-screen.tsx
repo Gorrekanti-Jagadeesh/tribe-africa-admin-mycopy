@@ -35,7 +35,7 @@ const HeroScreen: React.FC<HeroScreenProps> = ({
               options={countries}
               searchable={true}
               action={setCountry}
-              buttonStyles={'bg-slate-200 md:w-48 md:p-4'}
+              buttonStyles={'bg-slate-200 md:w-48 p-2 md:p-4'}
             />
             <Dropdown
               iconVisible={false}
@@ -43,7 +43,7 @@ const HeroScreen: React.FC<HeroScreenProps> = ({
               options={purposes}
               searchable={false}
               action={setPurpose}
-              buttonStyles={'bg-slate-200 md:w-48 md:p-4'}
+              buttonStyles={'bg-slate-200 md:w-48 p-2 md:p-4'}
             />
           </div>
           <button
