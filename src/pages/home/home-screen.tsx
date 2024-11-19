@@ -5,7 +5,7 @@ import HeroSection from './sections/hero-section';
 import Explore from './sections/explore';
 import Experience from './sections/experience';
 import Services from './sections/services';
-import CharmingHotels from './sections/charming-hotels';
+// import CharmingHotels from './sections/charming-hotels';
 import HolidayDestination from './sections/holiday-destination';
 import WorkingRemotely from './sections/working-remotely';
 import BusinessFriendly from './sections/business-friendly';
