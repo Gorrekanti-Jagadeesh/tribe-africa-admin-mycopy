@@ -29,7 +29,7 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
         </span>
       </span>
       <div
-        className={`absolute left-0 p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
+        className={`absolute left-0 top-0 p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
       >
         {content}
       </div>

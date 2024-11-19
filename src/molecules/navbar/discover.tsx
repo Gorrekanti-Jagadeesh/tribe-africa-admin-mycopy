@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-
 import CardsGrid from '@molecules/layout/cards-grid';
-
 import innovationsView from '@assets/home/discover/innovations.png';
 import didYouKnowView from '@assets/home/discover/did-you-know.png';
 import bucketListView from '@assets/home/discover/bucket-list.png';
@@ -20,7 +18,7 @@ const Discover: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleToggle = (data) => {
+  const handleToggle = (data: any) => {
     setToggle(false);
     setContent(data);
   };
@@ -75,12 +73,15 @@ const Discover: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="md:p-4">
       <h4 className="text-left text-orange-500 text-lg">&rarr; Discover</h4>
       {toggle ? (
         <CardsGrid data={discoverData} />
       ) : (
-        <div id="sub-layout" className="p-8 m-2 text-left bg-white text-black rounded-2xl">
+        <div
+          id="sub-layout"
+          className="p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl"
+        >
           <h4 className="text-orange-500 text-lg hover:underline cursor-pointer w-fit" onClick={() => setToggle(true)}>
             &larr; {content.title}
           </h4>

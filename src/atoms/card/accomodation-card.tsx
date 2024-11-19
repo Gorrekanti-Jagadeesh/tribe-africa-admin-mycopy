@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StarRating } from '../rating/star-rating';
 
-import { FaMapMarkerAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 // Define the props interface
@@ -36,7 +35,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ data }) => {
         </div>
         <div className="flex items-center text-gray-500 text-sm mt-2">
           <FontAwesomeIcon icon={faMap} />
-          <span>{distance}</span>
+          <span>{'5 km'}</span>
         </div>
         <hr className="my-2" />
         <div className="flex">

@@ -54,12 +54,12 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div className="relative inline-block" ref={ref}>
-      <button
+      <div
         className={`flex justify-center align-center w-24 ${buttonStyles} md:p-2 rounded-md cursor-pointer truncate`}
         onClick={handleButtonClick}
       >
         {placeholder} {iconVisible && <ChevronDownSVG />}
-      </button>
+      </div>
       <ul
         className={`absolute top-full left-0 z-10 w-full bg-white border border-gray-300 rounded-md max-h-[200px] overflow-y-auto p-0 m-0 list-none ${isOpen ? 'block' : 'hidden'}`}
       >

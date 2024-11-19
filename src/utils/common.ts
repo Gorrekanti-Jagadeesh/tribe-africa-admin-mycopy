@@ -21,10 +21,6 @@ export const base64ToBlob = (base64: string, mimeType = 'image/jpeg'): Blob => {
   return new Blob([new Uint8Array(byteNumbers)], { type: mimeType });
 };
 
-export const isLoggedIn = () => {
-  return Cookies.get('googleUser') != undefined || Cookies.get('emailUser') != undefined;
-};
-
 export const generateId = () => `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;
 
 export const formatDate = (isoString: string): string => {

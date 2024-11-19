@@ -27,7 +27,7 @@ const CardsGrid: React.FC<cardsProps> = ({ heading, data, max, featuredCard }) =
   return (
     <div className="p-4 max-w-6xl m-auto">
       <h2 className="text-4xl my-4">{heading}</h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
         {data.slice(0, max).map((item, index) => (
           <OverLayCard data={item} key={index} />
         ))}
