@@ -153,8 +153,11 @@ export const getAllEntryTypes = () => {
 };
 
 export const getDataByEntryType = async (entryType: string, key?: string, format?: string[]) => {
+  console.log(
+    `*[_type == "${entryType}" ${key ? '&& ' + key : ''} && !(_id in path("drafts.*"))] ${format ? '{' + format.join(',') + '}' : ''}`
+  );
   return sanityClient.fetch(
-    `*[_type == "${entryType}" ${key ? '&& ' + key : ''}] ${format ? '{' + format.join(',') + '}' : ''}`
+    `*[_type == "${entryType}" ${key ? '&& ' + key : ''} && !(_id in path("drafts.*"))] ${format ? '{' + format.join(',') + '}' : ''}`
   ); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
 };
 

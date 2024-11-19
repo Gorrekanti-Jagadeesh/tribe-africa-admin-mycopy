@@ -1,4 +1,6 @@
 import React from 'react';
+import { faMap } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StarRating } from '../rating/star-rating';
 
@@ -33,8 +35,8 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ data }) => {
           <span className="text-gray-500 ml-2 text-sm">101 reviews</span>
         </div>
         <div className="flex items-center text-gray-500 text-sm mt-2">
-          <FaMapMarkerAlt className="mr-1" />
-          <span>{'5KM'}</span>
+          <FontAwesomeIcon icon={faMap} />
+          <span>{distance}</span>
         </div>
         <hr className="my-2" />
         <div className="flex">

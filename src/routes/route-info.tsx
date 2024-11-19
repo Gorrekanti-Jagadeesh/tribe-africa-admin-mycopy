@@ -49,7 +49,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'events',
-    path: '/events/:event-type',
+    path: '/events/:event_type',
     element: <EventsPage />,
   },
   {

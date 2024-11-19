@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UnderlineHeading from '@atoms/heading/underline-heading';
 
 import Button from '@atoms/custom-button/button';
+import Modal from '../../molecules/modal';
+import EventForm from '../../molecules/forms/event-form';
 
 interface EventsScreenProps {
   heading: string;
@@ -18,10 +20,13 @@ interface EventsScreenProps {
     phone: string;
     whatsapp: string;
     amount: string;
+    category: string;
+    type: string;
   }[];
 }
 
 const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       {data.length ? (
@@ -64,7 +69,12 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
         <div className="shadow-2xl">
           <div className="flex flex-col md:flex-row p-8 text-center">
             <h1 className="text-4xl font-bold mb-4">{heading}</h1>
-            <Button className="md:ms-auto px-4">List your event</Button>
+            <Button className="md:ms-auto px-4" onClick={() => setIsOpen(true)}>
+              List your event
+            </Button>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+              <EventForm />
+            </Modal>
           </div>
           <img src={image} className="aspect-video object-cover" />
         </div>
