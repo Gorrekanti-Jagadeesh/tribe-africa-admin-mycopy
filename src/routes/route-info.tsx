@@ -8,6 +8,7 @@ import InnovationsScreen from '../pages/innovations/innovations-screen';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
 import { QNA } from '../pages/qna-form/qna-container';
+import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
 
 export interface RouteConfig {
   name: string;
@@ -70,6 +71,11 @@ const appRoutes: RouteConfig[] = [
     name: 'innovations',
     path: '/africa/smart-innovations',
     element: <InnovationsScreen />,
+  },
+  {
+    name: 'must see and do',
+    path: '/must-see-and-do/:category?/:id?',
+    element: <MustSeeAndDo />,
   },
   {
     name: 'destinations',

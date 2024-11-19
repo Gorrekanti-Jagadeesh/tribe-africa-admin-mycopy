@@ -9,6 +9,43 @@ interface CarouselItem {
   image: string;
 }
 
+export { default as demoImage } from '@assets/homepage-welcome-image-3.png';
+
+export const demoData = [
+  {
+    title: 'image1',
+    image: demoImage,
+  },
+  {
+    title: 'image2',
+    image: demoImage,
+  },
+  {
+    title: 'image3',
+    image: demoImage,
+  },
+  {
+    title: 'image5',
+    image: demoImage,
+  },
+  {
+    title: 'image6',
+    image: demoImage,
+  },
+  {
+    title: 'image7',
+    image: demoImage,
+  },
+  {
+    title: 'image8',
+    image: demoImage,
+  },
+  {
+    title: 'image9',
+    image: demoImage,
+  },
+];
+
 export const Countries: Option[] = [
   { value: 'Algeria', label: 'Algeria' },
   { value: 'Angola', label: 'Angola' },
@@ -236,4 +273,14 @@ export const eventTypes = [
       { title: 'Wrestling', value: 'wrestling' },
     ],
   },
+];
+
+// -----------Must see and do ---------------
+export const msadCategories = [
+  { category: 'action-enthusiasts', title: 'Action Enthusiasts' },
+  { category: 'historical-cultural-sites', title: 'Historical & Cultural Sites' },
+  { category: 'nature', title: 'Nature' },
+  { category: 'sacred-sites', title: 'Sacred Sites' },
+  { category: 'excursions', title: 'Excursions' },
+  { category: 'voluntourism', title: 'Voluntourism' },
 ];
