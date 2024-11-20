@@ -1,5 +1,5 @@
 import React from 'react';
-import branding from '../../../assets/branding.png';
+import branding from '@assets/branding.png';
 
 interface BrandingCornerProps {
   children: React.ReactNode;
@@ -7,15 +7,12 @@ interface BrandingCornerProps {
 
 const BrandingCorner: React.FC<BrandingCornerProps> = ({ children }) => {
   return (
-    <div>
+    <div className="relative overflow-hidden">
       {/* Background image in the corner */}
       <div
-        className="absolute size-96 bg-no-repeat bg-bottom-right grayscale opacity-30"
+        className="absolute -bottom-24 -right-10 size-96 bg-no-repeat bg-bottom-right grayscale opacity-30 bg-contain"
         style={{
-          bottom: '-100px',
-          right: '-40px',
           backgroundImage: `url(${branding})`,
-          backgroundSize: 'contain',
         }}
       ></div>
 

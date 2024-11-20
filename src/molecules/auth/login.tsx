@@ -86,9 +86,6 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, setType, onGoogleLoginSuccess,
           Continue with Google
         </button>
       </div>
-      <button className="mt-4 bg-gray-300 text-black p-2 rounded w-full" onClick={() => setIsOpen(false)}>
-        Close
-      </button>
     </div>
   );
 };

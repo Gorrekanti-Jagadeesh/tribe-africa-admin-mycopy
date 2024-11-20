@@ -90,7 +90,7 @@ export const Auth = () => {
       )}
 
       {/* Modal for Auth forms */}
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} customClasses="bg-white rounded-md" closeButtonClasses="right-2">
         {type == 'login' ? (
           <Login
             setIsOpen={setIsOpen}

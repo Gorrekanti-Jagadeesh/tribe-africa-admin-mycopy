@@ -131,6 +131,7 @@ const CharmingHotels: React.FC = () => {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           customClasses="bg-gray-900 text-white rounded-md border-2 border-orange-500"
+          closeButtonClasses="right-2 sticky"
         >
           <BrandingCorner>
             <HotelView data={content} />

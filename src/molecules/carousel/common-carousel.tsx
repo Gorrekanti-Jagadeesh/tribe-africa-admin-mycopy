@@ -42,19 +42,8 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   return (
     <div>
       <div className="relative w-full flex ">
-        {/* Left Arrow */}
-        <button
-          onClick={handlePrev}
-          disabled={isPrevDisabled}
-          className={`absolute left-0 md:-left-4 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
-            isPrevDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
-          }`}
-        >
-          <span className="text-4xl">&#8249;</span>
-        </button>
-
         {/* Carousel Images */}
-        <div className="flex overflow-hidden w-full -z-10">
+        <div className="flex overflow-hidden w-full">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
@@ -78,6 +67,17 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
             ))}
           </div>
         </div>
+
+        {/* Left Arrow */}
+        <button
+          onClick={handlePrev}
+          disabled={isPrevDisabled}
+          className={`absolute left-0 md:-left-4 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
+            isPrevDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+          }`}
+        >
+          <span className="text-4xl">&#8249;</span>
+        </button>
 
         {/* Right Arrow */}
         <button
