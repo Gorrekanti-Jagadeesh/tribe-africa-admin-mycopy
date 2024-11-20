@@ -1,5 +1,5 @@
-import React from 'react';
-import { HomeHeader } from '../../molecules/header';
+import { HomeHeader } from '@molecules/header';
+// Components importing from sections folder
 import HeroSection from './sections/hero-section';
 import Explore from './sections/explore';
 import Experience from './sections/experience';
@@ -8,9 +8,9 @@ import CharmingHotels from './sections/charming-hotels';
 import HolidayDestination from './sections/holiday-destination';
 import WorkingRemotely from './sections/working-remotely';
 import BusinessFriendly from './sections/business-friendly';
-import Footer from '../../molecules/footer';
+import Footer from '@molecules/footer';
 
-const HomeScreen: React.FC = () => {
+const HomeScreen = () => {
   return (
     <div className="max-w-screen-2xl m-auto">
       <HomeHeader />
