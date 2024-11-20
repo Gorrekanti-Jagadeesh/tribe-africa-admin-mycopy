@@ -1,4 +1,4 @@
-import { HomeHeader } from '../../molecules/header';
+import { HomeHeader } from '@molecules/header';
 // Components importing from sections folder
 import HeroSection from './sections/hero-section';
 import Explore from './sections/explore';

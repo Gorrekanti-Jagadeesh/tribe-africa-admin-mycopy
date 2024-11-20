@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
     "baseUrl": "src",
-    "jsx": "react-jsx",
     "paths": {
       "@assets/*": ["assets/*"],
       "@atoms/*": ["atoms/*"],
@@ -10,6 +12,8 @@
       "@data/*": ["data/*"],
       "@utils/*": ["utils/*"],
       "@types/*": ["types/*"]
-    }
+    },
+    "jsx": "react-jsx",
+    "esModuleInterop": true
   }
 }

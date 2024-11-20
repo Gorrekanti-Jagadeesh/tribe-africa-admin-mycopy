@@ -1,8 +1,8 @@
 import { default as SubscribeEmail } from '../../atoms/common/input-action';
-import { LinkList } from './link-list';
+import { LinkList } from '@molecules/layout/link-list';
 import { TribeAfrica } from '../../atoms/common/internal-logo';
 
-import spiralBackground from '../../assets/branding-bg-dark.png';
+import spiralBackground from '@assets/branding-bg-dark.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
@@ -10,61 +10,61 @@ const footerLinks = {
   about: [
     {
       label: 'About us',
-      link: '',
+      url: '',
     },
     {
       label: 'Resources & Policies',
-      link: '',
+      url: '',
     },
     {
       label: 'Trust & Safety',
-      link: '',
+      url: '',
     },
   ],
   business: [
     {
       label: 'Invest with us',
-      link: '',
+      url: '',
     },
     {
       label: 'Advertise with us',
-      link: '',
+      url: '',
     },
   ],
   join: [
     {
       label: 'Add your business',
-      link: '',
+      url: '',
     },
     {
       label: 'Add your service',
-      link: '',
+      url: '',
     },
     {
       label: 'Add a place',
-      link: '',
+      url: '',
     },
     {
       label: 'Add your event',
-      link: '',
+      url: '',
     },
     {
       label: 'Work with the Tribe',
-      link: '',
+      url: '',
     },
     {
       label: 'Contribute to our blog',
-      link: '',
+      url: '',
     },
   ],
   apps: [
     {
       label: 'Android App',
-      link: '',
+      url: '',
     },
     {
       label: 'iPhone App',
-      link: '',
+      url: '',
     },
   ],
 };
@@ -99,17 +99,17 @@ const Footer = () => {
           <div className="col-span-1 grid gap-2">
             <LinkList
               heading={
-                <>
+                <div className="text-orange-500 font-semibold">
                   About <TribeAfrica />
-                </>
+                </div>
               }
               links={footerLinks.about}
             />
             <LinkList
               heading={
-                <>
+                <div className="text-orange-500 font-semibold">
                   Biz with <TribeAfrica />
-                </>
+                </div>
               }
               links={footerLinks.business}
             />
@@ -118,14 +118,17 @@ const Footer = () => {
             <div className="grid md:flex gap-3 w-full">
               <LinkList
                 heading={
-                  <>
+                  <div className="text-orange-500 font-semibold">
                     Join <TribeAfrica />
-                  </>
+                  </div>
                 }
                 links={footerLinks.apps}
               />
               <div className="col-span-1 md:ms-auto md:w-48">
-                <LinkList heading={<>Get the App</>} links={footerLinks.join} />
+                <LinkList
+                  heading={<div className="text-orange-500 font-semibold">Get the App</div>}
+                  links={footerLinks.join}
+                />
               </div>
             </div>
             <div>
@@ -141,7 +144,7 @@ const Footer = () => {
         </div>
 
         {/* Social media links */}
-        {/* <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
+        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
           {socialMediaLinks.map((link, index) => (
             <a
               key={index}
@@ -153,7 +156,7 @@ const Footer = () => {
               <FontAwesomeIcon icon={link.icon} size="lg" />
             </a>
           ))}
-        </div> */}
+        </div>
       </div>
     </footer>
   );
