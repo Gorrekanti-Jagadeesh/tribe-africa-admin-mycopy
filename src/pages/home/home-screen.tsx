@@ -9,12 +9,13 @@ import HolidayDestination from './sections/holiday-destination';
 import WorkingRemotely from './sections/working-remotely';
 import BusinessFriendly from './sections/business-friendly';
 import Footer from '@molecules/footer';
+import Chatbot from '@atoms/common/chatbot';
 
 const HomeScreen = () => {
   return (
     <div className="max-w-screen-2xl m-auto">
       <HomeHeader />
-      <div>
+      <div className="relative">
         <HeroSection />
         <Explore />
         <CharmingHotels />
@@ -25,6 +26,9 @@ const HomeScreen = () => {
         <Services />
       </div>
       <Footer />
+      <div className="fixed bottom-0 right-0 m-2 lg:m-4 xl:mx-12">
+        <Chatbot />
+      </div>
     </div>
   );
 };

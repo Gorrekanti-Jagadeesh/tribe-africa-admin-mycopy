@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Dropdown from '@atoms/dropdown/dropdown-search';
-import { Countries, Purpose } from '@data';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import Chatbot from '@atoms/common/chatbot';
+import { Countries, Purpose } from '@data/index';
 
 // HeroSection Component
 const HeroSection: React.FC = () => {
@@ -20,10 +19,24 @@ const HeroSection: React.FC = () => {
   return (
     <div className="m-auto max-w-6xl">
       <div className="text-center relative p-2 animate-on-scroll">
-        <div className="flex gap-2 p-4 py-2 bg-white m-auto rounded-xl shadow-lg" style={{ width: 'fit-content' }}>
-          <div className="flex gap-2">
-            <Dropdown text="Where to?" options={Countries} searchable={true} action={setCountry} />
-            <Dropdown text="For?" options={Purpose} searchable={false} action={setPurpose} />
+        <div className="flex gap-2 p-4 py-2 bg-white m-auto w-full md:max-w-96 rounded-xl shadow-lg">
+          <div className="flex gap-2 flex-grow">
+            <Dropdown
+              iconVisible={false}
+              placeholderText="Where to?"
+              options={Countries}
+              searchable={true}
+              action={setCountry}
+              buttonStyles={'bg-slate-200 p-2 md:p-4'}
+            />
+            <Dropdown
+              iconVisible={false}
+              placeholderText="For?"
+              options={Purpose}
+              searchable={false}
+              action={setPurpose}
+              buttonStyles={'bg-slate-200 p-2 md:p-4'}
+            />
           </div>
           <button
             className={`border rounded-lg text-white px-4 bg-orange-500 disabled:bg-slate-400`}
@@ -41,11 +54,6 @@ const HeroSection: React.FC = () => {
             />
             Your browser does not support the video tag.
           </video>
-        </div>
-        <div className="float-right">
-          <p className="bg-orange-500 text-white p-2 rounded cursor-pointer">
-            <FontAwesomeIcon icon={faMessage} className="relative top-1 mx-2" /> Ask me anything!
-          </p>
         </div>
       </div>
       <Logo />
