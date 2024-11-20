@@ -186,6 +186,12 @@ export interface EventCategory {
   imageUrl: string;
 }
 
+export interface NetworkCategory {
+  title: string;
+  items: { label: string; url: string }[];
+  imageUrl: string;
+}
+
 export interface EventsScreenProps {
   eventCategories: EventCategory[];
 }

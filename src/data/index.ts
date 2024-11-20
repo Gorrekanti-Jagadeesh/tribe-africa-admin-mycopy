@@ -179,7 +179,7 @@ export const eventURLs = [
       { label: 'Training & Workshops', url: '/events/training-workshops' },
       { label: 'Networking', url: '/events/networking' },
     ],
-    imageUrl: '/path/to/business-image.jpg',
+    imageUrl: 'https://placehold.co/400',
   },
   {
     title: 'Entertainment',
@@ -191,7 +191,7 @@ export const eventURLs = [
       { label: 'Music', url: '/events/music' },
       { label: 'Theater & Comedy', url: '/events/theater-comedy' },
     ],
-    imageUrl: '/path/to/entertainment-image.jpg',
+    imageUrl: 'https://placehold.co/400',
   },
   {
     title: 'Sports',
@@ -203,7 +203,79 @@ export const eventURLs = [
       { label: 'Racket sports', url: '/events/racket-sports' },
       { label: 'Wrestling', url: '/events/wrestling' },
     ],
-    imageUrl: '/path/to/sports-image.jpg',
+    imageUrl: 'https://placehold.co/400',
+  },
+];
+
+export const travelKnowledgeURLs = [
+  {
+    items: [
+      { label: 'General Info', url: '/events/trade-shows' },
+      { label: 'Airlines that fly to ...', url: '/events/conferences-seminars' },
+      { label: 'Product Launches', url: '/events/product-launches' },
+      { label: 'Training & Workshops', url: '/events/training-workshops' },
+      { label: 'Networking', url: '/events/networking' },
+    ],
+  },
+  {
+    title: 'Important Addresses',
+    items: [
+      { label: 'Arts', url: '/events/arts' },
+      { label: 'Cultural Events & Festivals', url: '/events/cultural-events-festivals' },
+      { label: 'Dance', url: '/events/dance' },
+      { label: 'Fashion', url: '/events/fashion' },
+      { label: 'Music', url: '/events/music' },
+      { label: 'Theater & Comedy', url: '/events/theater-comedy' },
+    ],
+    imageUrl: 'https://placehold.co/400',
+  },
+  {
+    title: 'Useful Services',
+    items: [
+      { label: 'Boxing', url: '/events/boxing' },
+      { label: 'Football', url: '/events/football' },
+      { label: 'Marathons', url: '/events/marathons' },
+      { label: 'Races', url: '/events/races' },
+      { label: 'Racket sports', url: '/events/racket-sports' },
+      { label: 'Wrestling', url: '/events/wrestling' },
+    ],
+    imageUrl: 'https://placehold.co/400',
+    subTitle: 'For more Services checkout',
+    subitems: [{ label: 'Tribe Africa Pages', url: '/tribe-africa-pages' }],
+  },
+];
+
+export const networkURLs = [
+  {
+    title: 'Tribe Africa Pages',
+    items: [
+      { label: 'Government & Official', url: '/events/trade-shows' },
+      { label: 'Emergency & First Responders', url: '/events/conferences-seminars' },
+      { label: 'Looking to hire someone?', url: '/events/product-launches' },
+      { label: 'Find a Business', url: '/events/training-workshops' },
+      { label: 'Accomidation', url: '/events/networking' },
+    ],
+    imageUrl: 'https://placehold.co/400',
+  },
+  {
+    title: 'Business Events',
+    items: [
+      { label: 'Trade Shows', url: '/events/arts' },
+      { label: 'Conferences & Seminars', url: '/events/cultural-events-festivals' },
+      { label: 'Product Launches', url: '/events/dance' },
+      { label: 'Training & Workshops', url: '/events/fashion' },
+      { label: 'Networking', url: '/events/music' },
+    ],
+    imageUrl: 'https://placehold.co/400',
+  },
+  {
+    title: 'My Tribe',
+    items: [
+      { label: 'Chat Room', url: '/events/boxing' },
+      { label: 'Round Tables', url: '/events/football' },
+      { label: 'Jobs (Coming Soon)', url: '/events/marathons' },
+    ],
+    imageUrl: 'https://placehold.co/400',
   },
 ];
 

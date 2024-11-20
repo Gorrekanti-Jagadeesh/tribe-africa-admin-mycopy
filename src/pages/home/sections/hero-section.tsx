@@ -22,8 +22,22 @@ const HeroSection: React.FC = () => {
       <div className="text-center relative p-2 animate-on-scroll">
         <div className="flex gap-2 p-4 py-2 bg-white m-auto rounded-xl shadow-lg" style={{ width: 'fit-content' }}>
           <div className="flex gap-2">
-            <Dropdown text="Where to?" options={Countries} searchable={true} action={setCountry} />
-            <Dropdown text="For?" options={Purpose} searchable={false} action={setPurpose} />
+            <Dropdown
+              iconVisible={false}
+              placeholderText="Where to?"
+              options={Countries}
+              searchable={true}
+              action={setCountry}
+              buttonStyles={'bg-slate-200 md:w-48 p-2 md:p-4'}
+            />
+            <Dropdown
+              iconVisible={false}
+              placeholderText="For?"
+              options={Purpose}
+              searchable={false}
+              action={setPurpose}
+              buttonStyles={'bg-slate-200 md:w-48 p-2 md:p-4'}
+            />
           </div>
           <button
             className={`border rounded-lg text-white px-4 bg-orange-500 disabled:bg-slate-400`}

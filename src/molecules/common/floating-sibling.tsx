@@ -48,7 +48,10 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({ component, sib
           className={`absolute z-20 top-0 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
           style={positionStyle}
         >
-          <Button className="absolute -top-4 -right-4 rounded-full px-4" onClick={handleMouseLeave}>
+          <Button
+            className="absolute flex justify-center items-center -top-2 -right-2 rounded-full w-8 h-8"
+            onClick={handleMouseLeave}
+          >
             x
           </Button>
           {sibling}
