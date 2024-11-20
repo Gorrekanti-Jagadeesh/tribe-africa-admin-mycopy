@@ -8,6 +8,7 @@ import InnovationsScreen from '../pages/innovations/innovations-screen';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
 import { QNA } from '../pages/qna-form/qna-container';
+import AccommodationDetailsContainer from '../pages/accomodation/accomodation-details-container';
 
 export interface RouteConfig {
   name: string;
@@ -34,7 +35,7 @@ const appRoutes: RouteConfig[] = [
   {
     name: 'accomodation',
     path: '/accomodations/:accomodationId',
-    element: <Accomodation />,
+    element: <AccommodationDetailsContainer />,
   },
   {
     name: 'accomodations list',

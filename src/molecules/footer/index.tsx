@@ -1,5 +1,5 @@
 import { default as SubscribeEmail } from '../../atoms/common/input-action';
-import { LinkList } from '../layout/link-list';
+import { LinkList } from './link-list';
 import { TribeAfrica } from '../../atoms/common/internal-logo';
 
 import spiralBackground from '../../assets/branding-bg-dark.png';
@@ -10,61 +10,61 @@ const footerLinks = {
   about: [
     {
       label: 'About us',
-      url: '',
+      link: '',
     },
     {
       label: 'Resources & Policies',
-      url: '',
+      link: '',
     },
     {
       label: 'Trust & Safety',
-      url: '',
+      link: '',
     },
   ],
   business: [
     {
       label: 'Invest with us',
-      url: '',
+      link: '',
     },
     {
       label: 'Advertise with us',
-      url: '',
+      link: '',
     },
   ],
   join: [
     {
       label: 'Add your business',
-      url: '',
+      link: '',
     },
     {
       label: 'Add your service',
-      url: '',
+      link: '',
     },
     {
       label: 'Add a place',
-      url: '',
+      link: '',
     },
     {
       label: 'Add your event',
-      url: '',
+      link: '',
     },
     {
       label: 'Work with the Tribe',
-      url: '',
+      link: '',
     },
     {
       label: 'Contribute to our blog',
-      url: '',
+      link: '',
     },
   ],
   apps: [
     {
       label: 'Android App',
-      url: '',
+      link: '',
     },
     {
       label: 'iPhone App',
-      url: '',
+      link: '',
     },
   ],
 };
@@ -72,19 +72,19 @@ const footerLinks = {
 const socialMediaLinks = [
   {
     icon: faFacebookF,
-    url: 'https://facebook.com',
+    link: 'https://facebook.com',
   },
   {
     icon: faTwitter,
-    url: 'https://twitter.com',
+    link: 'https://twitter.com',
   },
   {
     icon: faInstagram,
-    url: 'https://instagram.com',
+    link: 'https://instagram.com',
   },
   {
     icon: faLinkedinIn,
-    url: 'https://linkedin.com',
+    link: 'https://linkedin.com',
   },
 ];
 
@@ -99,17 +99,17 @@ const Footer = () => {
           <div className="col-span-1 grid gap-2">
             <LinkList
               heading={
-                <h3 className="text-xl text-orange-500 font-bold mb-4">
+                <>
                   About <TribeAfrica />
-                </h3>
+                </>
               }
               links={footerLinks.about}
             />
             <LinkList
               heading={
-                <h3 className="text-xl text-orange-500 font-bold mb-4">
+                <>
                   Biz with <TribeAfrica />
-                </h3>
+                </>
               }
               links={footerLinks.business}
             />
@@ -118,17 +118,14 @@ const Footer = () => {
             <div className="grid md:flex gap-3 w-full">
               <LinkList
                 heading={
-                  <h3 className="text-xl text-orange-500 font-bold mb-4">
+                  <>
                     Join <TribeAfrica />
-                  </h3>
+                  </>
                 }
                 links={footerLinks.apps}
               />
               <div className="col-span-1 md:ms-auto md:w-48">
-                <LinkList
-                  heading={<h3 className="text-xl text-orange-500 font-bold mb-4">Get the App</h3>}
-                  links={footerLinks.join}
-                />
+                <LinkList heading={<>Get the App</>} links={footerLinks.join} />
               </div>
             </div>
             <div>
@@ -144,11 +141,11 @@ const Footer = () => {
         </div>
 
         {/* Social media links */}
-        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
+        {/* <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
           {socialMediaLinks.map((link, index) => (
             <a
               key={index}
-              href={link.url}
+              href={link.link}
               target="_blank"
               rel="noopener noreferrer"
               className="text-white bg-slate-700 p-2 rounded-full shadow-lg border hover:bg-white hover:border-orange-400 hover:text-black transition duration-300"
@@ -156,7 +153,7 @@ const Footer = () => {
               <FontAwesomeIcon icon={link.icon} size="lg" />
             </a>
           ))}
-        </div>
+        </div> */}
       </div>
     </footer>
   );

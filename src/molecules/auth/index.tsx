@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import Modal from '../modal';
 import Login from './login';
 import Signup from './signup';
+import Button from '../../atoms/custom-button/button';
 
 interface User {
   email: string | null;
@@ -84,12 +85,7 @@ export const Auth = () => {
           >
             Login
           </button>
-          <button
-            className="bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black"
-            onClick={() => handleAuth('register')}
-          >
-            Sign up
-          </button>
+          <Button onClick={() => handleAuth('register')}>Sign up</Button>
         </div>
       )}
 

@@ -6,13 +6,19 @@ import Blogs from '../navbar/blogs';
 import TravelKnowledge from '../navbar/travel-knowledge';
 import Network from '../navbar/network';
 import OutAndAbout from '../navbar/out-and-about';
+import PeaceProsperity from '../navbar/peace-prosperity';
 
 export const HomeHeader = () => {
   const menuItems = [
     { id: 'getting-there', title: 'Getting there', isNavLink: true, content: <>Coming soon</> },
     { id: 'discover', title: 'Discover', isNavLink: true, content: <Discover /> },
     { id: 'events', title: 'Events', isNavLink: true, content: <Events /> },
-    { id: 'institute-collaboration', title: 'Peace & Prosperity Institute', isNavLink: true, content: <>Content</> },
+    {
+      id: 'institute-collaboration',
+      title: 'Peace & Prosperity Institute',
+      isNavLink: true,
+      content: <PeaceProsperity />,
+    },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
     { id: 'contact', title: 'Contact', isNavLink: false, content: null },
   ];

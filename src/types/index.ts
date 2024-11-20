@@ -182,10 +182,7 @@ export interface CardProps {
 
 export interface EventCategory {
   title: string;
-  items: {
-    label: string;
-    url: string;
-  }[];
+  items: string[];
   imageUrl: string;
 }
 
@@ -207,25 +204,35 @@ export interface BlogPageScreenProps {
   banner: string;
   // blogsList: BlogContentProps[];
 }
-
-// QNA
-export interface QNAProps {
-  _id: string;
-  title: string;
-  content: string;
-  level: string;
-  date: string;
-  author: string;
-  replies_count: string;
+export interface Review {
+  hotel_id: string;
+  review_text: string;
+  quality_of_service: number;
+  comfort: number;
+  food_and_beverage: number;
+  location: number;
+  cleanliness: number;
+  total_rating: number;
+  created_at: string;
+  images?: Array<{
+    _type: 'image';
+    asset: {
+      _ref: string;
+      _type: 'reference';
+    };
+    _key: string;
+  }>;
+  reviewer_name: string;
+  reviewer_image: string;
 }
-
-// APIs
-export interface ImageAsset {
+export interface HotelData {
   _id: string;
-  url: string;
-  _type: 'image';
-  asset: {
-    _ref: string;
-    _type: 'reference';
-  };
+  name: string;
+  phone_number: string;
+  website_url: string;
+  location: string;
+  rate: number;
+  description: string;
+  created_at: string;
+  images: string[];
 }

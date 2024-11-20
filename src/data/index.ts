@@ -1,6 +1,6 @@
 import { Option, ServicesProps } from '../types';
 import demoImage from '../assets/homepage-welcome-image-3.png';
-import featuredBG from '../assets/branding.png';
+import featuredBG from '../assets/branding-bg-dark.png';
 
 interface CarouselItem {
   id: number;
@@ -20,6 +20,13 @@ export const Countries: Option[] = [
 export const Purpose: Option[] = [
   { value: 'Business', label: 'Business' },
   { value: 'Holiday', label: 'Holiday' },
+];
+
+export const Languages: Option[] = [
+  { value: 'English', label: 'English' },
+  { value: 'Hindi', label: 'Hindi' },
+  { value: 'Spanish', label: 'Spanish' },
+  { value: 'French', label: 'French' },
 ];
 
 export const HolidayDestinationData = [

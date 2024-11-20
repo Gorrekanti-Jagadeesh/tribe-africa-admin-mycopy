@@ -12,10 +12,6 @@ interface BlogComposeProps {
   className: string;
 }
 
-interface richTextBlocksProps {
-  _type: string;
-}
-
 // maximum number of images in the blog content
 const MAX_IMAGES = 3;
 // Split the rich text into text and tags
@@ -37,6 +33,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editorContent, setEditorContent] = useState<string>('');
 
+  // Handle changes in the rich text editor content
   const handleContentChange = (content: string): void => setEditorContent(content);
 
   // Handle changes in blog placeholder image in drag-and-drop component
@@ -67,7 +64,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
     const formData = new FormData(formElement);
 
     // list of final blocks after processing rich text
-    const richTextBlocks: richTextBlocksProps[] = await processContent(splitContent);
+    const richTextBlocks: any[] = await processContent(splitContent);
 
     let response;
     try {

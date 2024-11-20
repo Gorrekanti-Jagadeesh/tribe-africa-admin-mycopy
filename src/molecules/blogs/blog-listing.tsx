@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-import BlogCard from '@atoms/card/blog-card';
-import DualHeading from '@atoms/heading/dual-heading';
+import BlogCard from '../../atoms/card/blog-card';
+import DualHeading from '../../atoms/heading/dual-heading';
 import BlogCompose from './blog-compose';
 
-import { getDataByEntryType } from '@api';
-import { parseImageUrl } from '@utils/sanity';
+import { getDataByDocumentType } from '../../api';
+import { parseImageUrl } from '../../utils/sanity';
 
-import { BlogContentProps } from '@types';
+import { BlogContentProps } from '../../types';
 import Modal from '../modal';
 
 const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
   const [blogList, setBlogList] = useState<BlogContentProps[]>([]);
-
   useEffect(() => {
-    getDataByEntryType('blog')
-      .then((res: BlogContentProps[]) => {
+    getDataByDocumentType('blog', ['_id', 'title', 'image'])
+      .then((res: any[]) => {
         setBlogList(
-          res.map((item) => {
+          res.map((item: { _id: any; title: any; image: { asset: { _ref: string } }; content: any }) => {
             return {
               _id: item._id,
               title: item.title,
@@ -27,13 +26,9 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
           })
         );
       })
-      .catch((err: Error) => {
-        console.error('Error fetching blog data:', err.message);
-      });
+      .catch((err: any) => console.error(err));
   }, []);
-
   const [openModal, setOpenModal] = useState(false);
-
   return (
     <div className="max-w-6xl w-full m-auto">
       <div className="flex w-full">

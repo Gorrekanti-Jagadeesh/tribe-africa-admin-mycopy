@@ -6,7 +6,6 @@ interface customeBtnProps {
   className?: string;
   props?: React.HTMLAttributes<HTMLButtonElement>;
   style?: React.CSSProperties;
-  disabled?: boolean;
 }
 
 const Button: React.FC<customeBtnProps> = ({
@@ -16,18 +15,16 @@ const Button: React.FC<customeBtnProps> = ({
   children,
   className,
   style,
-  disabled,
   ...props
 }) => {
   return (
     <button
-      className={`bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black disabled:bg-gray-200 ${className}`}
+      className={`bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black duration-300 ${className}`}
       type={type}
       onClick={onClick}
       style={style}
       {...props}
       title={title}
-      disabled={disabled}
     >
       {children}
     </button>

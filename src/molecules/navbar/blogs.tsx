@@ -1,53 +1,41 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube, faSpotify } from '@fortawesome/free-brands-svg-icons';
+import Button from '../../atoms/custom-button/button';
+
+const ArticleCard: React.FC<{ src: string; alt: string; title: string }> = ({ src, alt, title }) => (
+  <div className="w-full">
+    <img src={src} alt={alt} className="w-full md:h-full rounded-md mb-2" />
+    <div className="text-center text-white">{title}</div>
+  </div>
+);
+
+const ArticleCardList = [
+  { title: 'Business Articles', images: 'https://via.placeholder.com/150' },
+  { title: 'Holiday Articles', images: 'https://via.placeholder.com/150' },
+  { title: 'Environment & Sustainability Articles', images: 'https://via.placeholder.com/150' },
+];
 
 const Blogs: React.FC = () => {
   return (
-    <div className="p-4">
+    <div className="p-2 md:p-4">
       {/* Blog Title */}
       <div className="text-orange-500  text-xl text-left mb-4">
         <span className="mr-2">→</span>Blog
       </div>
 
-      <div className="flex">
-        <div className="w-2/3 gap-4 flex flex-col">
-          <button className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-md w-fit ms-auto">
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-2/3 gap-4 flex flex-col">
+          <Button className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-md w-full md:w-fit md:ms-auto">
             Contribute
-          </button>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="w-full">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Business Articles"
-                className="w-full h-full rounded-md mb-2"
-              />
-              <div className="text-center text-white">Business Articles</div>
-            </div>
-
-            {/* Holiday Articles */}
-            <div className="w-full">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Holiday Articles"
-                className="w-full h-full rounded-md mb-2"
-              />
-              <div className="text-center text-white">Holiday Articles</div>
-            </div>
-
-            {/* Environment & Sustainability Articles */}
-            <div className="w-full">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Environment & Sustainability Articles"
-                className="w-full h-full rounded-md mb-2"
-              />
-              <div className="text-center text-white">Environment & Sustainability Articles</div>
-            </div>
+          </Button>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {ArticleCardList.map((eachArticle, index) => (
+              <ArticleCard key={index} src={eachArticle.images} alt={eachArticle.title} title={eachArticle.title} />
+            ))}
           </div>
         </div>
-
-        <div className="ml-6 flex flex-col flex-grow gap-4">
+        <div className="md:ml-6 flex flex-col flex-grow gap-4">
           <div className="bg-gray-700 text-white rounded-md aspect-video flex">
             <p className="m-auto">Business Videos</p>
           </div>
