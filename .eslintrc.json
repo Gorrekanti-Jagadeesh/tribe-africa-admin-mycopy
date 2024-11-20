@@ -9,6 +9,22 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn"
   },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@assets", "./src/assets"],
+          ["@atoms", "./src/atoms"],
+          ["@molecules", "./src/molecules"],
+          ["@api", "./src/api"],
+          ["@data", "./src/data"],
+          ["@utils", "./src/utils"],
+          ["@types", "./src/types"]
+        ],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "env": {
     "es6": true,
     "node": true
