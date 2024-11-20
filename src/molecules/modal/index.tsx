@@ -41,7 +41,7 @@ const Modal: React.FC<ModalProps> = ({
           >
             <button
               onClick={() => setIsOpen(false)}
-              className={`absolute top-2 right-0 text-white rounded-full p-2 px-4 bg-slate-800 w-fit ms-auto mb-4 text-xl ${closeButtonClasses}`}
+              className={`absolute top-2 right-2 text-white rounded-full p-2 px-4 bg-slate-800 w-fit ms-auto mb-4 text-xl ${closeButtonClasses}`}
               style={{ zIndex: 2 }}
             >
               X
