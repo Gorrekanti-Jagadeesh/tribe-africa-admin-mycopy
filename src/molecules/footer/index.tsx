@@ -3,8 +3,7 @@ import { LinkList } from '@molecules/layout/link-list';
 import { TribeAfrica } from '../../atoms/common/internal-logo';
 
 import spiralBackground from '@assets/branding-bg-dark.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const footerLinks = {
   about: [
@@ -68,25 +67,6 @@ const footerLinks = {
     },
   ],
 };
-
-const socialMediaLinks = [
-  {
-    icon: faFacebookF,
-    link: 'https://facebook.com',
-  },
-  {
-    icon: faTwitter,
-    link: 'https://twitter.com',
-  },
-  {
-    icon: faInstagram,
-    link: 'https://instagram.com',
-  },
-  {
-    icon: faLinkedinIn,
-    link: 'https://linkedin.com',
-  },
-];
 
 const Footer = () => {
   return (

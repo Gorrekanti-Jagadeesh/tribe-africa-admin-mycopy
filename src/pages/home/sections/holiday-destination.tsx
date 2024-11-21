@@ -56,9 +56,7 @@ const HolidayDestination: React.FC = () => {
               <label
                 key={index}
                 onClick={() => console.log(item.title)}
-                className={`absolute top-0 left-0 w-full h-full max-h-72 rounded-lg transition-transform duration-600 ease-in ${getClassNames(index)} ${
-                  activeIndex === index && isHovered ? 'transparent' : ''
-                }`}
+                className={`absolute top-0 left-0 w-full h-full max-h-72 rounded-lg transition-transform duration-600 ease-in ${getClassNames(index)}`}
                 id={`slider${index + 1}`}
               >
                 <img

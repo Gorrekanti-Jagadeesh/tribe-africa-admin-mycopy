@@ -10,10 +10,10 @@ interface InputActionProps {
 const InputAction: React.FC<InputActionProps> = ({ handleSubmit, inputType, inputPlaceholder, buttonPlaceholder }) => {
   return (
     <form onSubmit={handleSubmit}>
-      <div className="bg-white w-fit rounded-full m-auto md:m-0">
+      <div className="bg-white w-fit rounded-full m-auto md:m-0 text-gray-900">
         <input
           type={inputType}
-          className="bg-transparent rounded-full px-4 py-2 text-white outline-none"
+          className="bg-transparent rounded-full px-4 py-2 outline-none w-2/3"
           placeholder={inputPlaceholder}
         />
         <button type="submit" className="bg-orange-500 text-white px-4 py-2 rounded-full ml-2">

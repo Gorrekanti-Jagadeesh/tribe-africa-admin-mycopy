@@ -1,6 +1,7 @@
 import { Option, ServicesProps } from '../types';
 import demoImage from '../assets/homepage-welcome-image-3.png';
 import featuredBG from '../assets/branding-bg-dark.png';
+import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
 interface CarouselItem {
   id: number;
@@ -27,6 +28,25 @@ export const Languages: Option[] = [
   { value: 'Hindi', label: 'Hindi' },
   { value: 'Spanish', label: 'Spanish' },
   { value: 'French', label: 'French' },
+];
+
+export const socialMediaLinks = [
+  {
+    icon: faFacebookF,
+    link: 'https://facebook.com',
+  },
+  {
+    icon: faTwitter,
+    link: 'https://twitter.com',
+  },
+  {
+    icon: faInstagram,
+    link: 'https://instagram.com',
+  },
+  {
+    icon: faLinkedinIn,
+    link: 'https://linkedin.com',
+  },
 ];
 
 export const HolidayDestinationData = [
