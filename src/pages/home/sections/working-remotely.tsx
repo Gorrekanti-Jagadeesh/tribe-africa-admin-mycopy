@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import DualHeading from '../../../atoms/heading/dual-heading';
+import DualHeading from '@atoms/heading/dual-heading';
 
-import { carouselData } from '../../../data';
+import { carouselData } from '@data/index';
 
 const WorkingRemotely: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

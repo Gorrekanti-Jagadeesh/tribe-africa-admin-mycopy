@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Dropdown from '@atoms/dropdown/dropdown-search';
-import Chatbot from '@atoms/common/chatbot';
 import { Countries, Purpose } from '@data/index';
 
 // HeroSection Component

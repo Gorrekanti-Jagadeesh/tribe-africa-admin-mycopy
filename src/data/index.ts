@@ -50,6 +50,18 @@ export const HolidayDestinationData = [
     image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(41).webp',
     title: 'Five',
   },
+  {
+    image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(11).webp',
+    title: 'Three',
+  },
+  {
+    image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(99).webp',
+    title: 'Four',
+  },
+  {
+    image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(41).webp',
+    title: 'Five',
+  },
 ];
 
 export const carouselData: CarouselItem[] = [
@@ -86,6 +98,11 @@ export const carouselData: CarouselItem[] = [
 ];
 
 export const servicesData: ServicesProps[] = [
+  {
+    image: demoImage,
+    heading: 'Executive Logistics',
+    location: 'Fajara, The gambia',
+  },
   {
     image: demoImage,
     heading: 'Executive Logistics',

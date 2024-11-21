@@ -99,7 +99,7 @@ const Footer = () => {
           <div className="col-span-1 grid gap-2">
             <LinkList
               heading={
-                <div className="text-orange-500 font-semibold">
+                <div className="text-xl text-orange-500 font-semibold">
                   About <TribeAfrica />
                 </div>
               }
@@ -107,7 +107,7 @@ const Footer = () => {
             />
             <LinkList
               heading={
-                <div className="text-orange-500 font-semibold">
+                <div className="text-xl text-orange-500 font-semibold">
                   Biz with <TribeAfrica />
                 </div>
               }
@@ -118,16 +118,16 @@ const Footer = () => {
             <div className="grid md:flex gap-3 w-full">
               <LinkList
                 heading={
-                  <div className="text-orange-500 font-semibold">
+                  <div className="text-xl text-orange-500 font-semibold">
                     Join <TribeAfrica />
                   </div>
                 }
-                links={footerLinks.apps}
+                links={footerLinks.join}
               />
               <div className="col-span-1 md:ms-auto md:w-48">
                 <LinkList
-                  heading={<div className="text-orange-500 font-semibold">Get the App</div>}
-                  links={footerLinks.join}
+                  heading={<div className="text-xl text-orange-500 font-semibold">Get the App</div>}
+                  links={footerLinks.apps}
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@ const Footer = () => {
         </div>
 
         {/* Social media links */}
-        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
+        {/* <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
           {socialMediaLinks.map((link, index) => (
             <a
               key={index}
@@ -156,7 +156,7 @@ const Footer = () => {
               <FontAwesomeIcon icon={link.icon} size="lg" />
             </a>
           ))}
-        </div>
+        </div> */}
       </div>
     </footer>
   );

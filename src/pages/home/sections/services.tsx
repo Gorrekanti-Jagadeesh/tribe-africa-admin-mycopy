@@ -1,4 +1,4 @@
-import DualHeading from '../../../atoms/heading/dual-heading';
+import DualHeading from '@atoms/heading/dual-heading';
 
 import { servicesData as data } from '../../../data';
 
@@ -6,10 +6,10 @@ const Services: React.FC = () => {
   return (
     <div className="my-12 grid gap-2 m-auto max-w-6xl p-2 md:p-4">
       <DualHeading>Premier *Services*</DualHeading>
-      <div id="services-container" className="grid grid-cols-3 gap-3 animate-on-scroll">
+      <div id="services-container" className=" animate-on-scroll overflow-x-auto whitespace-nowrap">
         {/* Cards */}
         {data.map((service, index) => (
-          <div className="my-4" key={index}>
+          <div className="my-4 w-5/6 md:w-2/5 lg:w-1/3 p-2 max-w-full inline-block" key={index}>
             <div className="border-2 border-gray-300 p-2 rounded" style={{ aspectRatio: '4/3' }}>
               <div
                 className="relative bg-cover bg-center p-2 w-full h-full"
