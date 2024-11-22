@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { ImageDragAndDrop } from '@atoms/input-elements/drag-and-drop';

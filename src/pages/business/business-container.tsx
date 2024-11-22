@@ -13,11 +13,7 @@ const BusinessContainer = () => {
     setCurrentTime(now.toLocaleTimeString());
   };
 
-  const {
-    data: rawWeatherData,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data: rawWeatherData, isLoading } = useQuery({
     queryKey: ['weatherData'],
     queryFn: fetchWeatherData,
     refetchInterval: 1800000, // Refetch every 30 minutes
