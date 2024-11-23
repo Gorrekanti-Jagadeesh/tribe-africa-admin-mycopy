@@ -71,7 +71,7 @@ const footerLinks = {
 const Footer = () => {
   return (
     <footer
-      className="bg-black text-white py-8 text-center md:text-left"
+      className="bg-black text-white px-4 py-8 md:text-left"
       style={{ backgroundImage: `url(${spiralBackground})` }}
     >
       <div className="container mx-auto p-2 md:p-4 text-slate-300 m-auto max-w-6xl">
