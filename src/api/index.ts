@@ -4,6 +4,7 @@ import { UploadBody } from '@sanity/client';
 import { base64ToBlob } from '../utils/common';
 import imageUrlBuilder from '@sanity/image-url';
 import Cookies from 'js-cookie';
+import serviceUrls from '../service-urls';
 
 interface ContentfulSys {
   id: string;
@@ -65,15 +66,19 @@ export const fetchImageByEntryId = async (entryId: string): Promise<string> => {
 const API_KEY = import.meta.env.VITE_CURRENCY_API_KEY;
 
 export const fetchCurrencies = async () => {
+  const url = serviceUrls.currency.fetchCurrencies;
   try {
-    const res = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/codes`);
-    const data = await res.json();
-    return data.supported_codes.map((code: string[]) => {
-      return {
-        currencyCode: code[0],
-        currencyName: code[1],
-      };
-    });
+    const res = await axios.get(`${url}/${API_KEY}/codes`);
+    if (res?.data) {
+      return res?.data.supported_codes.map((code: string[]) => {
+        return {
+          currencyCode: code[0],
+          currencyName: code[1],
+        };
+      });
+    } else {
+      return [];
+    }
   } catch (error) {
     console.error('Error Fetching', error);
   }
