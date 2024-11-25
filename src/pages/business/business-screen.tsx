@@ -6,12 +6,10 @@ import CardsGrid from '@molecules/layout/cards-grid';
 const BusinessScreen = ({
   country,
   weatherData,
-  currentTime,
   isLoading,
 }: {
   country: string | undefined;
-  weatherData: { temperature: number; condition: string } | undefined;
-  currentTime: string;
+  weatherData: { temperature: number; condition: string; time: string } | undefined;
   isLoading: boolean;
 }) => {
   return (
@@ -39,7 +37,7 @@ const BusinessScreen = ({
                   : 'No data available'}
             </p>
             <p>Internet speed: 1gbps</p>
-            <p>Time: {currentTime}</p>
+            <p>Time: {weatherData ? weatherData.time : 'Loading...'}</p>
           </div>
         </div>
       </div>

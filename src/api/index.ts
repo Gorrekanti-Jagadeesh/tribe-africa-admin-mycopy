@@ -91,15 +91,18 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
   }
 };
 
-export const fetchWeatherData = async () => {
-  const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
-  const city = 'hyderabad';
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+export const fetchWeatherData = async (country: string) => {
+  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+  const apiUrl = `https://api.weatherapi.com/v1/current.json?q=${country}&key=${apiKey}`;
   try {
     const response = await axios.get(apiUrl);
-    const { temp } = response.data.main;
-    const description = response.data.weather[0].description;
-    return { temperature: temp, description };
+
+    const temperature = response.data.current.temp_f;
+    const condition = response.data.current.condition.text;
+    const time = response.data.location.localtime;
+
+    console.log(temperature, 'rtvfcd');
+    return { temperature, condition, time };
   } catch (error) {
     throw new Error('Error fetching weather data');
   }
