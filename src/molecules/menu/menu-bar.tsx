@@ -7,9 +7,15 @@ import Modal from '../modal';
 import { Auth } from '../auth';
 import Dropdown from '../../atoms/dropdown/dropdown-search';
 import { Languages } from '../../data';
+import i18n from '../../transaltionConfig';
 
 export const MenuBar = ({ purpose, country }: { purpose: string | undefined; country: string | undefined }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLanguageChange = (selectedOption: string) => {
+    i18n.changeLanguage(selectedOption); // Update i18next language
+  };
+
   return (
     <>
       <div className="flex items-center">
@@ -19,7 +25,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
             placeholderText="Language"
             searchable={false}
             options={Languages}
-            action={() => {}}
+            action={handleLanguageChange}
             buttonStyles={'md:w-32 '}
           />
         </div>
