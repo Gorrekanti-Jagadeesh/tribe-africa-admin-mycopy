@@ -34,7 +34,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'accomodation',
-    path: '/accomodations/:accomodationId',
+    path: '/accomodations/:accommodationId',
     element: <AccommodationDetailsContainer />,
   },
   {

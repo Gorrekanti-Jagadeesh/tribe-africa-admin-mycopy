@@ -14,7 +14,7 @@ interface AccommodationCardProps {
     phone_number: string;
     website_url: string;
     location: string;
-    rate: number;
+    rate: string;
     description: string;
     created_at: string;
     images: string[];

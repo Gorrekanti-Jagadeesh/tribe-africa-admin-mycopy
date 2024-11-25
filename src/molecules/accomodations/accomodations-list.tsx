@@ -3,7 +3,17 @@ import Button from '../../atoms/custom-button/button';
 import AccommodationCard from '../../atoms/card/accomodation-card';
 
 interface AccommodationListProps {
-  hotelData: any[];
+  hotelData: {
+    _id: string;
+    name: string;
+    phone_number: string;
+    website_url: string;
+    location: string;
+    rate: string;
+    images: string[];
+    description: string;
+    created_at: string;
+  }[];
 }
 
 const AccommodationsList: React.FC<AccommodationListProps> = ({ hotelData }) => {

@@ -21,7 +21,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
     cleanliness,
     reviewer_image,
   } = reviewData;
-  console.log(reviewData);
   return (
     <div className="border rounded-lg p-4 shadow-sm flex">
       {/* User Information */}
