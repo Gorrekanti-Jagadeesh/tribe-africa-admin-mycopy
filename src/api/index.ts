@@ -31,12 +31,11 @@ interface ContentfulResponse {
   items: ContentfulEntry[];
 }
 
-const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 
 export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
   try {
-    const response = await axios.get(`https://cdn.contentful.com/spaces/${spaceId}/entries`, {
+    const response = await axios.get(`${serviceUrls.home.contentful_base}/entries`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -53,10 +52,7 @@ export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
 };
 
 export const fetchImageByEntryId = async (entryId: string): Promise<string> => {
-  console.log('called');
-  const response = await axios.get(
-    `https://cdn.contentful.com/spaces/${spaceId}/assets/${entryId}?access_token=${accessToken}`
-  );
+  const response = await axios.get(`${serviceUrls.home.contentful_base}/assets/${entryId}?access_token=${accessToken}`);
 
   return 'https:' + response.data.fields.file.url;
 };
@@ -68,7 +64,7 @@ const API_KEY = import.meta.env.VITE_CURRENCY_API_KEY;
 export const fetchCurrencies = async () => {
   const url = serviceUrls.currency.fetchCurrencies;
   try {
-    const res = await axios.get(`${url}/${API_KEY}/codes`);
+    const res = await axios.get(`${url}/codes`);
     if (res?.data) {
       return res?.data.supported_codes.map((code: string[]) => {
         return {
@@ -85,10 +81,9 @@ export const fetchCurrencies = async () => {
 };
 
 export const convertCurrency = async (fromCurrency: string, toCurrency: string, amount: number) => {
+  const url = serviceUrls.currency.fetchCurrencies;
   try {
-    const res = await fetch(
-      `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${fromCurrency}/${toCurrency}/${amount}`
-    );
+    const res = await fetch(`${url}/pair/${fromCurrency}/${toCurrency}/${amount}`);
     const data = await res.json();
     return data;
   } catch (error) {
@@ -99,7 +94,7 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
 export const fetchWeatherData = async () => {
   const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
   const city = 'hyderabad';
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  const apiUrl = `${serviceUrls.base.weather}?q=${city}&appid=${apiKey}&units=metric`;
   try {
     const response = await axios.get(apiUrl);
     const { temp } = response.data.main;
