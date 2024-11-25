@@ -9,11 +9,14 @@ import { parseImageUrl } from '../../utils/sanity';
 
 import { BlogContentProps } from '../../types';
 import Modal from '../modal';
+import Dropdown from '@atoms/dropdown/dropdown-search';
+import { Languages } from '@data/index';
 
 const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
   const [blogList, setBlogList] = useState<BlogContentProps[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState('en_US');
   useEffect(() => {
-    getDataByDocumentType('blog', ['_id', 'title', 'image'])
+    getDataByDocumentType('blog', ['_id', 'title', 'image'], selectedLanguage)
       .then((res: any[]) => {
         setBlogList(
           res.map((item: { _id: any; title: any; image: { asset: { _ref: string } }; content: any }) => {
@@ -27,10 +30,18 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
         );
       })
       .catch((err: any) => console.error(err));
-  }, []);
+  }, [selectedLanguage]);
   const [openModal, setOpenModal] = useState(false);
   return (
     <div className="max-w-6xl w-full m-auto">
+      <Dropdown
+        iconVisible={true}
+        placeholderText="Language"
+        searchable={false}
+        options={Languages}
+        action={(value: string) => setSelectedLanguage(value)}
+        buttonStyles={'md:w-32 '}
+      />
       <div className="flex w-full">
         <DualHeading>{heading}</DualHeading>
         <Modal

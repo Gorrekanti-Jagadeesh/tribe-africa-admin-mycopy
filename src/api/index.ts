@@ -161,9 +161,14 @@ export const getDataByEntryType = async (entryType: string, key?: string, format
   ); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
 };
 
-export const getDataByDocumentType = (entryType: string, fields?: string[]) => {
+// export const getDataByDocumentType = (entryType: string, fields?: string[]) => {
+//   const fieldsQuery = fields ? fields.join(', ') : '*';
+//   return sanityClient.fetch(`*[_type == "${entryType}"]{${fieldsQuery}}`);
+// };
+
+export const getDataByDocumentType = (entryType: string, fields?: string[], language = 'en') => {
   const fieldsQuery = fields ? fields.join(', ') : '*';
-  return sanityClient.fetch(`*[_type == "${entryType}"]{${fieldsQuery}}`);
+  return sanityClient.fetch(`*[_type == "${entryType}" && language == "${language}"]{${fieldsQuery}}`);
 };
 
 export const getDataByDocumentTypeWithId = (entryType: string, fieldType: string, id?: string, fields?: string[]) => {

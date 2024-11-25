@@ -24,10 +24,11 @@ export const Purpose: Option[] = [
 ];
 
 export const Languages: Option[] = [
-  { value: 'English', label: 'English' },
-  { value: 'Hindi', label: 'Hindi' },
-  { value: 'Spanish', label: 'Spanish' },
-  { value: 'French', label: 'French' },
+  { value: 'en_US', label: 'English' },
+  { value: 'hin', label: 'Hindi' },
+  { value: 'es', label: 'Spanish' },
+  { value: 'fr', label: 'French' },
+  { value: 'tel', label: 'Telugu' },
 ];
 
 export const socialMediaLinks = [
