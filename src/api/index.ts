@@ -124,19 +124,13 @@ export const addNewEntry = (countryId: string) => {
   });
 };
 
-export const handleUpdate = async (hotelId: string) => {
+export const updateByDocumentById = async (id: string, updatedDocument) => {
   try {
-    const updatedHotel = await sanityClient
-      .patch(hotelId) // ID of the document to update
-      .set({
-        name: 'Updated Sunrise Hotel', // New hotel name
-        hotelCategory: 'Updated Luxury', // Updated hotel category
-      })
-      .commit(); // Commit the changes
+    const update = await sanityClient.patch(id).set(updatedDocument).commit();
 
-    console.log(`Hotel was updated:`, updatedHotel);
+    console.log(`Data is updated:`, update);
   } catch (err) {
-    console.error('Error updating hotel:', err);
+    console.error('Error updating the document:', err);
   }
 };
 
