@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchCurrencies, convertCurrency } from '../../api';
 import { africanCurrencies } from '../../data';
+import { useQuery } from '@tanstack/react-query';
 
 interface Currency {
   currencyCode: string;
@@ -69,18 +70,20 @@ const CurrencySelect: React.FC<CurrencySelectProps> = ({
 };
 
 const CurrencyCalculator: React.FC = () => {
-  const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [currencyValX, setCurrencyValX] = useState<string>('1');
   const [currencyX, setCurrencyX] = useState<Currency>();
   const [currencyValY, setCurrencyValY] = useState<string>('');
   const [currencyY, setCurrencyY] = useState<Currency>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingConversion, setIsLoadingConversion] = useState(false);
 
-  useEffect(() => {
-    fetchCurrencies()
-      .then((data) => setCurrencies(data))
-      .catch((err) => console.error(err));
-  }, []);
+  const {
+    data: currencies = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['currencies'],
+    queryFn: fetchCurrencies,
+  });
 
   useEffect(() => {
     renderConversion(currencyValX, currencyX?.currencyCode, currencyY?.currencyCode, setCurrencyValY);
@@ -92,7 +95,7 @@ const CurrencyCalculator: React.FC = () => {
     codeY: string | undefined,
     setValue: (val: string) => void
   ) => {
-    setIsLoading(true);
+    setIsLoadingConversion(true);
     if (value && codeX && codeY) {
       convertCurrency(codeX, codeY, parseFloat(value))
         .then((data) => {
@@ -102,7 +105,7 @@ const CurrencyCalculator: React.FC = () => {
           console.error(err);
         })
         .finally(() => {
-          setIsLoading(false);
+          setIsLoadingConversion(false);
         });
     }
   };
@@ -133,11 +136,19 @@ const CurrencyCalculator: React.FC = () => {
     renderConversion(value, currencyY?.currencyCode, currencyX?.currencyCode, setCurrencyValX);
   };
 
+  if (isLoading) {
+    return <div className="text-center p-6">Loading currencies...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center p-6 text-red-500">Failed to load currencies. Please try again later.</div>;
+  }
+
   return (
     <div className="bg-white p-6 rounded-lg max-w-2xl">
       <div className="mb-6">
         <h2 className="text-4xl font-bold my-4">Currency Calculator</h2>
-        <div className={isLoading ? 'opacity-30' : ''}>
+        <div className={isLoadingConversion ? 'opacity-30' : ''}>
           <p className="text-sm text-gray-400">
             {currencyValX} {currencyX?.currencyName} equals
           </p>

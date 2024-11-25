@@ -1,6 +1,7 @@
 import { Option, ServicesProps } from '../types';
 import demoImage from '../assets/homepage-welcome-image-3.png';
 import featuredBG from '../assets/branding-bg-dark.png';
+import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
 interface CarouselItem {
   id: number;
@@ -29,6 +30,25 @@ export const Languages: Option[] = [
   { value: 'French', label: 'French' },
 ];
 
+export const socialMediaLinks = [
+  {
+    icon: faFacebookF,
+    link: 'https://facebook.com',
+  },
+  {
+    icon: faTwitter,
+    link: 'https://twitter.com',
+  },
+  {
+    icon: faInstagram,
+    link: 'https://instagram.com',
+  },
+  {
+    icon: faLinkedinIn,
+    link: 'https://linkedin.com',
+  },
+];
+
 export const HolidayDestinationData = [
   {
     image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(19).webp',
@@ -37,6 +57,18 @@ export const HolidayDestinationData = [
   {
     image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(65).webp',
     title: 'Two',
+  },
+  {
+    image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(11).webp',
+    title: 'Three',
+  },
+  {
+    image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(99).webp',
+    title: 'Four',
+  },
+  {
+    image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(41).webp',
+    title: 'Five',
   },
   {
     image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(11).webp',
@@ -86,6 +118,11 @@ export const carouselData: CarouselItem[] = [
 ];
 
 export const servicesData: ServicesProps[] = [
+  {
+    image: demoImage,
+    heading: 'Executive Logistics',
+    location: 'Fajara, The gambia',
+  },
   {
     image: demoImage,
     heading: 'Executive Logistics',

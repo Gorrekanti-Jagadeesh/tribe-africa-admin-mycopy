@@ -1,15 +1,26 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose as close } from '@fortawesome/free-solid-svg-icons';
 
 interface ModalProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   containerClasses?: string;
   customClasses?: string;
+  closeButtonClasses?: string;
   trigger?: React.ReactNode;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, containerClasses, trigger, customClasses, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  setIsOpen,
+  containerClasses,
+  trigger,
+  customClasses,
+  closeButtonClasses,
+  children,
+}) => {
   return (
     <div className={`inline-block ${containerClasses}`}>
       {/* Trigger Button */}
@@ -32,12 +43,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, containerClasses, trig
           >
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white rounded-full p-2 px-4 bg-slate-800 w-fit ms-auto mb-4 text-xl"
+              className={`absolute top-2 right-2 text-white rounded-full p-1 px-2.5 bg-slate-800 ${closeButtonClasses}`}
               style={{ zIndex: 2 }}
             >
-              X
+              <FontAwesomeIcon icon={close} />
             </button>
-            {children}
+            <span className="z-0">{children}</span>
           </div>
         </div>
       )}

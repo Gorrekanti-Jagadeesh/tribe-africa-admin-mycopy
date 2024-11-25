@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
+import { ChevronDownSVG } from '@assets/svgs/chevron-down-svg';
 
 interface Option {
   value: string;
@@ -53,9 +53,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <div className="relative inline-block" ref={ref}>
+    <div className="relative inline-block w-full" ref={ref}>
       <div
-        className={`flex justify-center align-center w-24 ${buttonStyles} md:p-2 rounded-md cursor-pointer truncate`}
+        className={`flex justify-center align-center md:p-2 rounded-md cursor-pointer truncate ${buttonStyles}`}
         onClick={handleButtonClick}
       >
         {placeholder} {iconVisible && <ChevronDownSVG />}

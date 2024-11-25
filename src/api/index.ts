@@ -4,6 +4,7 @@ import { UploadBody } from '@sanity/client';
 import { base64ToBlob } from '../utils/common';
 import imageUrlBuilder from '@sanity/image-url';
 import Cookies from 'js-cookie';
+import serviceUrls from '../service-urls';
 
 interface ContentfulSys {
   id: string;
@@ -30,12 +31,11 @@ interface ContentfulResponse {
   items: ContentfulEntry[];
 }
 
-const spaceId = import.meta.env.VITE_SPACE_ID;
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 
 export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
   try {
-    const response = await axios.get(`https://cdn.contentful.com/spaces/${spaceId}/entries`, {
+    const response = await axios.get(`${serviceUrls.home.contentful_base}/entries`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -52,38 +52,36 @@ export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
 };
 
 export const fetchImageByEntryId = async (entryId: string): Promise<string> => {
-  console.log('called');
-  const response = await axios.get(
-    `https://cdn.contentful.com/spaces/${spaceId}/assets/${entryId}?access_token=${accessToken}`
-  );
+  const response = await axios.get(`${serviceUrls.home.contentful_base}/assets/${entryId}?access_token=${accessToken}`);
 
   return 'https:' + response.data.fields.file.url;
 };
 
 // ------------- Currency Converter --------------------
 
-const API_KEY = import.meta.env.VITE_CURRENCY_API_KEY;
-
 export const fetchCurrencies = async () => {
+  const url = serviceUrls.currency.fetchCurrencies;
   try {
-    const res = await fetch(`https://v6.exchangerate-api.com/v6/${API_KEY}/codes`);
-    const data = await res.json();
-    return data.supported_codes.map((code: string[]) => {
-      return {
-        currencyCode: code[0],
-        currencyName: code[1],
-      };
-    });
+    const res = await axios.get(`${url}/codes`);
+    if (res?.data) {
+      return res?.data.supported_codes.map((code: string[]) => {
+        return {
+          currencyCode: code[0],
+          currencyName: code[1],
+        };
+      });
+    } else {
+      return [];
+    }
   } catch (error) {
     console.error('Error Fetching', error);
   }
 };
 
 export const convertCurrency = async (fromCurrency: string, toCurrency: string, amount: number) => {
+  const url = serviceUrls.currency.fetchCurrencies;
   try {
-    const res = await fetch(
-      `https://v6.exchangerate-api.com/v6/${API_KEY}/pair/${fromCurrency}/${toCurrency}/${amount}`
-    );
+    const res = await fetch(`${url}/pair/${fromCurrency}/${toCurrency}/${amount}`);
     const data = await res.json();
     return data;
   } catch (error) {
@@ -94,7 +92,7 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
 export const fetchWeatherData = async () => {
   const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
   const city = 'hyderabad';
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  const apiUrl = `${serviceUrls.base.weather}?q=${city}&appid=${apiKey}&units=metric`;
   try {
     const response = await axios.get(apiUrl);
     const { temp } = response.data.main;
@@ -124,19 +122,13 @@ export const addNewEntry = (countryId: string) => {
   });
 };
 
-export const handleUpdate = async (hotelId: string) => {
+export const updateByDocumentById = async (id: string, updatedDocument) => {
   try {
-    const updatedHotel = await sanityClient
-      .patch(hotelId) // ID of the document to update
-      .set({
-        name: 'Updated Sunrise Hotel', // New hotel name
-        hotelCategory: 'Updated Luxury', // Updated hotel category
-      })
-      .commit(); // Commit the changes
+    const update = await sanityClient.patch(id).set(updatedDocument).commit();
 
-    console.log(`Hotel was updated:`, updatedHotel);
+    console.log(`Data is updated:`, update);
   } catch (err) {
-    console.error('Error updating hotel:', err);
+    console.error('Error updating the document:', err);
   }
 };
 

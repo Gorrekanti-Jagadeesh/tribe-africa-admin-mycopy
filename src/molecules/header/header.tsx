@@ -4,7 +4,7 @@ import africaLogo from '../../assets/logo.png';
 import { MenuBar } from '../menu/menu-bar';
 import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
 import { IoMenu } from 'react-icons/io5';
-import Dropdown from '../../atoms/dropdown/dropdown-search';
+import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Languages } from '../../data';
 
 interface HoverNavLinkProps {

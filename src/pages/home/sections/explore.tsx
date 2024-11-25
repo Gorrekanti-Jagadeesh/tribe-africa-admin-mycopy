@@ -58,10 +58,10 @@ const Explore: React.FC = () => {
             <span>and be a part of the future. welcome to the tribe.</span>
           </div>
         </div>
-        <div className="grid justify-content-center h-full m-auto md:max-w-96 animate-on-scroll">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="flex gap-3 md:flex-col m-auto md:max-w-96 animate-on-scroll">
+          <div className="flex gap-3 w-2/3 md:w-full">
             {/* Top Left Image */}
-            <div>
+            <div className="w-1/2 h-full aspect-square md:aspect-auto">
               <img
                 src={welcomeImage1}
                 alt="Person in suit"
@@ -70,17 +70,17 @@ const Explore: React.FC = () => {
             </div>
 
             {/* Top Right Image */}
-            <div>
+            <div className="w-1/2 h-full aspect-square md:aspect-auto">
               <img
                 src={welcomeImage2}
-                alt="Aerial view of coastline"
+                alt="Person in suit"
                 className="w-full h-full object-cover rounded-lg shadow-lg"
               />
             </div>
           </div>
 
           {/* Bottom Full-Width Image */}
-          <div className="mt-4">
+          <div className="w-1/3 md:w-full">
             <img src={welcomeImage3} alt="Person on boat" className="w-full h-full object-cover rounded-lg shadow-lg" />
           </div>
         </div>

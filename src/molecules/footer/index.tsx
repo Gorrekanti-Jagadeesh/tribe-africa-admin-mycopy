@@ -3,8 +3,7 @@ import { LinkList } from '@molecules/layout/link-list';
 import { TribeAfrica } from '../../atoms/common/internal-logo';
 
 import spiralBackground from '@assets/branding-bg-dark.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const footerLinks = {
   about: [
@@ -69,29 +68,10 @@ const footerLinks = {
   ],
 };
 
-const socialMediaLinks = [
-  {
-    icon: faFacebookF,
-    link: 'https://facebook.com',
-  },
-  {
-    icon: faTwitter,
-    link: 'https://twitter.com',
-  },
-  {
-    icon: faInstagram,
-    link: 'https://instagram.com',
-  },
-  {
-    icon: faLinkedinIn,
-    link: 'https://linkedin.com',
-  },
-];
-
 const Footer = () => {
   return (
     <footer
-      className="bg-black text-white py-8 text-center md:text-left"
+      className="bg-black text-white px-4 py-8 md:text-left"
       style={{ backgroundImage: `url(${spiralBackground})` }}
     >
       <div className="container mx-auto p-2 md:p-4 text-slate-300 m-auto max-w-6xl">
@@ -99,7 +79,7 @@ const Footer = () => {
           <div className="col-span-1 grid gap-2">
             <LinkList
               heading={
-                <div className="text-orange-500 font-semibold">
+                <div className="text-xl text-orange-500 font-semibold">
                   About <TribeAfrica />
                 </div>
               }
@@ -107,7 +87,7 @@ const Footer = () => {
             />
             <LinkList
               heading={
-                <div className="text-orange-500 font-semibold">
+                <div className="text-xl text-orange-500 font-semibold">
                   Biz with <TribeAfrica />
                 </div>
               }
@@ -118,16 +98,16 @@ const Footer = () => {
             <div className="grid md:flex gap-3 w-full">
               <LinkList
                 heading={
-                  <div className="text-orange-500 font-semibold">
+                  <div className="text-xl text-orange-500 font-semibold">
                     Join <TribeAfrica />
                   </div>
                 }
-                links={footerLinks.apps}
+                links={footerLinks.join}
               />
               <div className="col-span-1 md:ms-auto md:w-48">
                 <LinkList
-                  heading={<div className="text-orange-500 font-semibold">Get the App</div>}
-                  links={footerLinks.join}
+                  heading={<div className="text-xl text-orange-500 font-semibold">Get the App</div>}
+                  links={footerLinks.apps}
                 />
               </div>
             </div>
