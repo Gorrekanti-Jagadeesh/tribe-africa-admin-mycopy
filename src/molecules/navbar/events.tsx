@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
-import { LinkList } from '../layout/link-list';
-
 import { EventCategory } from '@types/index';
-import Button from '@atoms/custom-button/button';
-import Modal from '../modal';
-import EventForm from '../forms/event-form';
+import NavLayout from '@molecules/layout/nav-layout';
 
 import { eventURLs } from '@data/index';
 
