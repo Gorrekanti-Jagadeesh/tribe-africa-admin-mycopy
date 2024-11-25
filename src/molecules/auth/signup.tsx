@@ -2,8 +2,6 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth, db, doc, setDoc } from '../../../firebaseDB';
 
-import googleIcon from '@assets/icons/google-color.svg';
-import brandImage from '@assets/brand-tribe-africa.png';
 import Button from '@atoms/custom-button/button';
 
 interface User {

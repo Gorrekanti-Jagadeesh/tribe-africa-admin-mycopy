@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import googleIcon from '@assets/icons/google-color.svg';
 import brandImage from '@assets/brand-tribe-africa.png';

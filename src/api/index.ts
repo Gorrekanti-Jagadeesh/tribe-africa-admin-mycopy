@@ -166,14 +166,14 @@ export const getDataByDocumentTypeWithId = (entryType: string, fieldType: string
   return sanityClient.fetch(query);
 };
 
-export const getEntryDataById = (id: any) => {
+export const getEntryDataById = (id: string) => {
   return sanityClient.fetch(`*[_id == '${id}']`);
 };
 
-export const getHotelsInLocationWithLimit = (countryId: any) => {
+export const getHotelsInLocationWithLimit = (countryId: string) => {
   sanityClient
     .fetch(`*[_type == "Hotels" && location._ref == '${countryId}'] [0...4]`) // Replace with your document type
-    .then((res: any) => {
+    .then((res) => {
       return res;
     })
     .catch((err: any) => console.error(err));

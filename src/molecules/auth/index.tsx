@@ -60,11 +60,11 @@ export const Auth = () => {
     }
   };
 
-  const handleGoogleLoginSuccess = (user: User) => {
-    Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
-    setGoogleUser(user);
-    setIsLogin(true);
-  };
+  // const handleGoogleLoginSuccess = (user: User) => {
+  //   Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
+  //   setGoogleUser(user);
+  //   setIsLogin(true);
+  // };
 
   const handleEmailLoginSuccess = (user: User) => {
     Cookies.set('emailUser', JSON.stringify(user), { expires: 7 });
