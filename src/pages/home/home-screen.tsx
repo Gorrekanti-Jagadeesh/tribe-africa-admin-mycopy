@@ -18,7 +18,7 @@ const HomeScreen = () => {
       <div className="relative">
         <HeroSection />
         <Explore />
-        <CharmingHotels />
+        {/* <CharmingHotels /> */}
         <HolidayDestination />
         <Experience />
         <WorkingRemotely />

@@ -7,9 +7,9 @@ import { Loading } from '@atoms/common/loading';
 
 import { isLoggedIn, getFormData } from '@utils/common';
 
-import { addQuestion, getDataByEntryType } from '@api';
+import { qna, getDataByEntryType } from '@api/index';
 
-import { QNAProps } from '@types';
+import { QNAProps } from '@types/index';
 
 export const QNAScreen = () => {
   const [data, setData] = useState<QNAProps[]>([]);
@@ -21,7 +21,8 @@ export const QNAScreen = () => {
   const handleSubmit = (e: React.FormEvent) => {
     setIsSending(true);
     let req = getFormData(e);
-    addQuestion({ ...req, level: 'primary' })
+    qna
+      .addQuestion({ ...req, level: 'primary' })
       .then(() => window.location.reload())
       .catch((err) => console.log(err));
   };

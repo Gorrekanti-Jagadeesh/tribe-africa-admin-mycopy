@@ -236,3 +236,13 @@ export interface HotelData {
   created_at: string;
   images: string[];
 }
+
+export interface QNAProps {
+  _id: string;
+  title: string;
+  content: string;
+  level: string;
+  author: string;
+  date: string;
+  replies_count: string;
+}
