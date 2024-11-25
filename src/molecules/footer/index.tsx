@@ -144,7 +144,7 @@ const Footer = () => {
         </div>
 
         {/* Social media links */}
-        <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
+        {/* <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
           {socialMediaLinks.map((link, index) => (
             <a
               key={index}
@@ -156,7 +156,7 @@ const Footer = () => {
               <FontAwesomeIcon icon={link.icon} size="lg" />
             </a>
           ))}
-        </div>
+        </div> */}
       </div>
     </footer>
   );

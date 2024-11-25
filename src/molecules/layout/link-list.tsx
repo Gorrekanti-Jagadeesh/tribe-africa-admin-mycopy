@@ -11,7 +11,7 @@ export const LinkList = ({
   links: { url: string; label: string }[];
   className?: string;
   subLinksHeading?: React.ReactNode;
-  subLinks: { url: string; label: string }[];
+  subLinks?: { url: string; label: string }[];
 }) => {
   return (
     <>

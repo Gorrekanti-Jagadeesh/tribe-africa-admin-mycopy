@@ -4,6 +4,7 @@ import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Countries, Purpose } from '@data';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import SocialLinks from '@atoms/socia-icons/social-icons';
 
 // HeroSection Component
 const HeroSection: React.FC = () => {
@@ -63,6 +64,7 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
       <Logo />
+      <SocialLinks />
     </div>
   );
 };
