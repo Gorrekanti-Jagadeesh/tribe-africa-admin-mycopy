@@ -11,12 +11,23 @@ interface CarouselItem {
 }
 
 export const Countries: Option[] = [
-  { value: 'Algeria', label: 'Algeria' },
-  { value: 'Angola', label: 'Angola' },
-  { value: 'Benin', label: 'Benin' },
-  { value: 'Botswana', label: 'Botswana' },
-  { value: 'Burkina-faso', label: 'Burkina Faso' },
+  { value: 'algeria', label: 'Algeria' },
+  { value: 'angola', label: 'Angola' },
+  { value: 'benin', label: 'Benin' },
+  { value: 'botswana', label: 'Botswana' },
+  { value: 'south-africa', label: 'South Africa' },
+  { value: 'zimbabwe', label: 'Zimbabwe' },
 ];
+
+// To be fetching using Sanity Later
+export const countryInternetData = {
+  algeria: { speed: '13.63 Mbps' },
+  angola: { speed: '20.51 Mbps' },
+  benin: { speed: '25.04 Mbps' },
+  botswana: { speed: '24.14 Mbps' },
+  'south-africa': { speed: '48.33 Mbps' },
+  zimbabwe: { speed: '13.99 Mbps' },
+};
 
 export const Purpose: Option[] = [
   { value: 'Business', label: 'Business' },

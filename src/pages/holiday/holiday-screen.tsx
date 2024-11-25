@@ -17,7 +17,7 @@ interface CountryDataType {
 }
 
 const countryData: Record<string, CountryDataType> = {
-  Algeria: {
+  algeria: {
     center: [2.6328, 28.0339],
     markers: [
       { name: 'Algiers', coordinates: [3.0588, 36.7323], category: 'Cities' },
@@ -87,7 +87,7 @@ const countryData: Record<string, CountryDataType> = {
     ],
     scale: 2300,
   },
-  Angola: {
+  angola: {
     center: [17.8739, -11.2027],
     markers: [
       { name: 'Luanda', coordinates: [13.2344, -8.8383], category: 'Cities' },
@@ -99,7 +99,7 @@ const countryData: Record<string, CountryDataType> = {
     ],
     scale: 3000,
   },
-  Benin: {
+  benin: {
     center: [2.3158, 9.3077],
     markers: [
       { name: 'Cotonou', coordinates: [2.4183, 6.3703], category: 'Cities' },
@@ -110,7 +110,7 @@ const countryData: Record<string, CountryDataType> = {
     ],
     scale: 2300,
   },
-  Botswana: {
+  botswana: {
     center: [24.6849, -22.3285],
     markers: [
       { name: 'Gaborone', coordinates: [25.9231, -24.6282], category: 'Cities' },
@@ -121,7 +121,7 @@ const countryData: Record<string, CountryDataType> = {
     ],
     scale: 2300,
   },
-  'South Africa': {
+  'south-africa': {
     center: [24.9916, -30.5595],
     markers: [
       { name: 'Johannesburg', coordinates: [28.0473, -26.2041], category: 'Cities' },
@@ -133,7 +133,7 @@ const countryData: Record<string, CountryDataType> = {
     ],
     scale: 2400,
   },
-  Zimbabwe: {
+  zimbabwe: {
     center: [29.1549, -19.0154],
     markers: [
       { name: 'Harare', coordinates: [31.0522, -17.8292], category: 'Cities' },
