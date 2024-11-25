@@ -176,11 +176,11 @@ export const getHotelsInLocationWithLimit = (countryId: string) => {
     .then((res) => {
       return res;
     })
-    .catch((err: any) => console.error(err));
+    .catch((err: Error) => console.error(err));
 };
 
 // Upload image to Sanity
-export const uploadImage = async (file: UploadBody | string): Promise<any> => {
+export const uploadImage = async (file: UploadBody | string) => {
   try {
     const imageAsset = await sanityClient.assets.upload('image', typeof file === 'string' ? base64ToBlob(file) : file);
     return imageAsset;

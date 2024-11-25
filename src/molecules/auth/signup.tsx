@@ -10,10 +10,7 @@ interface User {
   email: string | null;
 }
 
-const Signup: React.FC<{ setIsOpen: (open: boolean) => void; setType: (type: string) => void }> = ({
-  setIsOpen,
-  setType,
-}) => {
+const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
