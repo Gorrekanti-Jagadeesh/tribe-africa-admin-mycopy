@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import demo from '../../assets/branding-bg-dark.png';
 import Button from '../custom-button/button';
 import { getFormData } from '../../utils/common';
-import { addQuestion, getDataByEntryType } from '../../api';
+import { qna, getDataByEntryType } from '../../api';
 import { Loading } from '../common/loading';
 import { QNAProps } from '../../types';
 
@@ -46,7 +46,8 @@ const QNACard: React.FC<CardProps> = ({ _id, title, content, level, author, date
     e.preventDefault();
     setIsSending(true);
     let req = getFormData(e);
-    addQuestion({ ...req, level: replyLevel })
+    qna
+      .addQuestion({ ...req, level: replyLevel })
       .then(() => {
         setIsLoading(true);
         getReplies(_id, replyLevel);

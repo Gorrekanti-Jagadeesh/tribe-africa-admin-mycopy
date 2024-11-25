@@ -14,9 +14,9 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
   const [blogList, setBlogList] = useState<BlogContentProps[]>([]);
   useEffect(() => {
     getDataByDocumentType('blog', ['_id', 'title', 'image'])
-      .then((res: any[]) => {
+      .then((res) => {
         setBlogList(
-          res.map((item: { _id: any; title: any; image: { asset: { _ref: string } }; content: any }) => {
+          res.map((item) => {
             return {
               _id: item._id,
               title: item.title,
@@ -26,7 +26,7 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
           })
         );
       })
-      .catch((err: any) => console.error(err));
+      .catch((err: Error) => console.error(err));
   }, []);
   const [openModal, setOpenModal] = useState(false);
   return (

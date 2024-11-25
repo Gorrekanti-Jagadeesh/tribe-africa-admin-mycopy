@@ -2,8 +2,6 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth, db, doc, setDoc } from '../../../firebaseDB';
 
-import googleIcon from '@assets/icons/google-color.svg';
-import brandImage from '@assets/brand-tribe-africa.png';
 import Button from '@atoms/custom-button/button';
 
 interface User {
@@ -12,10 +10,7 @@ interface User {
   email: string | null;
 }
 
-const Signup: React.FC<{ setIsOpen: (open: boolean) => void; setType: (type: string) => void }> = ({
-  setIsOpen,
-  setType,
-}) => {
+const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

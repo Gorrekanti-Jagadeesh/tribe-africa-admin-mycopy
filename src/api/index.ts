@@ -3,8 +3,8 @@ import sanityClient from '../sanityClient';
 import { UploadBody } from '@sanity/client';
 import { base64ToBlob } from '../utils/common';
 import imageUrlBuilder from '@sanity/image-url';
-import Cookies from 'js-cookie';
 import serviceUrls from '../service-urls';
+export * as qna from './qna';
 
 interface ContentfulSys {
   id: string;
@@ -166,21 +166,21 @@ export const getDataByDocumentTypeWithId = (entryType: string, fieldType: string
   return sanityClient.fetch(query);
 };
 
-export const getEntryDataById = (id: any) => {
+export const getEntryDataById = (id: string) => {
   return sanityClient.fetch(`*[_id == '${id}']`);
 };
 
-export const getHotelsInLocationWithLimit = (countryId: any) => {
+export const getHotelsInLocationWithLimit = (countryId: string) => {
   sanityClient
     .fetch(`*[_type == "Hotels" && location._ref == '${countryId}'] [0...4]`) // Replace with your document type
-    .then((res: any) => {
+    .then((res) => {
       return res;
     })
-    .catch((err: any) => console.error(err));
+    .catch((err: Error) => console.error(err));
 };
 
 // Upload image to Sanity
-export const uploadImage = async (file: UploadBody | string): Promise<any> => {
+export const uploadImage = async (file: UploadBody | string) => {
   try {
     const imageAsset = await sanityClient.assets.upload('image', typeof file === 'string' ? base64ToBlob(file) : file);
     return imageAsset;
@@ -193,28 +193,4 @@ export const uploadImage = async (file: UploadBody | string): Promise<any> => {
 export const sanityImageUrlBuilder = (image: string) => {
   const builder = imageUrlBuilder(sanityClient);
   return builder.image(image);
-};
-
-export const addQuestion = async (data: { title: string; level: string }) => {
-  let req = {
-    ...data,
-    _type: 'qna',
-    author: JSON.parse(Cookies.get('googleUser') || '{}').email,
-    date: new Date(),
-    replies_count: 0,
-  };
-
-  if (req.level != 'primary') {
-    console.log(req.title.slice(6));
-    const result = await sanityClient.patch(req.title.slice(6)).inc({ replies_count: 1 }).commit();
-    console.log('Multiple fields updated:', result);
-  }
-
-  try {
-    const res = await sanityClient.create(req);
-    return res;
-  } catch (error) {
-    console.error('Error uploading data:', error);
-    throw error;
-  }
 };

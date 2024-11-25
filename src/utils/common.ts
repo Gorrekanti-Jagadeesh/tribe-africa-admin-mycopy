@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 export const getFormData = (e: React.FormEvent) => {
   e.preventDefault();
   const formData = new FormData(e.currentTarget as HTMLFormElement);
-  let data: Record<string, any> = {};
+  let data = {};
   for (const [key, value] of formData.entries()) {
     data[key] = value;
   }

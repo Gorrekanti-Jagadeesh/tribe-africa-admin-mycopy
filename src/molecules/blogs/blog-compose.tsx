@@ -64,7 +64,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
     const formData = new FormData(formElement);
 
     // list of final blocks after processing rich text
-    const richTextBlocks: any[] = await processContent(splitContent);
+    const richTextBlocks = await processContent(splitContent);
 
     let response;
     try {
