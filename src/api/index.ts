@@ -59,8 +59,6 @@ export const fetchImageByEntryId = async (entryId: string): Promise<string> => {
 
 // ------------- Currency Converter --------------------
 
-const API_KEY = import.meta.env.VITE_CURRENCY_API_KEY;
-
 export const fetchCurrencies = async () => {
   const url = serviceUrls.currency.fetchCurrencies;
   try {
