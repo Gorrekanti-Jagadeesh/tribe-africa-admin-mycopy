@@ -2,12 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import { getDataByDocumentTypeWithId, uploadImage } from '../../api';
 import { useParams, useLocation } from 'react-router-dom';
 import AccomodationDetailsScreen from './accomodation-details-screen';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import sanityClient from '../../sanityClient';
 import { UploadBody } from '@sanity/client';
+import { Loading } from '@atoms/common/loading';
+import { useState } from 'react';
 
 const AccommodationDetailsContainer = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { accommodationId } = useParams<{ accommodationId: string }>();
 
   const location = useLocation();
@@ -49,7 +54,8 @@ const AccommodationDetailsContainer = () => {
 
   const { control, handleSubmit } = useForm();
 
-  const onSubmit = async (formData: any) => {
+  const onSubmit = async (formData: Record<string, number>) => {
+    setIsSubmitting(true);
     const token = Cookies.get('googleUser');
     const userDetails = token ? JSON.parse(token) : null;
 
@@ -68,22 +74,24 @@ const AccommodationDetailsContainer = () => {
 
     // Upload images using the uploadImage function
     const uploadedImages = await Promise.all(
-      (formData.images || []).map(async (image: UploadBody | string) => {
-        try {
-          const uploadedImage = await uploadImage(image);
-          return {
-            _type: 'image',
-            asset: {
-              _type: 'reference',
-              _ref: uploadedImage._id,
-            },
-            _key: uploadedImage._id,
-          };
-        } catch (error) {
-          console.error('Error uploading image:', error);
-          return null;
-        }
-      })
+      Array.isArray(formData.images)
+        ? formData.images.map(async (image: UploadBody | string) => {
+            try {
+              const uploadedImage = await uploadImage(image);
+              return {
+                _type: 'image',
+                asset: {
+                  _type: 'reference',
+                  _ref: uploadedImage._id,
+                },
+                _key: uploadedImage._id,
+              };
+            } catch (error) {
+              console.error('Error uploading image:', error);
+              return null;
+            }
+          })
+        : [] // Fallback to an empty array if not an array
     );
 
     // Filter out any null values in case of upload errors
@@ -104,21 +112,29 @@ const AccommodationDetailsContainer = () => {
       reviewer_image: photoURL,
     };
 
-    // Submit review to Sanity CMS
-    sanityClient
-      .create({
+    try {
+      // Submit review to Sanity CMS
+      const response = await sanityClient.create({
         _type: 'review',
         ...submissionData,
-      })
-      .then((response) => {
-        // Optionally handle the response
-      })
-      .catch((error) => {
-        console.error('Error submitting review:', error);
       });
+      console.log(response);
+      fetchReviewsByHotelId(accommodationId);
+      // Close the modal after submission
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    } finally {
+      setIsSubmitting(false); // Reset loading state
+    }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Loading />
+      </div>
+    );
   if (error) return <div>Error fetching reviews: {error.message}</div>;
 
   return (
@@ -128,6 +144,9 @@ const AccommodationDetailsContainer = () => {
         hotelData={data}
         onSubmit={handleSubmit(onSubmit)}
         control={control}
+        isSubmitting={isSubmitting}
+        setIsModalOpen={(isOpen: boolean) => setIsModalOpen(isOpen)}
+        isModalOpen={isModalOpen}
       />
     </div>
   );

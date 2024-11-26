@@ -117,9 +117,9 @@ const AfterWork = () => {
 
 export default AfterWork;
 
-const data = [
-  {
-    title: '',
-    image: '',
-  },
-];
+// const data = [
+//   {
+//     title: '',
+//     image: '',
+//   },
+// ];

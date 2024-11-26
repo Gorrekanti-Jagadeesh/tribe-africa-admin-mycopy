@@ -9,10 +9,31 @@ interface AccomodationDetailsScreenProps {
   hotelData: HotelData;
   onSubmit: () => void;
   control: Control;
+  isSubmitting: boolean;
+  isModalOpen: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
 }
 
-const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({ reviews, hotelData, onSubmit, control }) => {
-  return <AccommodationView reviews={reviews} hotelData={hotelData} onSubmit={onSubmit} control={control} />;
+const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
+  reviews,
+  hotelData,
+  onSubmit,
+  control,
+  isSubmitting,
+  isModalOpen,
+  setIsModalOpen,
+}) => {
+  return (
+    <AccommodationView
+      reviews={reviews}
+      hotelData={hotelData}
+      onSubmit={onSubmit}
+      control={control}
+      isSubmitting={isSubmitting}
+      isModalOpen={isModalOpen}
+      setIsModalOpen={setIsModalOpen}
+    />
+  );
 };
 
 export default AccomodationDetailsScreen;

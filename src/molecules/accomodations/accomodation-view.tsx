@@ -10,20 +10,43 @@ import StarRatingInput from '../../atoms/rating/start-rating-input';
 import FileUploadWithPreview from '../../atoms/input-elements/file-upload-with-preview';
 import { Review } from '../../types';
 import { HotelData } from '../../types';
+import { useForm } from 'react-hook-form';
+import { Loading } from '@atoms/common/loading';
+
+interface FormData {
+  review: string;
+  quality_of_service: number;
+  comfort: number;
+  food_and_beverage: number;
+  location: number;
+  cleanliness: number;
+  // Add any other fields as necessary
+}
 
 interface AccommodationViewProps {
   hotelData: HotelData;
   reviews: Review[];
-  onSubmit: (formData: any) => void;
+  onSubmit: (formData: FormData) => void;
   control: Control;
+  isSubmitting: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
+  isModalOpen: boolean;
 }
 
 const AccommodationImage = ({ source }: { source: string }) => {
   return <img src={source} alt="hotel image" className="w-full h-full object-cover rounded-lg max-h-96" />;
 };
 
-const AccommodationView: React.FC<AccommodationViewProps> = ({ hotelData, reviews, onSubmit, control }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const AccommodationView: React.FC<AccommodationViewProps> = ({
+  hotelData,
+  reviews,
+  onSubmit,
+  control,
+  isSubmitting,
+  isModalOpen,
+  setIsModalOpen,
+}) => {
+  const { getValues } = useForm();
 
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
@@ -115,7 +138,13 @@ const AccommodationView: React.FC<AccommodationViewProps> = ({ hotelData, review
 
       {/* Modal for writing a review */}
       <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-        <form onSubmit={onSubmit} className="p-8 bg-white rounded-lg w-full lg:w-[1000px] mx-auto">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault(); // Prevent default form submission
+            onSubmit(getValues() as FormData); // Cast getValues to FormData
+          }}
+          className="p-8 bg-white rounded-lg w-full lg:w-[1000px] mx-auto"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-[65%_35%] gap-6">
             {/* Review Section */}
             <div>
@@ -163,7 +192,7 @@ const AccommodationView: React.FC<AccommodationViewProps> = ({ hotelData, review
               {/* Submit Button */}
               <div className="flex items-end justify-end">
                 <button type="submit" className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600">
-                  Submit
+                  {isSubmitting ? <Loading /> : 'Submit'}
                 </button>
               </div>
             </div>
