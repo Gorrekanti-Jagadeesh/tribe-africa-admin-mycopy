@@ -25,6 +25,7 @@
           ["@api", "./src/api"],
           ["@data", "./src/data"],
           ["@utils", "./src/utils"],
+          ["@hooks", "./src/utils"],
           ["@types", "./src/types"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]

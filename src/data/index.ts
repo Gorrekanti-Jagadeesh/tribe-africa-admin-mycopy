@@ -49,6 +49,8 @@ export const socialMediaLinks = [
   },
 ];
 
+export { default as demoImage } from '@assets/homepage-welcome-image.png';
+
 export const HolidayDestinationData = [
   {
     image: 'https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(19).webp',
