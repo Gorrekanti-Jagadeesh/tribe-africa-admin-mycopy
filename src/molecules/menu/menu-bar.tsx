@@ -41,7 +41,7 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
         {country != undefined && (
           <div className="mx-4">
             <p>
-              {purpose == 'business' ? 'Business' : 'Holiday'} in {country}
+              {purpose != 'holiday' ? 'Business' : 'Holiday'} in {country}
             </p>
           </div>
         )}

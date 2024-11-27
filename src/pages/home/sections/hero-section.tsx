@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
 
   const handleGoClick = () => {
     if (country) {
-      purpose === 'Business' ? navigate(`/${country}/business`) : navigate(`/${country}/holiday`);
+      purpose === 'business' ? navigate(`/${country}/business`) : navigate(`/${country}/holiday`);
     }
   };
 

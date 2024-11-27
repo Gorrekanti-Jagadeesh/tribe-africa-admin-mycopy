@@ -30,8 +30,8 @@ export const countryInternetData = {
 };
 
 export const Purpose: Option[] = [
-  { value: 'Business', label: 'Business' },
-  { value: 'Holiday', label: 'Holiday' },
+  { value: 'business', label: 'Business' },
+  { value: 'holiday', label: 'Holiday' },
 ];
 
 export const Languages: Option[] = [
