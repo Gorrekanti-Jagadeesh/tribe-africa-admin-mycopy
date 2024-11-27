@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchHotelEntries, fetchImageByEntryId } from '../../../api';
-import { ContentfulResponse } from '../../../types';
-import CommonCarousel from '../../../molecules/carousel/common-carousel';
-import Modal from '../../../molecules/modal';
-import BrandingCorner from '../../../molecules/common/backgrounds/branding-background';
-import DualHeading from '../../../atoms/heading/dual-heading';
+import { fetchHotelEntries, fetchImageByEntryId } from '@api/index';
+import { ContentfulResponse } from '@types/index';
+import CommonCarousel from '@molecules/carousel/common-carousel';
+import Modal from '@molecules/modal';
+import DualHeading from '@atoms/heading/dual-heading';
+// import BackgroundImageWrapper from '@molecules/common/backgrounds/background-image-wrapper';
+
+// import image from '@assets/branding.png';
 
 interface ContentfulSys {
   id: string;
@@ -92,7 +94,7 @@ const CharmingHotels: React.FC = () => {
 
   const HotelView = ({ data }: { data: HotelFields }) => {
     return (
-      <div id="hotel-view" className="grid justify-center md:flex gap-4 p-2 md:p-4">
+      <div id="hotel-view" className="grid justify-center md:flex gap-4 p-2 md:p-4 my-4">
         <div id="collage" className="flex md:grid md:grid-cols-2 gap-4 md:w-4/6 max-w-xl overflow-auto">
           {data.hotelImages.map((image, idx) => (
             <img
@@ -131,11 +133,11 @@ const CharmingHotels: React.FC = () => {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           customClasses="bg-gray-900 text-white rounded-md border-2 border-orange-500"
-          closeButtonClasses="sticky"
         >
-          <BrandingCorner>
+          {/* <BackgroundImageWrapper image={image} position='bottom-right' offset='-40px' opacity='0.3'>
             <HotelView data={content} />
-          </BrandingCorner>
+          </BackgroundImageWrapper> */}
+          <HotelView data={content} />
         </Modal>
       )}
     </div>

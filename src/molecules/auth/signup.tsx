@@ -2,6 +2,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth, db, doc, setDoc } from '../../../firebaseDB';
 
+import Button from '@atoms/custom-button/button';
+
 interface User {
   accessToken: string | null;
   uid: string | null;
@@ -72,51 +74,60 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
   };
 
   return (
-    <div className="bg-white p-5 rounded-lg shadow-lg w-80">
-      <h2 className="text-xl font-semibold mb-4">Sign Up</h2>
+    <>
+      {/* First Name */}
       <input
         type="text"
         placeholder="First Name"
         value={firstName}
         onChange={(e) => setFirstName(e.target.value)}
-        className="border p-2 w-full mb-2"
+        className="border p-3 rounded-lg w-full mb-4"
       />
+
+      {/* Last Name */}
       <input
         type="text"
         placeholder="Last Name"
         value={lastName}
         onChange={(e) => setLastName(e.target.value)}
-        className="border p-2 w-full mb-2"
+        className="border p-3 rounded-lg w-full mb-4"
       />
+
+      {/* Email */}
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 w-full mb-2"
+        className="border p-3 rounded-lg w-full mb-4"
       />
+
+      {/* Password */}
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Password (at least 8 characters)"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 w-full mb-2"
+        className="border p-3 rounded-lg w-full mb-4"
       />
+
+      {/* Confirm Password */}
       <input
         type="password"
         placeholder="Confirm Password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        className="border p-2 w-full mb-2"
+        className="border p-3 rounded-lg w-full mb-4"
       />
-      {error && <p className="text-red-500 mb-2">{error}</p>} {/* Show error message */}
-      <button className="bg-purple-600 text-white p-2 rounded w-full" onClick={handleSignup}>
+
+      {/* Error Message */}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+
+      {/* Sign Up Button */}
+      <Button className="w-full mb-2" onClick={handleSignup}>
         Sign Up
-      </button>
-      <button className="mt-4 bg-gray-300 text-black p-2 rounded w-full" onClick={() => setIsOpen(false)}>
-        Close
-      </button>
-    </div>
+      </Button>
+    </>
   );
 };
 

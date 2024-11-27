@@ -11,6 +11,7 @@
       "@api/*": ["api/*"],
       "@data/*": ["data/*"],
       "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
       "@types/*": ["types/*"]
     },
     "jsx": "react-jsx",

@@ -18,7 +18,7 @@ const Discover: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleToggle = (data: any) => {
+  const handleToggle = (data) => {
     setToggle(false);
     setContent(data);
   };

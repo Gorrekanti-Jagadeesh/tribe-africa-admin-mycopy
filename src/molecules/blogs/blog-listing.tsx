@@ -19,7 +19,7 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
     getDataByDocumentType('blog', ['_id', 'title', 'image'], selectedLanguage)
       .then((res: any[]) => {
         setBlogList(
-          res.map((item: { _id: any; title: any; image: { asset: { _ref: string } }; content: any }) => {
+          res.map((item) => {
             return {
               _id: item._id,
               title: item.title,

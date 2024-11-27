@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { signInWithGoogle } from '../../../firebaseDB';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'; // Import Firebase Auth functions
+
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import Button from '@atoms/custom-button/button';
 
 interface User {
   email: string | null;
@@ -9,29 +10,16 @@ interface User {
 interface LoginProps {
   setIsOpen: (open: boolean) => void;
   setType: (type: string) => void;
-  onGoogleLoginSuccess: (user: User) => void;
   onEmailLoginSuccess: (user: User) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ setIsOpen, setType, onGoogleLoginSuccess, onEmailLoginSuccess }) => {
+const Login: React.FC<LoginProps> = ({ setIsOpen, setType, onEmailLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   // Initialize Firebase Auth
   const auth = getAuth();
-
-  const handleGoogleLogin = async () => {
-    try {
-      const user = await signInWithGoogle();
-      if (user) {
-        onGoogleLoginSuccess(user);
-        setIsOpen(false);
-      }
-    } catch (error) {
-      console.error('Error during Google sign-in:', error);
-    }
-  };
 
   const handleEmailLogin = async () => {
     try {
@@ -47,46 +35,31 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, setType, onGoogleLoginSuccess,
   };
 
   return (
-    <div className="bg-white p-5 rounded-lg shadow-lg w-80">
-      <h2 className="text-xl font-semibold mb-4">Welcome Back</h2>
-      <div>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full mb-2"
-        />
-        {/* Show error message */}
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-        <button className="bg-purple-600 text-white p-2 rounded w-full" onClick={handleEmailLogin}>
-          Sign In
-        </button>
-        <p className="mt-2 text-center">
-          Don't have an account?{' '}
-          <span onClick={() => setType('register')} className="text-blue-500 cursor-pointer">
-            Sign up
-          </span>
-        </p>
+    <>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="border p-3 rounded-lg w-full"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="border p-3 rounded-lg w-full"
+      />
+      {error && <p className="text-red-500">{error}</p>}
+      <div className="text-right">
+        <span onClick={() => setType('forgotPassword')} className="text-blue-500 text-sm cursor-pointer">
+          Forgot Password?
+        </span>
       </div>
-      <div className="flex items-center my-4">
-        <hr className="flex-grow border-t border-gray-300" />
-        <span className="mx-4 text-gray-500">Or</span>
-        <hr className="flex-grow border-t border-gray-300" />
-      </div>
-      <div className="mt-4">
-        <button className="bg-red-500 text-white p-2 rounded mb-2 w-full" onClick={handleGoogleLogin}>
-          Continue with Google
-        </button>
-      </div>
-    </div>
+      <Button className="w-full mb-2" onClick={handleEmailLogin}>
+        Sign In
+      </Button>
+    </>
   );
 };
 

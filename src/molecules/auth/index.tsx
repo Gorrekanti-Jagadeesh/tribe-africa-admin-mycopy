@@ -4,6 +4,8 @@ import Modal from '../modal';
 import Login from './login';
 import Signup from './signup';
 import Button from '../../atoms/custom-button/button';
+import { signInWithGoogle } from '../../../firebaseDB';
+import AuthWrapper from './auth-wrapper';
 
 interface User {
   email: string | null;
@@ -46,11 +48,23 @@ export const Auth = () => {
 
   const [isLogin, setIsLogin] = useState(googleUser || emailUser);
 
-  const handleGoogleLoginSuccess = (user: User) => {
-    Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
-    setGoogleUser(user);
-    setIsLogin(true);
+  const handleGoogleLogin = async () => {
+    try {
+      const user = await signInWithGoogle();
+      if (user) {
+        handleEmailLoginSuccess(user);
+        setIsOpen(false);
+      }
+    } catch (error) {
+      console.error('Error during Google sign-in:', error);
+    }
   };
+
+  // const handleGoogleLoginSuccess = (user: User) => {
+  //   Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
+  //   setGoogleUser(user);
+  //   setIsLogin(true);
+  // };
 
   const handleEmailLoginSuccess = (user: User) => {
     Cookies.set('emailUser', JSON.stringify(user), { expires: 7 });
@@ -91,16 +105,13 @@ export const Auth = () => {
 
       {/* Modal for Auth forms */}
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        {type == 'login' ? (
-          <Login
-            setIsOpen={setIsOpen}
-            setType={setType}
-            onGoogleLoginSuccess={handleGoogleLoginSuccess}
-            onEmailLoginSuccess={handleEmailLoginSuccess}
-          />
-        ) : (
-          <Signup setIsOpen={setIsOpen} />
-        )}
+        <AuthWrapper type={type} setType={setType} handleGoogleLogin={handleGoogleLogin}>
+          {type == 'login' ? (
+            <Login setIsOpen={setIsOpen} setType={setType} onEmailLoginSuccess={handleEmailLoginSuccess} />
+          ) : (
+            <Signup setIsOpen={setIsOpen} setType={setType} />
+          )}
+        </AuthWrapper>
       </Modal>
     </div>
   );
