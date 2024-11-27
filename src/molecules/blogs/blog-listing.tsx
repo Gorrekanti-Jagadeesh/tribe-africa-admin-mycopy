@@ -17,7 +17,7 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en_US');
   useEffect(() => {
     getDataByDocumentType('blog', ['_id', 'title', 'image'], selectedLanguage)
-      .then((res: any[]) => {
+      .then((res) => {
         setBlogList(
           res.map((item) => {
             return {
@@ -29,7 +29,7 @@ const BlogListing: React.FC<{ heading: string }> = ({ heading }) => {
           })
         );
       })
-      .catch((err: any) => console.error(err));
+      .catch((err: Error) => console.error(err));
   }, [selectedLanguage]);
   const [openModal, setOpenModal] = useState(false);
   return (

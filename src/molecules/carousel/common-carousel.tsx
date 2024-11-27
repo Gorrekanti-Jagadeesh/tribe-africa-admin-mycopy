@@ -44,9 +44,9 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
 
   return (
     <div>
-      <div className="relative w-full flex ">
+      <div className="relative w-full flex">
         {/* Carousel Images */}
-        <div className="flex overflow-hidden w-full">
+        <div className="flex overflow-hidden w-full ">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
@@ -54,11 +54,15 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
             }}
           >
             {data.map((item: carouselCardProps, index: number) => (
-              <div key={index} className="px-2 w-1/2 lg:w-1/3 flex-shrink-0 p-6 cursor-pointer" onClick={item.onClick}>
+              <div
+                key={index}
+                className="w-1/2 lg:w-1/3 flex-shrink-0 p-1 md:p-2 cursor-pointer"
+                onClick={item.onClick}
+              >
                 <img
                   src={item.image}
                   alt={`carousel-${index}`}
-                  className="w-full h-full object-cover rounded-lg cursor-pointer aspect-square"
+                  className="w-full object-cover rounded-lg cursor-pointer aspect-square"
                 />
                 <p>{item.title}</p>
               </div>
