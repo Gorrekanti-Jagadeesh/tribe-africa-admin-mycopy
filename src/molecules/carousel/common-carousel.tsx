@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import useScreenWidth from '@hooks/useScreenWidth';
+import React, { useEffect, useState } from 'react';
 
 interface carouselCardProps {
   image: string | undefined;
   title: string;
-  handleClick: () => void;
+  onClick?: () => void;
 }
 
 interface commonCarouselData {
@@ -12,17 +13,9 @@ interface commonCarouselData {
 
 const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  let itemsPerPage = 0;
+  const [itemsPerPage, setItemsPerPage] = useState(0);
 
-  const screenWidth = window.innerWidth;
-
-  if (screenWidth < 768) {
-    itemsPerPage = 1;
-  } else if (screenWidth < 1024) {
-    itemsPerPage = 2;
-  } else {
-    itemsPerPage = 3;
-  }
+  const screenWidth = useScreenWidth();
 
   const handleNext = () => {
     if (currentIndex + itemsPerPage < data.length) {
@@ -39,6 +32,14 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   const isNextDisabled = currentIndex >= data.length - itemsPerPage;
   const isPrevDisabled = currentIndex == 0;
 
+  useEffect(() => {
+    if (screenWidth < 1024) {
+      setItemsPerPage(2);
+    } else {
+      setItemsPerPage(3);
+    }
+  }, [screenWidth]);
+
   return (
     <div>
       <div className="relative w-full flex ">
@@ -53,14 +54,14 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
             {data.map((item: carouselCardProps, index: number) => (
               <div
                 key={index}
-                className="w-full px-2 sm:w-1/1 md:w-1/2 lg:w-1/3 flex-shrink-0 p-6 cursor-pointer"
-                style={{ minWidth: '33.3333%' }}
-                onClick={item.handleClick}
+                className="px-2 w-1/2 lg:w-1/3 flex-shrink-0 p-6 cursor-pointer"
+                // style={{ minWidth: '33.3333%' }}
+                onClick={item.onClick}
               >
                 <img
                   src={item.image}
                   alt={`carousel-${index}`}
-                  className="w-full h-full object-cover rounded-lg cursor-pointer"
+                  className="w-full h-full object-cover rounded-lg cursor-pointer aspect-square"
                 />
                 <p>{item.title}</p>
               </div>
