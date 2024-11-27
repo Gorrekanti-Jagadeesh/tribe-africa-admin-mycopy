@@ -2,16 +2,15 @@ import Footer from '@molecules/footer';
 import { BusinessHeader } from '@molecules/header';
 import heroBackground from '@assets/homepage-welcome-image-2.png';
 import CardsGrid from '@molecules/layout/cards-grid';
+import { countryInternetData } from '@data/index';
 
 const BusinessScreen = ({
   country,
   weatherData,
-  currentTime,
   isLoading,
 }: {
   country: string | undefined;
-  weatherData: { temperature: number; condition: string } | undefined;
-  currentTime: string;
+  weatherData: { temperature: number; condition: string; time: string } | undefined;
   isLoading: boolean;
 }) => {
   return (
@@ -35,11 +34,11 @@ const BusinessScreen = ({
               {isLoading
                 ? 'Loading...'
                 : weatherData
-                  ? `${weatherData.temperature} °/${weatherData.condition}`
+                  ? `${weatherData.temperature} °F / ${weatherData.condition}`
                   : 'No data available'}
             </p>
-            <p>Internet speed: 1gbps</p>
-            <p>Time: {currentTime}</p>
+            <p>Internet speed: {countryInternetData[country].speed}</p>
+            <p>Time: {weatherData ? weatherData.time : 'Loading...'}</p>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
 
   const handleGoClick = () => {
     if (country) {
-      purpose === 'Business' ? navigate(`/${country}/business`) : navigate(`/${country}/holiday`);
+      purpose === 'business' ? navigate(`/${country}/business`) : navigate(`/${country}/holiday`);
     }
   };
 
@@ -48,7 +48,7 @@ const HeroSection: React.FC = () => {
         <div className="bg-slate-800 relative bottom-8 rounded-lg" style={{ zIndex: '-1' }}>
           <video autoPlay={true} loop={true} muted={true} className="rounded-lg">
             <source
-              src="https://s3-figma-videos-production-sig.figma.com/video/1140530022219550208/TEAM/35df/ad4f/-0df9-42cc-8dbf-31a770951344?Expires=1730678400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=puNVfQdm3~hGUculdZ-XbsJyi4-OcR6DHCzDz3Th~XMfJjvqW9AqEP9HGRK3IWruDNz6Y6KkStL1AalESbTYe8-sYYodjddl8qf1VS5nPDR7vyoaSrKa0G7lHBAxbMYWwHNVMZBDf-PIzaxqWZHdUWMFTXrYQ0wsk31WdrlGS-ivOBtENsRC0MFkm7xKxJIqOmE09ev~fTjcL8jALXoKpraIw1y3MkmkXtjoFkZd~ntix40o9pyifWaZ~BDvviz9e4U7KrrYq4UYXsZ3TJHjNI1YVYDp6R5M0OjN3borMndRJn4tGHzUPiocnS83ZbRabIlSuhEtgaxZPUu7MBD8CA__"
+              src="https://s3-figma-videos-production-sig.figma.com/video/1140530022219550208/TEAM/35df/ad4f/-0df9-42cc-8dbf-31a770951344?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=o7OUUiRWnyMJNQ4TDigoXivMvWn~oTGmSt5hezNx57w1szkfUr4Pt-aB3gAtc8U1sj2vmMuR8t4gutWJ0dMg43eRrIJnwatAXVNCzfJaN7hUq8MlzXt~KMO98rh717eXzYJWc2dpe6VM1f6ebFAR97ZCM3PLWKORGiiFTI2H0Z189vAEEdAnjimaCbSPc1WGPtd6gI3Cd64DS8-oP7T4QAwQw4g~h6423d1eRIZv2ydz04yPjAKXiqTBd-s4YY-qHUw4WcEDOlxmweg1q3xxiQPPYYS7IMLYhM0x7IjIxCmMjveAsmKY9GbZYOqHOYMdxtDbL2hdZT8J2OopU1xGZw__"
               type="video/mp4"
             />
             Your browser does not support the video tag.
