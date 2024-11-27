@@ -3,6 +3,7 @@ import { HolidayHeader } from '../../molecules/header';
 
 import { useParams } from 'react-router';
 import MapChart from '../../molecules/maps/map';
+import LookOutCollage from './sections/look-out-collage';
 
 interface MarkerType {
   name: string;
@@ -162,6 +163,7 @@ const HolidayScreen = () => {
       <div>
         <HolidayHeader />
         <div className="text-center bg-slate-200 m-6">Holiday Content</div>
+        <LookOutCollage />
         <MapChart country={country} markers={markers} scale={scale} center={center} />
         <Footer />
       </div>
