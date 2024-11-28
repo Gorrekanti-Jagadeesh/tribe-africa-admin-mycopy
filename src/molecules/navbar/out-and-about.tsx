@@ -1,10 +1,13 @@
+import ColsGrid from '@molecules/layout/cols-grid';
 import OverLayCard from '../../atoms/card/overlay-card';
 import { FloatingSibling } from '../common/floating-sibling';
+
+import { demoImage } from '@data/index';
 
 const categories = [
   {
     title: 'Restaurants & Eateries',
-    image: 'https://example.com/fine-dining',
+    image: demoImage,
     items: [
       { title: 'Fine Dining', url: 'https://example.com/fine-dining' },
       { title: 'Fast Food', url: 'https://example.com/fast-food' },
@@ -13,7 +16,7 @@ const categories = [
   },
   {
     title: 'Bars & Pubs',
-    image: 'path/to/bars_image.jpg',
+    image: demoImage,
     items: [
       { title: 'Cocktail Bars', url: 'https://example.com/cocktail-bars' },
       { title: 'Sports Bars', url: 'https://example.com/sports-bars' },
@@ -22,7 +25,7 @@ const categories = [
   },
   {
     title: 'Nightclubs',
-    image: 'path/to/nightclub_image.jpg',
+    image: demoImage,
     items: [
       { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
       { title: 'Live Music', url: 'https://example.com/live-music' },
@@ -46,7 +49,7 @@ const categories = [
   },
   {
     title: 'Shopping',
-    image: 'path/to/shopping_image.jpg',
+    image: demoImage,
     items: [
       { title: 'Malls', url: 'https://example.com/malls' },
       { title: 'Boutiques', url: 'https://example.com/boutiques' },
@@ -55,7 +58,7 @@ const categories = [
   },
   {
     title: 'Clubs & Special Groups',
-    image: 'path/to/clubs_image.jpg',
+    image: demoImage,
     items: [
       { title: 'Toastmasters', url: 'https://example.com/toastmasters' },
       { title: 'Photography Club', url: 'https://example.com/photography-club' },
@@ -64,7 +67,7 @@ const categories = [
   },
   {
     title: 'Wellness & Beauty',
-    image: 'path/to/wellness_image.jpg',
+    image: demoImage,
     items: [
       { title: 'Gyms', url: 'https://example.com/gyms' },
       { title: 'Spas', url: 'https://example.com/spas' },
@@ -73,7 +76,7 @@ const categories = [
   },
   {
     title: 'Religious Institutions',
-    image: 'path/to/religious_image.jpg',
+    image: demoImage,
     items: [
       { title: 'Churches', url: 'https://example.com/churches' },
       { title: 'Mosques', url: 'https://example.com/mosques' },
@@ -82,7 +85,7 @@ const categories = [
   },
   {
     title: 'For Children',
-    image: 'path/to/children_image.jpg',
+    image: demoImage,
     items: [
       { title: 'Play Areas', url: 'https://example.com/play-areas' },
       { title: "Kids' Workshops", url: 'https://example.com/kids-workshops' },
@@ -95,11 +98,11 @@ const OutAndAbout = () => {
   return (
     <div>
       <h4 className="text-left text-orange-500 p-4 max-w-6xl">&rarr; Out & About</h4>
-      <div className="grid grid-cols-3 w-full">
+      <ColsGrid>
         {categories.map((category) => (
           <FloatingSibling
             component={
-              <div className="p-4 m-4">
+              <div className="px-4 m-4">
                 <OverLayCard
                   data={{
                     title: category.title,
@@ -119,8 +122,7 @@ const OutAndAbout = () => {
             // offset="parent"
           />
         ))}
-      </div>
-      {/* <FloatingSibling/> */}
+      </ColsGrid>
     </div>
   );
 };

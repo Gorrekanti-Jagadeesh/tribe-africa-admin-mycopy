@@ -43,9 +43,9 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
 export const HolidayHeader = () => {
   const menuItems = [
     { id: 'country', title: 'Country Name', isNavLink: false, content: null },
-    { id: 'Out & about', title: 'Network', isNavLink: true, content: <OutAndAbout /> },
-    { id: 'market-place', title: 'Market Place', isNavLink: true, content: <>Coming Soon</> },
-    { id: 'after-work', title: 'After Work', isNavLink: true, content: <>Coming soon</> },
+    { id: 'Out-and-about', title: 'Out & about', isNavLink: true, content: <OutAndAbout /> },
+    { id: 'events', title: 'Events', isNavLink: true, content: <>Coming Soon</> },
+    { id: 'must-see-and-do', title: 'Must see and do', isNavLink: true, content: <>Coming soon</> },
     { id: 'travel-knowledge', title: 'Travel Knowledge', isNavLink: true, content: <TravelKnowledge /> },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
   ];
