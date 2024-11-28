@@ -204,7 +204,7 @@ export const upcomingEvents = [
     image: featuredBG,
     title: 'List your event here',
     redirectUrl: 'https://google.com',
-    description: 'asdf',
+    description: 'some description about this card',
   },
   {
     image: featuredBG,
