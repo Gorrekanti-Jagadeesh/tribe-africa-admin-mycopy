@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import useScreenWidth from '@hooks/useScreenWidth';
+import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 interface carouselCardProps {
   image: string | undefined;
   title: string;
-  handleClick: () => void;
+  onClick?: () => void;
 }
 
 interface commonCarouselData {
@@ -12,17 +15,9 @@ interface commonCarouselData {
 
 const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  let itemsPerPage = 0;
+  const [itemsPerPage, setItemsPerPage] = useState(0);
 
-  const screenWidth = window.innerWidth;
-
-  if (screenWidth < 768) {
-    itemsPerPage = 1;
-  } else if (screenWidth < 1024) {
-    itemsPerPage = 2;
-  } else {
-    itemsPerPage = 3;
-  }
+  const screenWidth = useScreenWidth();
 
   const handleNext = () => {
     if (currentIndex + itemsPerPage < data.length) {
@@ -39,11 +34,19 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   const isNextDisabled = currentIndex >= data.length - itemsPerPage;
   const isPrevDisabled = currentIndex == 0;
 
+  useEffect(() => {
+    if (screenWidth < 1024) {
+      setItemsPerPage(2);
+    } else {
+      setItemsPerPage(3);
+    }
+  }, [screenWidth]);
+
   return (
     <div>
-      <div className="relative w-full flex ">
+      <div className="relative w-full flex">
         {/* Carousel Images */}
-        <div className="flex overflow-hidden w-full">
+        <div className="flex overflow-hidden w-full ">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
@@ -53,14 +56,13 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
             {data.map((item: carouselCardProps, index: number) => (
               <div
                 key={index}
-                className="w-full px-2 sm:w-1/1 md:w-1/2 lg:w-1/3 flex-shrink-0 p-6 cursor-pointer"
-                style={{ minWidth: '33.3333%' }}
-                onClick={item.handleClick}
+                className="w-1/2 lg:w-1/3 flex-shrink-0 p-1 md:p-2 cursor-pointer"
+                onClick={item.onClick}
               >
                 <img
                   src={item.image}
                   alt={`carousel-${index}`}
-                  className="w-full h-full object-cover rounded-lg cursor-pointer"
+                  className="w-full object-cover rounded-lg cursor-pointer aspect-square"
                 />
                 <p>{item.title}</p>
               </div>
@@ -72,22 +74,22 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
         <button
           onClick={handlePrev}
           disabled={isPrevDisabled}
-          className={`absolute left-0 md:-left-4 top-1/2 transform -translate-y-1/2 flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
+          className={`absolute -left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 w-10 h-10 md:w-16 md:h-16 ${
             isPrevDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
           }`}
         >
-          <span className="text-4xl">&#8249;</span>
+          <FontAwesomeIcon icon={faChevronLeft} />
         </button>
 
         {/* Right Arrow */}
         <button
           onClick={handleNext}
           disabled={isNextDisabled}
-          className={`absolute right-0 md:-right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-white rounded-full p-0 border border-gray-500 ${
+          className={`absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 w-10 h-10 md:w-16 md:h-16 ${
             isNextDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
           }`}
         >
-          <span className="text-4xl">&#8250;</span>
+          <FontAwesomeIcon icon={faChevronRight} />
         </button>
       </div>
     </div>

@@ -9,7 +9,7 @@ const DualHeading: React.FC<DualHeadingProps> = ({ children, className }) => {
   const parts = children.split('*');
 
   return (
-    <h2 className={`text-4xl ${className}`}>
+    <h2 className={`text-2xl md:text-4xl ${className}`}>
       {parts.map((part, index) =>
         index % 2 === 1 ? (
           <span key={index} className="font-serif text-orange-500">

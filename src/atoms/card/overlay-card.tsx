@@ -1,8 +1,12 @@
+import { useState } from 'react';
+import useScreenWidth from '@hooks/useScreenWidth';
+import Modal from '@molecules/modal';
+
 interface CardDataProps {
   image: string;
   title?: string;
-  isOverlay?: boolean;
-  overlayText?: string;
+  // isOverlay?: boolean;
+  description?: string;
   onClick?: () => void;
 }
 
@@ -11,23 +15,48 @@ interface OverLayCardProps {
 }
 
 const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const screenWidth = useScreenWidth();
+  const handleClick = () => {
+    if (screenWidth < 768 && data.description != undefined) {
+      setIsOpen(true);
+    }
+  };
   return (
-    <div className="w-full inline-block cursor-pointer group relative" onClick={data.onClick}>
+    <div>
+      {/* Card content */}
       <div
-        className="aspect-square bg-cover rounded-md relative"
-        style={{
-          backgroundImage: `url(${data.image})`,
-        }}
+        className="w-full inline-block cursor-pointer group relative"
+        onClick={data.onClick ? data.onClick : handleClick}
       >
-        {data.isOverlay && (
-          <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100">
-            <div className=" bg-black rounded-md flex items-center justify-center transition-opacity duration-300">
-              <div className="text-white">{data.overlayText}</div>
-            </div>
-          </div>
-        )}
+        {/* Background image for the card */}
+        <div
+          className="aspect-square bg-cover rounded-md relative"
+          style={{
+            backgroundImage: `url(${data.image})`,
+          }}
+        >
+          {/* Description as overlay text */}
+          {data.description != undefined && (
+            <>
+              <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 md:group-hover:opacity-100">
+                <div className="w-full h-full p-2 overflow-auto bg-black rounded-md flex justify-center transition-opacity duration-300">
+                  <div className="text-white">{data.description}</div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        {/* Image title */}
+        <p>{data.title}</p>
       </div>
-      <p>{data.title}</p>
+
+      {/* Description in modal for small screens */}
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} closeButtonClasses={'hidden'}>
+        <div className=" w-full p-2 aspect-square overflow-auto bg-black rounded-md flex">
+          <div className="text-white">{data.description}</div>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -125,7 +125,7 @@ const CharmingHotels: React.FC = () => {
         data={hotelData.map((item, index) => ({
           image: item.hotelImages[0]?.url,
           title: item.hotelName,
-          handleClick: () => processHotelImages(index, hotelData, setContent, setIsOpen),
+          onClick: () => processHotelImages(index, hotelData, setContent, setIsOpen),
         }))}
       />
       {content && (

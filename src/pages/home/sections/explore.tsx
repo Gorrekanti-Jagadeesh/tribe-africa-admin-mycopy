@@ -5,7 +5,10 @@ import welcomeImage2 from '@assets/homepage-welcome-image-2.png';
 import welcomeImage3 from '@assets/homepage-welcome-image-3.png';
 import { TribeAfrica } from '@atoms/common/internal-logo';
 
+import { useTranslation } from 'react-i18next';
+
 const Explore: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div
       className="relative bg-cover bg-center text-white p-2 md:p-4"
@@ -20,36 +23,19 @@ const Explore: React.FC = () => {
             </span>
           </h4>
           <div id="about-africa" className="grid gap-2 text-sm">
-            <p>
-              Welcome to Tribe Africa, your gateway to discovering the breathtaking beauty and boundless opportunities
-              of the African continent.
-            </p>
+            <p>{t('welcomeMessage')}</p>
             <p>
               <br />
             </p>
-            <p>
-              Home to 54 countries, Africa is a land rich in talent, culture, and awe-inspiring natural wonders waiting
-              to be explored. It's a hidden gem of potential brimming with opportunities for entrepreneurs, and offering
-              great travel experiences for holidaymakers seeking a sense of wonder and amazement. At the heart of this
-              vast continent is a dynamic, youthful population with an entrepreneurial spirit that is among the most
-              vibrant in the world.
-            </p>
+            <p>{t('aboutAfricaPart1')}</p>
             <p>
               <br />
             </p>
-            <p>
-              From the cradle of humanity to the mesmerizing sights and sounds that stir the soul, every corner of
-              Africa offers a unique and captivating story. Whether you are seeking the holiday adventure of a lifetime
-              or the perfect environment to grow your business, Tribe Africa is here to connect you to the wealth of
-              opportunities this incredible continent has to offer.
-            </p>
+            <p>{t('aboutAfricaPart2')}</p>
             <p>
               <br />
             </p>
-            <p>
-              Embark on your journey with Tribe Africa where your next holiday, business venture, or cultural discovery
-              awaits you. The future is African.
-            </p>
+            <p>{t('aboutAfricaPart3')}</p>
           </div>
           <div id="welcome-footer" className="text-sm flex gap-2">
             <span>

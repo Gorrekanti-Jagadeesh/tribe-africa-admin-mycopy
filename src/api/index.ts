@@ -89,15 +89,18 @@ export const convertCurrency = async (fromCurrency: string, toCurrency: string, 
   }
 };
 
-export const fetchWeatherData = async () => {
-  const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
-  const city = 'hyderabad';
-  const apiUrl = `${serviceUrls.base.weather}?q=${city}&appid=${apiKey}&units=metric`;
+export const fetchWeatherData = async (country: string) => {
+  const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+  const apiUrl = `https://api.weatherapi.com/v1/current.json?q=${country}&key=${apiKey}`;
   try {
     const response = await axios.get(apiUrl);
-    const { temp } = response.data.main;
-    const description = response.data.weather[0].description;
-    return { temperature: temp, description };
+
+    const temperature = response.data.current.temp_f;
+    const condition = response.data.current.condition.text;
+    const time = response.data.location.localtime;
+
+    console.log(temperature, 'rtvfcd');
+    return { temperature, condition, time };
   } catch (error) {
     throw new Error('Error fetching weather data');
   }
@@ -153,9 +156,14 @@ export const getDataByEntryType = async (entryType: string, key?: string, format
   ); // to filter keys: `*[_type == "${entryType}"]{_id, name, location}`
 };
 
-export const getDataByDocumentType = (entryType: string, fields?: string[]) => {
+// export const getDataByDocumentType = (entryType: string, fields?: string[]) => {
+//   const fieldsQuery = fields ? fields.join(', ') : '*';
+//   return sanityClient.fetch(`*[_type == "${entryType}"]{${fieldsQuery}}`);
+// };
+
+export const getDataByDocumentType = (entryType: string, fields?: string[], language = 'en') => {
   const fieldsQuery = fields ? fields.join(', ') : '*';
-  return sanityClient.fetch(`*[_type == "${entryType}"]{${fieldsQuery}}`);
+  return sanityClient.fetch(`*[_type == "${entryType}" && language == "${language}"]{${fieldsQuery}}`);
 };
 
 export const getDataByDocumentTypeWithId = (entryType: string, fieldType: string, id?: string, fields?: string[]) => {
