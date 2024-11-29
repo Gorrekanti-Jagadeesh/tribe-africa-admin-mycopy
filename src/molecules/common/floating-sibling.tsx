@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import Button from '../../atoms/custom-button/button';
 
 interface FloatingSiblingProps {
-  component: React.ReactNode;
+  component?: React.ReactNode;
   sibling: React.ReactNode;
+  // title?: string;
   // offset: 'parent' | 'screen';
 }
 

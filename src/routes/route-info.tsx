@@ -9,6 +9,10 @@ import DestinationDetailsContainer from '../pages/destination-details/details-co
 import BlogPage from '../pages/blogs/blogs-container';
 import { QNA } from '../pages/qna-form/qna-container';
 import AccommodationDetailsContainer from '../pages/accomodation/accomodation-details-container';
+import TribeAfricaPagesContainer from '../pages/tribe-africa-pages/tribe-africa-pages-container';
+import TribeAfricaPagesDetailsContainer from '../pages/tribe-africa-pages/tribe-africa-pages-details-container';
+import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-container';
+import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
 
 export interface RouteConfig {
   name: string;
@@ -76,6 +80,26 @@ const appRoutes: RouteConfig[] = [
     name: 'destinations',
     path: '/details/:name',
     element: <DestinationDetailsContainer />,
+  },
+  {
+    name: 'tribe africa pages',
+    path: '/tribe-africa-pages/:category',
+    element: <TribeAfricaPagesContainer />,
+  },
+  {
+    name: 'tribe africa details pages',
+    path: '/tribe-africa-pages/:category/:id',
+    element: <TribeAfricaPagesDetailsContainer />,
+  },
+  {
+    name: 'hire some one',
+    path: '/tribe-africa-pages/looking-to-hire-someone',
+    element: <LookingToHireSomeoneContainer />,
+  },
+  {
+    name: 'hire some one details',
+    path: '/tribe-africa-pages/looking-to-hire-someone/:id',
+    element: <LookingToHireSomeoneDetailsContainer />,
   },
 ];
 

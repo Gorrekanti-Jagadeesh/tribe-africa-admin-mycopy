@@ -188,7 +188,11 @@ export interface EventCategory {
 
 export interface NetworkCategory {
   title: string;
-  items: { label: string; url: string }[];
+  items: {
+    label: string;
+    url: string;
+    subItems?: { subTitle: string; subItems: { label: string; url: string }[] }[];
+  }[];
   imageUrl: string;
 }
 

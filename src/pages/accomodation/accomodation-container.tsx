@@ -5,6 +5,7 @@ import AccomodationScreen from './accomodation-screen';
 import { useQuery } from '@tanstack/react-query';
 import { sanityImageUrlBuilder } from '../../api';
 import { getDataByDocumentType } from '../../api';
+import { Loading } from '@atoms/common/loading';
 
 // Function to fetch data from Sanity CMS
 const fetchAccomodationData = async () => {
@@ -40,7 +41,7 @@ const AccomodationContainer = () => {
     queryFn: fetchAccomodationData,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>Error loading data</div>;
 
   return <AccomodationScreen hotelData={data} />;
