@@ -4,18 +4,17 @@ interface ProffesionalIcons {
 }
 
 interface IconsCardProps {
-  proffesionalIcons: ProffesionalIcons[];
+  data: ProffesionalIcons;
 }
 
-const IconsCard: React.FC<IconsCardProps> = ({ proffesionalIcons }) => {
+const IconsCard: React.FC<IconsCardProps> = ({ data }) => {
   return (
-    <div className="flex flex-wrap justify-center items-center">
-      {proffesionalIcons.map((proffesionalIcon) => (
-        <div key={proffesionalIcon.label} className="flex flex-col items-center p-2 cursor-pointer">
-          {proffesionalIcon.icon}
-          <p>{proffesionalIcon.label}</p>
-        </div>
-      ))}
+    <div className="w-full">
+      {/* {data.map((item) => ( */}
+      <div key={data.label} className="flex flex-col items-center p-2 cursor-pointer">
+        {data.icon}
+        <p>{data.label}</p>
+      </div>
     </div>
   );
 };

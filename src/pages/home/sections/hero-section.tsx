@@ -22,20 +22,18 @@ const HeroSection: React.FC = () => {
         <div className="flex gap-2 p-4 py-2 bg-white m-auto w-full md:max-w-96 rounded-xl shadow-lg">
           <div className="flex gap-2 flex-grow">
             <Dropdown
-              iconVisible={false}
               placeholderText="Where to?"
               options={Countries}
               searchable={true}
               action={setCountry}
-              buttonStyles={'bg-slate-200 p-2 md:p-4'}
+              buttonStyles={'justify-center bg-slate-200 p-2 md:p-4'}
             />
             <Dropdown
-              iconVisible={false}
               placeholderText="For?"
               options={Purpose}
               searchable={false}
               action={setPurpose}
-              buttonStyles={'bg-slate-200 p-2 md:p-4'}
+              buttonStyles={'justify-center bg-slate-200 p-2 md:p-4'}
             />
           </div>
           <button

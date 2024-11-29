@@ -3,10 +3,15 @@ import { Editor, EditorTextChangeEvent } from 'primereact/editor';
 
 interface RichTextEditorProps {
   className?: string;
+  remove?: string[];
   onContentChange: (content: string) => void;
 }
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({ className, onContentChange }) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({
+  className,
+  remove = ['color', 'font', 'background', 'code-block'],
+  onContentChange,
+}) => {
   const [text, setText] = useState<string>('');
 
   const handleChange = (content: string) => {
@@ -21,8 +26,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ className, onCon
         onTextChange={(e: EditorTextChangeEvent) => handleChange(e.htmlValue ? e.htmlValue : '')}
         onLoad={() => {
           // Loop through the class names and remove elements of each class
-          ['.ql-color', '.ql-font', '.ql-background', '.ql-code-block'].forEach((className) => {
-            const elements = document.querySelectorAll(className);
+          // ['.ql-color', '.ql-font', '.ql-background', '.ql-code-block']
+          remove.forEach((className) => {
+            const elements = document.querySelectorAll('.ql-' + className);
             elements.forEach((element) => {
               element.remove();
             });

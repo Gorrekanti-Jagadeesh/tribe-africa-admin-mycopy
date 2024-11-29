@@ -25,9 +25,9 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({ component, sib
 
       // Determine dropdown positioning based on available space
       if (rightSpace >= 200) {
-        style = { left: '100%', marginLeft: '8px' };
+        style = { left: '100%', paddingLeft: '8px' };
       } else if (leftSpace >= 200) {
-        style = { right: '100%', marginRight: '8px' };
+        style = { right: '100%', paddingRight: '8px' };
       } else {
         style = { left: '50%', transform: 'translateX(-50%)', top: '100%', marginTop: '8px' };
       }

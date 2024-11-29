@@ -104,7 +104,7 @@ const professionFilterData = [
   { label: 'It', icon: 'all' },
 ];
 
-const proffesionalIcons = [
+const data = [
   { label: 'Actor', icon: <ASVGComponent size={32} /> },
   { label: 'Designer', icon: <BSVGComponent size={32} /> },
   { label: 'Engineer', icon: <CSVGComponent size={32} /> },
@@ -125,7 +125,7 @@ const LookingToHireSomeoneContainer: React.FC = () => {
     <LookingToHireSomeoneScreen
       proffesionalData={proffesionalData}
       proffesionalOptions={proffesionalOptions}
-      proffesionalIcons={proffesionalIcons}
+      data={data}
     />
   );
 };

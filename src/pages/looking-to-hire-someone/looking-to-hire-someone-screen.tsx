@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import Button from '@atoms/custom-button/button';
 import TribeAfricaPagesCard from '@atoms/card/tribe-africa-pages-card';
 import IconsCard from '@atoms/card/icons-card';
-import { useNavigate } from 'react-router-dom';
+import locationPin from '@assets/icons/location.svg';
+import search from '@assets/icons/search.svg';
 
 interface ProffesionalData {
   id: string;
@@ -29,13 +32,13 @@ interface ProffesionalOptions {
 interface LookingToHireSomeoneScreenProps {
   proffesionalData: ProffesionalData[];
   proffesionalOptions: ProffesionalOptions[];
-  proffesionalIcons: ProffesionalIcons[];
+  data: ProffesionalIcons[];
 }
 
 const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
   proffesionalData,
   proffesionalOptions,
-  proffesionalIcons,
+  data,
 }) => {
   const navigate = useNavigate();
   return (
@@ -44,15 +47,15 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
       <div className="flex m-auto w-2/3 border rounded-lg my-6">
         <div className="flex flex-grow">
           <Dropdown
-            iconVisible={false}
-            placeholderText="State Name"
+            icon={<img src={locationPin} />}
+            placeholderText={`State Name`}
             options={proffesionalOptions}
             searchable={true}
             action={() => {}}
-            buttonStyles={'border-r-2 rounded-none p-2 md:p-4'}
+            buttonStyles={'border-r-2 rounded-none p-2 text-left md:p-4'}
           />
           <Dropdown
-            iconVisible={false}
+            icon={<img src={search} />}
             placeholderText="Actor"
             options={proffesionalOptions}
             searchable={true}
@@ -60,14 +63,20 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
             buttonStyles={'p-2 md:p-4'}
           />
         </div>
-        <Button className={`border rounded-tr-sm rounded-none text-white bg-orange-500 disabled:bg-slate-400`}>
+        <Button className={`border rounded-r-md rounded-l-none px-4 text-white bg-orange-500 disabled:bg-slate-400`}>
           Go
         </Button>
       </div>
-      <IconsCard proffesionalIcons={proffesionalIcons} />
+      <div className="flex flex-wrap justify-center items-center">
+        {data.map((item) => (
+          <div className="m-2">
+            <IconsCard data={item} />
+          </div>
+        ))}
+      </div>
       <div className="flex justify-between">
         <p>All</p>
-        <Button className="bg-orange-500 text-white">Get Listed on Tribe Africa Pages</Button>
+        <Button className="">Get Listed on Tribe Africa Pages</Button>
       </div>
       {proffesionalData.map((proffesional) => (
         <TribeAfricaPagesCard

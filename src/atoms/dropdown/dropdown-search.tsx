@@ -9,21 +9,23 @@ interface Option {
 
 // Dropdown with Search
 interface DropdownProps {
+  icon?: React.ReactNode;
   placeholderText: string;
   options: Option[];
   searchable: boolean;
   action: (selectedOption: string) => void;
-  iconVisible: boolean;
+  iconVisible?: boolean;
   buttonStyles?: string;
 }
 
 // Dropdown component
 const Dropdown: React.FC<DropdownProps> = ({
+  icon,
   placeholderText,
   options,
   searchable,
   action,
-  iconVisible,
+  iconVisible = false,
   buttonStyles,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,9 +57,10 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div className="relative inline-block w-full" ref={ref}>
       <div
-        className={`flex justify-center align-center md:p-2 rounded-md cursor-pointer truncate ${buttonStyles}`}
+        className={`flex items-center md:p-2 rounded-md cursor-pointer truncate ${buttonStyles}`}
         onClick={handleButtonClick}
       >
+        {icon && <span className="mr-2 w-4">{icon}</span>}
         {placeholder} {iconVisible && <ChevronDownSVG />}
       </div>
       <ul
