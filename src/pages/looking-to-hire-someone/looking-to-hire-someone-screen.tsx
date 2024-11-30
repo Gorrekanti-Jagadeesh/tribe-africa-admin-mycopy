@@ -64,7 +64,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
           />
         </div>
         <Button className={`border rounded-r-md rounded-l-none px-4 text-white bg-orange-500 disabled:bg-slate-400`}>
-          Go
+          Find
         </Button>
       </div>
       <div className="flex flex-wrap justify-center items-center">

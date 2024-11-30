@@ -8,7 +8,7 @@ import { faGlobe, faLocationPin, faPencil, faPhone } from '@fortawesome/free-sol
 import { Control, Controller } from 'react-hook-form';
 import StarRatingInput from '../../atoms/rating/start-rating-input';
 import FileUploadWithPreview from '../../atoms/input-elements/file-upload-with-preview';
-import { Review } from '../../types';
+import { ReviewProps } from '../../types';
 import { HotelData } from '../../types';
 import { useForm } from 'react-hook-form';
 import { Loading } from '@atoms/common/loading';
@@ -25,7 +25,7 @@ interface FormData {
 
 interface AccommodationViewProps {
   hotelData: HotelData;
-  reviews: Review[];
+  reviews: ReviewProps[];
   onSubmit: (formData: FormData) => void;
   control: Control;
   isSubmitting: boolean;
@@ -131,7 +131,7 @@ const AccommodationView: React.FC<AccommodationViewProps> = ({
         </div>
         <div id="reviews" className="flex flex-col gap-4">
           {reviews.map((item, index) => (
-            <ReviewCard key={index} reviewData={item} />
+            <ReviewCard key={index} data={item} />
           ))}
         </div>
       </div>

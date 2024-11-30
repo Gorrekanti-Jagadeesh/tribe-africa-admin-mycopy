@@ -1,4 +1,5 @@
 import { NavigateFunction } from 'react-router';
+import { SanityAsset } from '@sanity/image-url/lib/types/types';
 
 // data
 export interface ServicesProps {
@@ -214,27 +215,22 @@ export interface BlogPageScreenProps {
   banner: string;
   // blogsList: BlogContentProps[];
 }
-export interface Review {
-  hotel_id: string;
-  review_text: string;
-  quality_of_service: number;
-  comfort: number;
-  food_and_beverage: number;
-  location: number;
-  cleanliness: number;
-  total_rating: number;
-  created_at: string;
-  images?: Array<{
-    _type: 'image';
-    asset: {
-      _ref: string;
-      _type: 'reference';
-    };
-    _key: string;
-  }>;
-  reviewer_name: string;
-  reviewer_image: string;
+
+export interface RatingProps {
+  title: string;
+  score: string;
 }
+
+export interface ReviewProps {
+  _key: string; // `feedback:accomodation:${accomodation_id}` or `feedback:people:${person_id}`
+  content: string;
+  images?: Array<SanityAsset>;
+  ratings: Array<RatingProps>;
+  submitted_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface HotelData {
   _id: string;
   name: string;
@@ -255,4 +251,21 @@ export interface QNAProps {
   author: string;
   date: string;
   replies_count: string;
+}
+
+// Tribe africa pages
+export interface candidateProps {
+  _id?: string; // person_id
+  name: string;
+  description: string;
+  experience: number | string;
+  department: string; // ministry or police or artist or software
+  role: string; // finance or  traffic or actor or web developer
+  country: string;
+  phone_no?: string;
+  email?: string;
+  website?: string;
+  address?: string;
+  created_at: Date;
+  updated_at: Date;
 }

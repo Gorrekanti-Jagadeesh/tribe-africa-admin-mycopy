@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import AccommodationView from '../../molecules/accomodations/accomodation-view';
 
-import { Review, HotelData } from '../../types';
+import { ReviewProps, HotelData } from '../../types';
 import { Control } from 'react-hook-form';
 
 interface AccomodationDetailsScreenProps {
-  reviews: Review[];
+  reviews: ReviewProps[];
   hotelData: HotelData;
   onSubmit: () => void;
   control: Control;

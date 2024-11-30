@@ -1,45 +1,47 @@
 import React from 'react';
 import { StarRating } from '../rating/star-rating';
-import { Review } from '../../types';
+import { ReviewProps } from '../../types';
 import { sanityImageUrlBuilder } from '../../api';
 
+import { demoImage } from '@data/index';
+
 interface ReviewCardProps {
-  reviewData: Review;
+  data: ReviewProps;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
-  const {
-    reviewer_name,
-    created_at,
-    review_text,
-    images,
-    total_rating,
-    quality_of_service,
-    comfort,
-    food_and_beverage,
-    location,
-    cleanliness,
-    reviewer_image,
-  } = reviewData;
+const demoUser = {
+  image: demoImage,
+  user_name: 'candidate',
+};
+
+const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
+  const { content, images, ratings, submitted_by, created_at } = data;
+
+  const calculateTotal = () => {
+    let total = 0;
+    ratings.forEach((rating) => (total += parseInt(rating.score)));
+    return Math.floor(total / ratings.length);
+  };
+
   return (
     <div className="border rounded-lg p-4 shadow-sm flex">
       {/* User Information */}
       <div className="flex-shrink-0 mr-2">
-        {reviewer_image ? (
-          <img src={reviewer_image} alt={reviewer_name} className="w-12 h-12 rounded-full" />
+        {demoUser.image ? (
+          <img src={demoUser.image} alt={demoUser.user_name} className="w-12 h-12 rounded-full" />
         ) : (
           <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center text-white text-xl font-semibold">
-            {reviewer_name?.charAt(0).toUpperCase()}
+            {demoUser.user_name?.charAt(0).toUpperCase() || submitted_by}
           </div>
         )}
       </div>
       <div className="flex-grow">
         <div className="flex gap-4 items-center">
-          <h3 className="font-semibold text-lg">{reviewer_name}</h3>
+          <h3 className="font-semibold text-lg">{demoUser.user_name}</h3>
           <span className="text-gray-500 text-sm">{created_at}</span>
         </div>
         {/* <StarRating className='inline-block md:hidden' rating={total} /> */}
-        <p className="text-gray-600 mt-2">{review_text}</p>
+        <p className="text-gray-600 mt-2">{content}</p>
 
         {/* Review Images */}
         <div className="flex mt-4 space-x-2 overflow-auto">
@@ -60,36 +62,15 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
         <div className="space-y-2 min-w-56">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold whitespace-nowrap">In Total</span>
-            <StarRating rating={total_rating} />
+            <StarRating rating={calculateTotal()} />
           </div>
           <hr className="border border-black" />
-          {/* {ratings.map((rating) => (
+          {ratings.map((rating) => (
             <div className="flex gap-2 justify-between items-center" key={rating.title}>
               <span className="text-sm w-[40%]">{rating.title}</span>
-              <StarRating rating={rating.rating} />
+              <StarRating rating={rating.score} />
             </div>
-          ))} */}
-          <div className="flex gap-2 justify-between items-center">
-            <span className="text-sm w-[40%]">Quality of Service</span>
-            <StarRating rating={quality_of_service} />
-          </div>
-          <div className="flex gap-2 justify-between items-center">
-            <span className="text-sm w-[40%]">Location</span>
-            <StarRating rating={location} />
-          </div>
-          <div className="flex gap-2 justify-between items-center">
-            <span className="text-sm w-[40%]">Comfort</span>
-            <StarRating rating={comfort} />
-          </div>
-          <div className="flex gap-2 justify-between items-center">
-            <span className="text-sm w-[40%]">Food and Beverage</span>
-            <StarRating rating={food_and_beverage} />
-          </div>
-
-          <div className="flex gap-2 justify-between items-center">
-            <span className="text-sm w-[40%]">Cleanliness</span>
-            <StarRating rating={cleanliness} />
-          </div>
+          ))}
         </div>
       </div>
     </div>
@@ -99,4 +80,5 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ reviewData }) => {
 export default ReviewCard;
 
 // TODO:
-// Responsiveness of reviews layout
+// Get user details(username, image) with the userid in submitted_by key.
+// Responsiveness of reviews layout.
