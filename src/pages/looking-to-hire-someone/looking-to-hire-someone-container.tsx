@@ -13,69 +13,49 @@ import GSVGComponent from '../../assets/svgs/g';
 const fetchProffesionalData = () => {
   const data = [
     {
-      id: '1',
-      personName: 'John Doe',
-      profession: 'Software Engineer',
+      _id: '1',
+      name: 'John Doe',
+      department: 'IT',
+      role: 'Software Engineer',
       experience: '7+ Years Experience',
-      phoneNumber: '081234567890',
+      phone_no: '081234567890',
       email: 'john.doe@example.com',
-      imageUrl: ministerImage,
+      website: 'john.com',
+      image: ministerImage,
       description:
         'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      location: 'Abuja, Nigeria',
-      area: 'Freetown, Sierra Leone',
+      country: 'Abuja, Nigeria',
+      address: 'Freetown, Sierra Leone',
     },
     {
-      id: '2',
-      personName: 'John Doe',
-      profession: 'Software Engineer',
+      _id: '2',
+      name: 'John Doe',
+      department: 'Artist',
+      role: 'Actor',
       experience: '7+ Years Experience',
-      phoneNumber: '081234567890',
+      phone_no: '081234567890',
       email: 'john.doe@example.com',
-      imageUrl: ministerImage,
+      website: 'john.com',
+      image: ministerImage,
       description:
         'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      location: 'Abuja, Nigeria',
-      area: 'Freetown, Sierra Leone',
+      country: 'Abuja, Nigeria',
+      address: 'Freetown, Sierra Leone',
     },
     {
-      id: '3',
-      personName: 'John Doe',
-      profession: 'Software Engineer',
+      _id: '3',
+      name: 'John Doe',
+      department: 'IT',
+      role: 'Web Developer',
       experience: '7+ Years Experience',
-      phoneNumber: '081234567890',
+      phone_no: '081234567890',
       email: 'john.doe@example.com',
-      imageUrl: ministerImage,
+      website: 'john.com',
+      image: ministerImage,
       description:
         'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      location: 'Abuja, Nigeria',
-      area: 'Freetown, Sierra Leone',
-    },
-    {
-      id: '4',
-      personName: 'John Doe',
-      profession: 'Software Engineer',
-      experience: '7+ Years Experience',
-      phoneNumber: '081234567890',
-      email: 'john.doe@example.com',
-      imageUrl: ministerImage,
-      description:
-        'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      location: 'Abuja, Nigeria',
-      area: 'Freetown, Sierra Leone',
-    },
-    {
-      id: '5',
-      personName: 'John Doe',
-      profession: 'Software Engineer',
-      experience: '7+ Years Experience',
-      phoneNumber: '081234567890',
-      email: 'john.doe@example.com',
-      imageUrl: ministerImage,
-      description:
-        'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      location: 'Abuja, Nigeria',
-      area: 'Freetown, Sierra Leone',
+      country: 'Abuja, Nigeria',
+      address: 'Freetown, Sierra Leone',
     },
   ];
   return data;
@@ -91,27 +71,14 @@ const proffesionalOptions = [
   { label: 'Other', value: 'other' },
 ];
 
-const professionFilterData = [
-  { label: 'Agribusiness', icon: 'all' },
-  { label: 'Artists', icon: 'all' },
-  { label: 'Construction', icon: 'all' },
-  { label: 'Domestic', icon: 'all' },
-  { label: 'Education', icon: 'all' },
-  { label: 'Engineering', icon: 'all' },
-  { label: 'Hospitality', icon: 'all' },
-  { label: 'Law', icon: 'all' },
-  { label: 'Medical', icon: 'all' },
-  { label: 'It', icon: 'all' },
-];
-
 const data = [
-  { label: 'Actor', icon: <ASVGComponent size={32} /> },
-  { label: 'Designer', icon: <BSVGComponent size={32} /> },
-  { label: 'Engineer', icon: <CSVGComponent size={32} /> },
-  { label: 'Lawyer', icon: <DSVGComponent size={32} /> },
-  { label: 'Teacher', icon: <ESVGComponent size={32} /> },
-  { label: 'Writer', icon: <FSVGComponent size={32} /> },
-  { label: 'Other', icon: <GSVGComponent size={32} /> },
+  { label: 'Artist', value: 'artist', icon: <ASVGComponent size={32} /> },
+  { label: 'Designer', value: 'designer', icon: <BSVGComponent size={32} /> },
+  { label: 'Engineer', value: 'engineer', icon: <CSVGComponent size={32} /> },
+  { label: 'Lawyer', value: 'lawyer', icon: <DSVGComponent size={32} /> },
+  { label: 'Construction', value: 'construction', icon: <ESVGComponent size={32} /> },
+  { label: 'IT', value: 'it', icon: <FSVGComponent size={32} /> },
+  { label: 'Other', value: 'other', icon: <GSVGComponent size={32} /> },
 ];
 
 const LookingToHireSomeoneContainer: React.FC = () => {
@@ -125,7 +92,7 @@ const LookingToHireSomeoneContainer: React.FC = () => {
     <LookingToHireSomeoneScreen
       proffesionalData={proffesionalData}
       proffesionalOptions={proffesionalOptions}
-      data={data}
+      professions={data}
     />
   );
 };

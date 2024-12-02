@@ -7,20 +7,12 @@ import IconsCard from '@atoms/card/icons-card';
 import locationPin from '@assets/icons/location.svg';
 import search from '@assets/icons/search.svg';
 
-interface ProffesionalData {
-  id: string;
-  personName: string;
-  profession: string;
-  experience: string;
-  phoneNumber: string;
-  email: string;
-  imageUrl: string;
-  description: string;
-  location: string;
-  area: string;
-}
+import { ProffesionalData } from '@types/index';
+import { useState } from 'react';
+
 interface ProffesionalIcons {
   label: string;
+  value: string;
   icon: React.ReactNode;
 }
 
@@ -32,15 +24,26 @@ interface ProffesionalOptions {
 interface LookingToHireSomeoneScreenProps {
   proffesionalData: ProffesionalData[];
   proffesionalOptions: ProffesionalOptions[];
-  data: ProffesionalIcons[];
+  professions: ProffesionalIcons[];
 }
 
 const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
   proffesionalData,
   proffesionalOptions,
-  data,
+  professions,
 }) => {
+  const [data, setData] = useState(proffesionalData);
+  const [active, setActive] = useState(null);
   const navigate = useNavigate();
+
+  function filterByDepartment(this, department) {
+    if (active != department) {
+      console.log('active');
+      setActive(department);
+      setData(proffesionalData.filter((p) => p.department.toLowerCase() == department));
+    }
+  }
+
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       <h1 className="text-2xl font-bold">Looking to Hire Someone In Algeria</h1>
@@ -57,7 +60,12 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
           <Dropdown
             icon={<img src={search} />}
             placeholderText="Actor"
-            options={proffesionalOptions}
+            options={data.map((person) => {
+              return {
+                label: person.name,
+                value: person.name.toLowerCase(),
+              };
+            })}
             searchable={true}
             action={() => {}}
             buttonStyles={'p-2 md:p-4'}
@@ -68,9 +76,9 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
         </Button>
       </div>
       <div className="flex flex-wrap justify-center items-center">
-        {data.map((item) => (
-          <div className="m-2">
-            <IconsCard data={item} />
+        {professions.map((item) => (
+          <div className={`m-2 rounded-md p-2 ${active == item.value ? 'bg-blue-100' : ''}`}>
+            <IconsCard data={item} onClick={() => filterByDepartment(item.value)} />
           </div>
         ))}
       </div>
@@ -78,17 +86,17 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
         <p>All</p>
         <Button className="">Get Listed on Tribe Africa Pages</Button>
       </div>
-      {proffesionalData.map((proffesional) => (
+      {data.map((proffesional) => (
         <TribeAfricaPagesCard
-          key={proffesional.id}
+          key={proffesional._id}
           onClick={() =>
-            navigate(`/tribe-africa-pages/looking-to-hire-someone/${proffesional.id}`, { state: proffesional })
+            navigate(`/tribe-africa-pages/looking-to-hire-someone/${proffesional._id}`, { state: proffesional })
           }
-          image={proffesional.imageUrl}
+          image={proffesional.image}
           content={
             <div className="text-sm m-4">
               <p>
-                <strong>{proffesional.personName}</strong>
+                <strong>{proffesional.name}</strong>
               </p>
               <p>{proffesional.description}</p>
               <Button className="bg-orange-500 text-white mt-4">View Reviews</Button>
@@ -97,9 +105,9 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
           footer={
             <div className="text-sm">
               <p>
-                <strong>+ {proffesional.phoneNumber}</strong>{' '}
+                <strong>+ {proffesional.phone_no}</strong>{' '}
               </p>
-              {proffesional.area}
+              {proffesional.address}
             </div>
           }
         />

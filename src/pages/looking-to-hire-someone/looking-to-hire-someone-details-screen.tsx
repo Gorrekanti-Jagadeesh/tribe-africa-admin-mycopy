@@ -1,28 +1,53 @@
 import TribeAfricaPagesCard from '@atoms/card/tribe-africa-pages-card';
+import DualHeading from '@atoms/heading/dual-heading';
+import ReviewCard from '@atoms/card/review-card';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import type { ProffesionalData, ReviewProps } from '@types/index';
 
-interface ProffesionalPersonData {
-  id: string;
-  personName: string;
-  description: string;
-  imageUrl: string;
-  area: string;
-  email: string;
-  experience: string;
-  location: string;
-  phoneNumber: string;
-  profession: string;
-}
+const reviews: ReviewProps[] = [
+  {
+    _id: 'okati',
+    _key: 'feedback:person:manodu',
+    content: 'Ma anna devudu lanti vadu',
+    ratings: [
+      {
+        title: 'Quality of service',
+        score: 5,
+      },
+      {
+        title: 'Reliability',
+        score: 4,
+      },
+      {
+        title: 'Punctuality',
+        score: 2,
+      },
+      {
+        title: 'Integrity',
+        score: 5,
+      },
+    ],
+    submitted_by: 'some chillara fan',
+  },
+];
 
-const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: ProffesionalPersonData }> = ({
+const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: ProffesionalData }> = ({
   proffesionalPersonData,
 }) => {
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
+      <DualHeading className="font-bold">{proffesionalPersonData.name}</DualHeading>
       <TribeAfricaPagesCard
-        image={proffesionalPersonData.imageUrl}
+        className="border-none"
+        image={proffesionalPersonData.image}
         content={
           <div>
-            <p>{proffesionalPersonData.personName}</p>
+            <p>{proffesionalPersonData.role}</p>
+            <p>{proffesionalPersonData.experience}</p>
+            <p>{proffesionalPersonData.phone_no}</p>
+            <p>{proffesionalPersonData.email}</p>
+            <p>{proffesionalPersonData.website}↗</p>
             <p>{proffesionalPersonData.description}</p>
           </div>
         }
@@ -30,16 +55,13 @@ const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: Prof
       <div className="my-4">
         <div className="flex my-4">
           <h2 className="text-3xl font-semibold">Reviews</h2>
-          {/* <button
-            className="border-b border-b-black ms-auto flex justify-center items-center gap-2"
-            onClick={() => setIsModalOpen(true)}
-          >
+          <button className="border-b border-b-black ms-auto flex justify-center items-center gap-2" onClick={() => {}}>
             <FontAwesomeIcon icon={faPencil} /> write a review
-          </button> */}
+          </button>
         </div>
-        {/* <div id="reviews" className="flex flex-col gap-4">
-          {reviews?.map((item, index) => <ReviewCard key={index} reviewData={item} />)}
-        </div> */}
+        <div id="reviews" className="flex flex-col gap-4">
+          {reviews?.map((item, index) => <ReviewCard key={index} data={item} />)}
+        </div>
       </div>
     </div>
   );

@@ -4,13 +4,14 @@ interface TribeAfricaPagesCardProps {
   image?: string;
   content: ReactNode;
   footer?: ReactNode;
+  className?: string;
   onClick?: () => void;
 }
 
-const TribeAfricaPagesCard: React.FC<TribeAfricaPagesCardProps> = ({ image, content, footer, onClick }) => {
+const TribeAfricaPagesCard: React.FC<TribeAfricaPagesCardProps> = ({ image, content, footer, onClick, className }) => {
   return (
     <div
-      className={`w-full grid grid-cols-1 ${footer ? 'md:grid-cols-2' : 'md:grid-cols-1'} border border-gray-500 rounded-md p-2 my-4 cursor-pointer`}
+      className={`w-full grid grid-cols-1 ${footer ? 'md:grid-cols-2' : 'md:grid-cols-1'} border border-gray-500 rounded-md p-2 my-4 cursor-pointer ${className}`}
       onClick={onClick}
     >
       <div className={`flex flex-col md:flex-row md:w-full`}>

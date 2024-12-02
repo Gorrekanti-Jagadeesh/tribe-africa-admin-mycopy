@@ -218,17 +218,18 @@ export interface BlogPageScreenProps {
 
 export interface RatingProps {
   title: string;
-  score: string;
+  score: string | number;
 }
 
 export interface ReviewProps {
+  _id: string;
   _key: string; // `feedback:accomodation:${accomodation_id}` or `feedback:people:${person_id}`
   content: string;
   images?: Array<SanityAsset>;
   ratings: Array<RatingProps>;
   submitted_by: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface HotelData {
@@ -268,4 +269,19 @@ export interface candidateProps {
   address?: string;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface ProffesionalData {
+  _id: string;
+  name: string;
+  department: string;
+  role: string;
+  experience: string;
+  phone_no?: string;
+  email?: string;
+  website?: string;
+  image: string;
+  description: string;
+  country: string;
+  address?: string;
 }
