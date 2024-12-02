@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose as close } from '@fortawesome/free-solid-svg-icons';
+import Close from '@atoms/custom-button/close-button';
 
 interface ModalProps {
   isOpen: boolean;
@@ -38,16 +39,15 @@ const Modal: React.FC<ModalProps> = ({
         >
           {/* Modal Container */}
           <div
-            className={`grid relative max-w-5xl mx-auto max-h-full overflow-auto ${customClasses}`}
+            className={`relative max-w-5xl mx-auto max-h-full overflow-auto ${customClasses}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <button
+            <Close
+              className={`m-2 absolute top-0 right-0 ${closeButtonClasses}`}
+              size={`8`}
+              theme="light"
               onClick={() => setIsOpen(false)}
-              className={`absolute top-2 right-2 text-white rounded-full p-1 px-2.5 bg-slate-800 ${closeButtonClasses}`}
-              style={{ zIndex: 2 }}
-            >
-              <FontAwesomeIcon icon={close} />
-            </button>
+            />
             <span className="z-0">{children}</span>
           </div>
         </div>

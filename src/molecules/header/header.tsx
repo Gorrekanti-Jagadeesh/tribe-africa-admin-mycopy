@@ -6,6 +6,7 @@ import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
 import { IoMenu } from 'react-icons/io5';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Languages } from '../../data';
+import Close from '@atoms/custom-button/close-button';
 
 interface HoverNavLinkProps {
   id: string;
@@ -29,8 +30,9 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
         </span>
       </span>
       <div
-        className={`absolute left-0 top-0 md:top-auto p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
+        className={`fixed md:absolute left-0 top-0 md:top-auto p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
       >
+        <Close className="float-right" theme="light" size="6" onClick={() => setHover(false)} />
         {content}
       </div>
     </div>

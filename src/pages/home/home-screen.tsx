@@ -26,7 +26,7 @@ const HomeScreen = () => {
         <Services />
       </div>
       <Footer />
-      <div className="fixed bottom-0 right-0 m-2 lg:m-4 xl:mx-12">
+      <div className="fixed bottom-0 right-0 m-2 lg:m-4 xl:mx-12 z-50">
         <Chatbot />
       </div>
     </div>

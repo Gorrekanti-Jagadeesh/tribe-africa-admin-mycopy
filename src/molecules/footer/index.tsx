@@ -3,6 +3,7 @@ import { LinkList } from '@molecules/layout/link-list';
 import { TribeAfrica } from '../../atoms/common/internal-logo';
 
 import spiralBackground from '@assets/branding-bg-dark.png';
+import SocialLinks from '@atoms/socia-icons/social-icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const footerLinks = {
@@ -124,19 +125,7 @@ const Footer = () => {
         </div>
 
         {/* Social media links */}
-        {/* <div className="fixed right-0 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4 border-t border-s border-b border-orange-500 ps-4 py-12 rounded-s-xl">
-          {socialMediaLinks.map((link, index) => (
-            <a
-              key={index}
-              href={link.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white bg-slate-700 p-2 rounded-full shadow-lg border hover:bg-white hover:border-orange-400 hover:text-black transition duration-300"
-            >
-              <FontAwesomeIcon icon={link.icon} size="lg" />
-            </a>
-          ))}
-        </div> */}
+        <SocialLinks />
       </div>
     </footer>
   );

@@ -74,7 +74,7 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
         <button
           onClick={handlePrev}
           disabled={isPrevDisabled}
-          className={`absolute -left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 w-10 h-10 md:w-16 md:h-16 ${
+          className={`absolute -left-2 md:-left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
             isPrevDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
           }`}
         >
@@ -85,7 +85,7 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
         <button
           onClick={handleNext}
           disabled={isNextDisabled}
-          className={`absolute -right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 w-10 h-10 md:w-16 md:h-16 ${
+          className={`absolute -right-2 md:-right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
             isNextDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
           }`}
         >

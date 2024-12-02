@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Countries, Purpose } from '@data/index';
-import SocialLinks from '@atoms/socia-icons/social-icons';
 
 // HeroSection Component
 const HeroSection: React.FC = () => {
@@ -55,7 +54,6 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
       <Logo />
-      <SocialLinks />
     </div>
   );
 };
