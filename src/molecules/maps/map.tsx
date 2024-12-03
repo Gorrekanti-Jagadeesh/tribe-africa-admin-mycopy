@@ -162,7 +162,7 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const isSelectedCountry = geo.properties.name === country;
+                const isSelectedCountry = geo.properties.name.toLowerCase() === country.toLowerCase();
                 // fc813e or ff943f for main country
                 // b34302 or c35300for others
                 return (
