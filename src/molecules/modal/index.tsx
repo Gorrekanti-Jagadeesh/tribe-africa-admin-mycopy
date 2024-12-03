@@ -1,6 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose as close } from '@fortawesome/free-solid-svg-icons';
 import Close from '@atoms/custom-button/close-button';
 
 interface ModalProps {

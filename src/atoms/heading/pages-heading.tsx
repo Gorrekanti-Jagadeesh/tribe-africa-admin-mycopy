@@ -1,5 +1,5 @@
 import React from 'react';
-import ChevronBackSvg from '@assets/svgs/io-chevron-back-svg';
+// import ChevronBackSvg from '@assets/svgs/io-chevron-back-svg';
 
 interface headingProps {
   children: string;

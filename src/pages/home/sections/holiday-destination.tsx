@@ -10,8 +10,8 @@ const HolidayDestination: React.FC = () => {
   const [images, setImages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handlePopup = (country) => {
-    setImages([]);
+  const handlePopup = (country: string) => {
+    if (country) setImages([]);
     setIsOpen(true);
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReviewCard from '../../atoms/card/review-card';
 import { StarRating } from '../../atoms/rating/star-rating';
 import Modal from '../modal'; // Adjust the import path as necessary
