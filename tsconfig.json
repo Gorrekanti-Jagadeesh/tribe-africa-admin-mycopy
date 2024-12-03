@@ -12,7 +12,8 @@
       "@data/*": ["data/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["types/*"],
+      "@service-urls/*": ["service-urls/*"]
     },
     "jsx": "react-jsx",
     "esModuleInterop": true

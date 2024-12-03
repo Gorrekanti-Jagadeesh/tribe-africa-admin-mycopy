@@ -26,7 +26,8 @@
           ["@data", "./src/data"],
           ["@utils", "./src/utils"],
           ["@hooks", "./src/utils"],
-          ["@types", "./src/types"]
+          ["@types", "./src/types"],
+          ["@service-urls", "./src/service-urls"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }

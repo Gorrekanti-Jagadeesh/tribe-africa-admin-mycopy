@@ -1,9 +1,10 @@
 import NavFloatingLayout from '../layout/nav-floating-layout';
+import { demoImage } from '@data/index';
 
 const categories = [
   {
     title: 'Restaurants & Eateries',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Fine Dining', url: 'https://example.com/fine-dining' },
       { title: 'Fast Food', url: 'https://example.com/fast-food' },
@@ -12,7 +13,7 @@ const categories = [
   },
   {
     title: 'Bars & Pubs',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Cocktail Bars', url: 'https://example.com/cocktail-bars' },
       { title: 'Sports Bars', url: 'https://example.com/sports-bars' },
@@ -21,7 +22,7 @@ const categories = [
   },
   {
     title: 'Nightclubs',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
       { title: 'Live Music', url: 'https://example.com/live-music' },
@@ -45,7 +46,7 @@ const categories = [
   },
   {
     title: 'Shopping',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Malls', url: 'https://example.com/malls' },
       { title: 'Boutiques', url: 'https://example.com/boutiques' },
@@ -54,7 +55,7 @@ const categories = [
   },
   {
     title: 'Clubs & Special Groups',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Toastmasters', url: 'https://example.com/toastmasters' },
       { title: 'Photography Club', url: 'https://example.com/photography-club' },
@@ -63,7 +64,7 @@ const categories = [
   },
   {
     title: 'Wellness & Beauty',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Gyms', url: 'https://example.com/gyms' },
       { title: 'Spas', url: 'https://example.com/spas' },
@@ -72,7 +73,7 @@ const categories = [
   },
   {
     title: 'Religious Institutions',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Churches', url: 'https://example.com/churches' },
       { title: 'Mosques', url: 'https://example.com/mosques' },
@@ -81,7 +82,7 @@ const categories = [
   },
   {
     title: 'For Children',
-    image: 'https://placehold.co/400',
+    image: demoImage,
     items: [
       { title: 'Play Areas', url: 'https://example.com/play-areas' },
       { title: "Kids' Workshops", url: 'https://example.com/kids-workshops' },

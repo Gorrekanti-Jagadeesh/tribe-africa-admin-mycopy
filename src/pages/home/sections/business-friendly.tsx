@@ -46,7 +46,7 @@ const BusinessFriendly: React.FC = () => {
 
         {/* Left Arrow */}
         <button
-          className={`absolute left-0 md:-left-4 top-2/3 md:top-1/2 bg-white p-2 rounded-full shadow-lg border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
+          className={`absolute left-0 md:-left-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
             currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           onClick={handlePrev}

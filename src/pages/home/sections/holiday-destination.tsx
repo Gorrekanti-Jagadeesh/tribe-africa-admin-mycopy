@@ -2,20 +2,18 @@ import React, { useState, useEffect } from 'react';
 import DualHeading from '@atoms/heading/dual-heading';
 import Button from '@atoms/custom-button/button';
 import { HolidayDestinationData as destinations } from '@data/index';
+import Modal from '@molecules/modal';
 
 const HolidayDestination: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [images, setImages] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isHovered) {
-      const interval = setInterval(() => {
-        setActiveIndex((prevIndex) => (prevIndex + 1) % destinations.length);
-      }, 3000);
-
-      return () => clearInterval(interval);
-    }
-  }, [isHovered]);
+  const handlePopup = (country) => {
+    setImages([]);
+    setIsOpen(true);
+  };
 
   const getClassNames = (index: number) => {
     if (index === activeIndex) return 'active-slide';
@@ -38,6 +36,16 @@ const HolidayDestination: React.FC = () => {
     setActiveIndex((prevIndex) => (prevIndex - 1 + destinations.length) % destinations.length);
   };
 
+  useEffect(() => {
+    if (!isHovered) {
+      const interval = setInterval(() => {
+        setActiveIndex((prevIndex) => (prevIndex + 1) % destinations.length);
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isHovered]);
+
   return (
     <div className="bg-[#2B170A] py-8 p-2 md:p-4">
       <div className="max-w-6xl m-auto">
@@ -52,6 +60,19 @@ const HolidayDestination: React.FC = () => {
           onMouseLeave={() => setIsHovered(false)}
         >
           <div>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} customClasses="w-full h-full">
+              <div className="w-full h-full bg-[#2B170A] text-white rounded-md border-2 border-orange-500 grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 items-center text-center">
+                {images.length ? (
+                  <>
+                    {images.map((image) => (
+                      <img src={image.source} />
+                    ))}
+                  </>
+                ) : (
+                  <p className="col-span-2 lg:col-span-3">No data found</p>
+                )}
+              </div>
+            </Modal>
             {destinations.map((item, index) => (
               <label
                 key={index}
@@ -63,6 +84,7 @@ const HolidayDestination: React.FC = () => {
                   src={item.image}
                   className="w-full h-full rounded-md object-cover cursor-pointer hover:border border-orange-500"
                   alt={`Image of ${item.title}`}
+                  onClick={() => handlePopup(item.title)}
                 />
                 <h1 className="text-sm absolute bottom-0 left-0 m-2">{item.title}</h1>
               </label>

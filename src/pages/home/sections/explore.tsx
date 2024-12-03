@@ -38,10 +38,9 @@ const Explore: React.FC = () => {
             <p>{t('aboutAfricaPart3')}</p>
           </div>
           <div id="welcome-footer" className="text-sm flex gap-2">
-            <span>
-              join <TribeAfrica />
+            <span className="flex flex-wrap">
+              join <TribeAfrica className="mx-1.5" /> and be a part of the future. welcome to the tribe.
             </span>
-            <span>and be a part of the future. welcome to the tribe.</span>
           </div>
         </div>
         <div className="flex gap-3 md:flex-col m-auto md:max-w-96 animate-on-scroll">

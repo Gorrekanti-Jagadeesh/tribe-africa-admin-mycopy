@@ -1,9 +1,13 @@
+import { useParams } from 'react-router';
+
 import Footer from '../../molecules/footer';
 import { HolidayHeader } from '../../molecules/header';
-
-import { useParams } from 'react-router';
 import MapChart from '../../molecules/maps/map';
 import LookOutCollage from './sections/look-out-collage';
+import DualHeading from '@atoms/heading/dual-heading';
+import CommonCarousel from '@molecules/carousel/common-carousel';
+
+import { demoImage as heroBackground } from '@data/index';
 
 interface MarkerType {
   name: string;
@@ -160,13 +164,52 @@ const HolidayScreen = () => {
   const scale = countryData[country].scale;
   return (
     <div>
+      <HolidayHeader />
       <div>
-        <HolidayHeader />
-        <div className="text-center bg-slate-200 m-6">Holiday Content</div>
+        {/* Adventure */}
+        <div className="max-w-6xl m-auto p-4">
+          <DualHeading className="mb-4">Let the *Adventure* begin</DualHeading>
+          <CommonCarousel
+            data={[
+              {
+                title: 'title1',
+                image: heroBackground,
+              },
+              {
+                title: 'title1',
+                image: heroBackground,
+              },
+              {
+                title: 'title1',
+                image: heroBackground,
+              },
+            ]}
+          />
+        </div>
         <LookOutCollage />
         <MapChart country={country} markers={markers} scale={scale} center={center} />
-        <Footer />
+        {/* When the tribe goes out */}
+        <div className="max-w-6xl m-auto p-4">
+          <DualHeading className="mb-4">When the *Tribe* goes out!</DualHeading>
+          <CommonCarousel
+            data={[
+              {
+                title: 'title1',
+                image: heroBackground,
+              },
+              {
+                title: 'title1',
+                image: heroBackground,
+              },
+              {
+                title: 'title1',
+                image: heroBackground,
+              },
+            ]}
+          />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

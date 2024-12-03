@@ -34,9 +34,9 @@ const SocialLinks: React.FC = () => {
         )}
       </button>
       {/* Display social icons when visible */}
-      <div className="flex flex-col bg-white py-2 border border-orange-400">
-        {isVisible &&
-          socialLinks.map((link) => (
+      {isVisible && (
+        <div className="flex flex-col gap-1 bg-white py-2 px-1 border border-orange-400">
+          {socialLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -47,7 +47,8 @@ const SocialLinks: React.FC = () => {
               <FontAwesomeIcon icon={link.icon} />
             </a>
           ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

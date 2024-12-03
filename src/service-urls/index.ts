@@ -7,6 +7,7 @@ const serviceUrls = {
   },
   base: {
     weather: `https://api.openweathermap.org/data/2.5/weather`,
+    geological_data: `https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json`,
   },
 };
 export default serviceUrls;

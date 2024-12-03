@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { useNavigate } from 'react-router-dom';
-import algeriaMap from '../../assets/algeria-map.png';
+import algeriaMap from '@assets/algeria-map.png';
+import serviceUrls from '@service-urls/index';
 
 interface MarkerType {
   name: string;
@@ -17,7 +18,7 @@ interface MapChartProps {
   scale: number;
 }
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+const geoUrl = serviceUrls.base.geological_data;
 
 // Categories to filter markers
 const categories: string[] = ['Cities', 'Action Enthusiasts', 'Nature', 'Historical & Cultural', 'Sacred Sites'];
@@ -94,10 +95,10 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
 
   return (
     <div
-      className="flex flex-row justify-center items-start my-12 p-5 gap-2 m-auto max-w-6xl animate-on-scroll"
+      className="flex flex-col md:flex-row justify-center items-start my-12 gap-2 max-w-6xl m-auto p-2 md:p-4 animate-on-scroll"
       style={{ backgroundColor: '#b34302' }}
     >
-      <div className="w-[2px] bg-white mx-4 " style={{ height: 500 }}></div>
+      {/* <div className="w-[2px] bg-white mx-4 " style={{ height: 500 }}></div> */}
       <div className="flex flex-row min-w-64">
         <div className="flex flex-col justify-start items-start mt-14">
           {categories.map((cat) => (
@@ -152,10 +153,11 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
         </div>
       </div>
       <img src={algeriaMap} width={160} />
-      <div className="ml-10">
+      <div></div>
+      <div className="md:ml-10 w-full">
         <ComposableMap
           projectionConfig={{ scale: scale, center: center }}
-          style={{ width: 500, height: 500, overflow: 'hidden' }}
+          style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}
         >
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
