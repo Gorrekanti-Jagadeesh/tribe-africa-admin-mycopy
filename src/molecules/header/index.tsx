@@ -33,7 +33,7 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
   const menuItems = [
     { id: 'country', title: country, isNavLink: false, content: null },
     { id: 'network', title: 'Network', isNavLink: true, content: <Network /> },
-    { id: 'market-place', title: 'Market Place', isNavLink: true, content: <>Content</> },
+    { id: 'market-place', title: 'Market Place', isNavLink: true, content: <>Coming soon</> },
     { id: 'after-work', title: 'After Work', isNavLink: true, content: <AfterWork /> },
     { id: 'travel-knowledge', title: 'Travel Knowledge', isNavLink: true, content: <TravelKnowledge /> },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
@@ -42,7 +42,6 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
   return <Header country={country} menuItems={menuItems} />;
 };
 
-// TODO: Add holiday nav elements here, currently this is a copied version of business header
 export const HolidayHeader = () => {
   const menuItems = [
     { id: 'country', title: 'Country Name', isNavLink: false, content: null },
@@ -55,3 +54,7 @@ export const HolidayHeader = () => {
 
   return <Header menuItems={menuItems} />;
 };
+
+// TODO:
+// Add the remaining sections.
+// Peace and Prosperity popup changes implementation pending.

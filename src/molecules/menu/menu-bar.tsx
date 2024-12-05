@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import homeLogo from '../../assets/icons/home.png';
-import notificationLogo from '../../assets/icons/notification.png';
-import calculatorLogo from '../../assets/icons/calculator.png';
+import homeLogo from '@assets/icons/common/home.svg';
+import notificationLogo from '@assets/icons/common/notifications.svg';
+import calculatorLogo from '@assets/icons/common/calculator.svg';
 import CurrencyCalculator from '../common/currency-calculator';
 import Modal from '../modal';
 import { Auth } from '../auth';
@@ -19,7 +19,11 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
   return (
     <>
       <div className="flex items-center">
-        <div id="languages" className="border-2 outline-0 rounded hidden md:block" style={{ height: 'fit-content' }}>
+        <div
+          id="languages"
+          className="border-2 outline-0 rounded hidden md:block mr-2"
+          style={{ height: 'fit-content' }}
+        >
           <Dropdown
             iconVisible={true}
             placeholderText="Language"
@@ -30,13 +34,11 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
           />
         </div>
 
-        <Modal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          trigger={<img src={calculatorLogo} className="m-auto w-6 md:hidden" />}
-        >
-          <CurrencyCalculator />
-        </Modal>
+        {country && (
+          <Modal isOpen={isOpen} setIsOpen={setIsOpen} trigger={<img src={calculatorLogo} className="m-auto w-6" />}>
+            <CurrencyCalculator />
+          </Modal>
+        )}
 
         {country != undefined && (
           <div className="mx-4">
@@ -50,11 +52,6 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
             <div className="flex items-center gap-3">
               <img src={homeLogo} className="m-auto w-6 cursor-pointer" />
               <img src={notificationLogo} className="m-auto w-6 cursor-pointer" />
-              <img
-                src={calculatorLogo}
-                className="w-6 cursor-pointer hidden md:block"
-                onClick={() => setIsOpen(true)}
-              />
             </div>
             {/* Authentication component */}
             <Auth />

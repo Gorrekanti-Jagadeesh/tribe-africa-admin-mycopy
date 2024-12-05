@@ -1,11 +1,15 @@
 import DualHeading from '@atoms/heading/dual-heading';
 
 import { servicesData as data } from '../../../data';
+import Button from '@atoms/custom-button/button';
 
 const Services: React.FC = () => {
   return (
-    <div className="my-12 grid gap-2 m-auto max-w-6xl p-2 md:p-4">
-      <DualHeading>Premier *Services*</DualHeading>
+    <div className="grid gap-2 mb-4 max-w-6xl m-auto p-2 md:p-4">
+      <div className="flex">
+        <DualHeading>Premier *Services*</DualHeading>
+        <Button className="ms-auto">Advertise with Us</Button>
+      </div>
       <div id="services-container" className=" animate-on-scroll overflow-x-auto whitespace-nowrap">
         {/* Cards */}
         {data.map((service, index) => (

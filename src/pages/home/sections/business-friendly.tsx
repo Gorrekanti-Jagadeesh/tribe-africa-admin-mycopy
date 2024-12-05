@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import DualHeading from '@atoms/heading/dual-heading';
 import { carouselData } from '@data/index';
+import { LeftButton, RightButton } from '@molecules/carousel/common-carousel';
 
 const BusinessFriendly: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,52 +20,41 @@ const BusinessFriendly: React.FC = () => {
 
   return (
     <div className="mx-auto w-full flex flex-col max-w-6xl p-2 md:p-4">
-      <div className="ms-auto">
+      <div className="ms-auto flex flex-col items-end">
         <DualHeading>Business *Friendly*</DualHeading>
-        <p className="mt-2 text-lg text-gray-600">Great work-life balance</p>
+        <p className="mt-2 text-sm text-gray-600">Great work-life balance</p>
       </div>
       <div className="relative flex sm:flex-col items-center">
         {/* Text and Image */}
-        <div className="w-full flex flex-col md:flex-row-reverse relative items-center p-4">
+        <div className="w-full flex flex-col md:flex-row relative items-center m-2 md:m-4">
           {/* Text container */}
-          <div className="w-full md:-ml-10 mb-3 md:mb-0 relative bg-white rounded-lg shadow-lg">
-            <div className="bg-white p-8 md:-ml-10 rounded-lg w-full md:max-w-[53rem]">
-              <h2 className="text-xl font-semibold mb-2">{carouselData[currentIndex].title}</h2>
-              <p className="text-gray-600">{carouselData[currentIndex].description}</p>
+          <div className="absolute right-0 w-full h-full md:h-fit max-h-full md:w-3/5 md:mb-0 opacity-65 md:opacity-100 text-white bg-black md:text-black md:bg-white rounded-lg shadow-lg border border-orange-500">
+            <div className="p-2 md:p-4 w-full h-full flex flex-col truncate">
+              <div className="flex-grow">
+                <h2 className="text-xl font-semibold mb-2">{carouselData[currentIndex].title}</h2>
+                <p className="md:text-gray-600">{carouselData[currentIndex].description}</p>
+              </div>
+              <a href="" className="ms-auto text-blue-500">
+                Know more
+              </a>
             </div>
           </div>
 
           {/* Image container */}
-          <div className="w-full overflow-hidden rounded-lg shadow-lg -z-10">
+          <div className=" w-full md:w-3/5 overflow-hidden rounded-lg shadow-lg -z-10">
             <img
               src={carouselData[currentIndex].image}
               alt={carouselData[currentIndex].title}
-              className="h-64 md:h-80 lg:h-96 object-cover transition-transform duration-500 ease-out"
+              className="h-64 md:h-80 lg:h-96 w-full object-cover object-center"
             />
           </div>
         </div>
 
         {/* Left Arrow */}
-        <button
-          className={`absolute left-0 md:-left-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg border w-12 h-12 md:w-16 md:h-16 border-slate-300 ${
-            currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          onClick={handlePrev}
-          disabled={currentIndex === 0}
-        >
-          <span className="text-4xl leading-6">&#8249;</span>
-        </button>
+        <LeftButton onClick={handlePrev} disabled={currentIndex === 0} />
 
         {/* Right Arrow */}
-        <button
-          className={`absolute right-0 md:-right-4 top-2/3 md:top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full w-12 h-12 md:w-16 md:h-16 shadow-lg border-slate-300 ${
-            currentIndex === carouselData.length - 1 ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          onClick={handleNext}
-          disabled={currentIndex === carouselData.length - 1}
-        >
-          <span className="text-4xl leading-6">&#8250;</span>
-        </button>
+        <RightButton onClick={handleNext} disabled={currentIndex === carouselData.length - 1} />
       </div>
     </div>
   );

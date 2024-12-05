@@ -5,13 +5,13 @@ import { BusinessHeader } from '@molecules/header';
 import DualHeading from '@atoms/heading/dual-heading';
 import ColsGrid from '@molecules/layout/cols-grid';
 import OverLayCard from '@atoms/card/overlay-card';
-import CommonCarousel from '@molecules/carousel/common-carousel';
+import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Button from '@atoms/custom-button/button';
 
 import useScreenWidth from '@hooks/useScreenWidth';
 
 import heroBackground from '@assets/homepage-welcome-image-2.png';
-import { upcomingEvents, countryInternetData } from '@data/index';
+import { upcomingEvents, countryInternetData, demoImage } from '@data/index';
 
 const BusinessScreen = ({
   country,
@@ -63,10 +63,10 @@ const BusinessScreen = ({
         </div>
       </div>
 
-      {/* Cards layout for 'Key Investment Sectors' */}
+      {/* Key Investment Sectors */}
       <div className="max-w-6xl m-auto p-4">
         <DualHeading>{`Key *Investment Sectors* in ${country}`}</DualHeading>
-        <p className="mb-4">
+        <p className="mb-4 text-sm">
           Including endless opportunities for small and medium enterprises (SMEs) across all sectors
         </p>
         <ColsGrid cols={layout}>
@@ -76,10 +76,32 @@ const BusinessScreen = ({
         </ColsGrid>
       </div>
 
+      {/* Investment Agency container */}
+      <div className="w-full bg-black text-white">
+        <div className="max-w-6xl m-auto p-2 md:p-4 py-8">
+          <h2 className="text-lg md:text-4xl">
+            For more information on <span className="text-orange-500">Investment</span> in {country}
+          </h2>
+          <div className="flex flex-col md:flex-row gap-2">
+            <img className="md:w-1/3 aspect-square rounded-md" src={demoImage} />
+            <div className="flex-grow space-y-2">
+              <h3 className="font-semibold">The Investment agency company name</h3>
+              <p className="text-right">
+                For more information: <Button>Contact</Button>
+              </p>
+              <div className="border border-white rounded-md p-2 text-sm">
+                <p className="font-semibold">Title of comment</p>
+                <p>The review content</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Natural Resources */}
       <div className="max-w-6xl m-auto p-4">
         <DualHeading>Natural *Resources*</DualHeading>
-        <p className="">
+        <p className="text-sm">
           Committing to local beneficiation & enhancing the value addition of the continent's abundant resources
         </p>
         <CommonCarousel

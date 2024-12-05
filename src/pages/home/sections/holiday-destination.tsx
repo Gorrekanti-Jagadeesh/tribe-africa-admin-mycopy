@@ -55,11 +55,11 @@ const HolidayDestination: React.FC = () => {
         </div>
         <div
           id="slider"
-          className="relative w-1/2 h-80 m-auto my-4"
+          className="relative w-2/3 md:w-1/2 h-fit m-auto my-4"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <div>
+          <div className="relative w-full aspect-video">
             <Modal isOpen={isOpen} setIsOpen={setIsOpen} customClasses="w-full h-full">
               <div className="w-full h-full bg-[#2B170A] text-white rounded-md border-2 border-orange-500 grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 items-center text-center">
                 {images.length ? (
@@ -77,7 +77,7 @@ const HolidayDestination: React.FC = () => {
               <label
                 key={index}
                 onClick={() => console.log(item.title)}
-                className={`absolute top-0 left-0 w-full h-full max-h-72 rounded-lg transition-transform duration-600 ease-in ${getClassNames(index)}`}
+                className={`absolute top-0 left-0 w-full aspect-video max-h-72 rounded-lg transition-transform duration-600 ease-in ${getClassNames(index)}`}
                 id={`slider${index + 1}`}
               >
                 <img
@@ -90,7 +90,7 @@ const HolidayDestination: React.FC = () => {
               </label>
             ))}
           </div>
-          <div className="absolute -bottom-4 flex text-white gap-2 w-full justify-center items-center">
+          <div className="absolute flex text-white gap-2 w-full justify-center items-center">
             <button onClick={handleLeftClick}>&larr;</button>
             {destinations.map((_, idx) => (
               <span

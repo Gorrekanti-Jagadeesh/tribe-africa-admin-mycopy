@@ -5,7 +5,7 @@ import { HolidayHeader } from '../../molecules/header';
 import MapChart from '../../molecules/maps/map';
 import LookOutCollage from './sections/look-out-collage';
 import DualHeading from '@atoms/heading/dual-heading';
-import CommonCarousel from '@molecules/carousel/common-carousel';
+import { CommonCarousel } from '@molecules/carousel/common-carousel';
 
 import { demoImage as heroBackground } from '@data/index';
 

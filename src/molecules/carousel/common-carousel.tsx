@@ -13,7 +13,35 @@ interface commonCarouselData {
   data: carouselCardProps[];
 }
 
-const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
+export const LeftButton = ({ onClick, disabled }) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`absolute -left-2 md:-left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
+        disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+      }`}
+    >
+      <FontAwesomeIcon icon={faChevronLeft} />
+    </button>
+  );
+};
+
+export const RightButton = ({ onClick, disabled }) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`absolute -right-2 md:-right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
+        disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+      }`}
+    >
+      <FontAwesomeIcon icon={faChevronRight} />
+    </button>
+  );
+};
+
+export const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(0);
 
@@ -71,29 +99,11 @@ const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
         </div>
 
         {/* Left Arrow */}
-        <button
-          onClick={handlePrev}
-          disabled={isPrevDisabled}
-          className={`absolute -left-2 md:-left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
-            isPrevDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
-          }`}
-        >
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </button>
+        <LeftButton onClick={handlePrev} disabled={isPrevDisabled} />
 
         {/* Right Arrow */}
-        <button
-          onClick={handleNext}
-          disabled={isNextDisabled}
-          className={`absolute -right-2 md:-right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
-            isNextDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
-          }`}
-        >
-          <FontAwesomeIcon icon={faChevronRight} />
-        </button>
+        <RightButton onClick={handleNext} disabled={isNextDisabled} />
       </div>
     </div>
   );
 };
-
-export default CommonCarousel;

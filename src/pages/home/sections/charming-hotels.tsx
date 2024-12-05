@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchHotelEntries, fetchImageByEntryId } from '@api/index';
 import { ContentfulResponse } from '@types/index';
-import CommonCarousel from '@molecules/carousel/common-carousel';
+import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Modal from '@molecules/modal';
 import DualHeading from '@atoms/heading/dual-heading';
+import Button from '@atoms/custom-button/button';
 // import BackgroundImageWrapper from '@molecules/common/backgrounds/background-image-wrapper';
 
 // import image from '@assets/branding.png';
@@ -120,7 +121,10 @@ const CharmingHotels: React.FC = () => {
 
   return (
     <div className="max-w-6xl m-auto p-2 md:p-4 my-4">
-      <DualHeading>Charming *Hotels*</DualHeading>
+      <div className="flex">
+        <DualHeading>Charming *Hotels*</DualHeading>
+        <Button className="ms-auto">Advertise with Us</Button>
+      </div>
       <CommonCarousel
         data={hotelData.map((item, index) => ({
           image: item.hotelImages[0]?.url,

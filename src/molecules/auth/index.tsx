@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import Modal from '../modal';
 import Login from './login';
 import Signup from './signup';
-import Button from '../../atoms/custom-button/button';
+import Button from '@atoms/custom-button/button';
 import { signInWithGoogle } from '../../../firebaseDB';
 import AuthWrapper from './auth-wrapper';
 
@@ -99,7 +99,9 @@ export const Auth = () => {
           >
             Login
           </button>
-          <Button onClick={() => handleAuth('register')}>Sign up</Button>
+          <Button className="hidden md:inline-block" onClick={() => handleAuth('register')}>
+            Sign up
+          </Button>
         </div>
       )}
 
@@ -109,7 +111,7 @@ export const Auth = () => {
           {type == 'login' ? (
             <Login setIsOpen={setIsOpen} setType={setType} onEmailLoginSuccess={handleEmailLoginSuccess} />
           ) : (
-            <Signup setIsOpen={setIsOpen} setType={setType} />
+            <Signup setIsOpen={setIsOpen} />
           )}
         </AuthWrapper>
       </Modal>
