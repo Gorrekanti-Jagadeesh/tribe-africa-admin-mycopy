@@ -6,50 +6,42 @@ import imageUrlBuilder from '@sanity/image-url';
 import serviceUrls from '../service-urls';
 export * as qna from './qna';
 
-interface ContentfulSys {
-  id: string;
-}
+// interface HotelFields {
+//   hotelName: string;
+//   country: string;
+//   address: string;
+//   phone: string;
+//   hotelImages: CustomContentfulAsset[];
+// }
 
-interface CustomContentfulAsset {
-  sys: ContentfulSys;
-}
+// interface ContentfulEntry {
+//   sys: ContentfulSys;
+//   fields: HotelFields;
+// }
 
-interface HotelFields {
-  hotelName: string;
-  country: string;
-  address: string;
-  phone: string;
-  hotelImages: CustomContentfulAsset[];
-}
-
-interface ContentfulEntry {
-  sys: ContentfulSys;
-  fields: HotelFields;
-}
-
-interface ContentfulResponse {
-  items: ContentfulEntry[];
-}
+// interface ContentfulResponse {
+//   items: ContentfulEntry[];
+// }
 
 const accessToken = import.meta.env.VITE_ACCESS_TOKEN;
 
-export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
-  try {
-    const response = await axios.get(`${serviceUrls.home.contentful_base}/entries`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: {
-        content_type: 'hotels',
-        'fields.isCharming': true,
-      },
-    });
+// export const fetchHotelEntries = async (): Promise<ContentfulResponse> => {
+//   try {
+//     const response = await axios.get(`${serviceUrls.home.contentful_base}/entries`, {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//       params: {
+//         content_type: 'hotels',
+//         'fields.isCharming': true,
+//       },
+//     });
 
-    return response.data;
-  } catch (error) {
-    throw new Error('Failed to fetch data from Contentful');
-  }
-};
+//     return response.data;
+//   } catch (error) {
+//     throw new Error('Failed to fetch data from Contentful');
+//   }
+// };
 
 export const fetchImageByEntryId = async (entryId: string): Promise<string> => {
   const response = await axios.get(`${serviceUrls.home.contentful_base}/assets/${entryId}?access_token=${accessToken}`);

@@ -1,5 +1,4 @@
-import { Option, ServicesProps } from '../types';
-import demoImage from '../assets/homepage-welcome-image-3.png';
+import { Option } from '../types';
 import featuredBG from '../assets/branding-bg-dark.png';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 
@@ -128,29 +127,6 @@ export const carouselData: CarouselItem[] = [
     title: 'Title 5',
     description: 'Description 5',
     image: 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg',
-  },
-];
-
-export const servicesData: ServicesProps[] = [
-  {
-    image: demoImage,
-    heading: 'Executive Logistics',
-    location: 'Fajara, The gambia',
-  },
-  {
-    image: demoImage,
-    heading: 'Executive Logistics',
-    location: 'Fajara, The gambia',
-  },
-  {
-    image: demoImage,
-    heading: 'Executive Logistics',
-    location: 'Fajara, The gambia',
-  },
-  {
-    image: demoImage,
-    heading: 'Executive Logistics',
-    location: 'Fajara, The gambia',
   },
 ];
 

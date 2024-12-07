@@ -1,6 +1,4 @@
 import DualHeading from '@atoms/heading/dual-heading';
-
-import { servicesData as data } from '../../../data';
 import Button from '@atoms/custom-button/button';
 import { SanityAsset } from '@sanity/image-url/lib/types/types';
 import { useEffect, useState } from 'react';

@@ -1,6 +1,5 @@
 import { HomeHeader } from '@molecules/header';
 // Components importing from sections folder
-import HeroSection from './sections/hero-section';
 import Explore from './sections/explore';
 import Experience from './sections/experience';
 import Services from './sections/services';

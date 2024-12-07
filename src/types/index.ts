@@ -8,36 +8,10 @@ export interface ServicesProps {
   location: string;
 }
 
-export interface ServicesScreenProps {
-  data: ServicesProps[];
-}
-
-export interface ContentfulSys {
-  id: string;
-}
-
-export interface CustomContentfulAsset {
-  sys: ContentfulSys;
-  url?: Promise<string>;
-}
-
-export interface HotelFields {
-  hotelName: string;
-  country: string;
-  address: string;
-  phone: string;
-  hotelImages: CustomContentfulAsset[];
-}
-
 export interface carouselCardProps {
   image: string;
   info: string;
   onClick: () => void;
-}
-
-export interface ContentfulEntry {
-  sys: ContentfulSys;
-  fields: HotelFields;
 }
 
 export interface ContentfulResponse<T> {

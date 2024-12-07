@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import spiralBackground from '@assets/branding-bg-dark.png';
-import welcomeImage1 from '@assets/homepage-welcome-image.png';
-import welcomeImage2 from '@assets/homepage-welcome-image-2.png';
-import welcomeImage3 from '@assets/homepage-welcome-image-3.png';
 import { TribeAfrica } from '@atoms/common/internal-logo';
 import sanityClient from '../../../sanityClient';
 import HeroSection from './hero-section';
