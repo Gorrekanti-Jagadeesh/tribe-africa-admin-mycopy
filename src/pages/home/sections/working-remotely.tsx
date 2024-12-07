@@ -14,7 +14,7 @@ interface workingRemotelyFields {
 
 const WorkingRemotely: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [landingData, setLandingData] = useState<workingRemotelyFields[]>([]);
+  const [data, setData] = useState<workingRemotelyFields[]>([]);
 
   useEffect(() => {
     async function fetchHotels() {
@@ -22,7 +22,7 @@ const WorkingRemotely: React.FC = () => {
         const data = await sanityClient.fetch(`
             *[_type == "blog"]
           `);
-        setLandingData(
+        setData(
           data.filter(
             (each: workingRemotelyFields) =>
               each.homeBusinessBlogs === 'Working Remotely' && each.blogType === 'Business'
@@ -37,7 +37,7 @@ const WorkingRemotely: React.FC = () => {
   }, []);
 
   const handleNext = () => {
-    if (currentIndex < landingData.length - 1) {
+    if (currentIndex < data.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
@@ -48,7 +48,7 @@ const WorkingRemotely: React.FC = () => {
     }
   };
 
-  if (landingData.length === 0) {
+  if (data.length === 0) {
     return <p>Loading...</p>; // Show a loading state while data is being fetched
   }
 
@@ -65,10 +65,10 @@ const WorkingRemotely: React.FC = () => {
           <div className="absolute left-0 w-full h-full md:h-fit md:w-3/5 md:mb-0 opacity-65 md:opacity-100 text-white bg-black md:text-black md:bg-white rounded-lg shadow-lg border border-orange-500">
             <div className="p-2 md:p-6 w-full h-full flex flex-col">
               <div className="flex-grow max-h-48 h-full overflow-hidden">
-                <h2 className="text-xl font-semibold mb-2">{landingData[currentIndex].title}</h2>
-                <p className="md:text-gray-600 line-clamp-4">{landingData[currentIndex].description}</p>
+                <h2 className="text-xl font-semibold mb-2">{data[currentIndex].title}</h2>
+                <p className="md:text-gray-600 line-clamp-4">{data[currentIndex].description}</p>
               </div>
-              <a href={`blogs/${landingData[currentIndex]._id}`} className="ms-auto text-blue-500">
+              <a href={`blogs/${data[currentIndex]._id}`} className="ms-auto text-blue-500">
                 Know more
               </a>
             </div>
@@ -77,8 +77,8 @@ const WorkingRemotely: React.FC = () => {
           {/* Image container */}
           <div className=" w-full md:w-3/5 ms-auto overflow-hidden rounded-lg shadow-lg -z-10">
             <img
-              src={sanityImageUrlBuilder(landingData[currentIndex].image)}
-              alt={landingData[currentIndex].title}
+              src={sanityImageUrlBuilder(data[currentIndex].image)}
+              alt={data[currentIndex].title}
               className="h-64 md:h-80 lg:h-96 w-full object-cover object-center"
             />
           </div>
@@ -88,7 +88,7 @@ const WorkingRemotely: React.FC = () => {
         <LeftButton onClick={handlePrev} disabled={currentIndex === 0} />
 
         {/* Right Arrow */}
-        <RightButton onClick={handleNext} disabled={currentIndex === landingData.length - 1} />
+        <RightButton onClick={handleNext} disabled={currentIndex === data.length - 1} />
       </div>
     </div>
   );
