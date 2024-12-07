@@ -11,7 +11,7 @@ const BlogCard = ({ data }: { data: BlogContentProps }) => {
           backgroundImage: `url(${data.image})`,
         }}
       ></div>
-      <p className=" text-nowrap truncate">{data.title}</p>
+      <p className="text-nowrap truncate">{data.title}</p>
       <button className="bg-gray-300 p-2 px-6 rounded-lg text-sm m-auto" onClick={() => navigate('/blogs/' + data._id)}>
         Know more
       </button>

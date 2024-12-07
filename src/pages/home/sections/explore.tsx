@@ -27,7 +27,6 @@ const Explore: React.FC = () => {
             *[_type == "home-landing-page"]
           `);
         setLandingData(data);
-        console.log(data);
       } catch (error) {
         console.error('Error fetching hotels:', error);
       }

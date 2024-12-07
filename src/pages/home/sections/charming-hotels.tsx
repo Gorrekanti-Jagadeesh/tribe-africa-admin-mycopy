@@ -97,7 +97,6 @@ const CharmingHotels: React.FC = () => {
         data={hotelData
           .filter((each) => each.isCharmingHotel)
           .map((item, index) => {
-            console.log(item.images[0].asset.url);
             return {
               image: item.images[0].asset.url, // Get the URL as a string
               title: item.name,

@@ -18,7 +18,7 @@ export const LeftButton = ({ onClick, disabled }) => {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`absolute -left-2 md:-left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
+      className={`absolute -left-2 lg:-left-8 md:-left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-12 ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
       }`}
     >
@@ -32,7 +32,7 @@ export const RightButton = ({ onClick, disabled }) => {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`absolute -right-2 md:-right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-16 ${
+      className={`absolute -right-2 lg:-right-8 md:-right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full border border-gray-500 size-8 md:size-12 ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
       }`}
     >

@@ -14,6 +14,13 @@ export const isLoggedIn = () => {
   return Cookies.get('googleUser') != undefined || Cookies.get('emailUser') != undefined;
 };
 
+export const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + '...';
+  }
+  return text;
+};
+
 // Convert base64 image to Blob for upload
 export const base64ToBlob = (base64: string, mimeType = 'image/jpeg'): Blob => {
   const byteCharacters = atob(base64.split(',')[1]);

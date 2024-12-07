@@ -32,9 +32,12 @@ function splitRichText(richText: string): string[] {
 const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editorContent, setEditorContent] = useState<string>('');
+  const [descriptionContent, setDescriptionContent] = useState('');
 
   // Handle changes in the rich text editor content
   const handleContentChange = (content: string): void => setEditorContent(content);
+  console.log(descriptionContent);
+  const handleDescriptionChange = (content: string): void => setDescriptionContent(content.target.value);
 
   // Handle changes in blog placeholder image in drag-and-drop component
   const handleFileSelect = (file: File | null): void => setSelectedFile(file);
@@ -78,6 +81,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
           asset: { _type: 'reference', _ref: response._id },
         },
         content: richTextBlocks,
+        description: descriptionContent,
       };
       const res = await sanityClient.create(blogData);
       alert('submitted successfully');
@@ -105,6 +109,16 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
           <div className="flex flex-col gap-2">
             <label>Blog image</label>
             <ImageDragAndDrop onFileSelect={handleFileSelect} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label>Blog description</label>
+            <textarea
+              onChange={handleDescriptionChange}
+              name="description"
+              rows={4}
+              placeholder="Enter short Blog description"
+              className="border p-2 rounded-lg outline-none"
+            ></textarea>
           </div>
           <div className="flex flex-col gap-2">
             <label>Blog Content</label>

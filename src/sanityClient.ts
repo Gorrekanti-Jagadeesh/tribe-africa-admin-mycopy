@@ -7,4 +7,5 @@ export default sanityClient({
   apiVersion: '2023-10-05', // Use the current date for the latest API version
   token: import.meta.env.VITE_SANITY_TOKEN, // Replace with your new token that has write permissions
   useCdn: false, // `false` if you want fresh data
+  perspective: 'published',
 });
