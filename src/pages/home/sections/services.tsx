@@ -2,8 +2,34 @@ import DualHeading from '@atoms/heading/dual-heading';
 
 import { servicesData as data } from '../../../data';
 import Button from '@atoms/custom-button/button';
+import { SanityAsset } from '@sanity/image-url/lib/types/types';
+import { useEffect, useState } from 'react';
+import sanityClient from '../../../sanityClient';
+import { sanityImageUrlBuilder } from '@api/index';
+
+interface serviceDataFields {
+  service: string;
+  image: SanityAsset[]; // Array of Sanity image objects
+  location: string;
+}
 
 const Services: React.FC = () => {
+  const [servicesData, setServicesData] = useState<serviceDataFields[]>([]);
+  // const { t } = useTranslation();
+  // Fetch hotels from Sanity
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const data = await sanityClient.fetch(`
+            *[_type == "home-premier-services"]
+          `);
+        setServicesData(data);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
+    }
+    fetchServices();
+  }, []);
   return (
     <div className="grid gap-2 mb-4 max-w-6xl m-auto p-2 md:p-4">
       <div className="flex">
@@ -12,17 +38,17 @@ const Services: React.FC = () => {
       </div>
       <div id="services-container" className=" animate-on-scroll overflow-x-auto whitespace-nowrap">
         {/* Cards */}
-        {data.map((service, index) => (
+        {servicesData.map((services, index) => (
           <div className="my-4 w-5/6 md:w-2/5 lg:w-1/3 p-2 max-w-full inline-block" key={index}>
             <div className="border-2 border-gray-300 p-2 rounded" style={{ aspectRatio: '4/3' }}>
               <div
                 className="relative bg-cover bg-center p-2 w-full h-full"
-                style={{ backgroundImage: `url(${service.image})` }}
+                style={{ backgroundImage: `url(${sanityImageUrlBuilder(services?.image).url()})` }}
               ></div>
             </div>
             <div>
-              <h6 className="font-semibold">{service.heading}</h6>
-              <p className="text-sm">{service.location}</p>
+              <h6 className="font-semibold">{services.service}</h6>
+              <p className="text-sm">{services.location}</p>
             </div>
           </div>
         ))}

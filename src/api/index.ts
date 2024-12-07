@@ -198,7 +198,7 @@ export const uploadImage = async (file: UploadBody | string) => {
   }
 };
 
-export const sanityImageUrlBuilder = (image: string) => {
+export const sanityImageUrlBuilder = (image: string | []) => {
   const builder = imageUrlBuilder(sanityClient);
   return builder.image(image);
 };

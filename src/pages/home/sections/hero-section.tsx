@@ -4,7 +4,12 @@ import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Countries, Purpose } from '@data/index';
 
 // HeroSection Component
-const HeroSection: React.FC = () => {
+
+interface HeroSectionProps {
+  video: string;
+  image: string;
+}
+const HeroSection: React.FC<HeroSectionProps> = ({ video, image }) => {
   const [country, setCountry] = useState<string | null>(null);
   const [purpose, setPurpose] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -45,15 +50,20 @@ const HeroSection: React.FC = () => {
         </div>
         <div className="bg-slate-800 relative bottom-8 rounded-lg" style={{ zIndex: '-1' }}>
           <video autoPlay={true} loop={true} muted={true} className="rounded-lg">
-            <source
-              src="https://s3-figma-videos-production-sig.figma.com/video/1140530022219550208/TEAM/35df/ad4f/-0df9-42cc-8dbf-31a770951344?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=o7OUUiRWnyMJNQ4TDigoXivMvWn~oTGmSt5hezNx57w1szkfUr4Pt-aB3gAtc8U1sj2vmMuR8t4gutWJ0dMg43eRrIJnwatAXVNCzfJaN7hUq8MlzXt~KMO98rh717eXzYJWc2dpe6VM1f6ebFAR97ZCM3PLWKORGiiFTI2H0Z189vAEEdAnjimaCbSPc1WGPtd6gI3Cd64DS8-oP7T4QAwQw4g~h6423d1eRIZv2ydz04yPjAKXiqTBd-s4YY-qHUw4WcEDOlxmweg1q3xxiQPPYYS7IMLYhM0x7IjIxCmMjveAsmKY9GbZYOqHOYMdxtDbL2hdZT8J2OopU1xGZw__"
-              type="video/mp4"
-            />
+            <source src={video} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
       </div>
-      <Logo />
+      <div id="landing-logo" className="animate-on-scroll max-w-xl m-auto">
+        <img
+          className="m-auto w-100 p-4"
+          role="presentation"
+          loading="lazy"
+          src={image}
+          sizes="(max-width: 638px) 89vw, (max-width: 998px) 39vw, 35vw"
+        />
+      </div>
     </div>
   );
 };

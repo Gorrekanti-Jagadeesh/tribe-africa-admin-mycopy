@@ -16,7 +16,6 @@ const HomeScreen = () => {
     <div className="max-w-screen-2xl m-auto">
       <HomeHeader />
       <div className="relative">
-        <HeroSection />
         <Explore />
         <CharmingHotels />
         <HolidayDestination />
