@@ -28,7 +28,6 @@ const WorkingRemotely: React.FC = () => {
               each.homeBusinessBlogs === 'Working Remotely' && each.blogType === 'Business'
           )
         );
-        console.log(data);
       } catch (error) {
         console.error('Error fetching hotels:', error);
       }
