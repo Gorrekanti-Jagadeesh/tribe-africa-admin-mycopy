@@ -1,17 +1,7 @@
 import useScreenWidth from '@hooks/useScreenWidth';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-
-interface carouselCardProps {
-  image: string | undefined;
-  title: string;
-  onClick?: () => void;
-}
-
-interface commonCarouselData {
-  data: carouselCardProps[];
-}
 
 export const LeftButton = ({ onClick, disabled }) => {
   return (
@@ -41,7 +31,7 @@ export const RightButton = ({ onClick, disabled }) => {
   );
 };
 
-export const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
+export const CommonCarousel = ({ data, component }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(0);
 
@@ -76,23 +66,14 @@ export const CommonCarousel: React.FC<commonCarouselData> = ({ data }) => {
         {/* Carousel Images */}
         <div className="flex overflow-hidden w-full ">
           <div
-            className="flex transition-transform duration-500 ease-in-out"
+            className="w-full flex transition-transform duration-500 ease-in-out"
             style={{
               transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
             }}
           >
-            {data.map((item: carouselCardProps, index: number) => (
-              <div
-                key={index}
-                className="w-1/2 lg:w-1/3 flex-shrink-0 p-1 md:p-2 cursor-pointer"
-                onClick={item.onClick}
-              >
-                <img
-                  src={item.image}
-                  alt={`carousel-${index}`}
-                  className="w-full object-cover rounded-lg cursor-pointer aspect-square"
-                />
-                <p>{item.title}</p>
+            {data.map((item, index: number) => (
+              <div key={index} className="w-1/2 lg:w-1/3 flex-shrink-0 p-1 cursor-pointer" onClick={item.onClick}>
+                {component(item)}
               </div>
             ))}
           </div>

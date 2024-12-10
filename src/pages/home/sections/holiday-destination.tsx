@@ -5,6 +5,8 @@ import Modal from '@molecules/modal';
 import { sanityImageUrlBuilder } from '@api/index';
 import ColsGrid from '@molecules/layout/cols-grid';
 import { Loading } from '@atoms/common/loading';
+import useScreenWidth from '@hooks/useScreenWidth';
+import { Link } from 'react-router-dom';
 
 interface Destination {
   image: string;
@@ -16,11 +18,23 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [country, setCountry] = useState('');
   const [popupContent, setPopupContent] = useState<Destination[]>([]);
+  const [layout, setLayout] = useState(3);
+  const screenWidth = useScreenWidth();
+
+  useEffect(() => {
+    if (screenWidth < 1024) {
+      setLayout(2);
+    } else {
+      setLayout(3);
+    }
+  }, [screenWidth]);
 
   const handlePopup = (country: string) => {
     if (data[country]) {
-      setPopupContent(data[country]);
+      setCountry(country);
+      // setPopupContent(data[country]);
       setIsOpen(true);
       setIsHovered(false);
     }
@@ -46,6 +60,10 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
     }
     console.log(data);
   }, [isHovered, data]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   if (!data || loading) {
     return <Loading />;
@@ -73,11 +91,11 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
             <Modal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              customClasses="w-full h-full p-2 md:p-4 bg-[#2B170A] text-white rounded-md border-2 border-orange-500"
+              customClasses="w-full h-full p-2 md:p-6 md:p-8 bg-[#2B170A] text-white rounded-md border-2 border-orange-500"
             >
-              <ColsGrid>
-                {popupContent.length ? (
-                  popupContent.map((item, idx) => (
+              <ColsGrid cols={layout}>
+                {data[country] ? (
+                  data[country].map((item, idx) => (
                     <div key={idx} className="p-2">
                       <img
                         src={sanityImageUrlBuilder(item.image).url()}
@@ -91,6 +109,12 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
                   <p className="col-span-2 lg:col-span-3">No data found</p>
                 )}
               </ColsGrid>
+
+              <div className="w-full flex mb-4">
+                <Button className="ms-auto">
+                  <Link to={`/${country.toLowerCase().split(' ').join('-')}/holiday`}>Know more</Link>
+                </Button>
+              </div>
               {/* </div> */}
             </Modal>
 
@@ -106,7 +130,12 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
                   className="w-full h-full rounded-md object-cover cursor-pointer hover:border border-orange-500"
                   alt={country}
                 />
-                <h1 className="text-white absolute bottom-0 left-0 m-2">{country}</h1>
+                <Link
+                  to={`/${country.toLowerCase().split(' ').join('-')}/holiday`}
+                  className="text-white absolute bottom-0 left-0 m-2"
+                >
+                  {country}
+                </Link>
               </label>
             ))}
           </div>

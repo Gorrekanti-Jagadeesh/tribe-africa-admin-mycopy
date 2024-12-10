@@ -6,6 +6,7 @@ import MapChart from '../../molecules/maps/map';
 import LookOutCollage from './sections/look-out-collage';
 import DualHeading from '@atoms/heading/dual-heading';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
+import OverLayCard from '@atoms/card/overlay-card';
 
 import { demoImage as heroBackground } from '@data/index';
 
@@ -184,6 +185,7 @@ const HolidayScreen = () => {
                 image: heroBackground,
               },
             ]}
+            component={(item) => <OverLayCard data={item} />}
           />
         </div>
         <LookOutCollage />
@@ -206,6 +208,7 @@ const HolidayScreen = () => {
                 image: heroBackground,
               },
             ]}
+            component={(item) => <OverLayCard data={item} />}
           />
         </div>
       </div>

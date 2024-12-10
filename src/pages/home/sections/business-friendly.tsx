@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DualHeading from '@atoms/heading/dual-heading';
 import { LeftButton, RightButton } from '@molecules/carousel/common-carousel';
-import sanityClient from '../../../sanityClient';
 import { sanityImageUrlBuilder } from '@api/index';
 import { Loading } from '@atoms/common/loading';
 interface BusinessFreindlyFields {

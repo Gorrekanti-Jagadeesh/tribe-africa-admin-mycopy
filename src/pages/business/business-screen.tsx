@@ -119,6 +119,7 @@ const BusinessScreen = ({
               image: heroBackground,
             },
           ]}
+          component={(item) => <OverLayCard data={item} />}
         />
       </div>
 
@@ -145,6 +146,7 @@ const BusinessScreen = ({
               image: heroBackground,
             },
           ]}
+          component={(item) => <OverLayCard data={item} />}
         />
       </div>
       <Footer />

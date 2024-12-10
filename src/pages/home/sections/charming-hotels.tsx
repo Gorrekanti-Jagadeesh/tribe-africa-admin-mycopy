@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Modal from '@molecules/modal';
 import DualHeading from '@atoms/heading/dual-heading';
-import sanityClient from '../../../sanityClient';
 import { SanityAsset } from '@sanity/image-url/lib/types/types';
 import { Loading } from '@atoms/common/loading';
+import OverLayCard from '@atoms/card/overlay-card';
 
 interface HotelFields {
   name: string;
@@ -71,6 +71,7 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
               },
             };
           })}
+        component={(item) => <OverLayCard data={item} />}
       />
 
       {content && (
