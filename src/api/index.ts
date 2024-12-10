@@ -101,32 +101,6 @@ export const fetchWeatherData = async (country: string) => {
 // --------------- Sanity SDK ---------------------
 // ------------------ Blogs -----------------------
 
-export const addNewEntry = (countryId: string) => {
-  const newHotel = {
-    _type: 'Blog',
-    name: 'Sunrise Hotel',
-    location: {
-      _type: 'reference',
-      _ref: countryId,
-    },
-    hotelCategory: 'Luxury',
-  };
-
-  return sanityClient.create(newHotel).then((res: { _id: string }) => {
-    return console.log(`Hotel was created with ID: ${res._id}`);
-  });
-};
-
-export const updateByDocumentById = async (id: string, updatedDocument) => {
-  try {
-    const update = await sanityClient.patch(id).set(updatedDocument).commit();
-
-    console.log(`Data is updated:`, update);
-  } catch (err) {
-    console.error('Error updating the document:', err);
-  }
-};
-
 export const getAllEntryTypes = () => {
   sanityClient
     .fetch('*[defined(_type)]._type')

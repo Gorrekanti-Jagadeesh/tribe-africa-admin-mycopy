@@ -3,6 +3,7 @@ import DualHeading from '@atoms/heading/dual-heading';
 import { LeftButton, RightButton } from '@molecules/carousel/common-carousel';
 import sanityClient from '../../../sanityClient';
 import { sanityImageUrlBuilder } from '@api/index';
+import { Loading } from '@atoms/common/loading';
 interface workingRemotelyFields {
   image: string;
   title: string;
@@ -12,43 +13,15 @@ interface workingRemotelyFields {
   blogType: string;
 }
 
-const WorkingRemotely: React.FC = () => {
+const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error }> = ({ data, loading, error }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [data, setData] = useState<workingRemotelyFields[]>([]);
 
-  useEffect(() => {
-    async function fetchHotels() {
-      try {
-        const data = await sanityClient.fetch(`
-            *[_type == "blog"]
-          `);
-        setData(
-          data.filter(
-            (each: workingRemotelyFields) =>
-              each.homeBusinessBlogs === 'Working Remotely' && each.blogType === 'Business'
-          )
-        );
-      } catch (error) {
-        console.error('Error fetching hotels:', error);
-      }
-    }
-    fetchHotels();
-  }, []);
+  if (!data || loading) {
+    return <Loading />;
+  }
 
-  const handleNext = () => {
-    if (currentIndex < data.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  if (data.length === 0) {
-    return <p>Loading...</p>; // Show a loading state while data is being fetched
+  if (error) {
+    return <>Error fetching data..</>;
   }
 
   return (
@@ -76,7 +49,7 @@ const WorkingRemotely: React.FC = () => {
           {/* Image container */}
           <div className=" w-full md:w-3/5 ms-auto overflow-hidden rounded-lg shadow-lg -z-10">
             <img
-              src={sanityImageUrlBuilder(data[currentIndex].image)}
+              src={sanityImageUrlBuilder(data[currentIndex].image).url()}
               alt={data[currentIndex].title}
               className="h-64 md:h-80 lg:h-96 w-full object-cover object-center"
             />
@@ -84,10 +57,10 @@ const WorkingRemotely: React.FC = () => {
         </div>
 
         {/* Left Arrow */}
-        <LeftButton onClick={handlePrev} disabled={currentIndex === 0} />
+        <LeftButton onClick={() => setCurrentIndex(currentIndex - 1)} disabled={currentIndex === 0} />
 
         {/* Right Arrow */}
-        <RightButton onClick={handleNext} disabled={currentIndex === data.length - 1} />
+        <RightButton onClick={() => setCurrentIndex(currentIndex + 1)} disabled={currentIndex === data.length - 1} />
       </div>
     </div>
   );

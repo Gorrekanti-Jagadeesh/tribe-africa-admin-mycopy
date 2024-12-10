@@ -1,9 +1,8 @@
 import DualHeading from '@atoms/heading/dual-heading';
 import Button from '@atoms/custom-button/button';
 import { SanityAsset } from '@sanity/image-url/lib/types/types';
-import { useEffect, useState } from 'react';
-import sanityClient from '../../../sanityClient';
 import { sanityImageUrlBuilder } from '@api/index';
+import { Loading } from '@atoms/common/loading';
 
 interface serviceDataFields {
   service: string;
@@ -11,23 +10,15 @@ interface serviceDataFields {
   location: string;
 }
 
-const Services: React.FC = () => {
-  const [servicesData, setServicesData] = useState<serviceDataFields[]>([]);
-  // const { t } = useTranslation();
-  // Fetch hotels from Sanity
-  useEffect(() => {
-    async function fetchServices() {
-      try {
-        const data = await sanityClient.fetch(`
-            *[_type == "home-premier-services"]
-          `);
-        setServicesData(data);
-      } catch (error) {
-        console.error('Error fetching services:', error);
-      }
-    }
-    fetchServices();
-  }, []);
+const Services: React.FC<{ data: serviceDataFields[]; loading; error }> = ({ data, loading, error }) => {
+  if (!data || loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <>Error fetching data..</>;
+  }
+
   return (
     <div className="grid gap-2 mb-4 max-w-6xl m-auto p-2 md:p-4">
       <div className="flex">
@@ -36,7 +27,7 @@ const Services: React.FC = () => {
       </div>
       <div id="services-container" className=" animate-on-scroll overflow-x-auto whitespace-nowrap">
         {/* Cards */}
-        {servicesData.map((services, index) => (
+        {data.map((services, index) => (
           <div className="my-4 w-5/6 md:w-2/5 lg:w-1/3 p-2 max-w-full inline-block" key={index}>
             <div className="border-2 border-gray-300 p-2 rounded" style={{ aspectRatio: '4/3' }}>
               <div

@@ -2,6 +2,38 @@ import { uploadImage } from '../api';
 
 import { htmlToBlocks } from '@sanity/block-tools';
 import { Schema } from '@sanity/schema';
+import sanityClient from '../sanityClient';
+
+export const query = {
+  HOME: {
+    EXPLORE: `*[_type == "home-landing-page"][0]`,
+    CHARMING_HOTELS: `*[_type == "hotel"]{
+            name,
+            address,
+            email,
+            country,
+            website,
+            phone,
+            images[] {
+              asset->{
+                _id,
+                url
+              }
+            },
+            isCharmingHotel
+          }`,
+    HOLIDAY_DESTINATIONS: `*[_type == "holiday-destinations"]`,
+    WORKING_REMOTELY: `*[_type == "blog"]`,
+    BUSINESS_FRIENDLY: `*[_type == "blog"]`,
+    PREMIER_SERVICES: `*[_type == "home-premier-services"]`,
+  },
+};
+
+export const sanity = {
+  GET: (query) => sanityClient.fetch(query),
+  POST: (data) => sanityClient.create(data),
+  PUT: (id, data) => sanityClient.patch(id).set(data).commit(),
+};
 
 export const parseImageUrl = (imageStr: string) => {
   // for reference: https://cdn.sanity.io/images/0oezgboa/production/ac70bcb6e7211fe6f057d4f90a754901a299f5c3-800x488.jpg

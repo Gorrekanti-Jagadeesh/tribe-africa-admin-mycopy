@@ -3,8 +3,8 @@ import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Modal from '@molecules/modal';
 import DualHeading from '@atoms/heading/dual-heading';
 import sanityClient from '../../../sanityClient';
-import { sanityImageUrlBuilder } from '@api/index'; // Assuming you have a utility for this
 import { SanityAsset } from '@sanity/image-url/lib/types/types';
+import { Loading } from '@atoms/common/loading';
 
 interface HotelFields {
   name: string;
@@ -17,50 +17,15 @@ interface HotelFields {
   isCharmingHotel: boolean;
 }
 
-const CharmingHotels: React.FC = () => {
+const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ data, loading, error }) => {
   const [content, setContent] = useState<HotelFields | null>(null);
-  const [hotelData, setHotelData] = useState<HotelFields[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Fetch hotels from Sanity
-  useEffect(() => {
-    async function fetchHotels() {
-      try {
-        const hotels = await sanityClient.fetch(`
-          *[_type == "hotel"]{
-            name,
-            address,
-            email,
-            country,
-            website,
-            phone,
-            images[] {
-              asset->{
-                _id,
-                url
-              }
-            },
-            isCharmingHotel
-          }
-        `);
-        setHotelData(hotels);
-      } catch (error) {
-        console.error('Error fetching hotels:', error);
-      }
-    }
-    fetchHotels();
-  }, []);
+  if (loading) return <Loading />;
 
-  // Function to handle click on hotel for more details
-  const processHotelImages = (index: number) => {
-    if (hotelData && hotelData[index]) {
-      const updatedContent = hotelData[index];
-      setContent(updatedContent);
-      setIsOpen(true);
-    }
-  };
-
-  if (hotelData.length === 0) return <div>Loading...</div>;
+  if (error) {
+    return <>Error fetching data..</>;
+  }
 
   const HotelView = ({ data }: { data: HotelFields }) => {
     return (
@@ -69,7 +34,7 @@ const CharmingHotels: React.FC = () => {
           {data.images.map((image, idx) => (
             <img
               key={idx}
-              src={sanityImageUrlBuilder(image).url()}
+              src={image.asset.url}
               alt={`Hotel Image ${idx}`}
               className="aspect-square w-full m-auto rounded-lg min-w-60 md:min-w-0"
             />
@@ -94,13 +59,16 @@ const CharmingHotels: React.FC = () => {
     <div className="max-w-6xl m-auto p-2 md:p-4 my-4">
       <DualHeading>Charming *Hotels*</DualHeading>
       <CommonCarousel
-        data={hotelData
+        data={data
           .filter((each) => each.isCharmingHotel)
           .map((item, index) => {
             return {
               image: item.images[0].asset.url, // Get the URL as a string
               title: item.name,
-              onClick: () => processHotelImages(index),
+              onClick: () => {
+                setContent(data[index]);
+                setIsOpen(true);
+              },
             };
           })}
       />

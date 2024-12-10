@@ -32,7 +32,7 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
       <div
         className={`fixed md:absolute left-0 top-0 md:top-auto p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
       >
-        <Close className="float-right" theme="light" size="6" onClick={() => setHover(false)} />
+        <Close className="ms-auto block md:hidden" theme="light" size="6" onClick={() => setHover(false)} />
         {content}
       </div>
     </div>

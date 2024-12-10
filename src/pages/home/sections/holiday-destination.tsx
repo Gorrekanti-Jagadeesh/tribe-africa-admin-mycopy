@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import DualHeading from '@atoms/heading/dual-heading';
 import Button from '@atoms/custom-button/button';
 import Modal from '@molecules/modal';
-import sanityClient from '../../../sanityClient';
 import { sanityImageUrlBuilder } from '@api/index';
 import ColsGrid from '@molecules/layout/cols-grid';
+import { Loading } from '@atoms/common/loading';
 
 interface Destination {
   image: string;
@@ -12,46 +12,22 @@ interface Destination {
   destinationName: string;
 }
 
-const HolidayDestination: React.FC = () => {
+const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({ data, loading, error }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [groupedDestinations, setGroupedDestinations] = useState<Record<string, Destination[]>>({});
   const [isOpen, setIsOpen] = useState(false);
   const [popupContent, setPopupContent] = useState<Destination[]>([]);
 
-  useEffect(() => {
-    async function fetchDestinations() {
-      try {
-        const data = await sanityClient.fetch(`
-          *[_type == "holiday-destinations"]
-        `);
-
-        // Group destinations by country
-        const groupedData = data.reduce((acc: Record<string, Destination[]>, item: Destination) => {
-          const imageUrl = sanityImageUrlBuilder(item.image);
-          const destination = { ...item, image: imageUrl };
-          acc[item.country] = acc[item.country] || [];
-          acc[item.country].push(destination);
-          return acc;
-        }, {});
-        setGroupedDestinations(groupedData);
-      } catch (error) {
-        console.error('Error fetching destinations:', error);
-      }
-    }
-
-    fetchDestinations();
-  }, []);
-
   const handlePopup = (country: string) => {
-    if (groupedDestinations[country]) {
-      setPopupContent(groupedDestinations[country]);
+    if (data[country]) {
+      setPopupContent(data[country]);
       setIsOpen(true);
+      setIsHovered(false);
     }
   };
 
   const getClassNames = (index: number) => {
-    const total = Object.keys(groupedDestinations).length;
+    const total = Object.keys(data).length;
     if (index === activeIndex) return 'active-slide';
     if (index === (activeIndex + 1) % total) return 'right-slide';
     if (index === (activeIndex - 1 + total) % total) return 'left-slide';
@@ -61,22 +37,23 @@ const HolidayDestination: React.FC = () => {
     return 'hidden-slide';
   };
 
-  const handleRightClick = () => setActiveIndex((prev) => (prev + 1) % Object.keys(groupedDestinations).length);
-  const handleLeftClick = () =>
-    setActiveIndex(
-      (prev) => (prev - 1 + Object.keys(groupedDestinations).length) % Object.keys(groupedDestinations).length
-    );
-
   useEffect(() => {
     if (!isHovered) {
       const interval = setInterval(() => {
-        setActiveIndex((prev) => (prev + 1) % Object.keys(groupedDestinations).length);
-      }, 3000);
+        setActiveIndex((prev) => (prev + 1) % Object.keys(data).length);
+      }, 2500);
       return () => clearInterval(interval);
     }
-  }, [isHovered]);
+    console.log(data);
+  }, [isHovered, data]);
 
-  const countries = Object.keys(groupedDestinations);
+  if (!data || loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <>Error fetching data..</>;
+  }
 
   return (
     <div className="bg-[#2B170A] py-8 p-2 md:p-4">
@@ -91,18 +68,19 @@ const HolidayDestination: React.FC = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
+          {/* Images */}
           <div className="relative w-full aspect-video">
             <Modal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              customClasses="w-full h-full bg-[#2B170A] text-white rounded-md border-2 border-orange-500"
+              customClasses="w-full h-full p-2 md:p-4 bg-[#2B170A] text-white rounded-md border-2 border-orange-500"
             >
               <ColsGrid>
                 {popupContent.length ? (
                   popupContent.map((item, idx) => (
                     <div key={idx} className="p-2">
                       <img
-                        src={item.image}
+                        src={sanityImageUrlBuilder(item.image).url()}
                         alt={item.destinationName}
                         className="w-full aspect-square object-cover rounded-md" // Fixed height
                       />
@@ -116,7 +94,7 @@ const HolidayDestination: React.FC = () => {
               {/* </div> */}
             </Modal>
 
-            {countries.map((country, index) => (
+            {Object.keys(data).map((country, index) => (
               <label
                 key={country}
                 onClick={() => handlePopup(country)}
@@ -124,7 +102,7 @@ const HolidayDestination: React.FC = () => {
                 id={`slider${index + 1}`}
               >
                 <img
-                  src={groupedDestinations[country][0]?.image || ''}
+                  src={sanityImageUrlBuilder(data[country][0]?.image).url() || ''}
                   className="w-full h-full rounded-md object-cover cursor-pointer hover:border border-orange-500"
                   alt={country}
                 />
@@ -132,9 +110,14 @@ const HolidayDestination: React.FC = () => {
               </label>
             ))}
           </div>
+          {/* Slider buttons */}
           <div className="absolute flex text-white gap-2 w-full justify-center items-center">
-            <button onClick={handleLeftClick}>&larr;</button>
-            {countries.map((_, idx) => (
+            <button
+              onClick={() => setActiveIndex((prev) => (prev - 1 + Object.keys(data).length) % Object.keys(data).length)}
+            >
+              &larr;
+            </button>
+            {Object.keys(data).map((_, idx) => (
               <span
                 key={idx}
                 className={`w-3 aspect-square rounded-full ${activeIndex === idx ? 'bg-blue-500' : 'bg-white'}`}
@@ -142,7 +125,7 @@ const HolidayDestination: React.FC = () => {
                 aria-label={`Slide ${idx + 1}`}
               />
             ))}
-            <button onClick={handleRightClick}>&rarr;</button>
+            <button onClick={() => setActiveIndex((prev) => (prev + 1) % Object.keys(data).length)}>&rarr;</button>
           </div>
         </div>
       </div>
