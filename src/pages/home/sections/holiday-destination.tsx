@@ -19,7 +19,6 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [country, setCountry] = useState('');
-  const [popupContent, setPopupContent] = useState<Destination[]>([]);
   const [layout, setLayout] = useState(3);
   const screenWidth = useScreenWidth();
 
@@ -127,12 +126,12 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
               >
                 <img
                   src={sanityImageUrlBuilder(data[country][0]?.image).url() || ''}
-                  className="w-full h-full rounded-md object-cover cursor-pointer hover:border border-orange-500"
+                  className="w-full h-full rounded-3xl object-cover cursor-pointer hover:border border-orange-500"
                   alt={country}
                 />
                 <Link
                   to={`/${country.toLowerCase().split(' ').join('-')}/holiday`}
-                  className="text-white absolute bottom-0 left-0 m-2"
+                  className="text-white absolute bottom-0 left-0 m-4"
                 >
                   {country}
                 </Link>

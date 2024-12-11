@@ -27,6 +27,9 @@ export const query = {
     BUSINESS_FRIENDLY: `*[_type == "blog"]`,
     PREMIER_SERVICES: `*[_type == "home-premier-services"]`,
   },
+  BUSINESS: {
+    LANDING: `*[_type == "business-landing-page"]`,
+  },
 };
 
 export const sanity = {

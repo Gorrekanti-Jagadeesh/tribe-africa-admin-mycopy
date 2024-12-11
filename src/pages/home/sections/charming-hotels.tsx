@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Modal from '@molecules/modal';
 import DualHeading from '@atoms/heading/dual-heading';

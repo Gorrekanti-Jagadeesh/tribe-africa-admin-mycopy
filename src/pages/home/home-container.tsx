@@ -43,8 +43,6 @@ const HomeContainer = () => {
     queryFn: () => sanity.GET(query.HOME.HOLIDAY_DESTINATIONS),
   });
 
-  console.log(destinationsData);
-
   const groupedDestinations =
     destinationsData?.reduce((acc, { image, country, destinationName }) => {
       if (!acc[country]) {

@@ -181,16 +181,19 @@ export const upcomingEvents = [
     title: 'List your event here',
     redirectUrl: 'https://google.com',
     description: 'some description about this card',
+    id: 1,
   },
   {
     image: featuredBG,
     title: 'List your event here',
     redirectUrl: 'https://google.com',
+    id: 2,
   },
   {
     image: featuredBG,
     title: 'List your event here',
     redirectUrl: 'https://google.com',
+    id: 3,
   },
 ];
 
