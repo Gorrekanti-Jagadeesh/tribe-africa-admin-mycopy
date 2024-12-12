@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import BusinessScreen from './business-screen';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { fetchWeatherData } from '../../api';
 import { sanity } from '@utils/sanity';
 
 const BusinessContainer = () => {
   const { country } = useParams();
   const [currentTime, setCurrentTime] = useState<string>(''); // To track current formatted time
+  const navigate = useNavigate();
 
   const {
     data: landingData,
@@ -16,6 +17,16 @@ const BusinessContainer = () => {
   } = useQuery({
     queryKey: ['business-landing-data', country],
     queryFn: () => sanity.GET(`*[_type == "business-landing-page" && lower(country) == "${country}"][0]`), // Handle undefined 'country'
+  });
+
+  const {
+    data: rawWeatherData,
+    error: weatherError,
+    isLoading: weatherLoading,
+  } = useQuery({
+    queryKey: ['weatherData', country],
+    queryFn: () => fetchWeatherData(country),
+    refetchInterval: 1800000, // Refetch every 30 minutes
   });
 
   const {
@@ -37,13 +48,21 @@ const BusinessContainer = () => {
   });
 
   const {
-    data: rawWeatherData,
-    error: weatherError,
-    isLoading: weatherLoading,
+    data: eventsData,
+    error: eventsError,
+    isLoading: eventsLoading,
   } = useQuery({
-    queryKey: ['weatherData', country],
-    queryFn: () => fetchWeatherData(country),
-    refetchInterval: 1800000, // Refetch every 30 minutes
+    queryKey: ['events', country],
+    queryFn: () => sanity.GET(`*[_type == "event-sub-categories" && category == "business"]`),
+  });
+
+  const {
+    data: professionalServicesData,
+    error: professionalServicesError,
+    isLoading: professionalServicesLoading,
+  } = useQuery({
+    queryKey: ['business-professional-services', country],
+    queryFn: () => sanity.GET(`*[_type == "business-professional-services" && lower(country) == "${country}"]`),
   });
 
   // Function to format and update time every second
@@ -109,6 +128,7 @@ const BusinessContainer = () => {
     <div>
       <BusinessScreen
         props={{
+          navigate,
           country,
           weatherData,
           weatherLoading,
@@ -122,6 +142,12 @@ const BusinessContainer = () => {
           naturalResourcesData,
           naturalResourcesLoading,
           naturalResourcesError,
+          eventsData,
+          eventsLoading,
+          eventsError,
+          professionalServicesData,
+          professionalServicesLoading,
+          professionalServicesError,
         }}
       />
     </div>

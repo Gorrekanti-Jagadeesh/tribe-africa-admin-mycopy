@@ -21,6 +21,14 @@ export const truncateText = (text: string, maxLength: number) => {
   return text;
 };
 
+export const toKebabCase = (text: string) => {
+  return text
+    .toLowerCase() // Convert to lowercase
+    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+    .trim() // Remove leading/trailing spaces
+    .replace(/\s+/g, '-'); // Replace spaces with hyphens
+};
+
 // Convert base64 image to Blob for upload
 export const base64ToBlob = (base64: string, mimeType = 'image/jpeg'): Blob => {
   const byteCharacters = atob(base64.split(',')[1]);

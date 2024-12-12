@@ -10,12 +10,12 @@ import Button from '@atoms/custom-button/button';
 
 import useScreenWidth from '@hooks/useScreenWidth';
 
-import heroBackground from '@assets/homepage-welcome-image-2.png';
-import { upcomingEvents, countryInternetData, demoImage } from '@data/index';
 import { sanityImageUrlBuilder } from '@api/index';
+import { toKebabCase } from '@utils/common';
 
 const BusinessScreen = ({ props }) => {
   const {
+    navigate,
     country,
     weatherData,
     isLoading,
@@ -30,6 +30,12 @@ const BusinessScreen = ({ props }) => {
     naturalResourcesError,
     weatherLoading,
     weatherError,
+    eventsData,
+    eventsLoading,
+    eventsError,
+    professionalServicesData,
+    professionalServicesLoading,
+    professionalServicesError,
   } = props;
   const [layout, setLayout] = useState(3);
   const screenWidth = useScreenWidth();
@@ -42,14 +48,27 @@ const BusinessScreen = ({ props }) => {
     }
   }, [screenWidth]);
 
-  if (landingLoading || investmentLoading || weatherLoading || naturalResourcesLoading) {
+  if (
+    landingLoading ||
+    investmentLoading ||
+    weatherLoading ||
+    naturalResourcesLoading ||
+    professionalServicesLoading ||
+    eventsLoading
+  ) {
     return 'Loading';
   }
-  if (landingError || investmentError || weatherError || naturalResourcesError) {
+  if (
+    landingError ||
+    investmentError ||
+    weatherError ||
+    naturalResourcesError ||
+    eventsError ||
+    professionalServicesError
+  ) {
     return 'Error Loading page..';
   }
 
-  console.log(naturalResourcesData, 'ppppp');
   return (
     <div className="max-w-screen-2xl m-auto">
       <div className="bg-orange-500 p-4 text-white text-xl text-center">
@@ -136,8 +155,17 @@ const BusinessScreen = ({ props }) => {
       <div className="max-w-6xl m-auto p-4">
         <DualHeading className="mb-4">Upcoming *Events*</DualHeading>
         <ColsGrid cols={layout}>
-          {upcomingEvents.map((item) => (
-            <OverLayCard data={item} key={item.id} />
+          {eventsData.map((item) => (
+            <OverLayCard
+              data={{
+                ...item,
+                onClick: () =>
+                  navigate(`event/${toKebabCase(item.title)}`, {
+                    state: { image: item.image, country: landingData.country, event_type: item.title },
+                  }),
+              }}
+              key={item.id}
+            />
           ))}
         </ColsGrid>
       </div>
@@ -148,15 +176,7 @@ const BusinessScreen = ({ props }) => {
           <DualHeading>Professional *Services*</DualHeading>
           <Button className="ms-auto">Advertise your business</Button>
         </div>
-        <CommonCarousel
-          data={[
-            {
-              title: 'title1',
-              image: heroBackground,
-            },
-          ]}
-          component={(item) => <OverLayCard data={item} />}
-        />
+        <CommonCarousel data={professionalServicesData} component={(item) => <OverLayCard data={item} />} />
       </div>
       <Footer />
     </div>

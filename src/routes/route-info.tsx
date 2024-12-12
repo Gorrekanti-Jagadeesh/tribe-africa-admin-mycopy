@@ -13,7 +13,7 @@ import TribeAfricaPagesContainer from '../pages/tribe-africa-pages/tribe-africa-
 import TribeAfricaPagesDetailsContainer from '../pages/tribe-africa-pages/tribe-africa-pages-details-container';
 import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-container';
 import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
-
+import BusinessEventsPage from '../pages/events/business-events';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -55,6 +55,11 @@ const appRoutes: RouteConfig[] = [
     name: 'events',
     path: '/events/:event_type',
     element: <EventsPage />,
+  },
+  {
+    name: 'Business events',
+    path: '/:country/business/event/:event_type',
+    element: <BusinessEventsPage />,
   },
   {
     name: 'blogs list',
