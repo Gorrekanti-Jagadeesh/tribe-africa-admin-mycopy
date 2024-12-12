@@ -32,7 +32,6 @@ const BusinessEventsPage = () => {
         image={sanityImageUrlBuilder(image)}
         data={eventsData}
       />
-      ;
     </div>
   );
 };
