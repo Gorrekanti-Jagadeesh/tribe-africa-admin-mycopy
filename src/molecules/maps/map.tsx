@@ -98,11 +98,11 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
       className="flex flex-col md:flex-row justify-center items-start my-12 gap-2 max-w-6xl m-auto p-2 md:p-4 animate-on-scroll"
       style={{ backgroundColor: '#b34302' }}
     >
-      {/* <div className="w-[2px] bg-white mx-4 " style={{ height: 500 }}></div> */}
+      <div className="w-[2px] bg-white mx-4 hidden md:block" style={{ height: 600 }}></div>
       <div className="flex flex-row min-w-64">
         <div className="flex flex-col justify-start items-start mt-14">
-          {categories.map((cat) => (
-            <div>
+          {categories.map((cat, index) => (
+            <div key={index}>
               <div className="flex items-center">
                 <p
                   key={cat}
@@ -125,9 +125,9 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
               </div>
 
               {selectedCategory === cat &&
-                subCategories[selectedCategory].map((each) => {
+                subCategories[selectedCategory].map((each, index) => {
                   return (
-                    <div className="flex items-center">
+                    <div className="flex items-center" key={index}>
                       <p
                         className="ml-3"
                         style={{
@@ -153,7 +153,6 @@ const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) 
         </div>
       </div>
       <img src={algeriaMap} width={160} />
-      <div></div>
       <div className="md:ml-10 w-full">
         <ComposableMap
           projectionConfig={{ scale: scale, center: center }}

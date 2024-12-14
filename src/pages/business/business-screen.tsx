@@ -7,29 +7,29 @@ import ColsGrid from '@molecules/layout/cols-grid';
 import OverLayCard from '@atoms/card/overlay-card';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Button from '@atoms/custom-button/button';
-
 import useScreenWidth from '@hooks/useScreenWidth';
-
 import { sanityImageUrlBuilder } from '@api/index';
-import { toKebabCase } from '@utils/common';
+import { fromKebabCase, toKebabCase } from '@utils/common';
 
 const BusinessScreen = ({ props }) => {
   const {
     navigate,
     country,
-    weatherData,
-    isLoading,
     landingData,
     landingError,
     landingLoading,
+    weatherData,
+    weatherLoading,
+    weatherError,
+    agencyData,
+    agencyLoading,
+    agencyError,
     investmentData,
     investmentError,
     investmentLoading,
     naturalResourcesData,
     naturalResourcesLoading,
     naturalResourcesError,
-    weatherLoading,
-    weatherError,
     eventsData,
     eventsLoading,
     eventsError,
@@ -54,7 +54,8 @@ const BusinessScreen = ({ props }) => {
     weatherLoading ||
     naturalResourcesLoading ||
     professionalServicesLoading ||
-    eventsLoading
+    eventsLoading ||
+    agencyLoading
   ) {
     return 'Loading';
   }
@@ -64,7 +65,8 @@ const BusinessScreen = ({ props }) => {
     weatherError ||
     naturalResourcesError ||
     eventsError ||
-    professionalServicesError
+    professionalServicesError ||
+    agencyError
   ) {
     return 'Error Loading page..';
   }
@@ -81,13 +83,13 @@ const BusinessScreen = ({ props }) => {
           <div
             className="aspect-video bg-cover rounded-md w-full brightness-50"
             style={{
-              backgroundImage: `url(${sanityImageUrlBuilder(landingData.landingImage)})`,
+              backgroundImage: `url(${sanityImageUrlBuilder(landingData.businessLanding)})`,
             }}
           ></div>
           <div className="text-white text-sm md:text-base lg:text-lg flex flex-col gap-2 lg:gap-6 p-2 md:p-4 lg:p-8 absolute bottom-0 brightness-200">
             <p>
               Weather:{' '}
-              {isLoading
+              {weatherLoading
                 ? 'Loading...'
                 : weatherData
                   ? `${weatherData.temperature} °F / ${weatherData.condition}`
@@ -107,7 +109,7 @@ const BusinessScreen = ({ props }) => {
         </p>
         <ColsGrid cols={layout}>
           {investmentData.map((item) => (
-            <OverLayCard data={item} key={item.id} />
+            <OverLayCard data={item} key={item._id} />
           ))}
         </ColsGrid>
       </div>
@@ -116,21 +118,21 @@ const BusinessScreen = ({ props }) => {
       <div className="w-full bg-black text-white">
         <div className="max-w-6xl m-auto p-2 md:p-4 py-8">
           <h2 className="text-lg md:text-4xl">
-            For more information on <span className="text-orange-500">Investment</span> in {landingData.country}
+            For more information on <span className="text-orange-500">Investment</span> in {fromKebabCase(country)}
           </h2>
           <div className="flex flex-col md:flex-row gap-2 mt-3">
             <img
               className="md:w-1/4 aspect-square h-auto rounded-md"
-              src={sanityImageUrlBuilder(landingData.agencyLogo)}
+              src={sanityImageUrlBuilder(agencyData.agencyLogo)}
             />
             <div className="flex-grow space-y-2">
-              <h1 className="font-semibold">{landingData.agencyName}</h1>
-              <h3 className="font-semibold">Website: {landingData.agencyWebsite}</h3>
+              <h1 className="font-semibold">{agencyData.agencyName}</h1>
+              <h3 className="font-semibold">Website: {agencyData.agencyWebsite}</h3>
               <div className="border border-white rounded-md p-2 text-sm">
                 <p className="font-semibold">Reviews:</p>
                 <ul>
-                  {landingData.agencyReviews.map((each: string) => (
-                    <li>{each}</li>
+                  {agencyData.agencyReviews.map((each: string, index: number) => (
+                    <li key={index}>{each}</li>
                   ))}
                 </ul>
               </div>
@@ -161,10 +163,10 @@ const BusinessScreen = ({ props }) => {
                 ...item,
                 onClick: () =>
                   navigate(`event/${toKebabCase(item.title)}`, {
-                    state: { image: item.image, country: landingData.country, event_type: item.title },
+                    state: { image: item.image, country: fromKebabCase(country), event_type: item.title },
                   }),
               }}
-              key={item.id}
+              key={item._id}
             />
           ))}
         </ColsGrid>

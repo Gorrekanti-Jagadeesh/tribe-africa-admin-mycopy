@@ -24,9 +24,18 @@ export const truncateText = (text: string, maxLength: number) => {
 export const toKebabCase = (text: string) => {
   return text
     .toLowerCase() // Convert to lowercase
-    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+    .replace(/&/g, 'and') // Replace '&' with 'and'
+    .replace(/[^a-z0-9\s]/g, '') // Remove special characters except spaces
     .trim() // Remove leading/trailing spaces
     .replace(/\s+/g, '-'); // Replace spaces with hyphens
+};
+
+export const fromKebabCase = (kebab: string) => {
+  return kebab
+    .split('-') // Split the string by hyphens
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+    .join(' ') // Join the words with spaces
+    .replace(/\bAnd\b/g, '&'); // Replace 'And' with '&'
 };
 
 // Convert base64 image to Blob for upload

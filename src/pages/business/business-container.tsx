@@ -15,8 +15,8 @@ const BusinessContainer = () => {
     error: landingError,
     isLoading: landingLoading,
   } = useQuery({
-    queryKey: ['business-landing-data', country],
-    queryFn: () => sanity.GET(`*[_type == "business-landing-page" && lower(country) == "${country}"][0]`), // Handle undefined 'country'
+    queryKey: ['business-holiday-landing-data', country],
+    queryFn: () => sanity.GET(`*[_type == "business-holiday-landing-page" && lower(country) == "${country}"][0]`), // Handle undefined 'country'
   });
 
   const {
@@ -27,6 +27,15 @@ const BusinessContainer = () => {
     queryKey: ['weatherData', country],
     queryFn: () => fetchWeatherData(country),
     refetchInterval: 1800000, // Refetch every 30 minutes
+  });
+
+  const {
+    data: agencyData,
+    error: agencyError,
+    isLoading: agencyLoading,
+  } = useQuery({
+    queryKey: ['investment-agency-data', country],
+    queryFn: () => sanity.GET(`*[_type == "investment-agency-details" && lower(country) == "${country}"][0]`), // Handle undefined 'country'
   });
 
   const {
@@ -130,12 +139,15 @@ const BusinessContainer = () => {
         props={{
           navigate,
           country,
-          weatherData,
-          weatherLoading,
-          weatherError,
           landingData,
           landingError,
           landingLoading,
+          weatherData,
+          weatherLoading,
+          weatherError,
+          agencyData,
+          agencyLoading,
+          agencyError,
           investmentData,
           investmentError,
           investmentLoading,
