@@ -4,6 +4,8 @@ import demo from '@assets/homepage-welcome-image-3.png';
 import { useEffect, useState } from 'react';
 import { getDataByEntryType } from '../../api';
 import { eventTypes } from '../../data';
+import { useQuery } from '@tanstack/react-query';
+import { sanity } from '@utils/sanity';
 
 const EventsPage = () => {
   const [data, setData] = useState([]);
@@ -13,6 +15,17 @@ const EventsPage = () => {
   });
   const { event_type } = useParams();
   const navigate = useNavigate();
+
+  const {
+    data: events2Data,
+    error: events2Error,
+    isLoading: events2Loading,
+  } = useQuery({
+    queryKey: ['home-events'],
+    queryFn: () => sanity.GET(`*[_type == "event" && homeEvent == true]`),
+  });
+
+  console.log(events2Data, '@@@@@');
 
   const findEventByValue = (value: string = '') => {
     for (const category of eventTypes) {

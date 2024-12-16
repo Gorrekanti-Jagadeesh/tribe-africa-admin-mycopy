@@ -57,12 +57,7 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
       }, 2500);
       return () => clearInterval(interval);
     }
-    console.log(data);
   }, [isHovered, data]);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   if (!data || loading) {
     return <Loading />;

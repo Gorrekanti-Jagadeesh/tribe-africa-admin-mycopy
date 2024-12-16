@@ -82,7 +82,7 @@ const HomeContainer = () => {
       }),
   });
 
-  // Primier Services
+  // Premier Services
   const {
     data: servicesData,
     error: servicesError,

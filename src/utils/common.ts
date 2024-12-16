@@ -33,9 +33,14 @@ export const toKebabCase = (text: string) => {
 export const fromKebabCase = (kebab: string) => {
   return kebab
     .split('-') // Split the string by hyphens
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+    .map((word) => {
+      if (['and'].includes(word)) {
+        return word; // Lowercase certain words like "and"
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of other words
+    })
     .join(' ') // Join the words with spaces
-    .replace(/\bAnd\b/g, '&'); // Replace 'And' with '&'
+    .replace(/\band\b/g, '&'); // Replace 'And' with '&'
 };
 
 // Convert base64 image to Blob for upload

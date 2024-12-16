@@ -1,16 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { EventCategory } from '@types/index';
 import NavLayout from '@molecules/layout/nav-layout';
-
-import { eventURLs } from '@data/index';
+import { useQuery } from '@tanstack/react-query';
+import { sanity } from '@utils/sanity';
 
 const Events: React.FC = () => {
   const [eventCategories, setEventCategories] = useState<EventCategory[]>([]);
 
+  // Fetch data from Sanity
+  const {
+    data: eventsData,
+    error: eventsError,
+    isLoading: eventsLoading,
+  } = useQuery({
+    queryKey: ['events'],
+    queryFn: () => sanity.GET(`*[_type == "event-sub-categories"]{category, title, "imageUrl": image.asset->url}`),
+  });
+
   useEffect(() => {
-    const fetchedData: EventCategory[] = eventURLs;
-    setEventCategories(fetchedData);
-  }, []);
+    if (eventsData) {
+      // Transform data to match eventCategories format
+      const groupedData = eventsData.reduce((acc: Record<string, any>, item: any) => {
+        const { category, title, imageUrl } = item;
+
+        if (!acc[category]) {
+          acc[category] = {
+            title:
+              category === 'business' ? 'Business Events' : category === 'entertainment' ? 'Entertainment' : 'Sports',
+            items: [],
+            imageUrl, // Use the same image URL for all items in the category (optional)
+          };
+        }
+
+        acc[category].items.push({
+          label: title,
+          url: `/events/${title.toLowerCase().replace(/\s+/g, '-')}`,
+        });
+
+        return acc;
+      }, {});
+
+      // Convert grouped data to an array
+      const formattedData = Object.values(groupedData);
+      setEventCategories(formattedData as EventCategory[]);
+    }
+  }, [eventsData]);
+
+  if (eventsLoading) return <div>Loading...</div>;
+  if (eventsError) return <div>Error loading events</div>;
 
   return (
     <NavLayout eventCategories={eventCategories || []} showButton={true} showModal={true} navLayoutHeading="Event" />

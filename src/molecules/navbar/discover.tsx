@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import CardsGrid from '@molecules/layout/cards-grid';
-import innovationsView from '@assets/home/discover/innovations.png';
-import didYouKnowView from '@assets/home/discover/did-you-know.png';
-import bucketListView from '@assets/home/discover/bucket-list.png';
-import greatOutdoorsView from '@assets/home/discover/great-outdoors.png';
-import pilgrimageView from '@assets/home/discover/pilgrimage.png';
-import weddingDestinationView from '@assets/home/discover/destination-weddings.png';
+import { sanity } from '@utils/sanity';
+import { useQuery } from '@tanstack/react-query';
+import { Loading } from '@atoms/common/loading';
+import { sanityImageUrlBuilder } from '@api/index';
+import { toKebabCase } from '@utils/common';
 
 const Discover: React.FC = () => {
   const [toggle, setToggle] = useState(true);
@@ -23,60 +21,40 @@ const Discover: React.FC = () => {
     setContent(data);
   };
 
-  const discoverData = [
-    {
-      image: innovationsView,
-      title: 'Innovations',
-      onClick: () => handleToggle(InnovationsData),
-    },
-    {
-      image: didYouKnowView,
-      title: 'Did you know?',
-      onClick: () => handleToggle({}),
-    },
-    {
-      image: bucketListView,
-      title: 'For the bucket list',
-      onClick: () => handleToggle({}),
-    },
-    {
-      image: greatOutdoorsView,
-      title: 'The Great Outdoors',
-      onClick: () => handleToggle({}),
-    },
-    {
-      image: pilgrimageView,
-      title: 'Pilgrimage',
-      onClick: () => handleToggle({}),
-    },
-    {
-      image: weddingDestinationView,
-      title: 'Destination Weddings',
-      onClick: () => handleToggle({}),
-    },
-  ];
+  const {
+    data: discoverData,
+    error: discoverError,
+    isLoading: discoverLoading,
+  } = useQuery({
+    queryKey: ['home-discover-section-data'],
+    queryFn: () => sanity.GET(`*[_type == "home-discover-section"]`), // Handle undefined 'country'
+  });
 
-  const InnovationsData = {
-    title: 'Innovations',
-    data: [
-      {
-        image: pilgrimageView,
-        title: 'Amazing Smart Innovations',
-        onClick: () => navigate('/africa/smart-innovations'),
-      },
-      {
-        image: weddingDestinationView,
-        title: 'Upcoming Smart Cities',
-        onClick: () => setToggle(true),
-      },
-    ],
-  };
+  if (discoverLoading) {
+    return <Loading />;
+  }
 
+  if (discoverError) {
+    return <>Error fetching data..</>;
+  }
   return (
     <div className="md:p-4">
       <h4 className="text-left text-orange-500 text-lg">&rarr; Discover</h4>
       {toggle ? (
-        <CardsGrid data={discoverData} />
+        <div className="flex">
+          {discoverData.map((each) => (
+            <div
+              className="cursor-pointer w-1/3 m-2"
+              onClick={() => handleToggle({ data: each.subCategories, title: each.name })}
+            >
+              <img
+                className="rounded-md aspect-square hover:border hover:border-orange-500"
+                src={sanityImageUrlBuilder(each.image)}
+              />
+              <p>{each.name}</p>
+            </div>
+          ))}
+        </div>
       ) : (
         <div
           id="sub-layout"
@@ -85,7 +63,17 @@ const Discover: React.FC = () => {
           <h4 className="text-orange-500 text-lg hover:underline cursor-pointer w-fit" onClick={() => setToggle(true)}>
             &larr; {content.title}
           </h4>
-          {content.data ? <CardsGrid data={content.data} /> : <>Coming Soon</>}
+          <div className="flex">
+            {content.data.map((each) => (
+              <div
+                className="cursor-pointer w-1/3 m-2"
+                onClick={() => navigate(`discover/${toKebabCase(content.title)}/${toKebabCase(each.name)}`)}
+              >
+                <img className="rounded-md aspect-square" src={sanityImageUrlBuilder(each.image)} />
+                <p>{each.name}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

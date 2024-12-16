@@ -76,7 +76,7 @@ const BusinessScreen = ({ props }) => {
       <div className="bg-orange-500 p-4 text-white text-xl text-center">
         <p>Getting there - Book Flight and accommodation</p>
       </div>
-      <BusinessHeader country={country} />
+      <BusinessHeader country={fromKebabCase(country)} />
       {/* Hero section */}
       <div className="m-auto max-w-6xl p-4">
         <div className="relative">
@@ -161,10 +161,7 @@ const BusinessScreen = ({ props }) => {
             <OverLayCard
               data={{
                 ...item,
-                onClick: () =>
-                  navigate(`event/${toKebabCase(item.title)}`, {
-                    state: { image: item.image, country: fromKebabCase(country), event_type: item.title },
-                  }),
+                onClick: () => navigate(`/${country}/business/event/${toKebabCase(item.title)}`),
               }}
               key={item._id}
             />

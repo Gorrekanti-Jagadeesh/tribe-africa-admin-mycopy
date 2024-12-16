@@ -6,6 +6,7 @@ import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import OverLayCard from '@atoms/card/overlay-card';
 import { sanityImageUrlBuilder } from '@api/index';
 import ColsGrid from '@molecules/layout/cols-grid';
+import { fromKebabCase } from '@utils/common';
 
 interface MarkerType {
   name: string;
@@ -177,10 +178,17 @@ const HolidayScreen = ({ props }) => {
     return <div>Country data not available</div>;
   }
 
-  if (landingLoading || weatherLoading || lookOutForLoading || mapsLoading || adventuresLoading) {
+  if (
+    landingLoading ||
+    weatherLoading ||
+    lookOutForLoading ||
+    mapsLoading ||
+    adventuresLoading ||
+    tribeGoesOutLoading
+  ) {
     return 'Loading';
   }
-  if (landingError || weatherError || lookOutForError || mapsError || adventuresError) {
+  if (landingError || weatherError || lookOutForError || mapsError || adventuresError || tribeGoesOutError) {
     return 'Error Loading page..';
   }
 
@@ -194,7 +202,7 @@ const HolidayScreen = ({ props }) => {
 
   return (
     <div>
-      <HolidayHeader />
+      <HolidayHeader country={fromKebabCase(country)} />
       <div>
         {/* Adventure */}
         <div className="max-w-6xl m-auto p-4">

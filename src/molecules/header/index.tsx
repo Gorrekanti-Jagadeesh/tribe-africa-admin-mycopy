@@ -42,9 +42,9 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
   return <Header country={country} menuItems={menuItems} />;
 };
 
-export const HolidayHeader = () => {
+export const HolidayHeader = ({ country }: { country: string | undefined }) => {
   const menuItems = [
-    { id: 'country', title: 'Country Name', isNavLink: false, content: null },
+    { id: 'country', title: country, isNavLink: false, content: null },
     { id: 'Out & about', title: 'Out & About', isNavLink: true, content: <OutAndAbout /> },
     { id: 'events', title: 'Events', isNavLink: true, content: <BusinessEvents /> },
     { id: 'must-see-and-do', title: 'Must See & Do', isNavLink: true, content: <MustSeeAndDo /> },

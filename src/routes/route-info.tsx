@@ -4,7 +4,6 @@ import HolidayContainer from '../pages/holiday/holiday-container';
 import Accomodation from '../pages/accomodation/accomodation-container';
 import Events from '../molecules/navbar/events';
 import EventsPage from '../pages/events/events-container';
-import InnovationsScreen from '../pages/innovations/innovations-screen';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
 import { QNA } from '../pages/qna-form/qna-container';
@@ -14,6 +13,7 @@ import TribeAfricaPagesDetailsContainer from '../pages/tribe-africa-pages/tribe-
 import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-container';
 import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
 import BusinessEventsPage from '../pages/events/business-events';
+import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -53,7 +53,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'events',
-    path: '/events/:event_type',
+    path: '/events/:event_category/:event_type',
     element: <EventsPage />,
   },
   {
@@ -78,8 +78,8 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'innovations',
-    path: '/africa/smart-innovations',
-    element: <InnovationsScreen />,
+    path: '/discover/:category/:subcategory',
+    element: <DiscoverArticles />,
   },
   {
     name: 'destinations',
