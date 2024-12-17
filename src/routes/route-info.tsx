@@ -2,7 +2,6 @@ import HomeContainer from '../pages/home/home-container';
 import BusinessContainer from '../pages/business/business-container';
 import HolidayContainer from '../pages/holiday/holiday-container';
 import Accomodation from '../pages/accomodation/accomodation-container';
-import Events from '../molecules/navbar/events';
 import EventsPage from '../pages/events/events-container';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
@@ -46,11 +45,6 @@ const appRoutes: RouteConfig[] = [
     path: '/accomodations',
     element: <Accomodation />,
   },
-  // {
-  //   name: 'events',
-  //   path: '/events',
-  //   element: <Events />,
-  // },
   {
     name: 'events',
     path: '/events/:event_category/:event_type',

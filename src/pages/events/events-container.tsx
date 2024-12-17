@@ -1,8 +1,6 @@
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import EventsScreen from './events-screen';
-import demo from '@assets/homepage-welcome-image-3.png';
-import { useEffect, useState } from 'react';
-import { getDataByEntryType, sanityImageUrlBuilder } from '../../api';
+import { sanityImageUrlBuilder } from '../../api';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
 import { fromKebabCase, toKebabCase } from '@utils/common';
