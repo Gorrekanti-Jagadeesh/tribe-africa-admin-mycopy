@@ -34,7 +34,7 @@ const BusinessEventsPage = () => {
     queryKey: ['business-events', customCountry, customEventType],
     queryFn: () =>
       sanity.GET(
-        `*[_type == "event" && lower(country) == "${customCountry}" && category == "business" && type == "${customEventType}"]`
+        `*[_type == "event" && country == "${customCountry}" && category == "Business" && type == "${customEventType}"]`
       ),
     enabled: !!country && !!event_type, // Only run this query if country and event_type are available
   });

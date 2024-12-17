@@ -46,6 +46,7 @@ const Discover: React.FC = () => {
             <div
               className="cursor-pointer w-1/3 m-2"
               onClick={() => handleToggle({ data: each.subCategories, title: each.name })}
+              key={each._id}
             >
               <img
                 className="rounded-md aspect-square hover:border hover:border-orange-500"
@@ -68,6 +69,7 @@ const Discover: React.FC = () => {
               <div
                 className="cursor-pointer w-1/3 m-2"
                 onClick={() => navigate(`discover/${toKebabCase(content.title)}/${toKebabCase(each.name)}`)}
+                key={each._id}
               >
                 <img className="rounded-md aspect-square" src={sanityImageUrlBuilder(each.image)} />
                 <p>{each.name}</p>

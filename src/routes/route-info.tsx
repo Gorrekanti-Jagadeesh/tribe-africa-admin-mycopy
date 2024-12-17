@@ -46,11 +46,11 @@ const appRoutes: RouteConfig[] = [
     path: '/accomodations',
     element: <Accomodation />,
   },
-  {
-    name: 'events',
-    path: '/events',
-    element: <Events />,
-  },
+  // {
+  //   name: 'events',
+  //   path: '/events',
+  //   element: <Events />,
+  // },
   {
     name: 'events',
     path: '/events/:event_category/:event_type',

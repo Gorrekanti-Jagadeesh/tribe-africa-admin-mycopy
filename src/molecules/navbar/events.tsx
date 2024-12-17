@@ -3,6 +3,7 @@ import { EventCategory } from '@types/index';
 import NavLayout from '@molecules/layout/nav-layout';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
+import { toKebabCase } from '@utils/common';
 
 const Events: React.FC = () => {
   const [eventCategories, setEventCategories] = useState<EventCategory[]>([]);
@@ -14,34 +15,30 @@ const Events: React.FC = () => {
     isLoading: eventsLoading,
   } = useQuery({
     queryKey: ['events'],
-    queryFn: () => sanity.GET(`*[_type == "event-sub-categories"]{category, title, "imageUrl": image.asset->url}`),
+    queryFn: () =>
+      sanity.GET(`*[_type == "event-categories"]{
+        category,
+        "imageUrl": categoryImage.asset->url,
+        subCategories[] {
+          title,
+          "subCategoryImage": subCategoryImage.asset->url
+        }
+      }`),
   });
 
   useEffect(() => {
     if (eventsData) {
       // Transform data to match eventCategories format
-      const groupedData = eventsData.reduce((acc: Record<string, any>, item: any) => {
-        const { category, title, imageUrl } = item;
+      const formattedData = eventsData.map((category) => ({
+        title: category.category, // Category Title
+        imageUrl: category.imageUrl, // Category Image URL
+        items: category.subCategories.map((subCategory) => ({
+          label: subCategory.title,
+          url: `/events/${toKebabCase(category.category)}/${toKebabCase(subCategory.title)}`,
+          imageUrl: subCategory.subCategoryImage,
+        })),
+      }));
 
-        if (!acc[category]) {
-          acc[category] = {
-            title:
-              category === 'business' ? 'Business Events' : category === 'entertainment' ? 'Entertainment' : 'Sports',
-            items: [],
-            imageUrl, // Use the same image URL for all items in the category (optional)
-          };
-        }
-
-        acc[category].items.push({
-          label: title,
-          url: `/events/${title.toLowerCase().replace(/\s+/g, '-')}`,
-        });
-
-        return acc;
-      }, {});
-
-      // Convert grouped data to an array
-      const formattedData = Object.values(groupedData);
       setEventCategories(formattedData as EventCategory[]);
     }
   }, [eventsData]);
@@ -50,7 +47,9 @@ const Events: React.FC = () => {
   if (eventsError) return <div>Error loading events</div>;
 
   return (
-    <NavLayout eventCategories={eventCategories || []} showButton={true} showModal={true} navLayoutHeading="Event" />
+    <>
+      <NavLayout eventCategories={eventCategories || []} showButton={true} showModal={true} navLayoutHeading="Events" />
+    </>
   );
 };
 
