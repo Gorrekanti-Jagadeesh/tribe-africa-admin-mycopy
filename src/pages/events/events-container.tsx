@@ -3,7 +3,7 @@ import EventsScreen from './events-screen';
 import { sanityImageUrlBuilder } from '../../api';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
-import { fromKebabCase, toKebabCase } from '@utils/common';
+import { fromKebabCase } from '@utils/common';
 
 const EventsPage = () => {
   const { event_type, event_category } = useParams();
@@ -33,7 +33,9 @@ const EventsPage = () => {
   } = useQuery({
     queryKey: ['business-events', customEventCategory, customEventType],
     queryFn: () =>
-      sanity.GET(`*[_type == "event" && category == "${customEventCategory}" && type == "${customEventType}"]`),
+      sanity.GET(
+        `*[_type == "event" && homeEvent == true && category == "${customEventCategory}" && type == "${customEventType}"]`
+      ),
   });
 
   if (eventImageLoading || eventsLoading) {
