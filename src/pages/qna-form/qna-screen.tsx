@@ -9,7 +9,7 @@ import { isLoggedIn, getFormData } from '@utils/common';
 
 import { qna, getDataByEntryType } from '@api/index';
 
-import { QNAProps } from '@types/index';
+import { QNAProps } from '../../../src/types/index';
 
 export const QNAScreen = () => {
   const [data, setData] = useState<QNAProps[]>([]);

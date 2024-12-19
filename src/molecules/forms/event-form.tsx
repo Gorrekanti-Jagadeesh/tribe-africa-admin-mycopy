@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { ImageDragAndDrop } from '@atoms/input-elements/drag-and-drop';
-import { uploadImage } from '@api';
+import { uploadImage } from '@api/index';
 import { parseImageUrl } from '@utils/sanity';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
@@ -27,7 +27,7 @@ type FormData = {
 const categories = eventTypes;
 
 const EventForm: React.FC = () => {
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
@@ -51,7 +51,9 @@ const EventForm: React.FC = () => {
       });
   };
 
-  const handleFileSelect = (file: File | null): void => setImage(file);
+  const handleFileSelect = (file: File | null): void => {
+    setImage(file);
+  };
 
   const selectedCategory = watch('category');
   const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);

@@ -50,7 +50,7 @@ const Discover: React.FC = () => {
             >
               <img
                 className="rounded-md aspect-square hover:border hover:border-orange-500"
-                src={sanityImageUrlBuilder(each.image)}
+                src={sanityImageUrlBuilder(each.image).url()}
               />
               <p>{each.name}</p>
             </div>
@@ -71,7 +71,7 @@ const Discover: React.FC = () => {
                 onClick={() => navigate(`discover/${toKebabCase(content.title)}/${toKebabCase(each.name)}`)}
                 key={each._id}
               >
-                <img className="rounded-md aspect-square" src={sanityImageUrlBuilder(each.image)} />
+                <img className="rounded-md aspect-square" src={sanityImageUrlBuilder(each.image).url()} />
                 <p>{each.name}</p>
               </div>
             ))}

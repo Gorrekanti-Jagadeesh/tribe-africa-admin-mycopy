@@ -2,7 +2,7 @@ import Button from '@atoms/custom-button/button';
 import BlogView from '@molecules/blogs/blog-view';
 import BlogListing from '@molecules/blogs/blog-listing';
 import UnderlineHeading from '@atoms/heading/underline-heading';
-import { BlogPageScreenProps } from '@types';
+import { BlogPageScreenProps } from '../../../src/types/index';
 
 const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ blogId, banner }) => {
   return (

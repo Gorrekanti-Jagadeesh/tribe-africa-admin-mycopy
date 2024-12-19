@@ -7,7 +7,7 @@ import IconsCard from '@atoms/card/icons-card';
 import locationPin from '@assets/icons/location.svg';
 import search from '@assets/icons/search.svg';
 
-import { ProffesionalData } from '@types/index';
+import { ProffesionalData } from '../../../src/types/index';
 import { useState } from 'react';
 
 interface ProffesionalIcons {
