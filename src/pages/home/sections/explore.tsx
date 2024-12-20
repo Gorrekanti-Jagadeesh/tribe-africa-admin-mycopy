@@ -56,8 +56,8 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
           </div> */}
 
             <div id="about-africa" className="grid gap-2 text-sm">
-              {data.exploreSectionContent.map((each) => (
-                <p>{each}</p>
+              {data.exploreSectionContent.map((each, index) => (
+                <p key={index}>{each}</p>
               ))}
             </div>
             <div id="welcome-footer" className="text-sm flex gap-2">

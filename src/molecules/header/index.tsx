@@ -49,7 +49,7 @@ export const HolidayHeader = ({ country }: { country: string | undefined }) => {
     { id: 'events', title: 'Events', isNavLink: true, content: <BusinessEvents /> },
     { id: 'must-see-and-do', title: 'Must See & Do', isNavLink: true, content: <MustSeeAndDo /> },
     { id: 'travel-knowledge', title: 'Travel Knowledge', isNavLink: true, content: <TravelKnowledge /> },
-    { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
+    { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs page={'Country'} /> },
   ];
 
   return <Header menuItems={menuItems} />;

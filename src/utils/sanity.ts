@@ -23,8 +23,8 @@ export const query = {
             isCharmingHotel
           }`,
     HOLIDAY_DESTINATIONS: `*[_type == "holiday-destinations"]`,
-    WORKING_REMOTELY: `*[_type == "blog"]`,
-    BUSINESS_FRIENDLY: `*[_type == "blog"]`,
+    WORKING_REMOTELY: `*[_type == "blog" && homeBusinessBlogs =="Working Remotely" && blogType == "Business"]`,
+    BUSINESS_FRIENDLY: `*[_type == "blog"  && homeBusinessBlogs == "Business Friendly" && blogType == "Business"]`,
     PREMIER_SERVICES: `*[_type == "home-premier-services"]`,
   },
   BUSINESS: {

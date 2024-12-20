@@ -5,8 +5,10 @@ import { getEntryDataById } from '../../api';
 import { parseImageUrl } from '../../utils/sanity';
 
 import { BlogContentProps } from '../../types';
+import { useParams } from 'react-router';
 
-const BlogView = ({ blogId }: { blogId: string }) => {
+const BlogDetailsPage = () => {
+  const { blogId } = useParams();
   const [data, setData] = useState<BlogContentProps>({
     _id: '1',
     title: '',
@@ -27,7 +29,7 @@ const BlogView = ({ blogId }: { blogId: string }) => {
   }, [data]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-10 px-10">
       <h1 className="text-4xl my-4 font-semibold capitalize">{data.title}</h1>
       <img className="aspect-video object-cover" src={image} />
       {typeof data.content == 'string' ? (
@@ -53,4 +55,4 @@ const BlogView = ({ blogId }: { blogId: string }) => {
   );
 };
 
-export default BlogView;
+export default BlogDetailsPage;
