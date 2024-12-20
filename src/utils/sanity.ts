@@ -98,10 +98,6 @@ export const processContent = async (html: string[]) => {
           _type: 'image',
           asset: { _type: 'reference', _ref: res._id },
         });
-        console.log({
-          _type: 'image',
-          asset: { _type: 'reference', _ref: res._id },
-        });
       }
     } else {
       richtext += part;

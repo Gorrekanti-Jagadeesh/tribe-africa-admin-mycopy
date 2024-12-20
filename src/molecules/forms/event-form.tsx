@@ -43,7 +43,6 @@ const EventForm: React.FC = () => {
           image: parseImageUrl(res._id),
           _id: `drafts.${generateId()}`,
         };
-        console.log(jsonData);
         sanityClient.create(jsonData).then(() => alert('submitted successfully'));
       })
       .catch((error) => {

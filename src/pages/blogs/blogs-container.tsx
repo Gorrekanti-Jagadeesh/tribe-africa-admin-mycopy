@@ -41,8 +41,6 @@ const BlogPage = () => {
 
   const data = homeBlogData || countryBlogData;
 
-  console.log(data, ':tgh');
-
   return <BlogPageScreen banner={demo} data={data} blogCategory={customBlogCategory} country={customCountry} />;
 };
 

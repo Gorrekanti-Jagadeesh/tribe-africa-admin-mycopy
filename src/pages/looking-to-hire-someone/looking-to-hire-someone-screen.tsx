@@ -38,7 +38,6 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
 
   function filterByDepartment(this, department) {
     if (active != department) {
-      console.log('active');
       setActive(department);
       setData(proffesionalData.filter((p) => p.department.toLowerCase() == department));
     }

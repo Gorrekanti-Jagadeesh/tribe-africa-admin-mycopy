@@ -20,7 +20,6 @@ const BlogDetailsPage = () => {
   useEffect(() => {
     getEntryDataById(blogId).then((res: SetStateAction<BlogContentProps>[]) => {
       setData(res[0]);
-      console.log(res[0]);
     });
   }, [blogId]);
 
