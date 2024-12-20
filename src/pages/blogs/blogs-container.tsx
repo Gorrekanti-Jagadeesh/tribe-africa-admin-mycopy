@@ -18,7 +18,7 @@ const BlogPage = () => {
   } = useQuery({
     queryKey: ['home-blogs-data', blogCategory],
     queryFn: () => sanity.GET(`*[_type == "blog" && homeBlog == true && blogType == "${customBlogCategory}"]`), // Handle undefined 'country'
-    // enabled: Boolean(country),
+    enabled: !country,
   });
 
   const {
@@ -29,7 +29,7 @@ const BlogPage = () => {
     queryKey: ['country-blogs-data', blogCategory],
     queryFn: () =>
       sanity.GET(`*[_type == "blog" && country == "${customCountry}" && blogType == "${customBlogCategory}"]`), // Handle undefined 'country'
-    enabled: !country,
+    enabled: Boolean(country),
   });
 
   if (homeBlogLoading || countryBlogLoading) {
