@@ -45,6 +45,8 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
+    // console.log("hello")
+
     if (!selectedFile) {
       alert('Please upload an image before submitting.');
       return;
