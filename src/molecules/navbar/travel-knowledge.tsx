@@ -73,14 +73,12 @@
 
 import React, { useState } from 'react';
 import { LinkList } from '../layout/link-list';
-import { EventCategory } from '../../../src/types/index';
 import Button from '@atoms/custom-button/button';
 import Modal from '../modal';
 import EventForm from '../forms/event-form';
 import { travelKnowledgeURLs } from '../../data';
 
 const NavcategoryItem = ({ category }) => {
-  console.log(category, '@@@@@@@@@');
   return (
     <div className="flex flex-col">
       {category.imageUrl && (
