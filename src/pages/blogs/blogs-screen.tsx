@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import Button from '@atoms/custom-button/button';
 import UnderlineHeading from '@atoms/heading/underline-heading';
-import { BlogPageScreenProps } from '@types';
+import { BlogPageScreenProps } from '../../types';
 import BlogCard from '../../atoms/card/blog-card';
 import DualHeading from '../../atoms/heading/dual-heading';
 import BlogCompose from '@molecules/blogs/blog-compose';
 import Modal from '@molecules/modal';
 
-const BlogPageScreen: React.FC<BlogPageScreenProps> = ({ country, data, banner, blogCategory }) => {
+const BlogPageScreen = ({ country, data, banner, blogCategory }) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       <div className="flex flex-col gap-4">
         <div id="header" className="flex mb-4">
-          <UnderlineHeading> {`${country} ${blogCategory}  Articles`}</UnderlineHeading>
+          <UnderlineHeading>{`${country} ${blogCategory} Articles`}</UnderlineHeading>
           <Button className="ms-auto">Get Featured</Button>
         </div>
         <div id="banner" className="bg-gray-100 flex justify-center p-12">

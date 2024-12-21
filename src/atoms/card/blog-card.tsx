@@ -4,12 +4,16 @@ import { sanityImageUrlBuilder } from '@api/index';
 
 const BlogCard = ({ data }: { data: BlogContentProps }) => {
   const navigate = useNavigate();
+
+  const backgroundImageUrl =
+    typeof data?.image === 'string' ? data?.image : sanityImageUrlBuilder(data?.image?.asset?._ref)?.url();
+
   return (
     <div className="w-full relative grid gap-2">
       <div
         className="aspect-square bg-cover bg-center rounded-md relative"
         style={{
-          backgroundImage: `url(${sanityImageUrlBuilder(data.image)})`,
+          backgroundImage: `url(${backgroundImageUrl})`,
         }}
       ></div>
       <p className="text-nowrap truncate">{data.title}</p>

@@ -54,7 +54,7 @@ const Blogs = () => {
                 }}
               >
                 <img
-                  src={sanityImageUrlBuilder(each.categoryImage)}
+                  src={sanityImageUrlBuilder(each.categoryImage).url()}
                   alt={each.articleType}
                   className="w-full md:h-full rounded-md mb-2"
                 />
