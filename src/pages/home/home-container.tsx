@@ -3,14 +3,14 @@ import HomeScreen from './home-screen';
 import { useQuery } from '@tanstack/react-query';
 import { sanity, query } from '@utils/sanity';
 
-interface BusinessArticleProps {
-  image: string;
-  title: string;
-  description: string;
-  _id: string;
-  homeBusinessBlogs: string;
-  blogType: string;
-}
+// interface BusinessArticleProps {
+//   image: string;
+//   title: string;
+//   description: string;
+//   _id: string;
+//   homeBusinessBlogs: string;
+//   blogType: string;
+// }
 
 const HomeContainer = () => {
   // Explore
@@ -59,12 +59,7 @@ const HomeContainer = () => {
     isLoading: workingRemotelyLoading,
   } = useQuery({
     queryKey: ['working_remotely'],
-    queryFn: () =>
-      sanity.GET(query.HOME.WORKING_REMOTELY).then((data) => {
-        return data.filter(
-          (each: BusinessArticleProps) => each.homeBusinessBlogs === 'Working Remotely' && each.blogType === 'Business'
-        );
-      }),
+    queryFn: () => sanity.GET(query.HOME.WORKING_REMOTELY),
   });
 
   // Business friendly
@@ -74,12 +69,7 @@ const HomeContainer = () => {
     isLoading: BusinessFriendlyLoading,
   } = useQuery({
     queryKey: ['business_friendly'],
-    queryFn: () =>
-      sanity.GET(query.HOME.BUSINESS_FRIENDLY).then((data) => {
-        return data.filter(
-          (each: BusinessArticleProps) => each.homeBusinessBlogs === 'Business friendly' && each.blogType === 'Business'
-        );
-      }),
+    queryFn: () => sanity.GET(query.HOME.BUSINESS_FRIENDLY),
   });
 
   // Premier Services

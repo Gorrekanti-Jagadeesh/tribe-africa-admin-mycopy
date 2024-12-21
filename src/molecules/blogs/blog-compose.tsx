@@ -36,10 +36,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
 
   // Handle changes in the rich text editor content
   const handleContentChange = (content: string): void => setEditorContent(content);
-  // const handleDescriptionChange = (content: string): void => setDescriptionContent(content.target.value);
-  const handleDescriptionChange: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-    setDescriptionContent(event.target.value);
-  };
+  const handleDescriptionChange = (content: string): void => setDescriptionContent(content.target.value);
 
   // Handle changes in blog placeholder image in drag-and-drop component
   const handleFileSelect = (file: File | null): void => setSelectedFile(file);

@@ -13,6 +13,7 @@ import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/look
 import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
 import BusinessEventsPage from '../pages/events/business-events';
 import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
+import BlogDetailsPage from '@molecules/blogs/blog-view';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -56,14 +57,24 @@ const appRoutes: RouteConfig[] = [
     element: <BusinessEventsPage />,
   },
   {
-    name: 'blogs list',
-    path: '/blogs',
+    name: 'Blogs List - No Country',
+    path: '/:blogCategory/blogs',
     element: <BlogPage />,
   },
   {
-    name: 'blogs',
-    path: '/blogs/:blogId',
+    name: 'Blogs List - No Country',
+    path: '/:country/:blogCategory/blogs',
     element: <BlogPage />,
+  },
+  {
+    name: 'Blog Details - No Country',
+    path: '/:blogCategory/blogs/:blogId',
+    element: <BlogDetailsPage />,
+  },
+  {
+    name: 'Blog Details - With Country',
+    path: '/:country/:blogCategory/blogs/:blogId',
+    element: <BlogDetailsPage />,
   },
   {
     name: 'qna',

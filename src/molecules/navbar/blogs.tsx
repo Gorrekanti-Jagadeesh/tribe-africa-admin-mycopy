@@ -1,22 +1,35 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube, faSpotify } from '@fortawesome/free-brands-svg-icons';
 import Button from '../../atoms/custom-button/button';
+import { useQuery } from '@tanstack/react-query';
+import { sanity } from '@utils/sanity';
+import { sanityImageUrlBuilder } from '@api/index';
+import { useNavigate, useParams } from 'react-router';
+import { fromKebabCase, toKebabCase } from '@utils/common';
 
-const ArticleCard: React.FC<{ src: string; alt: string; title: string }> = ({ src, alt, title }) => (
-  <div className="w-full">
-    <img src={src} alt={alt} className="w-full md:h-full rounded-md mb-2" />
-    <div className="text-center text-white">{title}</div>
-  </div>
-);
+const Blogs = () => {
+  const { country } = useParams();
+  const navigation = useNavigate();
 
-const ArticleCardList = [
-  { title: 'Business Articles', images: 'https://via.placeholder.com/150' },
-  { title: 'Holiday Articles', images: 'https://via.placeholder.com/150' },
-  { title: 'Environment & Sustainability Articles', images: 'https://via.placeholder.com/150' },
-];
+  const customCountry = country ? fromKebabCase(country) : 'Home';
 
-const Blogs: React.FC = () => {
+  const {
+    data: blogData,
+    error: blogError,
+    isLoading: blogLoading,
+  } = useQuery({
+    queryKey: ['blogs-categories-data'],
+    queryFn: () => sanity.GET(`*[_type == "blog-categories" && country == "${customCountry}"][0]`),
+  });
+
+  if (blogLoading) {
+    return 'loading';
+  }
+
+  if (blogError) {
+    return 'Error';
+  }
+
   return (
     <div className="p-2 md:p-4">
       {/* Blog Title */}
@@ -30,8 +43,23 @@ const Blogs: React.FC = () => {
             Contribute
           </Button>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {ArticleCardList.map((eachArticle, index) => (
-              <ArticleCard key={index} src={eachArticle.images} alt={eachArticle.title} title={eachArticle.title} />
+            {blogData.articles.map((each, index: number) => (
+              <div
+                className="w-full"
+                key={index}
+                onClick={() => {
+                  country
+                    ? navigation(`/${country}/${toKebabCase(each.articleType)}/blogs`)
+                    : navigation(`/${toKebabCase(each.articleType)}/blogs`);
+                }}
+              >
+                <img
+                  src={sanityImageUrlBuilder(each.categoryImage)}
+                  alt={each.articleType}
+                  className="w-full md:h-full rounded-md mb-2"
+                />
+                <div className="text-center text-white">{each.articleType}</div>
+              </div>
             ))}
           </div>
         </div>

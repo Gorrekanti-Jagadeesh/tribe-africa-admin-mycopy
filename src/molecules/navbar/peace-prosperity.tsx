@@ -21,7 +21,7 @@ const PeaceProsperity: React.FC = () => {
   if (ppInstituteError) {
     return <>Error fetching data..</>;
   }
-  console.log(ppInstituteData, 'ppppoo');
+
   return (
     <div className="flex flex-col justify-center p-2 md:p-4">
       <h4 className="text-left text-orange-500 text-lg">&rarr; Peace & Prosperity Institute</h4>
@@ -33,8 +33,10 @@ const PeaceProsperity: React.FC = () => {
           </video>
         </div>
         <div style={{ flex: '0 0 60%' }}>
-          {ppInstituteData.paragraphs.map((each: string) => (
-            <p className="text-start mb-4">{each}</p>
+          {ppInstituteData.paragraphs.map((each: string, index: number) => (
+            <p className="text-start mb-4" key={index}>
+              {each}
+            </p>
           ))}
         </div>
       </div>

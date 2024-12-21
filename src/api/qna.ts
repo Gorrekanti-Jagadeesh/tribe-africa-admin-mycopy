@@ -11,7 +11,6 @@ export const addQuestion = async (data) => {
   };
 
   if (req.level != 'primary') {
-    console.log(req.title.slice(6));
     const result = await sanityClient.patch(req.title.slice(6)).inc({ replies_count: 1 }).commit();
     console.log('Multiple fields updated:', result);
   }

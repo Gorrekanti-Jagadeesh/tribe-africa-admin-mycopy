@@ -12,7 +12,7 @@ interface BusinessFreindlyFields {
   blogType: string;
 }
 
-const WorkingRemotely: React.FC<{ data: BusinessFreindlyFields[]; loading; error }> = ({ data, loading, error }) => {
+const BusinessFriendly: React.FC<{ data: BusinessFreindlyFields[]; loading; error }> = ({ data, loading, error }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!data || loading) {
@@ -65,4 +65,4 @@ const WorkingRemotely: React.FC<{ data: BusinessFreindlyFields[]; loading; error
   );
 };
 
-export default WorkingRemotely;
+export default BusinessFriendly;
