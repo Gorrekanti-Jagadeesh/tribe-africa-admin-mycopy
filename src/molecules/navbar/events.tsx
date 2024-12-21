@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { EventCategory } from '@types/index';
+import { EventCategory } from '../../../src/types/index';
 import NavLayout from '@molecules/layout/nav-layout';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';

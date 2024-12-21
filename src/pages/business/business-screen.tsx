@@ -123,7 +123,7 @@ const BusinessScreen = ({ props }) => {
           <div className="flex flex-col md:flex-row gap-2 mt-3">
             <img
               className="md:w-1/4 aspect-square h-auto rounded-md"
-              src={sanityImageUrlBuilder(agencyData.agencyLogo)}
+              src={sanityImageUrlBuilder(agencyData.agencyLogo).url()}
             />
             <div className="flex-grow space-y-2">
               <h1 className="font-semibold">{agencyData.agencyName}</h1>

@@ -3,7 +3,7 @@ import DualHeading from '@atoms/heading/dual-heading';
 import ReviewCard from '@atoms/card/review-card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import type { ProffesionalData, ReviewProps } from '@types/index';
+import type { ProffesionalData, ReviewProps } from '../../../src/types/index';
 
 const reviews: ReviewProps[] = [
   {

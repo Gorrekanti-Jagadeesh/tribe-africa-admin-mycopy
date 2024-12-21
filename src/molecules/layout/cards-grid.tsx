@@ -17,7 +17,7 @@ interface content {
 }
 
 interface cardsProps {
-  heading: ReactNode;
+  heading?: ReactNode;
   data: content[];
   max?: number;
   featuredCard?: featured;

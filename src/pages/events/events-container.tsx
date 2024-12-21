@@ -47,7 +47,11 @@ const EventsPage = () => {
   }
 
   return (
-    <EventsScreen heading={`${customEventType} events`} image={sanityImageUrlBuilder(eventImage)} data={eventsData} />
+    <EventsScreen
+      heading={`${customEventType} events`}
+      image={sanityImageUrlBuilder(eventImage).url()}
+      data={eventsData}
+    />
   );
 };
 

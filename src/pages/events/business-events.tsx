@@ -51,7 +51,7 @@ const BusinessEventsPage = () => {
     <div>
       <EventsScreen
         heading={`${customCountry} ${customEventType} events`}
-        image={sanityImageUrlBuilder(eventImage)}
+        image={sanityImageUrlBuilder(eventImage).url()}
         data={eventsData}
       />
     </div>

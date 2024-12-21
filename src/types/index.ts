@@ -157,8 +157,11 @@ export interface CardProps {
 
 export interface EventCategory {
   title: string;
-  items: string[];
+  items: { url: string; label: string }[];
   imageUrl: string;
+  subTitle?: string;
+  subLinks?: { url: string; label: string }[];
+  // subitems?: { url: string; label: string }[];
 }
 
 export interface NetworkCategory {
