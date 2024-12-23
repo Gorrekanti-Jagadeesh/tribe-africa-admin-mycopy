@@ -23,6 +23,8 @@ const WorkingRemotely: React.FC<{ data: BusinessFreindlyFields[]; loading; error
     return <>Error fetching data..</>;
   }
 
+  if (!data.length) return null;
+
   return (
     <div className="mx-auto w-full flex flex-col max-w-6xl p-2 md:p-4">
       <div className="ms-auto flex flex-col items-end">

@@ -19,7 +19,6 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [country, setCountry] = useState('');
-  const [popupContent, setPopupContent] = useState<Destination[]>([]);
   const [layout, setLayout] = useState(3);
   const screenWidth = useScreenWidth();
 
@@ -34,7 +33,6 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
   const handlePopup = (country: string) => {
     if (data[country]) {
       setCountry(country);
-      // setPopupContent(data[country]);
       setIsOpen(true);
       setIsHovered(false);
     }
@@ -162,28 +160,28 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
         {`
           .active-slide {
             transform: translateX(0) scale(1);
-            z-index: 5;
+            z-index: 3;
             opacity: 1;
           }
 
           .right-slide {
             transform: translateX(20%) scale(0.8);
-            z-index: 4;
+            z-index: 2;
           }
 
           .far-right-slide {
             transform: translateX(40%) scale(0.6);
-            z-index: 3;
+            z-index: 1;
           }
 
           .left-slide {
             transform: translateX(-20%) scale(0.8);
-            z-index: 4;
+            z-index: 2;
           }
 
           .far-left-slide {
             transform: translateX(-40%) scale(0.6);
-            z-index: 3;
+            z-index: 1;
           }
 
           .hidden-slide {

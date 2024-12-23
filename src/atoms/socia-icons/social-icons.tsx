@@ -18,7 +18,7 @@ const SocialLinks: React.FC = () => {
   ];
 
   return (
-    <div className="fixed top-1/2 right-0 flex">
+    <div className="fixed top-1/2 right-0 flex z-10">
       {/* Sticky button to reveal social links */}
       <button
         onClick={handleButtonClick}

@@ -23,6 +23,8 @@ const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error 
     return <>Error fetching data..</>;
   }
 
+  if (!data.length) return null;
+
   return (
     <div className="w-full max-w-6xl m-auto p-2 md:p-4">
       <div>
