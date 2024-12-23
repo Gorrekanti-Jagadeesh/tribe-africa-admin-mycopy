@@ -91,7 +91,6 @@ export const fetchWeatherData = async (country: string) => {
     const condition = response.data.current.condition.text;
     const time = response.data.location.localtime;
 
-    console.log(temperature, 'rtvfcd');
     return { temperature, condition, time };
   } catch (error) {
     throw new Error('Error fetching weather data');

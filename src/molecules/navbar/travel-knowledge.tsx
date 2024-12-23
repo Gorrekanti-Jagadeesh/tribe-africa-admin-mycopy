@@ -73,28 +73,36 @@
 
 import React, { useState } from 'react';
 import { LinkList } from '../layout/link-list';
-import { EventCategory } from '@types';
 import Button from '@atoms/custom-button/button';
 import Modal from '../modal';
 import EventForm from '../forms/event-form';
 import { travelKnowledgeURLs } from '../../data';
 
-const NavcategoryItem: React.FC<{ category: EventCategory }> = ({ category }) => (
-  <div className="flex flex-col">
-    {category.imageUrl && (
-      <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
-        <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
-      </div>
-    )}
-    <LinkList
+const NavcategoryItem = ({ category }) => {
+  return (
+    <div className="flex flex-col">
+      {category.imageUrl && (
+        <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
+          <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
+        </div>
+      )}
+      {/* <LinkList
       heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
       links={category.items}
       className="text-left w-full"
       subLinksHeading={<h3 className="text-lg md:text-xl font-semibold">{category.subTitle}</h3>}
       subLinks={category.subitems}
-    />
-  </div>
-);
+    /> */}
+      <LinkList
+        heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
+        links={category.items}
+        className="text-left w-full"
+        subLinksHeading={<h3 className="text-lg md:text-xl font-semibold">{category.subTitle}</h3>}
+        subLinks={category.subLinks} // Corrected property name
+      />
+    </div>
+  );
+};
 
 const TravelKnowledge: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

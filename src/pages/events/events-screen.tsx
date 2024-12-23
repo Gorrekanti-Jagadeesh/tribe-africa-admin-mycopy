@@ -29,7 +29,7 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
-      {data.length ? (
+      {data && data.length ? (
         <>
           <UnderlineHeading className="font-bold">{heading}</UnderlineHeading>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">

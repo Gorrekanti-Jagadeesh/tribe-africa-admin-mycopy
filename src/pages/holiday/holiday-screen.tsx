@@ -1,14 +1,12 @@
-import { useParams } from 'react-router';
-
 import Footer from '../../molecules/footer';
 import { HolidayHeader } from '../../molecules/header';
 import MapChart from '../../molecules/maps/map';
-import LookOutCollage from './sections/look-out-collage';
 import DualHeading from '@atoms/heading/dual-heading';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import OverLayCard from '@atoms/card/overlay-card';
-
-import { demoImage as heroBackground } from '@data/index';
+import { sanityImageUrlBuilder } from '@api/index';
+import ColsGrid from '@molecules/layout/cols-grid';
+import { fromKebabCase } from '@utils/common';
 
 interface MarkerType {
   name: string;
@@ -91,7 +89,7 @@ const countryData: Record<string, CountryDataType> = {
       { name: "Qal'a of Beni Hammad", coordinates: [4.7782, 35.863], category: 'Sacred Sites' },
       { name: 'Sidi Abderrahmane', coordinates: [3.046, 36.7809], category: 'Sacred Sites' },
     ],
-    scale: 2300,
+    scale: 2100,
   },
   angola: {
     center: [17.8739, -11.2027],
@@ -152,64 +150,106 @@ const countryData: Record<string, CountryDataType> = {
   },
 };
 
-const HolidayScreen = () => {
-  const { country } = useParams<{ country: string }>();
+const HolidayScreen = ({ props }) => {
+  const {
+    country,
+    weatherData,
+    weatherLoading,
+    weatherError,
+    landingData,
+    landingError,
+    landingLoading,
+    lookOutForData,
+    lookOutForLoading,
+    lookOutForError,
+    mapsData,
+    mapsError,
+    mapsLoading,
+    adventuresData,
+    adventuresLoading,
+    adventuresError,
+    tribeGoesOutData,
+    tribeGoesOutLoading,
+    tribeGoesOutError,
+  } = props;
 
   if (!country || !countryData[country]) {
     // Render a fallback component or message if the country is undefined or not in countryData
     return <div>Country data not available</div>;
   }
 
-  const markers = countryData[country].markers;
-  const center = countryData[country].center;
-  const scale = countryData[country].scale;
+  if (
+    landingLoading ||
+    weatherLoading ||
+    lookOutForLoading ||
+    mapsLoading ||
+    adventuresLoading ||
+    tribeGoesOutLoading
+  ) {
+    return 'Loading';
+  }
+  if (landingError || weatherError || lookOutForError || mapsError || adventuresError || tribeGoesOutError) {
+    return 'Error Loading page..';
+  }
+
+  // const markers = countryData[country].markers;
+  // const center = countryData[country].center;
+  // const scale = countryData[country].scale;
+
+  const markers = mapsData.markers;
+  const center = mapsData.center;
+  const scale = mapsData.scale;
+
   return (
     <div>
-      <HolidayHeader />
+      <HolidayHeader country={fromKebabCase(country)} />
       <div>
         {/* Adventure */}
         <div className="max-w-6xl m-auto p-4">
+          {/* Hero section */}
+          <div className="m-auto max-w-6xl p-4">
+            <div className="relative">
+              <div
+                className="aspect-video bg-cover rounded-md w-full brightness-50"
+                style={{
+                  backgroundImage: `url(${sanityImageUrlBuilder(landingData.holidayLanding)})`,
+                }}
+              ></div>
+              <div className="text-white text-sm md:text-base lg:text-lg flex flex-col gap-2 lg:gap-6 p-2 md:p-4 lg:p-8 absolute bottom-0 brightness-200">
+                <p>
+                  Weather:{' '}
+                  {weatherLoading
+                    ? 'Loading...'
+                    : weatherData
+                      ? `${weatherData.temperature} °F / ${weatherData.condition}`
+                      : 'No data available'}
+                </p>
+                <p>Internet speed: {landingData.internetSpeed}</p>
+                <p>Time: {weatherData ? weatherData.time : 'Loading...'}</p>
+              </div>
+            </div>
+          </div>
           <DualHeading className="mb-4">Let the *Adventure* begin</DualHeading>
           <CommonCarousel
-            data={[
-              {
-                title: 'title1',
-                image: heroBackground,
-              },
-              {
-                title: 'title1',
-                image: heroBackground,
-              },
-              {
-                title: 'title1',
-                image: heroBackground,
-              },
-            ]}
-            component={(item) => <OverLayCard data={item} />}
+            data={adventuresData}
+            component={(item) => <OverLayCard data={{ ...item, title: 'Excursions Coming Soon' }} />}
           />
         </div>
-        <LookOutCollage />
+        <div className="max-w-6xl m-auto p-4 animate-on-scroll">
+          <DualHeading>Things to *Look Out* For!</DualHeading>
+          <div className="mt-4">
+            <ColsGrid cols={3} gap={3}>
+              {lookOutForData.map((each) => (
+                <OverLayCard data={each} key={each._id} />
+              ))}
+            </ColsGrid>
+          </div>
+        </div>
         <MapChart country={country} markers={markers} scale={scale} center={center} />
         {/* When the tribe goes out */}
         <div className="max-w-6xl m-auto p-4">
           <DualHeading className="mb-4">When the *Tribe* goes out!</DualHeading>
-          <CommonCarousel
-            data={[
-              {
-                title: 'title1',
-                image: heroBackground,
-              },
-              {
-                title: 'title1',
-                image: heroBackground,
-              },
-              {
-                title: 'title1',
-                image: heroBackground,
-              },
-            ]}
-            component={(item) => <OverLayCard data={item} />}
-          />
+          <CommonCarousel data={tribeGoesOutData} component={(item) => <OverLayCard data={item} />} />
         </div>
       </div>
       <Footer />

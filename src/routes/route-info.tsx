@@ -2,9 +2,7 @@ import HomeContainer from '../pages/home/home-container';
 import BusinessContainer from '../pages/business/business-container';
 import HolidayContainer from '../pages/holiday/holiday-container';
 import Accomodation from '../pages/accomodation/accomodation-container';
-import Events from '../molecules/navbar/events';
 import EventsPage from '../pages/events/events-container';
-import InnovationsScreen from '../pages/innovations/innovations-screen';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
 import { QNA } from '../pages/qna-form/qna-container';
@@ -13,7 +11,9 @@ import TribeAfricaPagesContainer from '../pages/tribe-africa-pages/tribe-africa-
 import TribeAfricaPagesDetailsContainer from '../pages/tribe-africa-pages/tribe-africa-pages-details-container';
 import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-container';
 import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
-
+import BusinessEventsPage from '../pages/events/business-events';
+import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
+import BlogDetailsPage from '@molecules/blogs/blog-view';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -48,23 +48,33 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'events',
-    path: '/events',
-    element: <Events />,
-  },
-  {
-    name: 'events',
-    path: '/events/:event_type',
+    path: '/events/:event_category/:event_type',
     element: <EventsPage />,
   },
   {
-    name: 'blogs list',
-    path: '/blogs',
+    name: 'Business events',
+    path: '/:country/business/event/:event_type',
+    element: <BusinessEventsPage />,
+  },
+  {
+    name: 'Blogs List - No Country',
+    path: '/:blogCategory/blogs',
     element: <BlogPage />,
   },
   {
-    name: 'blogs',
-    path: '/blogs/:blogId',
+    name: 'Blogs List - No Country',
+    path: '/:country/:blogCategory/blogs',
     element: <BlogPage />,
+  },
+  {
+    name: 'Blog Details - No Country',
+    path: '/:blogCategory/blogs/:blogId',
+    element: <BlogDetailsPage />,
+  },
+  {
+    name: 'Blog Details - With Country',
+    path: '/:country/:blogCategory/blogs/:blogId',
+    element: <BlogDetailsPage />,
   },
   {
     name: 'qna',
@@ -73,8 +83,8 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'innovations',
-    path: '/africa/smart-innovations',
-    element: <InnovationsScreen />,
+    path: '/discover/:category/:subcategory',
+    element: <DiscoverArticles />,
   },
   {
     name: 'destinations',

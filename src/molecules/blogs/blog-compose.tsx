@@ -36,8 +36,9 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
 
   // Handle changes in the rich text editor content
   const handleContentChange = (content: string): void => setEditorContent(content);
-  console.log(descriptionContent);
-  const handleDescriptionChange = (content: string): void => setDescriptionContent(content.target.value);
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    setDescriptionContent(event.target.value);
+  };
 
   // Handle changes in blog placeholder image in drag-and-drop component
   const handleFileSelect = (file: File | null): void => setSelectedFile(file);
@@ -45,6 +46,8 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+
+    // console.log("hello")
 
     if (!selectedFile) {
       alert('Please upload an image before submitting.');

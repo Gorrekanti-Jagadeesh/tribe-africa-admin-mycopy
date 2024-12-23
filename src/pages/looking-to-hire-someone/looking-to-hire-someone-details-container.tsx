@@ -3,7 +3,6 @@ import LookingToHireSomeoneDetailsScreen from './looking-to-hire-someone-details
 
 const LookingToHireSomeoneDetailsContainer: React.FC = () => {
   const { state } = useLocation();
-  console.log(state);
   return <LookingToHireSomeoneDetailsScreen proffesionalPersonData={state} />;
 };
 

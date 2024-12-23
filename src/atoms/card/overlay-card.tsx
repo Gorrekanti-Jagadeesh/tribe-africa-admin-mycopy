@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useScreenWidth from '@hooks/useScreenWidth';
 import Modal from '@molecules/modal';
+import { sanityImageUrlBuilder } from '@api/index';
 
 interface CardDataProps {
   image: string;
@@ -22,6 +23,7 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
       setIsOpen(true);
     }
   };
+
   return (
     <div>
       {/* Card content */}
@@ -33,7 +35,7 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
         <div
           className="aspect-square bg-cover rounded-md relative"
           style={{
-            backgroundImage: `url(${data.image})`,
+            backgroundImage: `url(${typeof data.image === 'string' ? data.image : sanityImageUrlBuilder(data.image)})`,
           }}
         >
           {/* Description as overlay text */}

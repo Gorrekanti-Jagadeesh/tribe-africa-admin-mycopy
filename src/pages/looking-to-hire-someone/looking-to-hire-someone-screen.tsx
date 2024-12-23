@@ -7,7 +7,7 @@ import IconsCard from '@atoms/card/icons-card';
 import locationPin from '@assets/icons/location.svg';
 import search from '@assets/icons/search.svg';
 
-import { ProffesionalData } from '@types/index';
+import { ProffesionalData } from '../../../src/types/index';
 import { useState } from 'react';
 
 interface ProffesionalIcons {
@@ -38,7 +38,6 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
 
   function filterByDepartment(this, department) {
     if (active != department) {
-      console.log('active');
       setActive(department);
       setData(proffesionalData.filter((p) => p.department.toLowerCase() == department));
     }

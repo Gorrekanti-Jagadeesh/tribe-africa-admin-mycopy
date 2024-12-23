@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LinkList } from '../layout/link-list';
-import { EventCategory } from '@types';
+// import { EventCategory } from '@types/index';
+import { EventCategory } from '../../../src/types/index';
 import Button from '@atoms/custom-button/button';
 import Modal from '../modal';
 import EventForm from '../forms/event-form';

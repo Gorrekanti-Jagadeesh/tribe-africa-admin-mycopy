@@ -15,7 +15,7 @@ interface workingRemotelyFields {
 const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error }> = ({ data, loading, error }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (!data || loading) {
+  if (loading) {
     return <Loading />;
   }
 

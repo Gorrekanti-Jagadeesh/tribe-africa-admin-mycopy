@@ -21,6 +21,28 @@ export const truncateText = (text: string, maxLength: number) => {
   return text;
 };
 
+export const toKebabCase = (text: string) => {
+  return text
+    .toLowerCase() // Convert to lowercase
+    .replace(/&/g, 'and') // Replace '&' with 'and'
+    .replace(/[^a-z0-9\s]/g, '') // Remove special characters except spaces
+    .trim() // Remove leading/trailing spaces
+    .replace(/\s+/g, '-'); // Replace spaces with hyphens
+};
+
+export const fromKebabCase = (kebab: string) => {
+  return kebab
+    .split('-') // Split the string by hyphens
+    .map((word) => {
+      if (['and'].includes(word)) {
+        return word; // Lowercase certain words like "and"
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of other words
+    })
+    .join(' ') // Join the words with spaces
+    .replace(/\band\b/g, '&'); // Replace 'And' with '&'
+};
+
 // Convert base64 image to Blob for upload
 export const base64ToBlob = (base64: string, mimeType = 'image/jpeg'): Blob => {
   const byteCharacters = atob(base64.split(',')[1]);
