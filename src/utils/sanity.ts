@@ -30,6 +30,10 @@ export const query = {
   BUSINESS: {
     LANDING: `*[_type == "business-landing-page"]`,
   },
+  COUNTRY: {
+    DETAILS: (country, fields) =>
+      `*[_type == "countryDetails" && lower(country) == "${country}"]{${fields.length ? fields.join(', ') : '*'}}[0]`,
+  },
 };
 
 export const sanity = {
