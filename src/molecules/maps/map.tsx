@@ -32,8 +32,6 @@ const subCategories: { [key: string]: string[] } = {
   'Sacred Sites': [],
 };
 const MapChart: React.FC<MapChartProps> = ({ country, data }) => {
-  if (!data) return null;
-
   const { markers, center, scale } = data;
   const [selectedCategory, setSelectedCategory] = useState<string>('Cities');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>(subCategories['Cities'][0]);

@@ -73,38 +73,38 @@
 
 import { useState } from 'react';
 import { LinkList } from '../layout/link-list';
-import Button from '@atoms/custom-button/button';
-import Modal from '../modal';
-import EventForm from '../forms/event-form';
-import { travelKnowledgeURLs } from '../../data';
+// import Button from '@atoms/custom-button/button';
+// import Modal from '../modal';
+// import EventForm from '../forms/event-form';
+// import { travelKnowledgeURLs } from '../../data';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
 
-const NavcategoryItem = ({ category }) => {
-  return (
-    <div className="flex flex-col">
-      {category.imageUrl && (
-        <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
-          <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
-        </div>
-      )}
-      {/* <LinkList
-      heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
-      links={category.items}
-      className="text-left w-full"
-      subLinksHeading={<h3 className="text-lg md:text-xl font-semibold">{category.subTitle}</h3>}
-      subLinks={category.subitems}
-    /> */}
-      <LinkList
-        heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
-        links={category.items}
-        className="text-left w-full"
-        subLinksHeading={<h3 className="text-lg md:text-xl font-semibold">{category.subTitle}</h3>}
-        subLinks={category.subLinks} // Corrected property name
-      />
-    </div>
-  );
-};
+// const NavcategoryItem = ({ category }) => {
+//   return (
+//     <div className="flex flex-col">
+//       {category.imageUrl && (
+//         <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
+//           <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
+//         </div>
+//       )}
+//       {/* <LinkList
+//       heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
+//       links={category.items}
+//       className="text-left w-full"
+//       subLinksHeading={<h3 className="text-lg md:text-xl font-semibold">{category.subTitle}</h3>}
+//       subLinks={category.subitems}
+//     /> */}
+//       <LinkList
+//         heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
+//         links={category.items}
+//         className="text-left w-full"
+//         subLinksHeading={<h3 className="text-lg md:text-xl font-semibold">{category.subTitle}</h3>}
+//         subLinks={category.subLinks} // Corrected property name
+//       />
+//     </div>
+//   );
+// };
 
 import React, { useEffect } from 'react';
 import { toKebabCase } from '@utils/common';
@@ -135,7 +135,7 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
   useEffect(() => {
     if (travelData) {
       // Transform data to match NavLayout's eventCategories format
-      const formattedData = travelData[0]?.categories?.map((category: any) => ({
+      const formattedData = travelData[0]?.categories?.map((category) => ({
         title: category.category, // Category Title
         imageUrl: category.imageUrl, // Category Image URL
         items: category.subCategories.map((subCategory: string) => ({

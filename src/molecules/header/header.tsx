@@ -18,12 +18,7 @@ interface HoverNavLinkProps {
 const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
   const [hover, setHover] = useState(false);
   return (
-    <div
-      id={id}
-      className="md:m-auto group py-2 md:py-4 px-2"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <div id={id} className="md:m-auto group" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <span className="flex md:justify-center md:items-center cursor-pointer text-white md:text-black">
         {title}
         <span className="hidden md:block">
@@ -59,11 +54,11 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="grid gap-2 p-4 m-auto my-4 max-w-6xl relative">
+    <div className="grid gap-2 m-auto my-4 max-w-6xl relative">
       <MenuBar purpose={purpose} country={country} />
 
       {/* Mobile Header */}
-      <div className="flex justify-between items-center md:hidden">
+      <div className="flex gap-2 justify-between items-center md:hidden">
         <div className="relative">
           <button className="border rounded">
             {/* English <span className="caret" /> */}
@@ -91,13 +86,13 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
 
       {/* Menu Items for Mobile */}
       {isMenuOpen && (
-        <div className="flex flex-col bg-slate-950 mt-2 md:hidden">
+        <div className="flex flex-col gap-1 p-2 bg-slate-950 text-white text-left mt-2 md:hidden">
           {menuItems.map((item) =>
             item.isNavLink ? (
               <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
             ) : (
-              <div key={item.id} id={item.id} className="m-auto cursor-pointer" title="know more">
-                <a href={item.redirect}>{item.title}</a>
+              <div key={item.id} id={item.id} className="cursor-pointer w-fit" title="know more">
+                <Link to={item.redirect}>{item.title}</Link>
               </div>
             )
           )}
@@ -105,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
       )}
 
       {/* Desktop Header */}
-      <div className="hidden justify-center items-center text-center border-2 rounded-lg relative md:flex">
+      <div className="hidden justify-center items-center text-center border-2 rounded-lg relative md:flex gap-2 px-4">
         {/* Splitting the menuitems to bring logo in center position */}
         {menuItems.slice(0, midIndex).map((item) =>
           item.isNavLink ? (
