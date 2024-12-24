@@ -10,6 +10,7 @@ import PeaceProsperity from '../navbar/peace-prosperity';
 import AfterWork from '../navbar/after-work';
 import BusinessEvents from '../navbar/holiday-events';
 import MustSeeAndDo from '../navbar/must-see-and-do';
+import { fromKebabCase } from '@utils/common';
 
 export const HomeHeader = () => {
   const menuItems = [
@@ -31,7 +32,7 @@ export const HomeHeader = () => {
 
 export const BusinessHeader = ({ country }: { country: string | undefined }) => {
   const menuItems = [
-    { id: 'country', title: country, isNavLink: false, content: null },
+    { id: 'country', title: fromKebabCase(country), isNavLink: false, redirect: `/country/${country}` },
     { id: 'network', title: 'Network', isNavLink: true, content: <Network /> },
     { id: 'market-place', title: 'Market Place', isNavLink: true, content: <>Coming soon</> },
     { id: 'after-work', title: 'After Work', isNavLink: true, content: <AfterWork /> },
@@ -49,11 +50,16 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
 
 export const HolidayHeader = ({ country }: { country: string | undefined }) => {
   const menuItems = [
-    { id: 'country', title: country, isNavLink: false, content: null },
+    { id: 'country', title: fromKebabCase(country), isNavLink: false, redirect: `/country/${country}` },
     { id: 'Out & about', title: 'Out & About', isNavLink: true, content: <OutAndAbout /> },
     { id: 'events', title: 'Events', isNavLink: true, content: <BusinessEvents /> },
     { id: 'must-see-and-do', title: 'Must See & Do', isNavLink: true, content: <MustSeeAndDo /> },
-    { id: 'travel-knowledge', title: 'Travel Knowledge', isNavLink: true, content: <TravelKnowledge /> },
+    {
+      id: 'travel-knowledge',
+      title: 'Travel Knowledge',
+      isNavLink: true,
+      content: <TravelKnowledge country={country} />,
+    },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
   ];
 

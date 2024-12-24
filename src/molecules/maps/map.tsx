@@ -13,9 +13,11 @@ interface MarkerType {
 
 interface MapChartProps {
   country: string | undefined;
-  markers: MarkerType[];
-  center: [number, number];
-  scale: number;
+  data: {
+    markers: MarkerType[];
+    center: [number, number];
+    scale: number;
+  };
 }
 
 const geoUrl = serviceUrls.base.geological_data;
@@ -29,7 +31,10 @@ const subCategories: { [key: string]: string[] } = {
   'Historical & Cultural': [],
   'Sacred Sites': [],
 };
-const MapChart: React.FC<MapChartProps> = ({ country, markers, center, scale }) => {
+const MapChart: React.FC<MapChartProps> = ({ country, data }) => {
+  if (!data) return null;
+
+  const { markers, center, scale } = data;
   const [selectedCategory, setSelectedCategory] = useState<string>('Cities');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>(subCategories['Cities'][0]);
   const navigate = useNavigate();

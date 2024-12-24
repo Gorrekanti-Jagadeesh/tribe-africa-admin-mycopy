@@ -7,6 +7,7 @@ import { IoMenu } from 'react-icons/io5';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Languages } from '../../data';
 import Close from '@atoms/custom-button/close-button';
+import { Link } from 'react-router-dom';
 
 interface HoverNavLinkProps {
   id: string;
@@ -43,7 +44,8 @@ interface MenuItemsProps {
   id: string;
   title?: string;
   isNavLink: boolean;
-  content: React.ReactNode | null;
+  content?: React.ReactNode;
+  redirect?: string;
 }
 
 interface HeaderProps {
@@ -95,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
               <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
             ) : (
               <div key={item.id} id={item.id} className="m-auto cursor-pointer" title="know more">
-                <span>{item.title}</span>
+                <a href={item.redirect}>{item.title}</a>
               </div>
             )
           )}
@@ -110,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
             <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
           ) : (
             <div key={item.id} id={item.id} className="m-auto cursor-pointer" title="know more">
-              <span>{item.title}</span>
+              <Link to={item.redirect}>{item.title}</Link>
             </div>
           )
         )}
@@ -126,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
             <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
           ) : (
             <div key={item.id} id={item.id} className="m-auto cursor-pointer" title="know more">
-              <span>{item.title}</span>
+              <Link to={item.redirect}>{item.title}</Link>
             </div>
           )
         )}

@@ -17,6 +17,7 @@ import BlogDetailsPage from '@molecules/blogs/blog-view';
 import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
 
 import CountryDetails from '../pages/country-details/country-details-container';
+import NotFound from '@molecules/common/not-found';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -121,8 +122,13 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'country information',
-    path: '/:country',
+    path: '/country/:country',
     element: <CountryDetails />,
+  },
+  {
+    name: 'not found page',
+    path: '*',
+    element: <NotFound />,
   },
 ];
 

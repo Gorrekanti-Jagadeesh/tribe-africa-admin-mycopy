@@ -10,6 +10,7 @@ import Button from '@atoms/custom-button/button';
 import useScreenWidth from '@hooks/useScreenWidth';
 import { sanityImageUrlBuilder } from '@api/index';
 import { fromKebabCase, toKebabCase } from '@utils/common';
+import { Loading } from '@atoms/common/loading';
 
 const BusinessScreen = ({ props }) => {
   const {
@@ -57,16 +58,23 @@ const BusinessScreen = ({ props }) => {
     eventsLoading ||
     agencyLoading
   ) {
-    return 'Loading';
+    return <Loading />;
   }
   if (
     landingError ||
+    !landingData ||
     investmentError ||
+    !investmentData ||
     weatherError ||
+    !weatherData ||
     naturalResourcesError ||
+    !naturalResourcesData ||
     eventsError ||
+    !eventsData ||
     professionalServicesError ||
-    agencyError
+    !professionalServicesData ||
+    agencyError ||
+    !agencyData
   ) {
     return 'Error Loading page..';
   }
@@ -76,7 +84,7 @@ const BusinessScreen = ({ props }) => {
       <div className="bg-orange-500 p-4 text-white text-xl text-center">
         <p>Getting there - Book Flight and accommodation</p>
       </div>
-      <BusinessHeader country={fromKebabCase(country)} />
+      <BusinessHeader country={country} />
       {/* Hero section */}
       <div className="m-auto max-w-6xl p-4">
         <div className="relative">
