@@ -14,6 +14,7 @@ import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someo
 import BusinessEventsPage from '../pages/events/business-events';
 import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
 import BlogDetailsPage from '@molecules/blogs/blog-view';
+import CountryDetails from '../pages/country-details/country-details-container';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -110,6 +111,11 @@ const appRoutes: RouteConfig[] = [
     name: 'hire some one details',
     path: '/tribe-africa-pages/looking-to-hire-someone/:id',
     element: <LookingToHireSomeoneDetailsContainer />,
+  },
+  {
+    name: 'country information',
+    path: '/:country',
+    element: <CountryDetails />,
   },
 ];
 
