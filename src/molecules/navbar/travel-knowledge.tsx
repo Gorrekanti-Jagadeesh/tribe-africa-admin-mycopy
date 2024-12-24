@@ -41,7 +41,7 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
   } = useQuery<TravelData>({
     queryKey: ['travel-knowledge', country],
     queryFn: () =>
-      sanity.GET(`*[_type == "travel-knowldge" && country == "${country}"]{
+      sanity.GET(`*[_type == "travel-knowldge" && country == "${country}"][0]{
         categories[] {
           category,
           "imageUrl": categoryImage.asset->url,
