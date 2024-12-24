@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from '@atoms/custom-button/button';
 import UnderlineHeading from '@atoms/heading/underline-heading';
-import { BlogPageScreenProps } from '../../types';
 import BlogCard from '../../atoms/card/blog-card';
 import DualHeading from '../../atoms/heading/dual-heading';
 import BlogCompose from '@molecules/blogs/blog-compose';

@@ -35,7 +35,12 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
     { id: 'network', title: 'Network', isNavLink: true, content: <Network /> },
     { id: 'market-place', title: 'Market Place', isNavLink: true, content: <>Coming soon</> },
     { id: 'after-work', title: 'After Work', isNavLink: true, content: <AfterWork /> },
-    { id: 'travel-knowledge', title: 'Travel Knowledge', isNavLink: true, content: <TravelKnowledge /> },
+    {
+      id: 'travel-knowledge',
+      title: 'Travel Knowledge',
+      isNavLink: true,
+      content: <TravelKnowledge country={country} />,
+    },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
   ];
 

@@ -71,12 +71,14 @@
 //   },
 // ];
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { LinkList } from '../layout/link-list';
 import Button from '@atoms/custom-button/button';
 import Modal from '../modal';
 import EventForm from '../forms/event-form';
 import { travelKnowledgeURLs } from '../../data';
+import { useQuery } from '@tanstack/react-query';
+import { sanity } from '@utils/sanity';
 
 const NavcategoryItem = ({ category }) => {
   return (
@@ -104,22 +106,59 @@ const NavcategoryItem = ({ category }) => {
   );
 };
 
-const TravelKnowledge: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+import React, { useEffect } from 'react';
+import { toKebabCase } from '@utils/common';
+import NavLayout from '@molecules/layout/nav-layout';
+import { EventCategory } from '../../../src/types/index'; // Reuse the EventCategory type
+
+const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
+  const [travelCategories, setTravelCategories] = useState<EventCategory[]>([]);
+
+  // Fetch Travel Knowledge data filtered by the country
+  const {
+    data: travelData,
+    error: travelError,
+    isLoading: travelLoading,
+  } = useQuery({
+    queryKey: ['travel-knowledge', country],
+    queryFn: () =>
+      sanity.GET(`*[_type == "travel-knowldge" && country == "${country}"]{
+        categories[] {
+          category,
+          "imageUrl": categoryImage.asset->url,
+          subCategories[]
+        }
+      }`),
+    enabled: Boolean(country), // Ensure the query only runs when country is defined
+  });
+
+  useEffect(() => {
+    if (travelData) {
+      // Transform data to match NavLayout's eventCategories format
+      const formattedData = travelData[0]?.categories?.map((category: any) => ({
+        title: category.category, // Category Title
+        imageUrl: category.imageUrl, // Category Image URL
+        items: category.subCategories.map((subCategory: string) => ({
+          label: subCategory,
+          url: `/travel-knowledge/${toKebabCase(category.category)}/${toKebabCase(subCategory)}`,
+          imageUrl: category.imageUrl, // Reuse category image if no sub-category image exists
+        })),
+      }));
+
+      setTravelCategories(formattedData || []);
+    }
+  }, [travelData]);
+
+  if (travelLoading) return <div>Loading Travel Knowledge...</div>;
+  if (travelError) return <div>Error loading Travel Knowledge data.</div>;
 
   return (
-    <section className="flex flex-col p-2 md:p-4 max-w-6xl m-auto">
-      <div className="text-lg font-semibold flex flex-col md:flex-row mb-5">
-        <h4 className=" text-left text-orange-500 text-lg">&rarr; Travel Knowledge</h4>
-        <Modal isOpen={isOpen} setIsOpen={setIsOpen} containerClasses="ms-auto">
-          <EventForm />
-        </Modal>
-        <Button onClick={() => setIsOpen(true)}>Advertise on tribe africa</Button>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {travelKnowledgeURLs?.map((category, index) => <NavcategoryItem key={index} category={category} />)}
-      </div>
-    </section>
+    <NavLayout
+      eventCategories={travelCategories || []}
+      showModal={true}
+      showButton={true}
+      navLayoutHeading="Travel Knowledge"
+    />
   );
 };
 

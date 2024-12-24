@@ -16,6 +16,7 @@ import DiscoverArticles from '../pages/discover-articles/discover-articles-scree
 import BlogDetailsPage from '@molecules/blogs/blog-view';
 import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
 
+import CountryDetails from '../pages/country-details/country-details-container';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -117,6 +118,11 @@ const appRoutes: RouteConfig[] = [
     name: 'hire some one details',
     path: '/tribe-africa-pages/looking-to-hire-someone/:id',
     element: <LookingToHireSomeoneDetailsContainer />,
+  },
+  {
+    name: 'country information',
+    path: '/:country',
+    element: <CountryDetails />,
   },
 ];
 
