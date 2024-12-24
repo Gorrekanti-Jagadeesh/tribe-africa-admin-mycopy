@@ -40,7 +40,7 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
       id: 'travel-knowledge',
       title: 'Travel Knowledge',
       isNavLink: true,
-      content: <TravelKnowledge country={country} />,
+      content: <TravelKnowledge country={fromKebabCase(country)} />,
     },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
   ];

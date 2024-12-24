@@ -11,7 +11,7 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState<{ title: string; content: any[] }>({ title: '', content: [] });
-
+  console.log('countr', country);
   const {
     data: travelData,
     error: travelError,
@@ -106,7 +106,6 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
           >
             &larr; {modalContent.title}
           </h4>
-          <h4 className="text-xl font-semibold text-orange-500 mb-4">{modalContent.title}</h4>
           <div className="space-y-4">
             {modalContent.content.map((block: any, index: number) => {
               if (block._type === 'block') {
