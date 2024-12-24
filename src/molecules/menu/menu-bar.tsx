@@ -6,8 +6,9 @@ import CurrencyCalculator from '../common/currency-calculator';
 import Modal from '../modal';
 import { Auth } from '../auth';
 import Dropdown from '../../atoms/dropdown/dropdown-search';
-import { Languages } from '../../data';
+import { flags, Languages } from '../../data';
 import i18n from '../../transaltionConfig';
+import { fromKebabCase } from '@utils/common';
 
 export const MenuBar = ({ purpose, country }: { purpose: string | undefined; country: string | undefined }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,9 +42,10 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
         )}
 
         {country != undefined && (
-          <div className="mx-4">
+          <div className="mx-4 flex gap-2 justify-center align-middle items-center">
+            <img src={flags[country]} className="w-9 aspect-square rounded-full object-cover border border-gray-300" />
             <p>
-              {purpose != 'holiday' ? 'Business' : 'Holiday'} in {country}
+              {purpose != 'holiday' ? 'Business' : 'Holiday'} in {fromKebabCase(country)}
             </p>
           </div>
         )}

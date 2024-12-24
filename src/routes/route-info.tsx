@@ -14,7 +14,10 @@ import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someo
 import BusinessEventsPage from '../pages/events/business-events';
 import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
 import BlogDetailsPage from '@molecules/blogs/blog-view';
+import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
+
 import CountryDetails from '../pages/country-details/country-details-container';
+import NotFound from '@molecules/common/not-found';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -88,6 +91,11 @@ const appRoutes: RouteConfig[] = [
     element: <DiscoverArticles />,
   },
   {
+    name: 'must see and do',
+    path: '/must-see-and-do/:category?/:id?',
+    element: <MustSeeAndDo />,
+  },
+  {
     name: 'destinations',
     path: '/details/:name',
     element: <DestinationDetailsContainer />,
@@ -114,8 +122,13 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'country information',
-    path: '/:country',
+    path: '/country/:country',
     element: <CountryDetails />,
+  },
+  {
+    name: 'not found page',
+    path: '*',
+    element: <NotFound />,
   },
 ];
 

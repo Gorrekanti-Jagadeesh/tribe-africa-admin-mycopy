@@ -1,10 +1,9 @@
 import DualHeading from '@atoms/heading/dual-heading';
 import UnderlineHeading from '@atoms/heading/underline-heading';
-import { useQuery } from '@tanstack/react-query';
-import { fromKebabCase, toKebabCase } from '@utils/common';
-import { query, sanity } from '@utils/sanity';
-import { useEffect, useState } from 'react';
+import { fromKebabCase } from '@utils/common';
 import { useParams } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import { query, sanity } from '@utils/sanity';
 
 const fieldsOrder = [
   'noteToReader',
