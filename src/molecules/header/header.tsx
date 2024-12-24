@@ -7,6 +7,8 @@ import { IoMenu } from 'react-icons/io5';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Languages } from '../../data';
 import Close from '@atoms/custom-button/close-button';
+import { useNavigate } from 'react-router';
+import { toKebabCase } from '@utils/common';
 
 interface HoverNavLinkProps {
   id: string;
@@ -53,6 +55,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
+  const navigation = useNavigate();
   const midIndex = Math.floor(menuItems.length / 2);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -109,7 +112,13 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
           item.isNavLink ? (
             <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
           ) : (
-            <div key={item.id} id={item.id} className="m-auto cursor-pointer" title="know more">
+            <div
+              key={item.id}
+              id={item.id}
+              className="m-auto cursor-pointer"
+              title="know more"
+              onClick={() => navigation(`/${toKebabCase(item.title)}`)}
+            >
               <span>{item.title}</span>
             </div>
           )

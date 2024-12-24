@@ -1,9 +1,9 @@
 import DualHeading from '@atoms/heading/dual-heading';
 import UnderlineHeading from '@atoms/heading/underline-heading';
 import { useQuery } from '@tanstack/react-query';
-import { fromKebabCase } from '@utils/common';
+import { fromKebabCase, toKebabCase } from '@utils/common';
 import { query, sanity } from '@utils/sanity';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 const fieldsOrder = [
@@ -65,15 +65,20 @@ function orderFields(data) {
 
 const CountryDetails = () => {
   const { country } = useParams();
-  const [content, setContent] = useState(null);
   const { data, error, isLoading } = useQuery({
     queryKey: ['country_details'],
-    queryFn: () => sanity.GET(query.COUNTRY.DETAILS(country, fieldsOrder)),
+    queryFn: () => sanity.GET(query.COUNTRY.DETAILS(fromKebabCase(country), fieldsOrder)),
   });
 
-  useEffect(() => {
-    setContent(orderFields(data));
-  }, [data]);
+  if (isLoading) {
+    return 'Loading';
+  }
+  if (error) {
+    return 'Error occured';
+  }
+
+  const content = orderFields(data);
+
   return (
     <div className="flex flex-col gap-4 h-screen overflow p-2 md:p-4">
       <DualHeading>{'*' + fromKebabCase(country) + '*'}</DualHeading>

@@ -32,7 +32,7 @@ export const query = {
   },
   COUNTRY: {
     DETAILS: (country, fields) =>
-      `*[_type == "countryDetails" && lower(country) == "${country}"]{${fields.length ? fields.join(', ') : '*'}}[0]`,
+      `*[_type == "countryDetails" && country == "${country}"]{${fields.length ? fields.join(', ') : '*'}}[0]`,
   },
 };
 
