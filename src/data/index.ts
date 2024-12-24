@@ -1,7 +1,7 @@
 import { Option } from '../types';
 import featuredBG from '../assets/branding-bg-dark.png';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import { default as demoImage } from '@assets/homepage-welcome-image-3.png';
+// import { default as demoImage } from '@assets/homepage-welcome-image-3.png';
 
 interface CarouselItem {
   id: number;
@@ -9,6 +9,8 @@ interface CarouselItem {
   description: string;
   image: string;
 }
+
+export const demoImage = '@assets/homepage-welcome-image-3.png';
 
 export const demoData = [
   {
@@ -96,7 +98,7 @@ export const socialMediaLinks = [
   },
 ];
 
-export { default as demoImage } from '@assets/homepage-welcome-image.png';
+// export { default as demoImage } from '@assets/homepage-welcome-image.png';
 
 export const HolidayDestinationData = [
   {
@@ -453,5 +455,3 @@ export const msadCategories = [
   { category: 'excursions', title: 'Excursions' },
   { category: 'voluntourism', title: 'Voluntourism' },
 ];
-
-module.exports = { ...module.exports, demoImage };
