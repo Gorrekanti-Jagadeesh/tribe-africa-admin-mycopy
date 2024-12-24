@@ -6,17 +6,39 @@ import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
 import React, { useEffect } from 'react';
 
+interface SubCategory {
+  title: string;
+  content: Array<{ _type: string; children?: Array<{ text: string }>; asset?: { url: string }; alt?: string }>;
+}
+
+interface Category {
+  category: string;
+  imageUrl: string;
+  subCategories: SubCategory[];
+}
+
+interface TravelData {
+  categories: Category[];
+}
+
+interface ModalContent {
+  title: string;
+  content: SubCategory['content'];
+}
+
 const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
-  const [travelCategories, setTravelCategories] = useState([]);
+  const [travelCategories, setTravelCategories] = useState<
+    Array<{ title: string; imageUrl: string; items: Array<{ label: string; content: SubCategory['content'] }> }>
+  >([]);
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<{ title: string; content: any[] }>({ title: '', content: [] });
-  console.log('countr', country);
+  const [modalContent, setModalContent] = useState<ModalContent>({ title: '', content: [] });
+
   const {
     data: travelData,
     error: travelError,
     isLoading: travelLoading,
-  } = useQuery({
+  } = useQuery<TravelData>({
     queryKey: ['travel-knowledge', country],
     queryFn: () =>
       sanity.GET(`*[_type == "travel-knowldge" && country == "${country}"]{
@@ -34,10 +56,10 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
 
   useEffect(() => {
     if (travelData) {
-      const formattedData = travelData[0]?.categories?.map((category: any) => ({
+      const formattedData = travelData.categories.map((category) => ({
         title: category.category,
         imageUrl: category.imageUrl,
-        items: category.subCategories.map((subCategory: any) => ({
+        items: category.subCategories.map((subCategory) => ({
           label: subCategory.title,
           content: subCategory.content,
         })),
@@ -50,7 +72,7 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
   if (travelLoading) return <div>Loading Travel Knowledge...</div>;
   if (travelError) return <div>Error loading Travel Knowledge data.</div>;
 
-  const openModal = (title: string, content: any[]) => {
+  const openModal = (title: string, content: SubCategory['content']) => {
     setModalContent({ title, content });
     setIsContentOpen(true);
   };
@@ -107,16 +129,16 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
             &larr; {modalContent.title}
           </h4>
           <div className="space-y-4">
-            {modalContent.content.map((block: any, index: number) => {
+            {modalContent.content.map((block, index) => {
               if (block._type === 'block') {
                 return (
                   <p key={index} className="text-base">
-                    {block.children[0]?.text}
+                    {block.children?.[0]?.text}
                   </p>
                 );
               }
               if (block._type === 'image') {
-                return <img key={index} src={block.asset.url} alt={block.alt || 'Image'} className="w-full" />;
+                return <img key={index} src={block.asset?.url} alt={block.alt || 'Image'} className="w-full" />;
               }
               return null;
             })}
