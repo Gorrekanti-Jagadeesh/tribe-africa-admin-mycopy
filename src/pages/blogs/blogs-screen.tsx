@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from '@atoms/custom-button/button';
 import UnderlineHeading from '@atoms/heading/underline-heading';
 import BlogCard from '../../atoms/card/blog-card';
