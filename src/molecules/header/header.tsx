@@ -50,7 +50,6 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
-  const navigation = useNavigate();
   const midIndex = Math.floor(menuItems.length / 2);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
