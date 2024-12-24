@@ -1,5 +1,4 @@
 import { Option } from '../types';
-import featuredBG from '../assets/branding-bg-dark.png';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { default as demoImage } from '@assets/homepage-welcome-image-3.png';
 
