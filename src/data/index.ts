@@ -1,6 +1,7 @@
 import { Option } from '../types';
 import featuredBG from '../assets/branding-bg-dark.png';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { default as demoImage } from '@assets/homepage-welcome-image-3.png';
 
 interface CarouselItem {
   id: number;
@@ -8,6 +9,41 @@ interface CarouselItem {
   description: string;
   image: string;
 }
+
+export const demoData = [
+  {
+    title: 'image1',
+    image: demoImage,
+  },
+  {
+    title: 'image2',
+    image: demoImage,
+  },
+  {
+    title: 'image3',
+    image: demoImage,
+  },
+  {
+    title: 'image5',
+    image: demoImage,
+  },
+  {
+    title: 'image6',
+    image: demoImage,
+  },
+  {
+    title: 'image7',
+    image: demoImage,
+  },
+  {
+    title: 'image8',
+    image: demoImage,
+  },
+  {
+    title: 'image9',
+    image: demoImage,
+  },
+];
 
 export const Countries: Option[] = [
   { value: 'algeria', label: 'Algeria' },
@@ -407,3 +443,15 @@ export const eventTypes = [
     ],
   },
 ];
+
+// -----------Must see and do ---------------
+export const msadCategories = [
+  { category: 'action-enthusiasts', title: 'Action Enthusiasts' },
+  { category: 'historical-cultural-sites', title: 'Historical & Cultural Sites' },
+  { category: 'nature', title: 'Nature' },
+  { category: 'sacred-sites', title: 'Sacred Sites' },
+  { category: 'excursions', title: 'Excursions' },
+  { category: 'voluntourism', title: 'Voluntourism' },
+];
+
+module.exports = { ...module.exports, demoImage };
