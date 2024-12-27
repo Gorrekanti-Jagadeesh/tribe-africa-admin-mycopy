@@ -140,7 +140,7 @@ export const getDataByDocumentTypeWithId = (entryType: string, fieldType: string
 };
 
 export const getEntryDataById = (id: string) => {
-  return sanityClient.fetch(`*[_id == '${id}']`);
+  return sanityClient.fetch(`*[_id == '${id}'][0]`);
 };
 
 export const getHotelsInLocationWithLimit = (countryId: string) => {

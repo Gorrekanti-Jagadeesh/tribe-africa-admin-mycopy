@@ -65,7 +65,7 @@ const HolidayScreen = ({ props }) => {
 
   return (
     <div>
-      <HolidayHeader country={fromKebabCase(country)} />
+      <HolidayHeader country={country} />
       <div>
         {/* Adventure */}
         <div className="max-w-6xl m-auto p-4">
