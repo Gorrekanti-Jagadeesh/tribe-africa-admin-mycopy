@@ -18,6 +18,7 @@ import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
 
 import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
+import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -92,8 +93,13 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'must see and do',
-    path: '/must-see-and-do/:category?/:id?',
+    path: '/:country/holiday/must-see-and-do/:category',
     element: <MustSeeAndDo />,
+  },
+  {
+    name: 'must see and do details',
+    path: '/:country/holiday/must-see-and-do/:category/:id',
+    element: <MustSeeAndDoDetails />,
   },
   {
     name: 'destinations',

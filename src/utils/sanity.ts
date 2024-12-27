@@ -34,6 +34,14 @@ export const query = {
     DETAILS: (country, fields) =>
       `*[_type == "countryDetails" && country == "${country}"]{${fields.length ? fields.join(', ') : '*'}}[0]`,
   },
+  HOLIDAY: {
+    MUST_SEE_AND_DO: {
+      CATEGORY: `*[_type == "must-see-category"]`,
+      DATA: (country, category) =>
+        `*[_type == "must-see-and-do" && country == "${country}" && category._ref == "${category}"]{_id, title, image { asset->{ _id, url } } }`,
+      DETAILS: (id) => `*[_type == "must-see-and-do" && _id == "${id}"]`,
+    },
+  },
 };
 
 export const sanity = {
