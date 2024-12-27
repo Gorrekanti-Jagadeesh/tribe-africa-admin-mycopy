@@ -4,16 +4,17 @@ import UnderlineHeading from '@atoms/heading/underline-heading';
 import Button from '@atoms/custom-button/button';
 import Modal from '../../molecules/modal';
 import EventForm from '../../molecules/forms/event-form';
+import { useNavigate } from 'react-router';
+import { sanityImageUrlBuilder } from '@api/index';
 
 interface EventsScreenProps {
   heading: string;
   image: string;
   data: {
     title: string;
-    image: string;
-    description: string;
-    date: string;
-    time: string;
+    coverPhoto: string;
+    description: [];
+    eventTimings: string;
     location: string;
     country: string;
     website: string;
@@ -22,28 +23,43 @@ interface EventsScreenProps {
     amount: string;
     category: string;
     type: string;
+    _id: string;
   }[];
 }
 
 const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigation = useNavigate();
+
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       {data && data.length ? (
         <>
           <UnderlineHeading className="font-bold">{heading}</UnderlineHeading>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
-            {data.map((item, index) => (
-              <div className="w-full inline-block cursor-pointer rounded-md overflow-hidden border" key={index}>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto my-3">
+            {data.map((item) => (
+              <div
+                className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
+                key={item._id}
+                onClick={() => navigation(`${item._id}`)}
+              >
                 <div
                   className="aspect-video bg-cover group relative overflow-auto"
                   style={{
-                    backgroundImage: `url(${item.image})`,
+                    backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
                   }}
                 >
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
                     <div className="text-white">
-                      {item.description} {item.description.length}
+                      {item.description.map((block: { _type: string; children: {} }, index) => {
+                        if (block._type === 'block') {
+                          return (
+                            <p key={index} className="text-base">
+                              {block.children?.[0]?.text}
+                            </p>
+                          );
+                        }
+                      })}
                     </div>
                   </div>
                 </div>
@@ -52,14 +68,27 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
                     {item.title}
                   </p>
                   <p>
-                    {item.date} {item.time}
+                    <strong> Date & Time:</strong> {item.eventTimings}
                   </p>
-                  <p>{item.location}</p>
-                  <p>{item.country}</p>
-                  <p>{item.website}</p>
-                  <p>{item.phone}</p>
-                  <p>{item.whatsapp}</p>
-                  <p>{item.amount}</p>
+                  <p>
+                    <strong> Location:</strong> {item.location}
+                  </p>
+                  <p>
+                    <strong> Country: </strong>
+                    {item.country}
+                  </p>
+                  <p>
+                    <strong> Website:</strong> {item.website}
+                  </p>
+                  <p>
+                    <strong>Tel:</strong>
+                    {item.phone}
+                  </p>
+                  <p>
+                    <strong>Whats App:</strong>
+                    {item.whatsapp}
+                  </p>
+                  <Button>{item.amount}</Button>
                 </div>
               </div>
             ))}

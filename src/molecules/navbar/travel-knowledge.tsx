@@ -84,67 +84,67 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
         <Modal isOpen={isOpen} setIsOpen={setIsOpen} containerClasses="ms-auto">
           <EventForm />
         </Modal>
+        <Modal
+          isOpen={isContentOpen}
+          setIsOpen={setIsContentOpen}
+          containerClasses="ms-auto"
+          customClasses="w-full h-screen"
+        >
+          <div
+            id="sub-layout"
+            className="p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl"
+          >
+            <h4
+              className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
+              onClick={() => setIsContentOpen(false)}
+            >
+              &larr; {modalContent.title}
+            </h4>
+            <div className="space-y-4">
+              {modalContent.content.map((block, index) => {
+                if (block._type === 'block') {
+                  return (
+                    <p key={index} className="text-base">
+                      {block.children?.[0]?.text}
+                    </p>
+                  );
+                }
+                if (block._type === 'image') {
+                  return <img key={index} src={block.asset?.url} alt={block.alt || 'Image'} className="w-full" />;
+                }
+                return null;
+              })}
+            </div>
+          </div>
+        </Modal>
         <Button onClick={() => setIsOpen(true)}>Advertise on tribe africa</Button>
       </div>
 
-      {!isContentOpen ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {travelCategories.map((category, index) => (
-            <div key={index} className="flex flex-col">
-              {category.imageUrl && (
-                <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
-                  <img
-                    src={category.imageUrl}
-                    alt={category.title}
-                    className="w-full h-48 aspect-square object-cover"
-                  />
-                </div>
-              )}
-              <div id="about" className="text-left w-full space-y-2">
-                <h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>
-                <ul className="space-y-2">
-                  {category.items.map((subCategory, idx) => (
-                    <li
-                      key={idx}
-                      className="text-sm md:text-base cursor-pointer hover:underline"
-                      onClick={() => openModal(subCategory.label, subCategory.content)}
-                    >
-                      {subCategory.label}
-                    </li>
-                  ))}
-                </ul>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {travelCategories.map((category, index) => (
+          <div key={index} className="flex flex-col">
+            {category.imageUrl && (
+              <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
+                <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
               </div>
+            )}
+            <div id="about" className="text-left w-full space-y-2">
+              <h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>
+              <ul className="space-y-2">
+                {category.items.map((subCategory, idx) => (
+                  <li
+                    key={idx}
+                    className="text-sm md:text-base cursor-pointer hover:underline"
+                    onClick={() => openModal(subCategory.label, subCategory.content)}
+                  >
+                    {subCategory.label}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
-        </div>
-      ) : (
-        <div
-          id="sub-layout"
-          className="p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl"
-        >
-          <h4
-            className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-            onClick={() => setIsContentOpen(false)}
-          >
-            &larr; {modalContent.title}
-          </h4>
-          <div className="space-y-4">
-            {modalContent.content.map((block, index) => {
-              if (block._type === 'block') {
-                return (
-                  <p key={index} className="text-base">
-                    {block.children?.[0]?.text}
-                  </p>
-                );
-              }
-              if (block._type === 'image') {
-                return <img key={index} src={block.asset?.url} alt={block.alt || 'Image'} className="w-full" />;
-              }
-              return null;
-            })}
           </div>
-        </div>
-      )}
+        ))}
+      </div>
     </section>
   );
 };
