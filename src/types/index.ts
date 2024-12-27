@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router';
 import { SanityAsset } from '@sanity/image-url/lib/types/types';
+import { TypedObject } from '@sanity/block-tools';
 
 // data
 export interface ServicesProps {
@@ -194,19 +195,84 @@ export interface BlogPageScreenProps {
 }
 
 export interface RatingProps {
-  title: string;
-  score: string | number;
+  quality_of_service: number;
+  comfort: number;
+  food_and_beverage: number;
+  location: number;
+  cleanliness: number;
 }
 
 export interface ReviewProps {
   _id: string;
-  _key: string; // `feedback:accomodation:${accomodation_id}` or `feedback:people:${person_id}`
+  key: string; // `review:accomodation:${accomodation_id}` or `review:people:${person_id}`
   content: string;
   images?: Array<SanityAsset>;
-  ratings: Array<RatingProps>;
+  ratings: RatingProps;
   submitted_by: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface accomodationProps {
+  name: string;
+  address: string;
+  website: string;
+  phone_no: string;
+  email: string;
+  amount: string;
+  images: string[];
+  about: {
+    title: string;
+    description: TypedObject[];
+  };
+  policy: {
+    children: {
+      text: string;
+    }[];
+  }[];
+  paymentMethods: {
+    card: boolean;
+    cash: boolean;
+  };
+  acceptedCards: {
+    masterCard: boolean;
+    visaCard: boolean;
+    americanExpress: boolean;
+    discover: boolean;
+    jcb: boolean;
+  };
+  landmarks: {
+    title: string;
+    distance: string;
+  }[];
+  attractions: {
+    title: string;
+    distance: string;
+  }[];
+  location: {
+    latitude: string;
+    longitude: string;
+  };
+  amenities: {
+    title: string;
+    list: {
+      title: string;
+      description: string;
+    }[];
+  };
+  reviews: {
+    count: number;
+    fields: RatingProps;
+  };
+}
+
+export interface accommodationCardProps {
+  _id: string;
+  name: string;
+  phone_no: string;
+  website: string;
+  address: string;
+  images: string;
 }
 
 export interface HotelData {
@@ -262,3 +328,5 @@ export interface ProffesionalData {
   country: string;
   address?: string;
 }
+
+export default module.exports;

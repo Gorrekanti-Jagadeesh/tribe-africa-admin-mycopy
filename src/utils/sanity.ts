@@ -34,12 +34,24 @@ export const query = {
     DETAILS: (country, fields) =>
       `*[_type == "countryDetails" && lower(country) == "${country}"]{${fields.length ? fields.join(', ') : '*'}}[0]`,
   },
+  ACCOMMODATION: {
+    LIST: `*[_type == "accommodation"]{
+      _id, name, phone_no, website, amount, images[0]
+    }`,
+    DETAILS: (id: string) => `*[_type == "accommodation" && _id == "${id}"][0]`,
+  },
+  REVIEWS: {
+    ACCOMMODATION: (id: string) => `*[_type == "review" && key == "review:accommodation:${id}"]`,
+    PEOPLE: (id: string) => `*[_type == "review" && key == "review:people:${id}"]`,
+    ALL: `*[_type == "review"]`,
+  },
 };
 
 export const sanity = {
   GET: (query) => sanityClient.fetch(query),
-  POST: (data) => sanityClient.create(data),
+  POST: (type, data) => sanityClient.create({ ...data, _type: type }),
   PUT: (id, data) => sanityClient.patch(id).set(data).commit(),
+  DELETE: (id) => sanityClient.delete(id),
 };
 
 export const parseImageUrl = (imageStr: string) => {

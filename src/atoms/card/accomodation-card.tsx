@@ -6,27 +6,19 @@ import { StarRating } from '../rating/star-rating';
 
 import { useNavigate } from 'react-router-dom';
 
-// Define the props interface
-interface AccommodationCardProps {
-  data: {
-    _id: string;
-    name: string;
-    phone_number: string;
-    website_url: string;
-    location: string;
-    rate: string;
-    description: string;
-    created_at: string;
-    images: string[];
-  };
-}
+import { accommodationCardProps } from '../../types/index';
+import { sanityImageUrlBuilder } from '@api/index';
 
-const AccommodationCard: React.FC<AccommodationCardProps> = ({ data }) => {
-  const { images, name, rate, _id } = data;
+const AccommodationCard: React.FC<{ data: accommodationCardProps }> = ({ data }) => {
+  const { images, name, _id } = data;
   const navigate = useNavigate();
   return (
     <div className="border rounded-lg shadow-sm overflow-hidden">
-      <img src={images[0].toString()} alt={name} className="w-full aspect-video rounded-lg h-48 object-cover" />
+      <img
+        src={sanityImageUrlBuilder(images).url()}
+        alt={name}
+        className="w-full aspect-video rounded-lg h-48 object-cover"
+      />
       <div className="p-4">
         <h3 className="text-lg font-semibold">{name}</h3>
         <div className="flex items-center text-orange-500 mt-1">
@@ -41,7 +33,7 @@ const AccommodationCard: React.FC<AccommodationCardProps> = ({ data }) => {
         <div className="flex">
           <div className="flex items-center">
             <span className="text-sm text-gray-500">From</span>
-            <span className="font-bold text-lg mx-2">{rate}</span>
+            <span className="font-bold text-lg mx-2">{}</span>
           </div>
           <button
             className="w-fit ms-auto bg-gray-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
