@@ -42,6 +42,18 @@ export const fromKebabCase = (kebab: string) => {
     .join(' ') // Join the words with spaces
     .replace(/\band\b/g, '&'); // Replace 'And' with '&'
 };
+export const fromSnakeCase = (kebab: string) => {
+  return kebab
+    .split('_') // Split the string by hyphens
+    .map((word) => {
+      if (['and'].includes(word)) {
+        return word; // Lowercase certain words like "and"
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of other words
+    })
+    .join(' ') // Join the words with spaces
+    .replace(/\band\b/g, '&'); // Replace 'And' with '&'
+};
 
 // Convert base64 image to Blob for upload
 export const base64ToBlob = (base64: string, mimeType = 'image/jpeg'): Blob => {
@@ -59,4 +71,14 @@ export const formatDate = (isoString: string): string => {
   const year = date.getFullYear();
 
   return `${day}-${month}-${year}`;
+};
+
+export const getAverageOfObjectValues = (obj: object) => {
+  let sum = 0;
+  Object.values(obj).forEach((val) => (sum += val));
+  return sum / Object.values(obj).length;
+};
+
+export const appendToAverage = (average: number, count: number, value: number) => {
+  return (average * count + value) / (count + 1);
 };

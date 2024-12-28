@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { getDataByDocumentTypeWithId, uploadImage } from '../../api';
-import { useParams, useLocation } from 'react-router-dom';
+import { uploadImage } from '../../api';
+import { useParams } from 'react-router-dom';
 import AccomodationDetailsScreen from './accomodation-details-screen';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
-import sanityClient from '../../sanityClient';
 import { UploadBody } from '@sanity/client';
 import { Loading } from '@atoms/common/loading';
 import { useState } from 'react';
+import { query, sanity } from '@utils/sanity';
+import { appendToAverage } from '@utils/common';
 
 const AccommodationDetailsContainer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,39 +16,17 @@ const AccommodationDetailsContainer = () => {
 
   const { accommodationId } = useParams<{ accommodationId: string }>();
 
-  const location = useLocation();
-  const { data } = location.state || {}; // Add fallback empty object
-
-  const fetchReviewsByHotelId = async (hotelId: string) => {
-    const reviews = await getDataByDocumentTypeWithId('review', 'hotel_id', hotelId, [
-      'review_text',
-      'quality_of_service',
-      'comfort',
-      'food_and_beverage',
-      'location',
-      'cleanliness',
-      'total_rating',
-      'created_at',
-      'images',
-      'reviewer_name',
-      'reviewer_image',
-    ]);
-
-    // Define the type for reviews
-    type Review = {
-      created_at: string;
-    };
-
-    // Sort reviews by created_at in descending order
-    reviews.sort((a: Review, b: Review) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const fetchReviewsByHotelId = async (id: string) => {
+    const reviews = await sanity.GET(query.REVIEWS.ACCOMMODATION(id));
     return reviews;
   };
 
-  const {
-    data: reviews,
-    error,
-    isLoading,
-  } = useQuery({
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['accommodation_details'],
+    queryFn: () => sanity.GET(query.ACCOMMODATION.DETAILS(accommodationId)),
+  });
+
+  const { data: reviews } = useQuery({
     queryKey: ['reviews', accommodationId || 'defaultId'],
     queryFn: () => (accommodationId ? fetchReviewsByHotelId(accommodationId) : Promise.resolve([])),
   });
@@ -55,22 +34,22 @@ const AccommodationDetailsContainer = () => {
   const { control, handleSubmit } = useForm();
 
   const onSubmit = async (formData: Record<string, number>) => {
+    if (
+      !formData.quality_of_service ||
+      !formData.comfort ||
+      !formData.food_and_beverage ||
+      !formData.location ||
+      !formData.cleanliness
+    ) {
+      alert('Enter valid rating scores');
+      return;
+    }
+
     setIsSubmitting(true);
     const token = Cookies.get('googleUser');
     const userDetails = token ? JSON.parse(token) : null;
 
-    const { displayName, photoURL } = userDetails || {};
-
-    // Calculate the total rating as the average of the individual ratings
-    const ratings = [
-      formData.quality_of_service,
-      formData.comfort,
-      formData.food_and_beverage,
-      formData.location,
-      formData.cleanliness,
-    ];
-
-    const totalRating = ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length;
+    const { displayName } = userDetails || {};
 
     // Upload images using the uploadImage function
     const uploadedImages = await Promise.all(
@@ -91,34 +70,63 @@ const AccommodationDetailsContainer = () => {
               return null;
             }
           })
-        : [] // Fallback to an empty array if not an array
+        : []
     );
 
     // Filter out any null values in case of upload errors
     const validImages = uploadedImages.filter((image) => image !== null);
 
     const submissionData = {
-      hotel_id: accommodationId, // Use accommodationId for hotel_id
-      review_text: formData.review,
-      quality_of_service: formData.quality_of_service,
-      comfort: formData.comfort,
-      food_and_beverage: formData.food_and_beverage,
-      location: formData.location,
-      cleanliness: formData.cleanliness,
-      total_rating: totalRating,
-      created_at: new Date().toISOString(),
+      key: `review:accommodation:${accommodationId}`, // Use accommodationId for hotel_id
+      content: formData.reviews,
+      ratings: {
+        quality_of_service: formData.quality_of_service,
+        comfort: formData.comfort,
+        food_and_beverage: formData.food_and_beverage,
+        location: formData.location,
+        cleanliness: formData.cleanliness,
+      },
       images: validImages,
-      reviewer_name: displayName,
-      reviewer_image: photoURL,
+      submitted_by: displayName,
     };
 
     try {
       // Submit review to Sanity CMS
-      const response = await sanityClient.create({
-        _type: 'review',
-        ...submissionData,
+      sanity.POST('review', submissionData).then(() => {
+        if (!data.reviews) {
+          data.reviews = {
+            count: 0,
+            fields: {
+              quality_of_service: 0,
+              comfort: 0,
+              food_and_beverage: 0,
+              location: 0,
+              cleanliness: 0,
+            },
+          };
+        }
+        sanity.PUT(accommodationId, {
+          ...data,
+          reviews: {
+            count: 1 + data.reviews.count,
+            fields: {
+              quality_of_service: appendToAverage(
+                data.reviews.fields.quality_of_service,
+                data.reviews.count,
+                formData.quality_of_service
+              ),
+              comfort: appendToAverage(data.reviews.fields.comfort, data.reviews.count, formData.comfort),
+              food_and_beverage: appendToAverage(
+                data.reviews.fields.food_and_beverage,
+                data.reviews.count,
+                formData.food_and_beverage
+              ),
+              location: appendToAverage(data.reviews.fields.location, data.reviews.count, formData.location),
+              cleanliness: appendToAverage(data.reviews.fields.cleanliness, data.reviews.count, formData.cleanliness),
+            },
+          },
+        });
       });
-      console.log(response);
       fetchReviewsByHotelId(accommodationId);
       // Close the modal after submission
       setIsModalOpen(false);
@@ -129,19 +137,17 @@ const AccommodationDetailsContainer = () => {
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <Loading />
-      </div>
-    );
+  if (isLoading) return <Loading />;
+
   if (error) return <div>Error fetching reviews: {error.message}</div>;
+
+  if (!data) return <>data not received yet</>;
 
   return (
     <div>
       <AccomodationDetailsScreen
+        data={data}
         reviews={reviews}
-        hotelData={data}
         onSubmit={handleSubmit(onSubmit)}
         control={control}
         isSubmitting={isSubmitting}
