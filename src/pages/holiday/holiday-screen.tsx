@@ -6,7 +6,6 @@ import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import OverLayCard from '@atoms/card/overlay-card';
 import { sanityImageUrlBuilder } from '@api/index';
 import ColsGrid from '@molecules/layout/cols-grid';
-import { fromKebabCase } from '@utils/common';
 import { CountriesGeoData } from '@data/index';
 
 const HolidayScreen = ({ props }) => {

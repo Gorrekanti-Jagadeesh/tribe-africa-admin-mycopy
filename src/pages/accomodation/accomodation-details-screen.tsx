@@ -5,11 +5,10 @@ import Modal from '@molecules/modal';
 import shareIcon from '../../assets/icons/share-dotted.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faLocationPin, faPencil, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import StarRatingInput from '../../atoms/rating/start-rating-input';
 import FileUploadWithPreview from '../../atoms/input-elements/file-upload-with-preview';
 import { Loading } from '@atoms/common/loading';
-
 import { ReviewProps, accomodationProps } from '../../types';
 import { Control } from 'react-hook-form';
 import { sanityImageUrlBuilder } from '@api/index';
@@ -123,7 +122,7 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
           {data.amenities.title}
         </UnderlineHeading>
         <div className="md:flex justify-between">
-          {data.amenities.list.map((amenity, index) => (
+          {data.amenities.list.map((amenity) => (
             <p className="text-wrap md:w-[45%]" key={amenity.title}>
               <span className="font-semibold">{amenity.title}</span>
               {' - '}

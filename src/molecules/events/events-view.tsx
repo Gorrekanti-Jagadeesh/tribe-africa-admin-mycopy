@@ -3,7 +3,7 @@ import { getEntryDataById, sanityImageUrlBuilder } from '../../api';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { Loading } from '@atoms/common/loading';
-import { FaGlobe, FaPhone, FaWhatsapp, FaFacebook, FaEnvelope } from 'react-icons/fa';
+import { FaGlobe, FaPhone, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 
 const EventDetailsPage = () => {

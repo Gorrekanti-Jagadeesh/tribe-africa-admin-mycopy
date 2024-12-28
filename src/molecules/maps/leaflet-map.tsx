@@ -27,7 +27,7 @@ const LeafletMap = ({ mark, latitude, longitude }) => {
         mapRef.current = null;
       }
     };
-  }, [latitude, longitude]);
+  }, [latitude, longitude, mark]);
 
   return (
     <div className="max-w-6xl m-auto p-2 md:p-4">
