@@ -12,28 +12,40 @@ const MustSeeAndDo: React.FC = () => {
   const navigate = useNavigate();
   const [msdCategory, setMsdCategory] = useState([]);
 
+  const structureFunction = async () => {
+    // Fetching data from the API
+    const data = await sanity.GET(query.HOLIDAY.MUST_SEE_AND_DO.CATEGORY);
+
+    if (data) {
+      // Mapping over the data to add the `onClick` function dynamically
+      const formattedCategoryData = data.map((eachCategory) => ({
+        ...eachCategory,
+        onClick: () =>
+          navigate(`/${country}/holiday/must-see-and-do/${toKebabCase(eachCategory.title)}`, {
+            state: eachCategory._id,
+          }),
+      }));
+
+      // Returning the formatted data
+      return formattedCategoryData;
+    } else {
+      // Handle the case where no data is returned
+      console.error('No data found.');
+      return [];
+    }
+  };
+
   const { data, error, isLoading } = useQuery({
-    queryKey: ['must_see_and_do_categories'],
-    queryFn: () => sanity.GET(query.HOLIDAY.MUST_SEE_AND_DO.CATEGORY),
+    queryKey: ['must_see_and_do_categories', country],
+    queryFn: structureFunction, // Use the structureFunction for fetching and formatting data
   });
 
-  useEffect(() => {
-    if (data) {
-      const formattedCategoryData = data?.map((eachCategory) => {
-        return {
-          ...eachCategory,
-          onClick: () =>
-            navigate(`/${country}/holiday/must-see-and-do/${toKebabCase(eachCategory.title)}`, {
-              state: eachCategory._id,
-            }),
-        };
-      });
-      setMsdCategory(formattedCategoryData);
-    }
-  }, [data, country]);
-
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="flex justify-center items-center">
+        <Loading />
+      </div>
+    );
   }
   if (error) {
     return 'Error occured';
@@ -42,7 +54,7 @@ const MustSeeAndDo: React.FC = () => {
   return (
     <div className="md:p-4">
       <h4 className="text-left text-orange-500 text-lg">&rarr; Must see & Do</h4>
-      <CardsGrid data={msdCategory} />
+      <CardsGrid data={data} />
     </div>
   );
 };
