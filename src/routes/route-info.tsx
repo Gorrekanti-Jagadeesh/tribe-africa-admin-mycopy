@@ -11,14 +11,13 @@ import TribeAfricaPagesContainer from '../pages/tribe-africa-pages/tribe-africa-
 import TribeAfricaPagesDetailsContainer from '../pages/tribe-africa-pages/tribe-africa-pages-details-container';
 import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-container';
 import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
-import BusinessEventsPage from '../pages/events/business-events';
 import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
 import BlogDetailsPage from '@molecules/blogs/blog-view';
 import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
-
 import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
 import EventDetailsPage from '@molecules/events/events-view';
+import CountryEventsPage from '../pages/events/business-events';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -62,9 +61,9 @@ const appRoutes: RouteConfig[] = [
     element: <EventDetailsPage />,
   },
   {
-    name: 'Country Business events',
-    path: '/:country/business/event/:event_type',
-    element: <BusinessEventsPage />,
+    name: 'Country events',
+    path: '/:country/:category/event/:event_type',
+    element: <CountryEventsPage />,
   },
   {
     name: 'Country Business events',
