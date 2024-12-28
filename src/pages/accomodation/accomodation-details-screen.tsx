@@ -15,7 +15,8 @@ import { Control } from 'react-hook-form';
 import { sanityImageUrlBuilder } from '@api/index';
 import { PortableText } from '@portabletext/react';
 import UnderlineHeading from '@atoms/heading/underline-heading';
-import { getAverageOfObjectValues } from '@utils/common';
+import { fromSnakeCase, getAverageOfObjectValues } from '@utils/common';
+import LeafletMap from '@molecules/maps/leaflet-map';
 
 interface AccomodationDetailsScreenProps {
   reviews: ReviewProps[];
@@ -121,33 +122,36 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
         <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
           {data.amenities.title}
         </UnderlineHeading>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-1">
-            {data.amenities.list.map((amenity, index) => (
-              <div key={amenity.title}>
-                {index % 2 == 0 ? (
-                  <div className={`flex gap-2`}>
-                    <p className="font-semibold">{amenity.title}</p> -<p>{amenity.description}</p>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="col-span-1">
-            {data.amenities.list.map((amenity, index) => (
-              <div key={amenity.title}>
-                {index % 2 == 1 ? (
-                  <div className={`flex gap-2`}>
-                    <p className="font-semibold">{amenity.title}</p> -<p>{amenity.description}</p>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="md:flex justify-between">
+          {data.amenities.list.map((amenity, index) => (
+            <p className="text-wrap md:w-[45%]" key={amenity.title}>
+              <span className="font-semibold">{amenity.title}</span>
+              {' - '}
+              {amenity.description}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      {/* Map */}
+      <LeafletMap mark={data.name} latitude={data.location.latitude} longitude={data.location.longitude} />
+
+      {/* Guest Reviews Breakdown */}
+      <div>
+        <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
+          Guest Reviews
+        </UnderlineHeading>
+        <div className="flex flex-wrap justify-between">
+          {data.reviews && (
+            <>
+              {Object.keys(data.reviews.fields).map((field) => (
+                <div className="flex justify-between w-full sm:w-[45%]" key={field}>
+                  <p>{fromSnakeCase(field)}</p>
+                  <StarRating rating={data.reviews.fields[field]} />
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -162,11 +166,13 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
             <FontAwesomeIcon icon={faPencil} /> write a review
           </button>
         </div>
-        <div id="reviews" className="flex flex-col gap-4">
-          {reviews.map((item, index) => (
-            <ReviewCard key={index} data={item} />
-          ))}
-        </div>
+        {reviews && (
+          <div id="reviews" className="flex flex-col gap-4">
+            {reviews.map((item, index) => (
+              <ReviewCard key={index} data={item} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal for writing a review */}
