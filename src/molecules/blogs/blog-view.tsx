@@ -27,7 +27,7 @@ const BlogDetailsPage = () => {
   return (
     <div className="flex flex-col gap-6 pb-10 px-10">
       <h1 className="text-4xl my-4 font-semibold capitalize">{data.title}</h1>
-      <img className="aspect-video object-cover" src={sanityImageUrlBuilder(data.image)} />
+      <img className="aspect-video object-cover" src={sanityImageUrlBuilder(data.image).url()} />
       {typeof data.content == 'string' ? (
         <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
       ) : (

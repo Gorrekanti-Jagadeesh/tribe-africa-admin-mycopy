@@ -41,7 +41,7 @@ const HolidayEventsPage = () => {
         {eventsData[1].subCategories.map((each) => (
           <div onClick={() => navigation(`/${country}/sports/event/${toKebabCase(each.title)}`)}>
             <img
-              src={sanityImageUrlBuilder(each.subCategoryImage)}
+              src={sanityImageUrlBuilder(each.subCategoryImage).url()}
               className="rounded-md aspect-square hover:border hover:border-orange-500"
             />
             <p>{each.title}</p>
