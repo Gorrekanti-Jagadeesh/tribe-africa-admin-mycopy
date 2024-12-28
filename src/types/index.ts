@@ -207,7 +207,7 @@ export interface ReviewProps {
   key: string; // `review:accomodation:${accomodation_id}` or `review:people:${person_id}`
   content: string;
   images?: Array<SanityAsset>;
-  ratings: { title: string; score: number };
+  ratings: { title: string; score: number }[];
   submitted_by: string;
   created_at?: string;
   updated_at?: string;
