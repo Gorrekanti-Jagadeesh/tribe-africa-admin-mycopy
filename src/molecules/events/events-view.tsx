@@ -43,7 +43,7 @@ const EventDetailsPage = () => {
         <div className=" text-gray-700 text-lg mt-4 space-y-4">
           <div className="flex items-center gap-3">
             <img
-              src={sanityImageUrlBuilder(eventDetails.businessPhoto)}
+              src={sanityImageUrlBuilder(eventDetails.businessPhoto).url()}
               alt="Business"
               className="h-20 w-20 rounded-xl object-cover border border-gray-300"
             />
