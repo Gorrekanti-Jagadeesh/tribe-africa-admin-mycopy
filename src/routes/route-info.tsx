@@ -19,6 +19,7 @@ import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
 import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
 import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
+import EventDetailsPage from '@molecules/events/events-view';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -57,9 +58,19 @@ const appRoutes: RouteConfig[] = [
     element: <EventsPage />,
   },
   {
-    name: 'Business events',
+    name: 'Event details',
+    path: '/events/:event_category/:event_type/:eventId',
+    element: <EventDetailsPage />,
+  },
+  {
+    name: 'Country Business events',
     path: '/:country/business/event/:event_type',
     element: <BusinessEventsPage />,
+  },
+  {
+    name: 'Country Business events',
+    path: '/:country/business/event/:event_type/:eventId',
+    element: <EventDetailsPage />,
   },
   {
     name: 'Blogs List - No Country',

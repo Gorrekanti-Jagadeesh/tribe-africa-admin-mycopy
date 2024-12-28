@@ -13,7 +13,7 @@ const BlogPageScreen = ({ country, data, banner, blogCategory }) => {
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       <div className="flex flex-col gap-4">
         <div id="header" className="flex mb-4">
-          <UnderlineHeading>{`${country} ${blogCategory} Articles`}</UnderlineHeading>
+          <UnderlineHeading>{`${country} ${country && '-'} ${blogCategory} Articles`}</UnderlineHeading>
           <Button className="ms-auto">Get Featured</Button>
         </div>
         <div id="banner" className="bg-gray-100 flex justify-center p-12">

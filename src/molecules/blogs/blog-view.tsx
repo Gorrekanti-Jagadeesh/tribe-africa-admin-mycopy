@@ -1,36 +1,33 @@
-import { useState, useEffect, SetStateAction } from 'react';
-
 import { PortableText } from '@portabletext/react';
-import { getEntryDataById } from '../../api';
+import { getEntryDataById, sanityImageUrlBuilder } from '../../api';
 import { parseImageUrl } from '../../utils/sanity';
-
-import { BlogContentProps } from '../../types';
 import { useParams } from 'react-router';
+import { Loading } from '@atoms/common/loading';
+import { useQuery } from '@tanstack/react-query';
 
 const BlogDetailsPage = () => {
   const { blogId } = useParams();
-  const [data, setData] = useState<BlogContentProps>({
-    _id: '1',
-    title: '',
-    image: '',
-    content: '',
+
+  const {
+    data: data,
+    error: eventDetailsError,
+    isLoading: eventDetailsLoading,
+  } = useQuery({
+    queryKey: ['events-details-page'],
+    queryFn: () => getEntryDataById(blogId), // Handle undefined 'country'
   });
-  const [image, setImage] = useState('');
 
-  useEffect(() => {
-    getEntryDataById(blogId).then((res: SetStateAction<BlogContentProps>[]) => {
-      setData(res[0]);
-    });
-  }, [blogId]);
-
-  useEffect(() => {
-    if (typeof data.image != 'string') setImage(parseImageUrl(data.image.asset._ref));
-  }, [data]);
+  if (eventDetailsLoading) {
+    return <Loading />;
+  }
+  if (eventDetailsError) {
+    return 'Error Occured';
+  }
 
   return (
     <div className="flex flex-col gap-6 pb-10 px-10">
       <h1 className="text-4xl my-4 font-semibold capitalize">{data.title}</h1>
-      <img className="aspect-video object-cover" src={image} />
+      <img className="aspect-video object-cover" src={sanityImageUrlBuilder(data.image)} />
       {typeof data.content == 'string' ? (
         <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
       ) : (

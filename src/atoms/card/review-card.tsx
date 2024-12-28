@@ -4,6 +4,7 @@ import { ReviewProps } from '../../types';
 import { sanityImageUrlBuilder } from '../../api';
 
 import { demoImage } from '@data/index';
+import { fromSnakeCase, getAverageOfObjectValues } from '@utils/common';
 
 interface ReviewCardProps {
   data: ReviewProps;
@@ -16,12 +17,6 @@ const demoUser = {
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
   const { content, images, ratings, submitted_by, created_at } = data;
-
-  const calculateTotal = () => {
-    let total = 0;
-    ratings.forEach((rating) => (total += typeof rating.score == 'string' ? parseInt(rating.score) : rating.score));
-    return Math.floor(total / ratings.length);
-  };
 
   return (
     <div className="border rounded-lg p-4 shadow-sm flex flex-col md:flex-row">
@@ -64,13 +59,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
         <div className="space-y-2 min-w-56">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold whitespace-nowrap">In Total</span>
-            <StarRating rating={calculateTotal()} />
+            <StarRating rating={getAverageOfObjectValues(ratings)} />
           </div>
           <hr className="border border-black" />
-          {ratings.map((rating) => (
-            <div className="flex gap-2 justify-between items-center" key={rating.title}>
-              <span className="text-sm w-[40%]">{rating.title}</span>
-              <StarRating rating={rating.score} />
+          {Object.keys(ratings).map((rating) => (
+            <div className="flex gap-2 justify-between items-center" key={rating}>
+              <span className="text-sm w-[40%]">{fromSnakeCase(rating)}</span>
+              <StarRating rating={ratings[rating]} />
             </div>
           ))}
         </div>
