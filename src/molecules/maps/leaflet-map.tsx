@@ -30,15 +30,13 @@ const LeafletMap = ({ mark, latitude, longitude }) => {
   }, [latitude, longitude]);
 
   return (
-    <div className="max-w-6xl m-auto p-2 md:p-4">
-      <div
-        id="map"
-        style={{
-          width: '100%',
-          height: '400px',
-        }}
-      ></div>
-    </div>
+    <div
+      id="map"
+      style={{
+        width: '100%',
+        height: '400px',
+      }}
+    ></div>
   );
 };
 

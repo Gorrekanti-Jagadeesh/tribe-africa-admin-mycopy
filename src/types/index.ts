@@ -225,11 +225,7 @@ export interface accomodationProps {
     title: string;
     description: TypedObject[];
   };
-  policy: {
-    children: {
-      text: string;
-    }[];
-  }[];
+  policy: TypedObject[];
   paymentMethods: {
     card: boolean;
     cash: boolean;
@@ -248,6 +244,10 @@ export interface accomodationProps {
   attractions: {
     title: string;
     distance: string;
+  }[];
+  operating_season: {
+    title: string;
+    description: string;
   }[];
   location: {
     latitude: string;
@@ -272,7 +272,12 @@ export interface accommodationCardProps {
   phone_no: string;
   website: string;
   address: string;
+  amount: string;
   images: string;
+  reviews: {
+    count: number;
+    fields: ReviewProps;
+  };
 }
 
 export interface HotelData {

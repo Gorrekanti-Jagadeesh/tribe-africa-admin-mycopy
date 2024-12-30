@@ -117,6 +117,90 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
         <PortableText value={data.about.description} />
       </div>
 
+      {/* Information grid */}
+      <div className="md:grid grid-cols-2 gap-2">
+        <div className="col-span-1 space-y-2">
+          {/* Policies and payments */}
+          <div>
+            {/* Policy container */}
+            <div>
+              <UnderlineHeading className="text-lg font-semibold">Policies</UnderlineHeading>
+              <PortableText value={data.policy} />
+            </div>
+
+            {/* Payment methods */}
+            <div>
+              <p>
+                <span className="font-semibold">Payment methods accepted:</span>
+                {Object.keys(data.paymentMethods)
+                  .filter((method) => data.paymentMethods[method])
+                  .join(', ')}
+              </p>
+            </div>
+
+            {/* Accepted cards */}
+            <div>
+              <p>
+                <span className="font-semibold">Cards accepted:</span>
+                {Object.keys(data.acceptedCards)
+                  .filter((card) => data.acceptedCards[card])
+                  .join(', ')}
+              </p>
+            </div>
+          </div>
+
+          {/* Distance to key locations */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold">Distance to key locations</UnderlineHeading>
+            <div>
+              {data.landmarks.map((item) => (
+                <div key={item.title}>
+                  <p>
+                    <span className="font-semibold mr-1">{item.title}:</span>
+                    {item.distance}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-1 space-y-2">
+          {/* Operating seasons of the accommodation */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold">Operating Season</UnderlineHeading>
+            <div>
+              {data.operating_season.map((item) => (
+                <div key={item.title}>
+                  <p>
+                    <span className="font-semibold mr-1">{item.title}:</span>
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Distance to nearby attractions */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold">Nearby Attractions</UnderlineHeading>
+            <div>
+              {data.attractions.map((item) => (
+                <div key={item.title}>
+                  <p>
+                    <span className="font-semibold mr-1">{item.title}:</span>
+                    {item.distance}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Map */}
+          <LeafletMap mark={data.name} latitude={data.location.latitude} longitude={data.location.longitude} />
+        </div>
+      </div>
+
       {/* Amenities Section */}
       <div className="my-6">
         <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
@@ -132,9 +216,6 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
           ))}
         </div>
       </div>
-
-      {/* Map */}
-      <LeafletMap mark={data.name} latitude={data.location.latitude} longitude={data.location.longitude} />
 
       {/* Guest Reviews Breakdown */}
       <div>
