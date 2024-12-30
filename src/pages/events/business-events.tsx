@@ -5,10 +5,11 @@ import EventsScreen from './events-screen';
 import { sanityImageUrlBuilder } from '@api/index';
 import { fromKebabCase } from '@utils/common';
 
-const BusinessEventsPage = () => {
-  const { country, event_type } = useParams();
+const CountryEventsPage = () => {
+  const { country, event_type, category } = useParams();
 
   const customCountry = fromKebabCase(country);
+  const customCategory = fromKebabCase(category);
   const customEventType = fromKebabCase(event_type);
 
   // Query for fallback data, always executed
@@ -19,7 +20,7 @@ const BusinessEventsPage = () => {
   } = useQuery({
     queryKey: ['event-image', customEventType],
     queryFn: () =>
-      sanity.GET(`*[_type == "event-categories" && category == "Business"]{
+      sanity.GET(`*[_type == "event-categories" && category == "${customCategory}"]{
         subCategories[title == "${customEventType}"]{
           subCategoryImage
         }
@@ -34,7 +35,7 @@ const BusinessEventsPage = () => {
     queryKey: ['business-events', customCountry, customEventType],
     queryFn: () =>
       sanity.GET(
-        `*[_type == "event" && country == "${customCountry}" && category == "Business" && type == "${customEventType}"]`
+        `*[_type == "event" && country == "${customCountry}" && category == "${customCategory}" && type == "${customEventType}"]`
       ),
     enabled: !!country && !!event_type, // Only run this query if country and event_type are available
   });
@@ -58,4 +59,4 @@ const BusinessEventsPage = () => {
   );
 };
 
-export default BusinessEventsPage;
+export default CountryEventsPage;

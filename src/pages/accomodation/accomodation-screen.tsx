@@ -7,7 +7,7 @@ import { accommodationCardProps } from '../../types/index';
 interface AccomodationScreenProps {
   data: accommodationCardProps[];
   error: Error;
-  isLoading: Boolean;
+  isLoading: boolean;
 }
 
 const AccomodationScreen: React.FC<AccomodationScreenProps> = ({ data, error, isLoading }) => {

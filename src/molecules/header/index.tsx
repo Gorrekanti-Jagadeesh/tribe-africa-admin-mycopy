@@ -8,9 +8,9 @@ import Network from '../navbar/network';
 import OutAndAbout from '../navbar/out-and-about';
 import PeaceProsperity from '../navbar/peace-prosperity';
 import AfterWork from '../navbar/after-work';
-import BusinessEvents from '../navbar/holiday-events';
 import MustSeeAndDo from '../navbar/must-see-and-do';
 import { fromKebabCase } from '@utils/common';
+import HolidayEventsPage from '../../pages/events/holiday-events';
 
 export const HomeHeader = () => {
   const menuItems = [
@@ -52,7 +52,7 @@ export const HolidayHeader = ({ country }: { country: string | undefined }) => {
   const menuItems = [
     { id: 'country', title: fromKebabCase(country), isNavLink: false, redirect: `/country/${country}` },
     { id: 'Out & about', title: 'Out & About', isNavLink: true, content: <OutAndAbout /> },
-    { id: 'events', title: 'Events', isNavLink: true, content: <BusinessEvents /> },
+    { id: 'events', title: 'Events', isNavLink: true, content: <HolidayEventsPage /> },
     { id: 'must-see-and-do', title: 'Must See & Do', isNavLink: true, content: <MustSeeAndDo /> },
     {
       id: 'travel-knowledge',
