@@ -14,7 +14,7 @@ const AccommodationDetailsContainer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { accommodationId } = useParams<{ accommodationId: string }>();
+  const { categoryInfoId } = useParams<{ categoryInfoId: string }>();
 
   const fetchReviewsByHotelId = async (id: string) => {
     const reviews = await sanity.GET(query.REVIEWS.ACCOMMODATION(id));
@@ -23,12 +23,12 @@ const AccommodationDetailsContainer = () => {
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['accommodation_details'],
-    queryFn: () => sanity.GET(query.ACCOMMODATION.DETAILS(accommodationId)),
+    queryFn: () => sanity.GET(query.ACCOMMODATION.DETAILS(categoryInfoId)),
   });
 
   const { data: reviews } = useQuery({
-    queryKey: ['reviews', accommodationId || 'defaultId'],
-    queryFn: () => (accommodationId ? fetchReviewsByHotelId(accommodationId) : Promise.resolve([])),
+    queryKey: ['reviews', categoryInfoId || 'defaultId'],
+    queryFn: () => (categoryInfoId ? fetchReviewsByHotelId(categoryInfoId) : Promise.resolve([])),
   });
 
   const { control, handleSubmit } = useForm();
@@ -77,7 +77,7 @@ const AccommodationDetailsContainer = () => {
     const validImages = uploadedImages.filter((image) => image !== null);
 
     const submissionData = {
-      key: `review:accommodation:${accommodationId}`, // Use accommodationId for hotel_id
+      key: `review:accommodation:${categoryInfoId}`, // Use categoryInfoId for hotel_id
       content: formData.reviews,
       ratings: {
         quality_of_service: formData.quality_of_service,
@@ -105,7 +105,7 @@ const AccommodationDetailsContainer = () => {
             },
           };
         }
-        sanity.PUT(accommodationId, {
+        sanity.PUT(categoryInfoId, {
           ...data,
           reviews: {
             count: 1 + data.reviews.count,
@@ -127,7 +127,7 @@ const AccommodationDetailsContainer = () => {
           },
         });
       });
-      fetchReviewsByHotelId(accommodationId);
+      fetchReviewsByHotelId(categoryInfoId);
       // Close the modal after submission
       setIsModalOpen(false);
     } catch (error) {

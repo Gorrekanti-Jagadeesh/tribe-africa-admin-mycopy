@@ -6,9 +6,12 @@ const categories = [
     title: 'Restaurants & Eateries',
     image: demoImage,
     items: [
+      { title: 'Traditional', url: 'https://example.com/traditional' },
+      { title: 'Casual Dining', url: 'https://example.com/casual-dining' },
       { title: 'Fine Dining', url: 'https://example.com/fine-dining' },
-      { title: 'Fast Food', url: 'https://example.com/fast-food' },
-      { title: 'Vegan Options', url: 'https://example.com/vegan-options' },
+      { title: 'Street Food', url: 'https://example.com/street-food' },
+      { title: 'Vegeterian & Vegan', url: 'https://example.com/vegaterian-vegan' },
+      { title: 'Beach Bars', url: 'https://example.com/beach-bars' },
     ],
   },
   {

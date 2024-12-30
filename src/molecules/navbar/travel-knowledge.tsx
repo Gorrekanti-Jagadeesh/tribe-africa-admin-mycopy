@@ -5,6 +5,8 @@ import EventForm from '../forms/event-form';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
 import React, { useEffect } from 'react';
+import { toKebabCase } from '@utils/common';
+import { useNavigate } from 'react-router';
 
 interface SubCategory {
   title: string;
@@ -33,6 +35,7 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
   const [isContentOpen, setIsContentOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState<ModalContent>({ title: '', content: [] });
+  const navigation = useNavigate();
 
   const {
     data: travelData,
@@ -135,7 +138,15 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
                   <li
                     key={idx}
                     className="text-sm md:text-base cursor-pointer hover:underline"
-                    onClick={() => openModal(subCategory.label, subCategory.content)}
+                    onClick={() => {
+                      if (subCategory.label === 'Accommodation' || subCategory.label == 'Q & A Forum') {
+                        navigation(`/${toKebabCase(country)}/${toKebabCase(subCategory.label)}`);
+                      }
+                      if (subCategory.label == 'Q & A Forum') {
+                        navigation(`/${toKebabCase(country)}/qna`);
+                      }
+                      openModal(subCategory.label, subCategory.content);
+                    }}
                   >
                     {subCategory.label}
                   </li>

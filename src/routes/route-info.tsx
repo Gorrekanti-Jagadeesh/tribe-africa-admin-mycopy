@@ -1,7 +1,7 @@
 import HomeContainer from '../pages/home/home-container';
 import BusinessContainer from '../pages/business/business-container';
 import HolidayContainer from '../pages/holiday/holiday-container';
-import Accomodation from '../pages/accomodation/accomodation-container';
+import AccomodationContainer from '../pages/accomodation/accomodation-container';
 import EventsPage from '../pages/events/events-container';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
@@ -42,13 +42,13 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'accomodation',
-    path: '/accomodations/:accommodationId',
+    path: '/:country/:category/:categoryInfoId',
     element: <AccommodationDetailsContainer />,
   },
   {
     name: 'accomodations list',
-    path: '/accomodations',
-    element: <Accomodation />,
+    path: ':country/:category',
+    element: <AccomodationContainer />,
   },
   {
     name: 'events',
@@ -67,7 +67,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'Country Business events',
-    path: '/:country/business/event/:event_type/:eventId',
+    path: '/:country/:category/event/:event_type/:eventId',
     element: <EventDetailsPage />,
   },
   {
@@ -92,7 +92,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'qna',
-    path: '/qna',
+    path: ':country/qna',
     element: <QNA />,
   },
   {

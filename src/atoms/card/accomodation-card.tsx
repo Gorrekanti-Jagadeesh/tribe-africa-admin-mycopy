@@ -8,8 +8,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { accommodationCardProps } from '../../types/index';
 import { sanityImageUrlBuilder } from '@api/index';
+import { toKebabCase } from '@utils/common';
 
-const AccommodationCard: React.FC<{ data: accommodationCardProps }> = ({ data }) => {
+const AccommodationCard: React.FC<{ data: accommodationCardProps; country: string; category: string }> = ({
+  data,
+  country,
+  category,
+}) => {
   const { images, name, _id } = data;
   const navigate = useNavigate();
   return (
@@ -38,7 +43,7 @@ const AccommodationCard: React.FC<{ data: accommodationCardProps }> = ({ data })
           <button
             className="w-fit ms-auto bg-gray-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
             onClick={() => {
-              navigate(`/accomodations/${_id}`, { state: { data } });
+              navigate(`/${toKebabCase(country)}/${toKebabCase(category)}/${_id}`, { state: { data } });
             }}
           >
             View Hotel
