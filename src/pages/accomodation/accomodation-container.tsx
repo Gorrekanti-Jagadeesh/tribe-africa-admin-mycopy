@@ -11,11 +11,9 @@ const AccomodationContainer = () => {
     queryKey: ['accomodationData', country],
     queryFn: () =>
       sanity.GET(`*[_type == "accommodation" && country == "${fromKebabCase(country)}"]{
-      _id, name, phone_no, website, amount, images[0]
+      _id, name, phone_no, website, amount, images[0], reviews
     }`),
   });
-
-  console.log(country, 'tyg', data);
 
   return <AccomodationScreen data={data} error={error} isLoading={isLoading} country={country} category={category} />;
 };

@@ -139,11 +139,13 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
                     key={idx}
                     className="text-sm md:text-base cursor-pointer hover:underline"
                     onClick={() => {
-                      if (subCategory.label === 'Accommodation' || subCategory.label == 'Q & A Forum') {
+                      if (subCategory.label === 'Accommodation') {
                         navigation(`/${toKebabCase(country)}/${toKebabCase(subCategory.label)}`);
+                        return;
                       }
                       if (subCategory.label == 'Q & A Forum') {
                         navigation(`/${toKebabCase(country)}/qna`);
+                        return;
                       }
                       openModal(subCategory.label, subCategory.content);
                     }}
