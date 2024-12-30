@@ -1,8 +1,8 @@
 import { useParams } from 'react-router';
 import AccomodationScreen from './accomodation-screen';
 import { useQuery } from '@tanstack/react-query';
-import { query, sanity } from '@utils/sanity';
-import { fromKebabCase, toKebabCase } from '@utils/common';
+import { sanity } from '@utils/sanity';
+import { fromKebabCase } from '@utils/common';
 
 const AccomodationContainer = () => {
   const { country, category } = useParams();
