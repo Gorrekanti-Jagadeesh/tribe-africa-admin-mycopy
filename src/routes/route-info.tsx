@@ -20,6 +20,8 @@ import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
 import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 import EventDetailsPage from '@molecules/events/events-view';
+import HostelForm from '@molecules/forms/accomodation-creation-form';
+
 export interface RouteConfig {
   name: string;
   path: string;
@@ -146,6 +148,11 @@ const appRoutes: RouteConfig[] = [
     name: 'not found page',
     path: '*',
     element: <NotFound />,
+  },
+  {
+    name: 'hotel form',
+    path: '/form',
+    element: <HostelForm />,
   },
 ];
 

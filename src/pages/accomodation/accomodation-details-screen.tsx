@@ -52,8 +52,8 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
           {/* Rating */}
           {data.reviews && (
             <div className="flex mt-2">
-              <StarRating rating={getAverageOfObjectValues(data.reviews.fields)} />
-              <p className="ml-2 m-auto text-gray-600 text-sm">{data.reviews.count} reviews</p>
+              <StarRating rating={getAverageOfObjectValues(data?.reviews.fields)} />
+              <p className="ml-2 m-auto text-gray-600 text-sm">{data?.reviews.count} reviews</p>
             </div>
           )}
           {/* Address and Contact */}
@@ -69,13 +69,13 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
                 <span className="mr-1">
                   <FontAwesomeIcon icon={faPhone} />
                 </span>
-                {data.phone_no}
+                {data?.phone_no}
               </p>
               <p className="flex items-center">
                 <span className="mr-1">
                   <FontAwesomeIcon icon={faGlobe} />
                 </span>
-                {data.website}
+                {data?.website}
               </p>
             </span>
           </div>
