@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Button from '../../atoms/custom-button/button';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { toKebabCase } from '@utils/common';
 
 interface FloatingSiblingProps {

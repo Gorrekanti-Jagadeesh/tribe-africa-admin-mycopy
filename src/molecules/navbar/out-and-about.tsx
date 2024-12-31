@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import NavFloatingLayout from '../layout/nav-floating-layout';
-import { demoImage } from '@data/index';
 import { useParams } from 'react-router';
 import { sanity } from '@utils/sanity';
 import { fromKebabCase } from '@utils/common';

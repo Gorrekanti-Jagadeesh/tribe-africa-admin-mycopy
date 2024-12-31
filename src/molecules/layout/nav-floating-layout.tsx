@@ -2,7 +2,7 @@ import React from 'react';
 import OverLayCard from '../../atoms/card/overlay-card';
 import { FloatingSibling } from '../common/floating-sibling';
 import { sanityImageUrlBuilder } from '@api/index';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { toKebabCase } from '@utils/common';
 
 const NavFloatingLayout: React.FC<{
