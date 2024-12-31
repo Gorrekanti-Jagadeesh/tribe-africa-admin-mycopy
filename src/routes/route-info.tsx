@@ -1,7 +1,7 @@
 import HomeContainer from '../pages/home/home-container';
 import BusinessContainer from '../pages/business/business-container';
 import HolidayContainer from '../pages/holiday/holiday-container';
-import Accomodation from '../pages/accomodation/accomodation-container';
+import AccomodationContainer from '../pages/accomodation/accomodation-container';
 import EventsPage from '../pages/events/events-container';
 import DestinationDetailsContainer from '../pages/destination-details/details-container';
 import BlogPage from '../pages/blogs/blogs-container';
@@ -11,17 +11,16 @@ import TribeAfricaPagesContainer from '../pages/tribe-africa-pages/tribe-africa-
 import TribeAfricaPagesDetailsContainer from '../pages/tribe-africa-pages/tribe-africa-pages-details-container';
 import LookingToHireSomeoneContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-container';
 import LookingToHireSomeoneDetailsContainer from '../pages/looking-to-hire-someone/looking-to-hire-someone-details-container';
-import BusinessEventsPage from '../pages/events/business-events';
 import DiscoverArticles from '../pages/discover-articles/discover-articles-screen';
 import BlogDetailsPage from '@molecules/blogs/blog-view';
 import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
-
 import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
 import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 import EventDetailsPage from '@molecules/events/events-view';
 import HostelForm from '@molecules/forms/accomodation-creation-form';
 
+import CountryEventsPage from '../pages/events/business-events';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -46,13 +45,13 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'accomodation',
-    path: '/accomodations/:accommodationId',
+    path: '/:country/:category/:categoryInfoId',
     element: <AccommodationDetailsContainer />,
   },
   {
     name: 'accomodations list',
-    path: '/accomodations',
-    element: <Accomodation />,
+    path: ':country/:category',
+    element: <AccomodationContainer />,
   },
   {
     name: 'events',
@@ -65,13 +64,13 @@ const appRoutes: RouteConfig[] = [
     element: <EventDetailsPage />,
   },
   {
-    name: 'Country Business events',
-    path: '/:country/business/event/:event_type',
-    element: <BusinessEventsPage />,
+    name: 'Country events',
+    path: '/:country/:category/event/:event_type',
+    element: <CountryEventsPage />,
   },
   {
     name: 'Country Business events',
-    path: '/:country/business/event/:event_type/:eventId',
+    path: '/:country/:category/event/:event_type/:eventId',
     element: <EventDetailsPage />,
   },
   {
@@ -96,7 +95,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'qna',
-    path: '/qna',
+    path: ':country/qna',
     element: <QNA />,
   },
   {

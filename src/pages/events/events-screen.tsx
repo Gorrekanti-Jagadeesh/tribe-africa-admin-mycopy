@@ -51,7 +51,7 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
                 >
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
                     <div className="text-white">
-                      {item.description.map((block: { _type: string; children: {} }, index) => {
+                      {item.description.map((block: { _type: string; children: { text: string }[] }, index) => {
                         if (block._type === 'block') {
                           return (
                             <p key={index} className="text-base">

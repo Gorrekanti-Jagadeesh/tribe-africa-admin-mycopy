@@ -44,7 +44,7 @@ export const query = {
   },
   ACCOMMODATION: {
     LIST: `*[_type == "accommodation"]{
-      _id, name, phone_no, website, amount, images[0]
+      _id, name, phone_no, website, amount, images[0], reviews
     }`,
     DETAILS: (id: string) => `*[_type == "accommodation" && _id == "${id}"][0]`,
   },
