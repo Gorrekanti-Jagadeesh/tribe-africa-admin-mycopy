@@ -10,7 +10,7 @@ const AccomodationContainer = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['accomodationData', country],
     queryFn: () =>
-      sanity.GET(`*[_type == "accommodation" && country == "${fromKebabCase(country)}"]{
+      sanity.GET(`*[_type == "accommodation" && country == "${fromKebabCase(country)}" && categoryType == "${fromKebabCase(category)}"]{
       _id, name, phone_no, website, amount, images[0], reviews
     }`),
   });

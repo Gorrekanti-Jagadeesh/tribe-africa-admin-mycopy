@@ -1,5 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
 import NavFloatingLayout from '../layout/nav-floating-layout';
 import { demoImage } from '@data/index';
+import { useParams } from 'react-router';
+import { sanity } from '@utils/sanity';
+import { fromKebabCase } from '@utils/common';
+import { Loading } from '@atoms/common/loading';
 
 const categories = [
   {
@@ -27,21 +32,6 @@ const categories = [
     title: 'Nightclubs',
     image: demoImage,
     items: [
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
       { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
       { title: 'Live Music', url: 'https://example.com/live-music' },
       { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
@@ -95,6 +85,17 @@ const categories = [
 ];
 
 const OutAndAbout = () => {
+  const { country } = useParams();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['accomodationData', country],
+    queryFn: () => sanity.GET(`*[_type == "after-work" && country == "${fromKebabCase(country)}"]`),
+  });
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>Error loading data</div>;
+  if (!data) return <div>Data not loaded yet..</div>;
+
   return <NavFloatingLayout categories={categories} />;
 };
 
