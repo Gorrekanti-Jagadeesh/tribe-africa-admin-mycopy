@@ -164,7 +164,7 @@ const AccommodationForm: React.FC = () => {
           <input
             id="name"
             {...register('name', { required: 'Name is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
             placeholder="Enter name"
           />
           {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
@@ -178,7 +178,7 @@ const AccommodationForm: React.FC = () => {
           <input
             id="website"
             {...register('website', { required: 'Website is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
             placeholder="Enter website URL"
           />
           {errors.website && <p className="text-red-500 text-sm">{errors.website.message}</p>}
@@ -192,7 +192,7 @@ const AccommodationForm: React.FC = () => {
           <input
             id="phone_no"
             {...register('phone_no', { required: 'Phone number is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
             placeholder="Enter phone number"
           />
           {errors.phone_no && <p className="text-red-500 text-sm">{errors.phone_no.message}</p>}
@@ -206,7 +206,7 @@ const AccommodationForm: React.FC = () => {
           <input
             id="email"
             {...register('email', { required: 'Email is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
             placeholder="Enter email"
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -220,7 +220,7 @@ const AccommodationForm: React.FC = () => {
           <input
             id="address"
             {...register('address', { required: 'Address is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
             placeholder="Enter address"
           />
           {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
@@ -361,7 +361,7 @@ const AccommodationForm: React.FC = () => {
         <div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full bg-orange-500 text-white p-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-300"
           >
             Submit
           </button>
