@@ -5,17 +5,17 @@ import Modal from '@molecules/modal';
 import shareIcon from '../../assets/icons/share-dotted.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faLocationPin, faPencil, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import StarRatingInput from '../../atoms/rating/start-rating-input';
 import FileUploadWithPreview from '../../atoms/input-elements/file-upload-with-preview';
 import { Loading } from '@atoms/common/loading';
-
 import { ReviewProps, accomodationProps } from '../../types';
 import { Control } from 'react-hook-form';
 import { sanityImageUrlBuilder } from '@api/index';
 import { PortableText } from '@portabletext/react';
 import UnderlineHeading from '@atoms/heading/underline-heading';
-import { getAverageOfObjectValues } from '@utils/common';
+import { fromSnakeCase, getAverageOfObjectValues } from '@utils/common';
+import LeafletMap from '@molecules/maps/leaflet-map';
 
 interface AccomodationDetailsScreenProps {
   reviews: ReviewProps[];
@@ -116,38 +116,122 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
         <PortableText value={data.about.description} />
       </div>
 
+      {/* Information grid */}
+      <div className="md:grid grid-cols-2 gap-2">
+        <div className="col-span-1 space-y-2">
+          {/* Policies and payments */}
+          <div>
+            {/* Policy container */}
+            <div>
+              <UnderlineHeading className="text-lg font-semibold">Policies</UnderlineHeading>
+              <PortableText value={data.policy} />
+            </div>
+
+            {/* Payment methods */}
+            <div>
+              <p>
+                <span className="font-semibold">Payment methods accepted:</span>
+                {Object.keys(data.paymentMethods)
+                  .filter((method) => data.paymentMethods[method])
+                  .join(', ')}
+              </p>
+            </div>
+
+            {/* Accepted cards */}
+            <div>
+              <p>
+                <span className="font-semibold">Cards accepted:</span>
+                {Object.keys(data.acceptedCards)
+                  .filter((card) => data.acceptedCards[card])
+                  .join(', ')}
+              </p>
+            </div>
+          </div>
+
+          {/* Distance to key locations */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold">Distance to key locations</UnderlineHeading>
+            <div>
+              {data.landmarks.map((item) => (
+                <div key={item.title}>
+                  <p>
+                    <span className="font-semibold mr-1">{item.title}:</span>
+                    {item.distance}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-1 space-y-2">
+          {/* Operating seasons of the accommodation */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold">Operating Season</UnderlineHeading>
+            <div>
+              {data.operating_season.map((item) => (
+                <div key={item.title}>
+                  <p>
+                    <span className="font-semibold mr-1">{item.title}:</span>
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Distance to nearby attractions */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold">Nearby Attractions</UnderlineHeading>
+            <div>
+              {data.attractions.map((item) => (
+                <div key={item.title}>
+                  <p>
+                    <span className="font-semibold mr-1">{item.title}:</span>
+                    {item.distance}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Map */}
+          <LeafletMap mark={data.name} latitude={data.location.latitude} longitude={data.location.longitude} />
+        </div>
+      </div>
+
       {/* Amenities Section */}
       <div className="my-6">
         <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
           {data.amenities.title}
         </UnderlineHeading>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-1">
-            {data.amenities.list.map((amenity, index) => (
-              <div key={amenity.title}>
-                {index % 2 == 0 ? (
-                  <div className={`flex gap-2`}>
-                    <p className="font-semibold">{amenity.title}</p> -<p>{amenity.description}</p>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="col-span-1">
-            {data.amenities.list.map((amenity, index) => (
-              <div key={amenity.title}>
-                {index % 2 == 1 ? (
-                  <div className={`flex gap-2`}>
-                    <p className="font-semibold">{amenity.title}</p> -<p>{amenity.description}</p>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="md:flex justify-between">
+          {data.amenities.list.map((amenity) => (
+            <p className="text-wrap md:w-[45%]" key={amenity.title}>
+              <span className="font-semibold">{amenity.title}</span>
+              {' - '}
+              {amenity.description}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      {/* Guest Reviews Breakdown */}
+      <div>
+        <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
+          Guest Reviews
+        </UnderlineHeading>
+        <div className="flex flex-wrap justify-between">
+          {data.reviews && (
+            <>
+              {Object.keys(data.reviews.fields).map((field) => (
+                <div className="flex justify-between w-full sm:w-[45%]" key={field}>
+                  <p>{fromSnakeCase(field)}</p>
+                  <StarRating rating={data.reviews.fields[field]} />
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -162,11 +246,13 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
             <FontAwesomeIcon icon={faPencil} /> write a review
           </button>
         </div>
-        <div id="reviews" className="flex flex-col gap-4">
-          {reviews.map((item, index) => (
-            <ReviewCard key={index} data={item} />
-          ))}
-        </div>
+        {reviews && (
+          <div id="reviews" className="flex flex-col gap-4">
+            {reviews.map((item, index) => (
+              <ReviewCard key={index} data={item} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal for writing a review */}

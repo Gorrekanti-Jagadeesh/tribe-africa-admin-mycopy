@@ -1,10 +1,11 @@
+import { demoImage } from '@data/index';
 import NavFloatingLayout from '../layout/nav-floating-layout';
 
 const AfterWork = () => {
   const categories = [
     {
       title: 'Restaurants & Eateries',
-      image: 'https://example.com/fine-dining',
+      image: demoImage,
       items: [
         { title: 'Traditional', url: 'https://example.com/traditional' },
         { title: 'Casual Dining', url: 'https://example.com/casual-dining' },
@@ -16,7 +17,7 @@ const AfterWork = () => {
     },
     {
       title: 'Bars & Pubs',
-      image: 'path/to/bars_image.jpg',
+      image: demoImage,
       items: [
         { title: 'Cocktail Bars', url: 'https://example.com/cocktail-bars' },
         { title: 'Sports Bars', url: 'https://example.com/sports-bars' },
@@ -25,7 +26,7 @@ const AfterWork = () => {
     },
     {
       title: 'Nightclubs',
-      image: 'path/to/nightclub_image.jpg',
+      image: demoImage,
       items: [
         { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
         { title: 'Live Music', url: 'https://example.com/live-music' },
@@ -49,7 +50,7 @@ const AfterWork = () => {
     },
     {
       title: 'Shopping',
-      image: 'path/to/shopping_image.jpg',
+      image: demoImage,
       items: [
         { title: 'Malls', url: 'https://example.com/malls' },
         { title: 'Boutiques', url: 'https://example.com/boutiques' },
@@ -58,7 +59,7 @@ const AfterWork = () => {
     },
     {
       title: 'Clubs & Special Groups',
-      image: 'path/to/clubs_image.jpg',
+      image: demoImage,
       items: [
         { title: 'Toastmasters', url: 'https://example.com/toastmasters' },
         { title: 'Photography Club', url: 'https://example.com/photography-club' },
@@ -67,7 +68,7 @@ const AfterWork = () => {
     },
     {
       title: 'Wellness & Beauty',
-      image: 'path/to/wellness_image.jpg',
+      image: demoImage,
       items: [
         { title: 'Gyms', url: 'https://example.com/gyms' },
         { title: 'Spas', url: 'https://example.com/spas' },
@@ -76,7 +77,7 @@ const AfterWork = () => {
     },
     {
       title: 'Religious Institutions',
-      image: 'path/to/religious_image.jpg',
+      image: demoImage,
       items: [
         { title: 'Churches', url: 'https://example.com/churches' },
         { title: 'Mosques', url: 'https://example.com/mosques' },
@@ -85,7 +86,7 @@ const AfterWork = () => {
     },
     {
       title: 'For Children',
-      image: 'path/to/children_image.jpg',
+      image: demoImage,
       items: [
         { title: 'Play Areas', url: 'https://example.com/play-areas' },
         { title: "Kids' Workshops", url: 'https://example.com/kids-workshops' },

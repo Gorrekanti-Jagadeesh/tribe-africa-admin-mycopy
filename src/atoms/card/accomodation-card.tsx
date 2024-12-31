@@ -8,8 +8,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { accommodationCardProps } from '../../types/index';
 import { sanityImageUrlBuilder } from '@api/index';
+import { toKebabCase } from '@utils/common';
+import { getAverageOfObjectValues } from '@utils/common';
 
-const AccommodationCard: React.FC<{ data: accommodationCardProps }> = ({ data }) => {
+const AccommodationCard: React.FC<{ data: accommodationCardProps; country: string; category: string }> = ({
+  data,
+  country,
+  category,
+}) => {
   const { images, name, _id } = data;
   const navigate = useNavigate();
   return (
@@ -22,8 +28,8 @@ const AccommodationCard: React.FC<{ data: accommodationCardProps }> = ({ data })
       <div className="p-4">
         <h3 className="text-lg font-semibold">{name}</h3>
         <div className="flex items-center text-orange-500 mt-1">
-          <StarRating rating={'3'} />
-          <span className="text-gray-500 ml-2 text-sm">101 reviews</span>
+          <StarRating rating={getAverageOfObjectValues(data.reviews.fields)} />
+          <span className="text-gray-500 ml-2 text-sm">{data.reviews.count} reviews</span>
         </div>
         <div className="flex items-center text-gray-500 text-sm mt-2">
           <FontAwesomeIcon icon={faMap} />
@@ -33,12 +39,12 @@ const AccommodationCard: React.FC<{ data: accommodationCardProps }> = ({ data })
         <div className="flex">
           <div className="flex items-center">
             <span className="text-sm text-gray-500">From</span>
-            <span className="font-bold text-lg mx-2">{}</span>
+            <span className="font-bold text-lg mx-2">{data.amount}</span>
           </div>
           <button
             className="w-fit ms-auto bg-gray-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
             onClick={() => {
-              navigate(`/accomodations/${_id}`, { state: { data } });
+              navigate(`/${toKebabCase(country)}/${toKebabCase(category)}/${_id}`, { state: { data } });
             }}
           >
             View Hotel

@@ -46,7 +46,7 @@ export const ImageDragAndDrop: React.FC<ImageDragAndDropProps> = ({ onFileSelect
     <div
       {...getRootProps()}
       className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-4 text-center transition-colors min-h-64 duration-200 ${
-        isDragActive ? 'border-orange-500 bg-blue-50' : 'border-gray-300 bg-gray-50'
+        isDragActive ? 'border-orange-500 bg-orange-50' : 'border-gray-300 bg-gray-50'
       }`}
     >
       <input {...getInputProps()} />

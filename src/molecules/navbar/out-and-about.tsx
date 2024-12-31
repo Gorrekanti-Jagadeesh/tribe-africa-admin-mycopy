@@ -1,14 +1,22 @@
+import { useQuery } from '@tanstack/react-query';
 import NavFloatingLayout from '../layout/nav-floating-layout';
 import { demoImage } from '@data/index';
+import { useParams } from 'react-router';
+import { sanity } from '@utils/sanity';
+import { fromKebabCase } from '@utils/common';
+import { Loading } from '@atoms/common/loading';
 
 const categories = [
   {
     title: 'Restaurants & Eateries',
     image: demoImage,
     items: [
+      { title: 'Traditional', url: 'https://example.com/traditional' },
+      { title: 'Casual Dining', url: 'https://example.com/casual-dining' },
       { title: 'Fine Dining', url: 'https://example.com/fine-dining' },
-      { title: 'Fast Food', url: 'https://example.com/fast-food' },
-      { title: 'Vegan Options', url: 'https://example.com/vegan-options' },
+      { title: 'Street Food', url: 'https://example.com/street-food' },
+      { title: 'Vegeterian & Vegan', url: 'https://example.com/vegaterian-vegan' },
+      { title: 'Beach Bars', url: 'https://example.com/beach-bars' },
     ],
   },
   {
@@ -24,21 +32,6 @@ const categories = [
     title: 'Nightclubs',
     image: demoImage,
     items: [
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
-      { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
-      { title: 'Live Music', url: 'https://example.com/live-music' },
-      { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
       { title: 'DJ Nights', url: 'https://example.com/dj-nights' },
       { title: 'Live Music', url: 'https://example.com/live-music' },
       { title: 'Themed Nights', url: 'https://example.com/themed-nights' },
@@ -92,6 +85,17 @@ const categories = [
 ];
 
 const OutAndAbout = () => {
+  const { country } = useParams();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['accomodationData', country],
+    queryFn: () => sanity.GET(`*[_type == "after-work" && country == "${fromKebabCase(country)}"]`),
+  });
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>Error loading data</div>;
+  if (!data) return <div>Data not loaded yet..</div>;
+
   return <NavFloatingLayout categories={categories} />;
 };
 
