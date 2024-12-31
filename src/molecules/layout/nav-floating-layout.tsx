@@ -19,7 +19,7 @@ const NavFloatingLayout: React.FC<{
   return (
     <div>
       <h4 className="text-left text-orange-500 p-4 max-w-6xl">&rarr; {heading}</h4>
-      <div className="grid grid-cols-2 md:grid-cols-3 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 w-full">
         {categories.map((each, index) => (
           <FloatingSibling
             key={index}

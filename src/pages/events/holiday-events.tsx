@@ -7,6 +7,7 @@ import EventForm from '@molecules/forms/event-form';
 import Modal from '@molecules/modal';
 import Button from '@atoms/custom-button/button';
 import { useState } from 'react';
+import OverLayCard from '@atoms/card/overlay-card';
 
 const HolidayEventsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,22 +32,23 @@ const HolidayEventsPage = () => {
   }
 
   return (
-    <div className="px-2">
+    <div>
       <div className="flex flex-col md:justify-between md:flex-row md:items-center p-4">
-        <h1 className="text-lg text-orange-500 p-4 max-w-6xl">&rarr; Holiday Events</h1>
+        <h1 className="text-lg text-orange-500">&rarr; Holiday Events</h1>
         <div>
           <Button onClick={() => setIsOpen(true)}>List your event</Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-auto">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-auto px-2">
         {eventsData[0].subCategories.map((each) => (
-          <div onClick={() => navigation(`/${country}/entertainment/event/${toKebabCase(each.title)}`)}>
-            <img
-              src={sanityImageUrlBuilder(each.subCategoryImage).url()}
-              className="rounded-md aspect-square hover:border hover:border-orange-500"
+          <div onClick={() => navigation(`/${country}/entertainment/event/${toKebabCase(each.title)}`)} className="m-4">
+            <OverLayCard
+              data={{
+                title: each.title,
+                image: sanityImageUrlBuilder(each.subCategoryImage).url(),
+              }}
             />
-            <p>{each.title}</p>
           </div>
         ))}
         {eventsData[1].subCategories.map((each) => (
