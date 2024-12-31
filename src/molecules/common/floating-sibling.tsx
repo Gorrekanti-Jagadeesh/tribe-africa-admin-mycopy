@@ -6,9 +6,9 @@ import { toKebabCase } from '@utils/common';
 interface FloatingSiblingProps {
   component?: React.ReactNode;
   sibling: React.ReactNode;
-  hasSubcategories: boolean;
-  mainCategory: string;
-  country: string;
+  hasSubcategories?: boolean;
+  mainCategory?: string;
+  country?: string;
 }
 
 export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
