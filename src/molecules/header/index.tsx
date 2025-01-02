@@ -33,7 +33,7 @@ export const HomeHeader = () => {
 export const BusinessHeader = ({ country }: { country: string | undefined }) => {
   const menuItems = [
     { id: 'country', title: fromKebabCase(country), isNavLink: false, redirect: `/country/${country}` },
-    { id: 'network', title: 'Network', isNavLink: true, content: <Network /> },
+    { id: 'network', title: 'Network', isNavLink: true, content: <Network country={fromKebabCase(country)} /> },
     { id: 'market-place', title: 'Market Place', isNavLink: true, content: <>Coming soon</> },
     { id: 'after-work', title: 'After Work', isNavLink: true, content: <AfterWork /> },
     {

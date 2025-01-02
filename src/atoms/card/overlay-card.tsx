@@ -42,7 +42,7 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
           {data.description != undefined && (
             <>
               <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 md:group-hover:opacity-100">
-                <div className="w-full h-full p-2 overflow-auto bg-black rounded-md flex justify-center transition-opacity duration-300">
+                <div className="w-full h-full p-2 overflow-auto bg-black rounded-md flex justify-center items-center transition-opacity duration-300">
                   <div className="text-white">{data.description}</div>
                 </div>
               </div>

@@ -47,11 +47,13 @@ const NavcategoryItem: React.FC<{ category: NetworkCategory }> = ({ category }) 
     </div>
   );
 };
-const Network: React.FC = () => {
+const Network: React.FC<{ country: string }> = ({ country }) => {
   const fetchNetworkCategories = async (): Promise<NetworkCategory[]> => {
     // Ensure the data structure matches NetworkCategory[]
     return networkURLs as NetworkCategory[];
   };
+
+  console.log('coutmr', country);
 
   const {
     data: networkCategories,
