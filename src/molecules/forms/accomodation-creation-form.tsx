@@ -6,7 +6,7 @@ import DynamicForm from '@atoms/input-elements/dynamic-form'; // Assuming this i
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import AccordionWithCheckboxes from '@molecules/accordion/check-boxes-accordion';
 
-interface AccommodationFormInputs {
+export interface AccommodationFormInputs {
   name: string;
   address: string;
   website: string;
@@ -66,6 +66,8 @@ const AccommodationForm: React.FC = () => {
       [accordionKey]: selectedIds,
     }));
   };
+
+  console.log(selectedIds);
 
   // Data for all accordions (dynamic data for each accordion)
   const accordionsData = [

@@ -21,6 +21,8 @@ const MustSeeAndDoDetails = () => {
     queryFn: () => sanity.GET(query.HOLIDAY.MUST_SEE_AND_DO.DETAILS(id)),
   });
 
+  console.log(country, category);
+
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">

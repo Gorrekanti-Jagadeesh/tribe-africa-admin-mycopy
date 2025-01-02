@@ -1,27 +1,13 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
 import MustSeeAndDoScreen from './must-see-and-do-screen';
-
-import { getDataByEntryType } from '../../api';
-import { parseImageUrl, sanity } from '../../utils/sanity';
-
-import { msadCategories } from '../../data';
+import { sanity } from '../../utils/sanity';
 import { useQuery } from '@tanstack/react-query';
 import { query } from '@utils/sanity';
 import { Loading } from '@atoms/common/loading';
 import { fromKebabCase } from '@utils/common';
 
 const MustSeeAndDo = () => {
-  const [MSDData, setMSDData] = useState<
-    {
-      title: string;
-      image: string;
-      _id: string;
-      onClick: () => void;
-    }[]
-  >([]);
-
   const location = useLocation();
   const categoryId = location.state;
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import CardsGrid from '@molecules/layout/cards-grid';
 import { query, sanity } from '@utils/sanity';
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +10,6 @@ import { toKebabCase } from '@utils/common';
 const MustSeeAndDo: React.FC = () => {
   const { country } = useParams();
   const navigate = useNavigate();
-  const [msdCategory, setMsdCategory] = useState([]);
 
   const structureFunction = async () => {
     // Fetching data from the API
