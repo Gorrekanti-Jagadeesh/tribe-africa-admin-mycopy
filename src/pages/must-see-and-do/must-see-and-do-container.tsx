@@ -1,5 +1,4 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useState } from 'react';
 import MustSeeAndDoScreen from './must-see-and-do-screen';
 import { sanity } from '../../utils/sanity';
 import { useQuery } from '@tanstack/react-query';
