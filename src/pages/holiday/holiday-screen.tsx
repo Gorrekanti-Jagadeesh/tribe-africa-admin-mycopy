@@ -34,7 +34,6 @@ const HolidayScreen = ({ props }) => {
   if (!country || !CountriesGeoData[country]) {
     return <div>Country data not available</div>;
   }
-
   if (
     landingLoading ||
     weatherLoading ||
