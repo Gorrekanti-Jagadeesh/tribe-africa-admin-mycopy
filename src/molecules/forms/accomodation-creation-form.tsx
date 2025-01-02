@@ -48,13 +48,13 @@ const AccommodationForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<AccommodationFormInputs>({
     defaultValues: {
       dynamicFields: [{ key: '', value: '' }],
     },
   });
+  const { control } = useForm();
 
   // State for tracking selected items from each accordion
   const [selectedIds, setSelectedIds] = useState<{ [key: string]: number[] }>({});
