@@ -82,12 +82,18 @@ const data = [
 ];
 
 const LookingToHireSomeoneContainer: React.FC = () => {
-  const { data: proffesionalData, isLoading } = useQuery({
+  const {
+    data: proffesionalData,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ['proffesionalData'],
     queryFn: fetchProffesionalData,
   });
 
   if (isLoading) return <Loading />;
+  if (error) return 'Error Occured';
+
   return (
     <LookingToHireSomeoneScreen
       proffesionalData={proffesionalData}

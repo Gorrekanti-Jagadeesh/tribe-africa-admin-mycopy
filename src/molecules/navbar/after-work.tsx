@@ -17,7 +17,9 @@ const AfterWork = () => {
   if (error) return <div>Error loading data</div>;
   if (!data) return <div>Data not loaded yet..</div>;
 
-  return <NavFloatingLayout categories={data.allCategories} heading={'After Work'} country={country} />;
+  return (
+    <NavFloatingLayout categories={data.allCategories} heading={'After Work'} country={country} pageType={'business'} />
+  );
 };
 
 export default AfterWork;

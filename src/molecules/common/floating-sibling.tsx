@@ -9,6 +9,7 @@ interface FloatingSiblingProps {
   hasSubcategories?: boolean;
   mainCategory?: string;
   country?: string;
+  pageType?: string;
 }
 
 export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
@@ -17,6 +18,7 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
   hasSubcategories,
   mainCategory,
   country,
+  pageType,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [positionStyle, setPositionStyle] = useState({});
@@ -26,7 +28,7 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
 
   const handleClick = () => {
     if (!hasSubcategories) {
-      navigation(`/${country}/${toKebabCase(mainCategory)}`);
+      navigation(`/${country}/${pageType}/${toKebabCase(mainCategory)}`);
       return;
     }
 

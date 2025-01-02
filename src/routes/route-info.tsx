@@ -45,12 +45,12 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'accomodation',
-    path: '/:country/:category/:categoryInfoId',
+    path: '/:country/:pageType/:category/:categoryInfoId',
     element: <AccommodationDetailsContainer />,
   },
   {
     name: 'accomodations list',
-    path: ':country/:category',
+    path: ':country/:pageType/:category',
     element: <AccomodationContainer />,
   },
   {
@@ -130,12 +130,12 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'hire some one',
-    path: '/tribe-africa-pages/looking-to-hire-someone',
+    path: '/:country/business/looking-to-hire-someone',
     element: <LookingToHireSomeoneContainer />,
   },
   {
     name: 'hire some one details',
-    path: '/tribe-africa-pages/looking-to-hire-someone/:id',
+    path: '/:country/business/looking-to-hire-someone/:id',
     element: <LookingToHireSomeoneDetailsContainer />,
   },
   {

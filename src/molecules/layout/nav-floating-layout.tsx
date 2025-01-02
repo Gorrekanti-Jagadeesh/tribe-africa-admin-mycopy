@@ -14,7 +14,8 @@ const NavFloatingLayout: React.FC<{
   }>;
   heading: string;
   country: string;
-}> = ({ categories, heading, country }) => {
+  pageType: string;
+}> = ({ categories, heading, country, pageType }) => {
   const navigation = useNavigate();
   return (
     <div>
@@ -24,7 +25,10 @@ const NavFloatingLayout: React.FC<{
           <FloatingSibling
             key={index}
             component={
-              <div className="p-4 m-4">
+              <div
+                className="p-4 m-4"
+                onClick={() => navigation(`/${country}/${pageType}/${toKebabCase(each.category)}`)}
+              >
                 <OverLayCard
                   data={{
                     title: each.category,
@@ -38,7 +42,7 @@ const NavFloatingLayout: React.FC<{
                 <h4 className="text-orange-500 font-semibold">&rarr; {each.category}</h4>
                 {each.subcategories &&
                   each.subcategories.map((item, index) => (
-                    <p key={index} onClick={() => navigation(`/${country}/${toKebabCase(item)}`)}>
+                    <p key={index} onClick={() => navigation(`/${country}/${pageType}/${toKebabCase(item)}`)}>
                       {item}
                     </p>
                   ))}
@@ -47,6 +51,7 @@ const NavFloatingLayout: React.FC<{
             hasSubcategories={each.hasSubcategories}
             mainCategory={each.category}
             country={country}
+            pageType={pageType}
             // offset="parent"
           />
         ))}

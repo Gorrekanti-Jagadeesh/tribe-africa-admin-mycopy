@@ -1,11 +1,8 @@
 import React from 'react';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { StarRating } from '../rating/star-rating';
-
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
 import { accommodationCardProps } from '../../types/index';
 import { sanityImageUrlBuilder } from '@api/index';
 import { toKebabCase } from '@utils/common';
@@ -17,6 +14,7 @@ const AccommodationCard: React.FC<{ data: accommodationCardProps; country: strin
   category,
 }) => {
   const { images, name, _id } = data;
+  const { pageType } = useParams();
   const navigate = useNavigate();
   return (
     <div className="border rounded-lg shadow-sm overflow-hidden">
@@ -44,7 +42,7 @@ const AccommodationCard: React.FC<{ data: accommodationCardProps; country: strin
           <button
             className="w-fit ms-auto bg-gray-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
             onClick={() => {
-              navigate(`/${toKebabCase(country)}/${toKebabCase(category)}/${_id}`, { state: { data } });
+              navigate(`/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/${_id}`, { state: { data } });
             }}
           >
             View Hotel

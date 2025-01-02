@@ -17,7 +17,9 @@ const OutAndAbout = () => {
   if (error) return <div>Error loading data</div>;
   if (!data) return <div>Data not loaded yet..</div>;
 
-  return <NavFloatingLayout categories={data.allCategories} heading={'Out & About'} country={country} />;
+  return (
+    <NavFloatingLayout categories={data.allCategories} heading={'Out & About'} country={country} pageType="holiday" />
+  );
 };
 
 export default OutAndAbout;

@@ -169,10 +169,10 @@ export interface NetworkCategory {
   title: string;
   items: {
     label: string;
-    url: string;
-    subItems?: { subTitle: string; subItems: { label: string; url: string }[] }[];
+    hasSubcategories: boolean;
+    subCategories?: string[];
   }[];
-  imageUrl: string;
+  image: string;
 }
 
 export interface EventsScreenProps {
