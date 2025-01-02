@@ -16,7 +16,10 @@ import BlogDetailsPage from '@molecules/blogs/blog-view';
 import MustSeeAndDo from '../pages/must-see-and-do/must-see-and-do-container';
 import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
+import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 import EventDetailsPage from '@molecules/events/events-view';
+import HostelForm from '@molecules/forms/accomodation-creation-form';
+
 import CountryEventsPage from '../pages/events/business-events';
 export interface RouteConfig {
   name: string;
@@ -102,8 +105,13 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'must see and do',
-    path: '/must-see-and-do/:category?/:id?',
+    path: '/:country/holiday/must-see-and-do/:category',
     element: <MustSeeAndDo />,
+  },
+  {
+    name: 'must see and do details',
+    path: '/:country/holiday/must-see-and-do/:category/:id',
+    element: <MustSeeAndDoDetails />,
   },
   {
     name: 'destinations',
@@ -139,6 +147,11 @@ const appRoutes: RouteConfig[] = [
     name: 'not found page',
     path: '*',
     element: <NotFound />,
+  },
+  {
+    name: 'hotel form',
+    path: '/form',
+    element: <HostelForm />,
   },
 ];
 

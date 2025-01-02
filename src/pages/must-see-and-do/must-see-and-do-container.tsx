@@ -1,15 +1,19 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import MustSeeAndDoScreen from './must-see-and-do-screen';
 
 import { getDataByEntryType } from '../../api';
-import { parseImageUrl } from '../../utils/sanity';
+import { parseImageUrl, sanity } from '../../utils/sanity';
 
 import { msadCategories } from '../../data';
+import { useQuery } from '@tanstack/react-query';
+import { query } from '@utils/sanity';
+import { Loading } from '@atoms/common/loading';
+import { fromKebabCase } from '@utils/common';
 
 const MustSeeAndDo = () => {
-  const [data, setData] = useState<
+  const [MSDData, setMSDData] = useState<
     {
       title: string;
       image: string;
@@ -17,58 +21,51 @@ const MustSeeAndDo = () => {
       onClick: () => void;
     }[]
   >([]);
-  const [itemDetails, setItemDetails] = useState(null);
-  const { category, id } = useParams();
+
+  const location = useLocation();
+  const categoryId = location.state;
+
+  const { country, category } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const categoryTitle = msadCategories.find((item) => item.category === category)?.title;
+  const structureFunction = async () => {
+    // Fetching data from the API
+    const data = await sanity.GET(query.HOLIDAY.MUST_SEE_AND_DO.DATA(fromKebabCase(country), categoryId));
+    if (data) {
+      // Adding `onClick` function dynamically after the data is fetched
+      const dataa = data.map((item) => ({
+        ...item,
+        onClick: () => navigate(`/${country}/holiday/must-see-and-do/${category}/${item._id}`), // Navigation link
+      }));
 
-    if (!category || !categoryTitle) {
-      navigate('/');
-      return;
-    }
-
-    if (id) {
-      getDataByEntryType('must_see_and_do', `category == "${category}" && _id == "${id}"`)
-        .then((res) => {
-          if (res.length > 0) {
-            setItemDetails({
-              ...res[0],
-              image: parseImageUrl(res[0].image.asset._ref),
-            });
-          } else {
-            navigate(`/must-see-and-do/${category}`);
-          }
-        })
-        .catch(() => {
-          navigate('/');
-        });
+      // If you want to use `dataa` further, you can return it or do something with it here
+      return dataa; // Returning the mapped data
     } else {
-      getDataByEntryType('must_see_and_do', `category == "${category}"`)
-        .then((res) => {
-          setData(
-            res.map((item: { image: { asset: { _ref: string } }; _id: string }) => ({
-              ...item,
-              image: parseImageUrl(item.image.asset._ref),
-              onClick: () => navigate(`/must-see-and-do/${category}/${item._id}`),
-            }))
-          );
-        })
-        .catch(() => {
-          navigate('/');
-        });
+      // Handle case where no data is returned, if necessary
+      console.error('No data found.');
+      return [];
     }
-  }, [category, id, navigate]);
+  };
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['must_see_and_do_data', category],
+    queryFn: structureFunction,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Loading />
+      </div>
+    );
+  }
+  if (error) {
+    return;
+  }
 
   return (
     <div>
-      <MustSeeAndDoScreen
-        category={msadCategories.find((item) => item.category === category)?.title || category || 'error'}
-        id={id}
-        data={data}
-        itemDetails={itemDetails}
-      />
+      <MustSeeAndDoScreen category={fromKebabCase(category)} data={data} />
     </div>
   );
 };
