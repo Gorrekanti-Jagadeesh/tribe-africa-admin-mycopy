@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { LinkList } from '../layout/link-list';
-// import { EventCategory } from '@types/index';
 import { EventCategory } from '../../../src/types/index';
 import Button from '@atoms/custom-button/button';
-import Modal from '../modal';
 import EventForm from '../forms/event-form';
+import { useModalContext } from '../../context/modalContext';
 
 const NavcategoryItem: React.FC<{ category: EventCategory }> = ({ category }) => (
   <div className="flex justify-between md:flex-col md:justify-start">
@@ -21,22 +20,22 @@ const NavcategoryItem: React.FC<{ category: EventCategory }> = ({ category }) =>
 
 const NavLayout: React.FC<{
   eventCategories: EventCategory[];
-  showModal: boolean;
   showButton: boolean;
   navLayoutHeading: string;
-}> = ({ eventCategories, showModal, showButton, navLayoutHeading }) => {
-  const [isOpen, setIsOpen] = useState(false);
+}> = ({ eventCategories, showButton, navLayoutHeading }) => {
+  const { setModalContent, setModalIsOpen } = useModalContext();
+
+  useEffect(() => setModalContent(<EventForm />), []);
 
   return (
     <section className="flex flex-col p-2 md:p-4 max-w-6xl m-auto">
       <div className="text-lg font-semibold flex flex-col md:flex-row mb-5">
         <h4 className=" text-left text-orange-500 text-lg">&rarr; {navLayoutHeading}</h4>
-        {showModal && (
-          <Modal isOpen={isOpen} setIsOpen={setIsOpen} containerClasses="ms-auto">
-            <EventForm />
-          </Modal>
+        {showButton && (
+          <Button className="ms-auto" onClick={() => setModalIsOpen(true)}>
+            Advertise on tribe africa
+          </Button>
         )}
-        {showButton && <Button onClick={() => setIsOpen(true)}>Advertise on tribe africa</Button>}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {eventCategories.map((category, index) => (

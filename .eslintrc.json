@@ -19,6 +19,7 @@
     "import/resolver": {
       "alias": {
         "map": [
+          ["@", "./src/"],
           ["@assets", "./src/assets"],
           ["@atoms", "./src/atoms"],
           ["@molecules", "./src/molecules"],
@@ -27,7 +28,8 @@
           ["@utils", "./src/utils"],
           ["@hooks", "./src/utils"],
           ["@types", "./src/types"],
-          ["@service-urls", "./src/service-urls"]
+          ["@service-urls", "./src/service-urls"],
+          ["@context", "./src/context"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }

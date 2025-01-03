@@ -5,6 +5,7 @@
     "moduleResolution": "bundler",
     "baseUrl": "src",
     "paths": {
+      "@*": ["/*"],
       "@assets/*": ["assets/*"],
       "@atoms/*": ["atoms/*"],
       "@molecules/*": ["molecules/*"],
@@ -13,7 +14,8 @@
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
       "@types/*": ["types/*"],
-      "@service-urls/*": ["service-urls/*"]
+      "@service-urls/*": ["service-urls/*"],
+      "@context/*": ["context/*"]
     },
     "jsx": "react-jsx",
     "esModuleInterop": true
