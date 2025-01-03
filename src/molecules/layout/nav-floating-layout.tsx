@@ -27,7 +27,11 @@ const NavFloatingLayout: React.FC<{
             component={
               <div
                 className="p-4 m-4"
-                onClick={() => navigation(`/${country}/${pageType}/${toKebabCase(each.category)}`)}
+                onClick={() => {
+                  if (!each.hasSubcategories) {
+                    navigation(`/${country}/${pageType}/${toKebabCase(each.category)}`);
+                  }
+                }}
               >
                 <OverLayCard
                   data={{

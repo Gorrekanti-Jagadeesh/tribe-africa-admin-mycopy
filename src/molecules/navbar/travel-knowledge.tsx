@@ -28,7 +28,7 @@ interface ModalContent {
   content: SubCategory['content'];
 }
 
-const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
+const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ country, pageType }) => {
   const [travelCategories, setTravelCategories] = useState<
     Array<{ title: string; imageUrl: string; items: Array<{ label: string; content: SubCategory['content'] }> }>
   >([]);
@@ -140,7 +140,7 @@ const TravelKnowledge: React.FC<{ country: string }> = ({ country }) => {
                     className="text-sm md:text-base cursor-pointer hover:underline"
                     onClick={() => {
                       if (subCategory.label === 'Accommodation') {
-                        navigation(`/${toKebabCase(country)}/${toKebabCase(subCategory.label)}`);
+                        navigation(`/${toKebabCase(country)}/${pageType}/${toKebabCase(subCategory.label)}`);
                         return;
                       }
                       if (subCategory.label == 'Q & A Forum') {

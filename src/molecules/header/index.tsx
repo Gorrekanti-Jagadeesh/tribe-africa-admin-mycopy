@@ -1,5 +1,4 @@
 import { Header } from './header';
-
 import Discover from '../navbar/discover';
 import Events from '../navbar/events';
 import Blogs from '../navbar/blogs';
@@ -40,7 +39,7 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
       id: 'travel-knowledge',
       title: 'Travel Knowledge',
       isNavLink: true,
-      content: <TravelKnowledge country={fromKebabCase(country)} />,
+      content: <TravelKnowledge country={fromKebabCase(country)} pageType="business" />,
     },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
   ];
@@ -51,14 +50,14 @@ export const BusinessHeader = ({ country }: { country: string | undefined }) => 
 export const HolidayHeader = ({ country }: { country: string | undefined }) => {
   const menuItems = [
     { id: 'country', title: fromKebabCase(country), isNavLink: false, redirect: `/country/${country}` },
-    { id: 'Out & about', title: 'Out & About', isNavLink: true, content: <OutAndAbout /> },
     { id: 'events', title: 'Events', isNavLink: true, content: <HolidayEventsPage /> },
     { id: 'must-see-and-do', title: 'Must See & Do', isNavLink: true, content: <MustSeeAndDo /> },
+    { id: 'Out & about', title: 'Out & About', isNavLink: true, content: <OutAndAbout /> },
     {
       id: 'travel-knowledge',
       title: 'Travel Knowledge',
       isNavLink: true,
-      content: <TravelKnowledge country={fromKebabCase(country)} />,
+      content: <TravelKnowledge country={fromKebabCase(country)} pageType="holiday" />,
     },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
   ];
