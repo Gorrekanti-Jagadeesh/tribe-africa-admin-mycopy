@@ -28,7 +28,7 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
 
   const handleClick = () => {
     if (!hasSubcategories) {
-      navigation(`/${country}/${pageType}/${toKebabCase(mainCategory)}`);
+      navigation(`/${country}/${pageType}/details/${toKebabCase(mainCategory)}`);
       return;
     }
 

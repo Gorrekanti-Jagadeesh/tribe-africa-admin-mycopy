@@ -45,12 +45,12 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'accomodation',
-    path: '/:country/:pageType/:category/:categoryInfoId',
+    path: '/:country/:pageType/:category/:sub_category/:categoryInfoId',
     element: <AccommodationDetailsContainer />,
   },
   {
     name: 'accomodations list',
-    path: ':country/:pageType/:category',
+    path: ':country/:pageType/:category/:sub_category',
     element: <AccomodationContainer />,
   },
   {

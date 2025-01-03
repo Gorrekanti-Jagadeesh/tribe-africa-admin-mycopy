@@ -25,14 +25,7 @@ const NavFloatingLayout: React.FC<{
           <FloatingSibling
             key={index}
             component={
-              <div
-                className="p-4 m-4"
-                onClick={() => {
-                  if (!each.hasSubcategories) {
-                    navigation(`/${country}/${pageType}/${toKebabCase(each.category)}`);
-                  }
-                }}
-              >
+              <div className="p-4 m-4">
                 <OverLayCard
                   data={{
                     title: each.category,
@@ -46,7 +39,12 @@ const NavFloatingLayout: React.FC<{
                 <h4 className="text-orange-500 font-semibold">&rarr; {each.category}</h4>
                 {each.subcategories &&
                   each.subcategories.map((item, index) => (
-                    <p key={index} onClick={() => navigation(`/${country}/${pageType}/${toKebabCase(item)}`)}>
+                    <p
+                      key={index}
+                      onClick={() =>
+                        navigation(`/${country}/${pageType}/${toKebabCase(each.category)}/${toKebabCase(item)}`)
+                      }
+                    >
                       {item}
                     </p>
                   ))}

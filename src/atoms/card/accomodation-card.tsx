@@ -8,11 +8,12 @@ import { sanityImageUrlBuilder } from '@api/index';
 import { toKebabCase } from '@utils/common';
 import { getAverageOfObjectValues } from '@utils/common';
 
-const AccommodationCard: React.FC<{ data: accommodationCardProps; country: string; category: string }> = ({
-  data,
-  country,
-  category,
-}) => {
+const AccommodationCard: React.FC<{
+  data: accommodationCardProps;
+  country: string;
+  category: string;
+  subCategory: string;
+}> = ({ data, country, category, subCategory }) => {
   const { images, name, _id } = data;
   const { pageType } = useParams();
   const navigate = useNavigate();
@@ -42,7 +43,10 @@ const AccommodationCard: React.FC<{ data: accommodationCardProps; country: strin
           <button
             className="w-fit ms-auto bg-gray-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
             onClick={() => {
-              navigate(`/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/${_id}`, { state: { data } });
+              navigate(
+                `/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/${toKebabCase(subCategory)}/${_id}`,
+                { state: { data } }
+              );
             }}
           >
             View Hotel
