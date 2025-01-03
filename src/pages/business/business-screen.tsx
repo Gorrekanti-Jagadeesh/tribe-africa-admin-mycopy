@@ -169,7 +169,7 @@ const BusinessScreen = ({ props }) => {
             <OverLayCard
               data={{
                 ...item,
-                onClick: () => navigate(`/${country}/business/event/${toKebabCase(item.title)}`),
+                onClick: () => navigate(`/${country}/events/business/${toKebabCase(item.title)}`),
               }}
               key={item._id}
             />

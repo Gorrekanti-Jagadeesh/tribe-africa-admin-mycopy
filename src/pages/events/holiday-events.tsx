@@ -42,7 +42,10 @@ const HolidayEventsPage = () => {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-auto px-2">
         {eventsData[0].subCategories.map((each) => (
-          <div onClick={() => navigation(`/${country}/entertainment/event/${toKebabCase(each.title)}`)} className="m-4">
+          <div
+            onClick={() => navigation(`/${country}/events/entertainment/${toKebabCase(each.title)}`)}
+            className="m-4"
+          >
             <OverLayCard
               data={{
                 title: each.title,
@@ -52,7 +55,7 @@ const HolidayEventsPage = () => {
           </div>
         ))}
         {eventsData[1].subCategories.map((each) => (
-          <div onClick={() => navigation(`/${country}/sports/event/${toKebabCase(each.title)}`)}>
+          <div onClick={() => navigation(`/${country}/events/sports/${toKebabCase(each.title)}`)}>
             <img
               src={sanityImageUrlBuilder(each.subCategoryImage).url()}
               className="rounded-md aspect-square hover:border hover:border-orange-500"
