@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Close from '@atoms/custom-button/close-button';
 
 interface ModalProps {

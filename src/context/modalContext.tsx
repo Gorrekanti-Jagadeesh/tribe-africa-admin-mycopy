@@ -26,8 +26,6 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modalContent, setModalContent] = useState<ReactNode>(<></>);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
-  //   useEffect(() => console.log('triggered'), [modalIsOpen]);
-
   return (
     <ModalContext.Provider value={{ modalContent, setModalContent, modalIsOpen, setModalIsOpen }}>
       {children}
