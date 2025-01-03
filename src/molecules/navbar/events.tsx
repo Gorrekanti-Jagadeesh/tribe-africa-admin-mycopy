@@ -48,7 +48,7 @@ const Events: React.FC = () => {
 
   return (
     <>
-      <NavLayout eventCategories={eventCategories || []} showButton={true} showModal={true} navLayoutHeading="Events" />
+      <NavLayout eventCategories={eventCategories || []} showButton={true} navLayoutHeading="Events" />
     </>
   );
 };

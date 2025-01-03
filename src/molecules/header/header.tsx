@@ -1,39 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import africaLogo from '../../assets/logo.png';
 
 import { MenuBar } from '../menu/menu-bar';
-import { ChevronDownSVG } from '../../assets/svgs/chevron-down-svg';
 import { IoMenu } from 'react-icons/io5';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Languages } from '../../data';
-import Close from '@atoms/custom-button/close-button';
 import { Link } from 'react-router-dom';
-
-interface HoverNavLinkProps {
-  id: string;
-  title?: string;
-  content: React.ReactNode;
-}
-
-const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
-  const [hover, setHover] = useState(false);
-  return (
-    <div id={id} className="md:m-auto group" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <span className="flex md:justify-center md:items-center cursor-pointer text-white md:text-black">
-        {title}
-        <span className="hidden md:block">
-          <ChevronDownSVG />
-        </span>
-      </span>
-      <div
-        className={`fixed md:absolute left-0 top-0 md:top-auto p-2 mt-1 w-full max-h-screen overflow-auto border-2 border-orange-500 bg-black text-white rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
-      >
-        <Close className="ms-auto block md:hidden" theme="light" size="6" onClick={() => setHover(false)} />
-        {content}
-      </div>
-    </div>
-  );
-};
+import Modal from '@molecules/modal';
+import HoverNavLink from './hover-nav-link';
+import { ModalProvider, useModalContext } from '@context/modalContext';
 
 interface MenuItemsProps {
   id: string;
@@ -49,13 +24,17 @@ interface HeaderProps {
   menuItems: MenuItemsProps[];
 }
 
-export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
+const JSX: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
   const midIndex = Math.floor(menuItems.length / 2);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { modalIsOpen, setModalIsOpen, modalContent } = useModalContext();
 
   return (
     <div className="grid gap-2 m-auto my-4 max-w-6xl relative">
       <MenuBar purpose={purpose} country={country} />
+      <Modal isOpen={modalIsOpen} setIsOpen={setModalIsOpen}>
+        {modalContent}
+      </Modal>
 
       {/* Mobile Header */}
       <div className="flex gap-2 justify-between items-center md:hidden">
@@ -91,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
             item.isNavLink ? (
               <HoverNavLink key={item.id} id={item.id} title={item.title} content={item.content} />
             ) : (
-              <div key={item.id} id={item.id} className="cursor-pointer w-fit" title="know more">
+              <div key={item.id} id={item.id} className="cursor-pointer flex-1" title="know more">
                 <Link to={item.redirect}>{item.title}</Link>
               </div>
             )
@@ -129,5 +108,13 @@ export const Header: React.FC<HeaderProps> = ({ country, purpose, menuItems }) =
         )}
       </div>
     </div>
+  );
+};
+
+export const Header: React.FC<HeaderProps> = (props) => {
+  return (
+    <ModalProvider>
+      <JSX {...props} />
+    </ModalProvider>
   );
 };
