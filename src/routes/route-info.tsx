@@ -65,12 +65,12 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'Country events',
-    path: '/:country/:category/event/:event_type',
+    path: '/:country/events/:event_category/:event_type',
     element: <CountryEventsPage />,
   },
   {
     name: 'Country Business events',
-    path: '/:country/:category/event/:event_type/:eventId',
+    path: '/:country/events/:event_category/:event_type/:eventId',
     element: <EventDetailsPage />,
   },
   {

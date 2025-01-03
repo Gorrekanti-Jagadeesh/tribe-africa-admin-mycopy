@@ -26,11 +26,11 @@ const EventDetailsPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-10 px-6 max-w-6xl m-auto">
+    <div className="flex flex-col gap-6 m-auto max-w-4xl px-10 md:px-0">
       {/* Event Title */}
-      <h1 className="text-4xl font-semibold capitalize">{eventDetails.title}</h1>
+      <h1 className="text-3xl md:text-4xl font-semibold capitalize">{eventDetails.title}</h1>
       <img
-        className="h-[50vh] w-full object-cover rounded-md"
+        className="h-[50vh] w-full object-contain rounded-md"
         src={sanityImageUrlBuilder(eventDetails.coverPhoto).url()}
         alt="Event Cover"
       />
@@ -38,7 +38,6 @@ const EventDetailsPage = () => {
         <h3 className="text-2xl font-semibold mb-2">Description</h3>
         <PortableText value={eventDetails.description} />
       </section>
-
       <div className="flex flex-col md:flex-row justify-around">
         <div className=" text-gray-700 text-lg mt-4 space-y-4">
           <div className="flex items-center gap-3">
@@ -105,7 +104,6 @@ const EventDetailsPage = () => {
           </div>
         </div>
       </div>
-
       <div className="mt-6">
         <h3 className="text-xl font-bold">About the Event</h3>
         <PortableText value={eventDetails.aboutEvent} />

@@ -6,10 +6,10 @@ import { sanityImageUrlBuilder } from '@api/index';
 import { fromKebabCase } from '@utils/common';
 
 const CountryEventsPage = () => {
-  const { country, event_type, category } = useParams();
+  const { country, event_type, event_category } = useParams();
 
   const customCountry = fromKebabCase(country);
-  const customCategory = fromKebabCase(category);
+  const customCategory = fromKebabCase(event_category);
   const customEventType = fromKebabCase(event_type);
 
   // Query for fallback data, always executed
