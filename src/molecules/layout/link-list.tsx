@@ -6,12 +6,14 @@ export const LinkList = ({
   className,
   subLinksHeading,
   subLinks,
+  disable = false,
 }: {
   heading: React.ReactNode;
-  links: { url: string; label: string }[];
+  links: { url?: string; label: string }[];
   className?: string;
   subLinksHeading?: React.ReactNode;
   subLinks?: { url: string; label: string }[];
+  disable?: boolean;
 }) => {
   return (
     <>
@@ -20,7 +22,13 @@ export const LinkList = ({
         <ul className="space-y-2">
           {links.map((link, index) => (
             <li key={index} className="text-sm md:text-base">
-              <a href={link.url}>{link.label}</a>
+              {disable ? (
+                <span className="text-gray-400 cursor-not-allowed">{link.label}</span>
+              ) : (
+                <a href={link.url} className="hover:underline">
+                  {link.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
