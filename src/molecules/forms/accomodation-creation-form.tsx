@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useForm, Controller, SubmitHandler, useFieldArray } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
-import { RichTextEditor } from '@atoms/input-elements/rich-text-editor';
-import DynamicForm from '@atoms/input-elements/dynamic-form'; // Assuming this is your custom component
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import AccordionWithCheckboxes from '@molecules/accordion/check-boxes-accordion';
+import Input from '@atoms/input-elements/input';
+import DynamicFields from '@atoms/input-elements/dynamic-fields';
 
 interface AccommodationFormInputs {
   name: string;
@@ -55,9 +55,15 @@ const AccommodationForm: React.FC = () => {
       dynamicFields: [{ key: '', value: '' }],
     },
   });
+  const [landmarks, setLandmarks] = useState([]);
+  const [attractions, setAttractions] = useState([]);
 
   // State for tracking selected items from each accordion
   const [selectedIds, setSelectedIds] = useState<{ [key: string]: number[] }>({});
+
+  useEffect(() => {
+    console.log('Fields updated');
+  }, [landmarks, attractions, selectedIds]);
 
   // Callback to handle selection changes in each accordion
   const handleSelectionChange = (accordionKey: string, selectedIds: number[]) => {
@@ -131,11 +137,6 @@ const AccommodationForm: React.FC = () => {
     },
   ];
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'dynamicFields',
-  });
-
   const onSubmit: SubmitHandler<AccommodationFormInputs> = (data) => {
     console.log(data);
   };
@@ -157,91 +158,22 @@ const AccommodationForm: React.FC = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">Accommodation Registration Form</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Name */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Name
-          </label>
-          <input
-            id="name"
-            {...register('name', { required: 'Name is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
-            placeholder="Enter name"
-          />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-        </div>
+        <Input type="text" name="name" placeholder="Name" />
 
         {/* Website */}
-        <div>
-          <label htmlFor="website" className="block text-sm font-medium mb-1">
-            Website
-          </label>
-          <input
-            id="website"
-            {...register('website', { required: 'Website is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
-            placeholder="Enter website URL"
-          />
-          {errors.website && <p className="text-red-500 text-sm">{errors.website.message}</p>}
-        </div>
+        <Input type="text" name="website" placeholder="Website" />
 
         {/* Phone Number */}
-        <div>
-          <label htmlFor="phone_no" className="block text-sm font-medium mb-1">
-            Phone Number
-          </label>
-          <input
-            id="phone_no"
-            {...register('phone_no', { required: 'Phone number is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
-            placeholder="Enter phone number"
-          />
-          {errors.phone_no && <p className="text-red-500 text-sm">{errors.phone_no.message}</p>}
-        </div>
+        <Input type="text" name="phone_no" placeholder="Phone Number" />
 
         {/* Email */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            {...register('email', { required: 'Email is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
-            placeholder="Enter email"
-          />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-        </div>
+        <Input type="email" name="email" placeholder="Enter email" />
 
         {/* Address */}
-        <div>
-          <label htmlFor="address" className="block text-sm font-medium mb-1">
-            Address
-          </label>
-          <input
-            id="address"
-            {...register('address', { required: 'Address is required' })}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-orange-200"
-            placeholder="Enter address"
-          />
-          {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
-        </div>
+        <Input type="text" name="address" placeholder="Enter address" />
 
         {/* Description */}
-        <div>
-          <p className="block text-sm font-medium mb-1">Description</p>
-          <Controller
-            name="about.description"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <textarea
-                {...field}
-                className="w-full h-48 p-2 border rounded outline-none"
-                placeholder="Write your review..."
-              />
-            )}
-          />
-        </div>
+        <Input type="rich-text" name="description" placeholder="Description" />
 
         {/* Accommodation Images */}
         <div>
@@ -250,37 +182,52 @@ const AccommodationForm: React.FC = () => {
         </div>
 
         {/* Accommodation Policies */}
-        <div>
-          <p className="block text-sm font-medium mb-1">Accommodation Policies</p>
-          <RichTextEditor onContentChange={() => {}} />
-        </div>
+        <Input type="rich-text" name="policy" placeholder="Accommodation Policies" />
 
         {/* Dynamic Key-Value Pair Creation Operation seasons */}
         <div>
-          <label className="block text-sm font-medium mb-1">Operation seasons</label>
-          {/* Pass append, remove, and fields to the DynamicForm component */}
-          <DynamicForm namePrefix="dynamicFields" fields={fields} append={append} remove={remove} register={register} />
-          <button
-            type="button"
-            onClick={() => append({ key: '', value: '' })}
-            className="bg-green-500 text-white py-2 px-4 rounded mt-2"
-          >
-            Add Custom Field
-          </button>
+          <label>Operating Seasons</label>
+          <DynamicFields
+            fields={[
+              {
+                type: 'text',
+                name: 'title',
+                placeholder: 'Title',
+              },
+              {
+                type: 'text',
+                name: 'distance',
+                placeholder: 'Distance',
+              },
+            ]}
+            setValue={setLandmarks}
+          />
         </div>
 
         {/* Dynamic Key-Value Pair Creation Near by Attractions */}
         <div>
-          <label className="block text-sm font-medium mb-1">Near by Attractions</label>
-          {/* Pass append, remove, and fields to the DynamicForm component */}
-          <DynamicForm namePrefix="dynamicFields" fields={fields} append={append} remove={remove} register={register} />
-          <button
-            type="button"
-            onClick={() => append({ key: '', value: '' })}
-            className="bg-green-500 text-white py-2 px-4 rounded mt-2"
-          >
-            Add Custom Field
-          </button>
+          <label>Nearby Attractions</label>
+          <DynamicFields
+            fields={[
+              {
+                type: 'text',
+                name: 'title',
+                placeholder: 'Title',
+              },
+              {
+                type: 'select',
+                name: 'distance',
+                placeholder: 'Distance',
+                options: [
+                  {
+                    value: 'voh',
+                    label: 'Voh..',
+                  },
+                ],
+              },
+            ]}
+            setValue={setAttractions}
+          />
         </div>
 
         {/* Payment Methods */}
@@ -304,7 +251,7 @@ const AccommodationForm: React.FC = () => {
 
         {/* Accepted Cards Dropdown */}
         <div>
-          <label className="block text-sm font-medium mb-1">Near by Attractions</label>
+          <label className="block text-sm font-medium mb-1">Accepted Cards</label>
           <Dropdown
             iconVisible={true}
             placeholderText="Master Card"
@@ -313,34 +260,6 @@ const AccommodationForm: React.FC = () => {
             action={() => {}}
             buttonStyles={'md:w-24 py-1 px-2 border'}
           />
-        </div>
-
-        {/* Dynamic Key-Value Pair Creation Near by Attractions */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Distance to Key Locations</label>
-          {/* Pass append, remove, and fields to the DynamicForm component */}
-          <DynamicForm namePrefix="dynamicFields" fields={fields} append={append} remove={remove} register={register} />
-          <button
-            type="button"
-            onClick={() => append({ key: '', value: '' })}
-            className="bg-green-500 text-white py-2 px-4 rounded mt-2"
-          >
-            Add Custom Field
-          </button>
-        </div>
-
-        {/* Dynamic Key-Value Pair Creation Near by Attractions */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Hotel Room & Bathroom details</label>
-          {/* Pass append, remove, and fields to the DynamicForm component */}
-          <DynamicForm namePrefix="dynamicFields" fields={fields} append={append} remove={remove} register={register} />
-          <button
-            type="button"
-            onClick={() => append({ key: '', value: '' })}
-            className="bg-green-500 text-white py-2 px-4 rounded mt-2"
-          >
-            Add Custom Field
-          </button>
         </div>
 
         <div className="p-6">
