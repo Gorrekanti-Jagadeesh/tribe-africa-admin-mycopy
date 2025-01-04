@@ -24,7 +24,7 @@ const PeaceProsperity: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center p-2 md:p-4">
-      <h4 className="text-left text-orange-500 text-lg">&rarr; Peace & Prosperity Institute</h4>
+      <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Peace & Prosperity Institute</h4>
       <div className="flex flex-col md:flex-row my-4">
         <div className="w-full max-w-2xl mb-4 mr-2" style={{ flex: '0 0 40%' }}>
           <video autoPlay={true} loop={true} muted={true} className="rounded-lg">

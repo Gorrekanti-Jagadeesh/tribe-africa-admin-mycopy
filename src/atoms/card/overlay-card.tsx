@@ -28,7 +28,7 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
     <div>
       {/* Card content */}
       <div
-        className="w-full inline-block cursor-pointer group relative"
+        className="w-full inline-block cursor-pointer group relative text-center"
         onClick={data.onClick ? data.onClick : handleClick}
       >
         {/* Background image for the card */}

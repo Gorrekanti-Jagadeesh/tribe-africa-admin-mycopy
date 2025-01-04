@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Loading } from '@atoms/common/loading';
 import { sanityImageUrlBuilder } from '@api/index';
 import { toKebabCase } from '@utils/common';
+import OverLayCard from '@atoms/card/overlay-card';
 
 const Discover: React.FC = () => {
   const [toggle, setToggle] = useState(true);
@@ -38,21 +39,23 @@ const Discover: React.FC = () => {
     return <>Error fetching data..</>;
   }
   return (
-    <div className="md:p-4">
-      <h4 className="text-left text-orange-500 text-lg">&rarr; Discover</h4>
+    <div className="p-2 md:p-3">
+      <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Discover</h4>
       {toggle ? (
-        <div className="flex">
+        <div className="grid grid-cols-2 md:grid-cols-4 w-full">
           {discoverData.map((each) => (
             <div
-              className="cursor-pointer w-1/3 m-2"
+              // className="cursor-pointer w-1/3 m-2"
               onClick={() => handleToggle({ data: each.subCategories, title: each.name })}
               key={each._id}
+              className="m-4"
             >
-              <img
-                className="rounded-md aspect-square hover:border hover:border-orange-500"
-                src={sanityImageUrlBuilder(each.image).url()}
+              <OverLayCard
+                data={{
+                  title: each.name,
+                  image: sanityImageUrlBuilder(each.image).url(),
+                }}
               />
-              <p>{each.name}</p>
             </div>
           ))}
         </div>
@@ -64,15 +67,20 @@ const Discover: React.FC = () => {
           <h4 className="text-orange-500 text-lg hover:underline cursor-pointer w-fit" onClick={() => setToggle(true)}>
             &larr; {content.title}
           </h4>
-          <div className="flex">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-auto px-2">
             {content.data.map((each) => (
               <div
-                className="cursor-pointer w-1/3 m-2"
+                // className="cursor-pointer w-1/3 m-2"
                 onClick={() => navigate(`discover/${toKebabCase(content.title)}/${toKebabCase(each.name)}`)}
                 key={each._id}
+                className="m-4"
               >
-                <img className="rounded-md aspect-square" src={sanityImageUrlBuilder(each.image).url()} />
-                <p>{each.name}</p>
+                <OverLayCard
+                  data={{
+                    title: each.name,
+                    image: sanityImageUrlBuilder(each.image).url(),
+                  }}
+                />
               </div>
             ))}
           </div>

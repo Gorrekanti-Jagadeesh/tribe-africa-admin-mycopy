@@ -142,8 +142,8 @@ const Network: React.FC<{ country: string }> = ({ country }) => {
 
   return (
     <div>
-      <section className="flex flex-col p-2 md:p-4 max-w-6xl m-auto">
-        <h4 className=" text-left text-orange-500 text-lg">&rarr; Network</h4>
+      <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">
+        <h4 className=" text-left text-orange-500 text-lg mb-4 font-semibold">&rarr; Network</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {networkData?.map((category, index) => (
             <TribeAfricaPagesNavcategoryItem key={index} category={category} country={country} />

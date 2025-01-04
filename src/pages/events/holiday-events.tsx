@@ -32,15 +32,14 @@ const HolidayEventsPage = () => {
   }
 
   return (
-    <div>
-      <div className="flex flex-col md:justify-between md:flex-row md:items-center p-4">
-        <h1 className="text-lg text-orange-500">&rarr; Holiday Events</h1>
+    <div className="p-2 md:p-3">
+      <div className="flex flex-col md:justify-between md:flex-row md:items-center">
+        <h1 className="text-lg text-orange-500 text-left font-semibold">&rarr; Holiday Events</h1>
         <div>
           <Button onClick={() => setIsOpen(true)}>List your event</Button>
         </div>
       </div>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-auto px-2">
+      <div className="grid grid-cols-2 md:grid-cols-4 w-full">
         {eventsData[0].subCategories.map((each) => (
           <div
             onClick={() => navigation(`/${country}/events/entertainment/${toKebabCase(each.title)}`)}

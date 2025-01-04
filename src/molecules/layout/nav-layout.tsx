@@ -28,9 +28,9 @@ const NavLayout: React.FC<{
   useEffect(() => setModalContent(<EventForm />), []);
 
   return (
-    <section className="flex flex-col p-2 md:p-4 max-w-6xl m-auto">
-      <div className="text-lg font-semibold flex flex-col md:flex-row mb-5">
-        <h4 className=" text-left text-orange-500 text-lg">&rarr; {navLayoutHeading}</h4>
+    <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">
+      <div className="text-lg flex flex-col items-center md:flex-row mb-5">
+        <h4 className=" text-left text-orange-500 text-lg font-semibold">&rarr; {navLayoutHeading}</h4>
         {showButton && (
           <Button className="ms-auto" onClick={() => setModalIsOpen(true)}>
             Advertise on tribe africa

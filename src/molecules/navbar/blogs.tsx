@@ -31,17 +31,17 @@ const Blogs = () => {
   }
 
   return (
-    <div className="p-2 md:p-4">
+    <div className="p-2 md:p-3">
       {/* Blog Title */}
-      <div className="text-orange-500  text-xl text-left mb-4">
-        <span className="mr-2">→</span>Blog
+      <div className="flex items-center mb-4">
+        <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Blogs</h4>
+        <Button className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-md w-full md:w-fit md:ms-auto">
+          Contribute
+        </Button>
       </div>
 
       <div className="flex flex-col md:flex-row">
         <div className="md:w-2/3 gap-4 flex flex-col">
-          <Button className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-md w-full md:w-fit md:ms-auto">
-            Contribute
-          </Button>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {blogData.articles.map((each, index: number) => (
               <div

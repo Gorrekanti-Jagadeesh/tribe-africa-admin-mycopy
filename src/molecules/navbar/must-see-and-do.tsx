@@ -1,11 +1,11 @@
 import React from 'react';
-import CardsGrid from '@molecules/layout/cards-grid';
 import { query, sanity } from '@utils/sanity';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { Loading } from '@atoms/common/loading';
 import { useNavigate } from 'react-router';
 import { toKebabCase } from '@utils/common';
+import OverLayCard from '@atoms/card/overlay-card';
 
 const MustSeeAndDo: React.FC = () => {
   const { country } = useParams();
@@ -51,9 +51,15 @@ const MustSeeAndDo: React.FC = () => {
   }
 
   return (
-    <div className="md:p-4">
-      <h4 className="text-left text-orange-500 text-lg">&rarr; Must see & Do</h4>
-      <CardsGrid data={data} />
+    <div className="p-2 md:p-3">
+      <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Must see & Do</h4>
+      <div className="grid grid-cols-2 md:grid-cols-4 w-full">
+        {data.map((each) => (
+          <div key={each._id} className="m-4">
+            <OverLayCard data={each} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

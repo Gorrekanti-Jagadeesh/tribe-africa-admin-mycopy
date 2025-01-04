@@ -18,8 +18,8 @@ const NavFloatingLayout: React.FC<{
 }> = ({ categories, heading, country, pageType }) => {
   const navigation = useNavigate();
   return (
-    <div>
-      <h4 className="text-left text-orange-500 p-4 max-w-6xl">&rarr; {heading}</h4>
+    <div className="p-2 md:p-3">
+      <h4 className="text-left text-orange-500 max-w-6xl text-lg font-semibold">&rarr; {heading}</h4>
       <div className="grid grid-cols-2 md:grid-cols-4 w-full">
         {categories.map((each, index) => (
           <FloatingSibling

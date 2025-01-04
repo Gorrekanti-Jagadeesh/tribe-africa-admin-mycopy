@@ -88,44 +88,11 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
   };
 
   return (
-    <section className="flex flex-col p-2 md:p-4 max-w-6xl m-auto">
-      <div className="text-lg font-semibold flex flex-col md:flex-row mb-5">
-        <h4 className=" text-left text-orange-500 text-lg">&rarr; Travel Knowledge</h4>
+    <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">
+      <div className="text-lg flex flex-col items-center md:flex-row mb-4">
+        <h4 className=" text-left text-orange-500 text-lg font-semibold">&rarr; Travel Knowledge</h4>
         <Modal isOpen={isOpen} setIsOpen={setIsOpen} containerClasses="ms-auto">
           <EventForm />
-        </Modal>
-        <Modal
-          isOpen={isContentOpen}
-          setIsOpen={setIsContentOpen}
-          containerClasses="ms-auto"
-          customClasses="w-full h-screen"
-        >
-          <div
-            id="sub-layout"
-            className="p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl"
-          >
-            <h4
-              className="text-orange-500 text-lg hover:underline cursor-pointer w-fit"
-              onClick={() => setIsContentOpen(false)}
-            >
-              &larr; {modalContent.title}
-            </h4>
-            <div className="space-y-4">
-              {modalContent.content.map((block, index) => {
-                if (block._type === 'block') {
-                  return (
-                    <p key={index} className="text-base">
-                      {block.children?.[0]?.text}
-                    </p>
-                  );
-                }
-                if (block._type === 'image') {
-                  return <img key={index} src={block.asset?.url} alt={block.alt || 'Image'} className="w-full" />;
-                }
-                return null;
-              })}
-            </div>
-          </div>
         </Modal>
         <Button onClick={() => setIsOpen(true)}>Advertise on tribe africa</Button>
       </div>
@@ -193,6 +160,39 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
           </div>
         ))}
       </div>
+      <Modal
+        isOpen={isContentOpen}
+        setIsOpen={setIsContentOpen}
+        containerClasses="ms-auto"
+        customClasses="w-full h-screen"
+      >
+        <div
+          id="sub-layout"
+          className="p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl"
+        >
+          <h4
+            className="text-orange-500 text-lg hover:underline cursor-pointer w-fit font-semibold"
+            onClick={() => setIsContentOpen(false)}
+          >
+            &larr; {modalContent.title}
+          </h4>
+          <div className="space-y-4">
+            {modalContent.content.map((block, index) => {
+              if (block._type === 'block') {
+                return (
+                  <p key={index} className="text-base">
+                    {block.children?.[0]?.text}
+                  </p>
+                );
+              }
+              if (block._type === 'image') {
+                return <img key={index} src={block.asset?.url} alt={block.alt || 'Image'} className="w-full" />;
+              }
+              return null;
+            })}
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 };
