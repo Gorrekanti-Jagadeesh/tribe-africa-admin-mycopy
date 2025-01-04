@@ -8,8 +8,12 @@ const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex z-10">
-      <Button className="ms-auto" onClick={() => setIsOpen(true)}>
-        <FontAwesomeIcon icon={faMessage} className="relative top-1 mx-2" /> Ask me anything!
+      <Button
+        className="ms-auto rounded-full border border-white flex gap-2 md:rounded-md"
+        onClick={() => setIsOpen(true)}
+      >
+        <FontAwesomeIcon icon={faMessage} className="relative md:top-1 " />
+        <span className="hidden md:block">Ask me anything!</span>
       </Button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         form
