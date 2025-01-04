@@ -6,8 +6,15 @@ import { sanity } from '@utils/sanity';
 import { sanityImageUrlBuilder } from '@api/index';
 import { toKebabCase } from '@utils/common';
 import { LinkList } from '@molecules/layout/link-list';
+import { networkURLs } from '@data/index';
+import { Loading } from '@atoms/common/loading';
+import { useNavigate } from 'react-router';
 
-const NavcategoryItem: React.FC<{ category: NetworkCategory }> = ({ category }) => {
+const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; country: string }> = ({
+  category,
+  country,
+}) => {
+  const navigation = useNavigate();
   return (
     <div className="flex justify-between md:flex-col md:justify-start">
       <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
@@ -29,12 +36,23 @@ const NavcategoryItem: React.FC<{ category: NetworkCategory }> = ({ category }) 
                     <div className="min-w-40 h-full md:min-w-64 aspect-square overflow-auto text-left p-4 rounded-lg bg-white text-black">
                       <h4 className="text-orange-500 font-semibold">&rarr; {eachCategory.label}</h4>
                       {eachCategory.hasSubcategories &&
-                        eachCategory.subCategories.map((item, index) => <li key={index}>{item}</li>)}
+                        eachCategory.subCategories.map((item, index) => (
+                          <li
+                            key={index}
+                            onClick={() =>
+                              navigation(
+                                `/${toKebabCase(country)}/business/${toKebabCase(eachCategory.label)}/${toKebabCase(item)}`
+                              )
+                            }
+                          >
+                            {item}
+                          </li>
+                        ))}
                     </div>
                   }
                   hasSubcategories={eachCategory.hasSubcategories}
                   mainCategory={eachCategory.label}
-                  country={'algeria'}
+                  country={country}
                   pageType={'business'}
                 />
               </li>
@@ -55,6 +73,21 @@ const EventsNavcategoryItem: React.FC<{ category: EventCategory }> = ({ category
       heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
       links={category.items}
       className="text-left order-1 md:order-2 w-1/2 md:w-full"
+      disable={false}
+    />
+  </div>
+);
+
+const MyTribeNavcategoryItem: React.FC<{ category: NetworkCategory }> = ({ category }) => (
+  <div className="flex justify-between md:flex-col md:justify-start">
+    <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
+      <img src={category.image} alt={category.title} className="w-full h-48 aspect-square object-cover" />
+    </div>
+    <LinkList
+      heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
+      links={category.items}
+      className="text-left order-1 md:order-2 w-1/2 md:w-full"
+      disable={true}
     />
   </div>
 );
@@ -63,23 +96,20 @@ const Network: React.FC<{ country: string }> = ({ country }) => {
   const [eventCategories, setEventCategories] = useState<EventCategory[]>([]);
 
   const {
-    data: networkCategories,
-    isLoading,
-    error,
+    data: networkData,
+    isLoading: networkDataLoading,
+    error: networkDataError,
   } = useQuery<NetworkCategory[]>({
-    queryKey: ['networkCategories'],
-    queryFn: () => sanity.GET(`*[_type == "network"]`),
+    queryKey: ['network'],
+    queryFn: () => sanity.GET(`*[_type == "tribe-africa-pages"]`),
   });
 
-  if (isLoading) <>Loading...</>;
-  if (error) <>Error Occurred</>;
-  // Fetch data from Sanity
   const {
     data: eventsData,
-    error: eventsError,
-    isLoading: eventsLoading,
+    error: eventsDataError,
+    isLoading: eventsDataLoading,
   } = useQuery({
-    queryKey: ['events'],
+    queryKey: ['country-network-events'],
     queryFn: () =>
       sanity.GET(`*[_type == "event-categories" && category == "Business"]{
         category,
@@ -103,22 +133,25 @@ const Network: React.FC<{ country: string }> = ({ country }) => {
           imageUrl: subCategory.subCategoryImage,
         })),
       }));
-      // /:country/:category/event/:event_type
       setEventCategories(formattedData as EventCategory[]);
     }
   }, [eventsData]);
 
-  if (eventsLoading) return <div>Loading...</div>;
-  if (eventsError) return <div>Error loading events</div>;
+  if (eventsDataLoading || networkDataLoading) return <Loading />;
+  if (eventsDataError || networkDataError) return <div>Error Loading Data</div>;
 
   return (
     <div>
       <section className="flex flex-col p-2 md:p-4 max-w-6xl m-auto">
+        <h4 className=" text-left text-orange-500 text-lg">&rarr; Network</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {networkCategories?.map((category, index) => <NavcategoryItem key={index} category={category} />)}
+          {networkData?.map((category, index) => (
+            <TribeAfricaPagesNavcategoryItem key={index} category={category} country={country} />
+          ))}
           {eventCategories.map((category, index) => (
             <EventsNavcategoryItem key={index} category={category} />
           ))}
+          <MyTribeNavcategoryItem category={networkURLs} />
         </div>
       </section>
     </div>

@@ -8,7 +8,7 @@ import type { ProffesionalData, ReviewProps } from '../../../src/types/index';
 const reviews: ReviewProps[] = [
   {
     _id: 'okati',
-    key: 'feedback:person:manodu',
+    key: 'review:person:manodu',
     content: 'Ma anna devudu lanti vadu',
     ratings: [
       {

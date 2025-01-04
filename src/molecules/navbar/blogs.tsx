@@ -58,7 +58,7 @@ const Blogs = () => {
                   alt={each.articleType}
                   className="w-full md:h-full rounded-md mb-2"
                 />
-                <div className="text-center text-white">{each.articleType}</div>
+                <div className="text-center text-white">{each.articleType} Articles</div>
               </div>
             ))}
           </div>

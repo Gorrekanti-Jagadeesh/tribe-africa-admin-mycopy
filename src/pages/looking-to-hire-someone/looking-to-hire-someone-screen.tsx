@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import Button from '@atoms/custom-button/button';
@@ -35,6 +35,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
   const [data, setData] = useState(proffesionalData);
   const [active, setActive] = useState(null);
   const navigate = useNavigate();
+  const { country } = useParams();
 
   function filterByDepartment(this, department) {
     if (active != department) {
@@ -89,7 +90,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
         <TribeAfricaPagesCard
           key={proffesional._id}
           onClick={() =>
-            navigate(`/tribe-africa-pages/looking-to-hire-someone/${proffesional._id}`, { state: proffesional })
+            navigate(`/${country}/business/looking-to-hire-someone/${proffesional._id}`, { state: proffesional })
           }
           image={proffesional.image}
           content={

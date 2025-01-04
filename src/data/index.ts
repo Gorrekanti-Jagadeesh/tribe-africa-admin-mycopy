@@ -410,100 +410,15 @@ export const travelKnowledgeURLs = [
   },
 ];
 
-export const networkURLs = [
-  {
-    title: 'Tribe Africa Pages',
-    items: [
-      {
-        label: 'Government & Official',
-        subItems: [
-          {
-            subTitle: 'Government & Official',
-            subItems: [
-              { label: 'Ministries', url: '/tribe-africa-pages/ministries' },
-              { label: 'National Boards', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Chambers of Commerce', url: '/tribe-africa-pages/chambers-of-commerce' },
-              { label: 'Parastatals', url: '/tribe-africa-pages/parastatals' },
-              { label: 'International Organizations', url: '/tribe-africa-pages/international-organizations' },
-              { label: 'Foreign Embassies & Consultates', url: '/tribe-africa-pages/foreign-embassies-consultates' },
-              { label: 'National Tourist Offices', url: '/tribe-africa-pages/national-tourist-offices' },
-              { label: 'Immigration', url: '/tribe-africa-pages/immigration' },
-            ],
-          },
-          {
-            subTitle: 'Emergency & First Responders',
-            subItems: [
-              { label: 'Police', url: '/tribe-africa-pages/police' },
-              { label: 'Hospitals & Clinics', url: '/tribe-africa-pages/hospitals-clinics' },
-              { label: 'Pharmacutics', url: '/tribe-africa-pages/pharmacutics' },
-              { label: 'Fire Stations', url: '/tribe-africa-pages/fire-stations' },
-            ],
-          },
-          {
-            subTitle: 'Looking to hire someone?',
-            subItems: [
-              { label: 'Ministries', url: '/tribe-africa-pages/ministries' },
-              { label: 'National Boards', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Chambers of Commerce', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Parastatals', url: '/tribe-africa-pages/national-boards' },
-              { label: 'International Organizations', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Foreign Embassies & Consultates', url: '/tribe-africa-pages/national-boards' },
-              { label: 'National Tourist Offices', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Immigration', url: '/tribe-africa-pages/national-boards' },
-            ],
-          },
-          {
-            subTitle: 'Find a Business',
-            subItems: [
-              { label: 'Ministries', url: '/tribe-africa-pages/ministries' },
-              { label: 'National Boards', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Chambers of Commerce', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Parastatals', url: '/tribe-africa-pages/national-boards' },
-              { label: 'International Organizations', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Foreign Embassies & Consultates', url: '/tribe-africa-pages/national-boards' },
-              { label: 'National Tourist Offices', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Immigration', url: '/tribe-africa-pages/national-boards' },
-            ],
-          },
-          {
-            subTitle: 'Accomidation',
-            subItems: [
-              { label: 'Ministries', url: '/tribe-africa-pages/ministries' },
-              { label: 'National Boards', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Chambers of Commerce', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Parastatals', url: '/tribe-africa-pages/national-boards' },
-              { label: 'International Organizations', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Foreign Embassies & Consultates', url: '/tribe-africa-pages/national-boards' },
-              { label: 'National Tourist Offices', url: '/tribe-africa-pages/national-boards' },
-              { label: 'Immigration', url: '/tribe-africa-pages/national-boards' },
-            ],
-          },
-        ],
-      },
-    ],
-    imageUrl: 'https://placehold.co/400',
-  },
-  {
-    title: 'Business Events',
-    items: [
-      { label: 'Trade Shows', url: '/events/arts' },
-      { label: 'Conferences & Seminars', url: '/events/cultural-events-festivals' },
-      { label: 'Product Launches', url: '/events/dance' },
-      { label: 'Training & Workshops', url: '/events/fashion' },
-      { label: 'Networking', url: '/events/music' },
-    ],
-    imageUrl: 'https://placehold.co/400',
-  },
-  {
-    title: 'My Tribe',
-    items: [
-      { label: 'Chat Room', url: '/events/boxing' },
-      { label: 'Round Tables', url: '/events/football' },
-      { label: 'Jobs (Coming Soon)', url: '/events/marathons' },
-    ],
-    imageUrl: 'https://placehold.co/400',
-  },
-];
+export const networkURLs = {
+  title: 'My Tribe (Coming Soon)',
+  items: [
+    { label: 'Chat Room', hasSubcategories: false },
+    { label: 'Round Tables', hasSubcategories: false },
+    { label: 'Jobs', hasSubcategories: false },
+  ],
+  image: demoImage,
+};
 
 export const eventTypes = [
   {
