@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, Controller, SubmitHandler, useFieldArray } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import { RichTextEditor } from '@atoms/input-elements/rich-text-editor';
-import DynamicForm from '@atoms/input-elements/dynamic-form'; // Assuming this is your custom component
+import DynamicForm from '@atoms/input-elements/dynamic-form';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import AccordionWithCheckboxes from '@molecules/accordion/check-boxes-accordion';
 
