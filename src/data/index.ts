@@ -46,10 +46,6 @@ export const demoData = [
     title: 'image8',
     image: demoImage,
   },
-  {
-    title: 'image9',
-    image: demoImage,
-  },
 ];
 
 export const Countries: Option[] = [
