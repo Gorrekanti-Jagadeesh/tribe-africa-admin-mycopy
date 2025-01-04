@@ -33,7 +33,7 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
       >
         {/* Background image for the card */}
         <div
-          className="aspect-square bg-cover rounded-md relative"
+          className="aspect-square bg-cover rounded-md relative hover:border hover: border-orange-500"
           style={{
             backgroundImage: `url(${typeof data.image === 'string' ? data.image : sanityImageUrlBuilder(data.image)})`,
           }}

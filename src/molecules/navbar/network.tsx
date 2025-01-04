@@ -29,7 +29,7 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
         <ul>
           {category.items.map((eachCategory, index) => {
             return (
-              <li className="my-2" key={index}>
+              <li className="text-sm md:text-base cursor-pointer hover:underline my-2" key={index}>
                 <FloatingSibling
                   component={<span>{eachCategory.label}</span>}
                   sibling={

@@ -55,12 +55,13 @@ const HolidayEventsPage = () => {
           </div>
         ))}
         {eventsData[1].subCategories.map((each) => (
-          <div onClick={() => navigation(`/${country}/events/sports/${toKebabCase(each.title)}`)}>
-            <img
-              src={sanityImageUrlBuilder(each.subCategoryImage).url()}
-              className="rounded-md aspect-square hover:border hover:border-orange-500"
+          <div onClick={() => navigation(`/${country}/events/sports/${toKebabCase(each.title)}`)} className="m-4">
+            <OverLayCard
+              data={{
+                title: each.title,
+                image: sanityImageUrlBuilder(each.subCategoryImage).url(),
+              }}
             />
-            <p>{each.title}</p>
           </div>
         ))}
       </div>

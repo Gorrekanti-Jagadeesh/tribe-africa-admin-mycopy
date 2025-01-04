@@ -25,7 +25,7 @@ const NavFloatingLayout: React.FC<{
           <FloatingSibling
             key={index}
             component={
-              <div className="p-4 m-4">
+              <div className="m-4">
                 <OverLayCard
                   data={{
                     title: each.category,
