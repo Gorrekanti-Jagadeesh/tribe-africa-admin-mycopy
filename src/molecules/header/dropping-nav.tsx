@@ -1,7 +1,7 @@
 import Close from '@atoms/custom-button/close-button';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 
 interface HoverNavLinkProps {
