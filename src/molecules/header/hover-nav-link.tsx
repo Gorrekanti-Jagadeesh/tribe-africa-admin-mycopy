@@ -23,7 +23,8 @@ const HoverNavLink: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
         <FontAwesomeIcon icon={faChevronDown} className="w-3" />
       </span>
       <div
-        className={`fixed h-screen md:h-auto md:absolute left-0 top-0 md:top-auto p-2 w-full overflow-auto border-2 border-orange-500 bg-black text-white md:rounded transition-opacity z-20 ${hover ? 'visible' : 'invisible'}`}
+        className={`fixed md:absolute h-screen md:h-auto left-0 top-0 md:top-auto p-2 w-full overflow-auto border-2 border-orange-500 bg-black text-white md:rounded z-20 transition-opacity duration-200 ease-out
+          ${hover ? 'opacity-100' : 'opacity-0 -z-50 transition-none'}`}
       >
         <Close className="ms-auto block md:hidden" theme="light" size="6" onClick={() => setHover(false)} />
         {content}

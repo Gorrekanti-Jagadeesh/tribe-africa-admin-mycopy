@@ -79,7 +79,7 @@ const JSX: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
       )}
 
       {/* Desktop Header */}
-      <div className="hidden justify-center items-center text-center border-2 rounded-lg relative md:flex gap-2 px-4">
+      <div className="hidden md:flex gap-2 border-2 rounded-lg relative px-4">
         {/* Splitting the menuitems to bring logo in center position */}
         {menuItems.slice(0, midIndex).map((item) =>
           item.isNavLink ? (
