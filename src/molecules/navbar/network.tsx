@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { EventCategory, NetworkCategory } from '../../types';
+import { EventCategory, NetworkCategory } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { FloatingSibling } from '@molecules/common/floating-sibling';
 import { sanity } from '@utils/sanity';

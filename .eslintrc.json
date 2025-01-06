@@ -19,7 +19,7 @@
     "import/resolver": {
       "alias": {
         "map": [
-          ["@", "./src/"],
+          ["@/", "./"],
           ["@assets", "./src/assets"],
           ["@atoms", "./src/atoms"],
           ["@molecules", "./src/molecules"],
