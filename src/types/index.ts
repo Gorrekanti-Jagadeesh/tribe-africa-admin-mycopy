@@ -205,12 +205,11 @@ export interface RatingProps {
 export interface ReviewProps {
   _id: string;
   key: string; // `review:accomodation:${accomodation_id}` or `review:people:${person_id}`
-  content: string;
-  images?: Array<SanityAsset>;
+  reviewDescription: string;
+  reviewerImage?: string;
   ratings: { title: string; score: number }[];
-  submitted_by: string;
-  created_at?: string;
-  updated_at?: string;
+  submittedBy: string;
+  submittedDate: string;
 }
 
 export interface accomodationProps {
@@ -325,13 +324,14 @@ export interface ProffesionalData {
   department: string;
   role: string;
   experience: string;
-  phone_no?: string;
+  phoneNumber?: string;
   email?: string;
   website?: string;
   image: string;
   description: string;
   country: string;
   address?: string;
+  reviews?: ReviewProps[];
 }
 
 export default module.exports;

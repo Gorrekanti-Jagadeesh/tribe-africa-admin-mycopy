@@ -2,20 +2,14 @@ import React from 'react';
 import { StarRating } from '../rating/star-rating';
 import { ReviewProps } from '../../types';
 import { sanityImageUrlBuilder } from '../../api';
-import { demoImage } from '@data/index';
 import { fromSnakeCase } from '@utils/common';
 
 interface ReviewCardProps {
   data: ReviewProps;
 }
 
-const demoUser = {
-  image: demoImage,
-  user_name: 'candidate',
-};
-
 const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
-  const { content, images, ratings, submitted_by, created_at } = data;
+  const { reviewDescription, reviewerImage, ratings, submittedBy, submittedDate } = data;
 
   const calculateTotal = (ratings) => {
     return ratings.reduce((acc: number, each) => each.score + acc, 0);
@@ -26,34 +20,19 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
       {/* User Information */}
       <div className="flex flex-grow">
         <div className="flex-shrink-0 mr-2">
-          {demoUser.image ? (
-            <img src={demoUser.image} alt={demoUser.user_name} className="w-12 h-12 rounded-md" />
-          ) : (
-            <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center text-white text-xl font-semibold">
-              {demoUser.user_name?.charAt(0).toUpperCase() || submitted_by}
-            </div>
-          )}
+          <img
+            src={sanityImageUrlBuilder(reviewerImage).url()}
+            alt={'Reviewer Image'}
+            className="w-12 h-12 rounded-md"
+          />
         </div>
         <div className="flex-grow">
           <div className="flex gap-4 items-center">
-            <h3 className="font-semibold text-lg">{demoUser.user_name}</h3>
-            <span className="text-gray-500 text-sm">{created_at}</span>
+            <h3 className="font-semibold text-lg">{submittedBy}</h3>
+            <span className="text-gray-500 text-sm">{submittedDate}</span>
           </div>
           {/* <StarRating className='inline-block md:hidden' rating={total} /> */}
-          <p className="text-gray-600 mt-2">{content}</p>
-
-          {/* Review Images */}
-          <div className="flex mt-4 space-x-2 overflow-auto">
-            {images &&
-              images.map((image, index) => (
-                <img
-                  key={index}
-                  src={sanityImageUrlBuilder(image.asset._ref).url()}
-                  alt={`Review image ${index + 1}`}
-                  className="w-28 aspect-square object-cover rounded-lg"
-                />
-              ))}
-          </div>
+          <p className="text-gray-600 mt-2">{reviewDescription}</p>
         </div>
       </div>
 
@@ -80,4 +59,4 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
 export default ReviewCard;
 
 // TODO:
-// Get user details(username, image) with the userid in submitted_by key.
+// Get user details(username, image) with the userid in submittedBy key.

@@ -21,6 +21,7 @@ import EventDetailsPage from '@molecules/events/events-view';
 import HostelForm from '@molecules/forms/accomodation-creation-form';
 
 import CountryEventsPage from '../pages/events/business-events';
+import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -130,12 +131,17 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'hire some one',
-    path: '/:country/business/looking-to-hire-someone',
+    path: '/:country/business/details/looking-to-hire-someone',
     element: <LookingToHireSomeoneContainer />,
   },
   {
+    name: 'Find a business',
+    path: '/:country/business/details/find-a-business',
+    element: <FindABusinessContainer />,
+  },
+  {
     name: 'hire some one details',
-    path: '/:country/business/looking-to-hire-someone/:id',
+    path: '/:country/business/details/looking-to-hire-someone/:proffessionalId',
     element: <LookingToHireSomeoneDetailsContainer />,
   },
   {

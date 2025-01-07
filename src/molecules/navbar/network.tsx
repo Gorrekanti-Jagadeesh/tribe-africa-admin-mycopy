@@ -35,7 +35,7 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
                   sibling={
                     <div className="min-w-40 h-full md:min-w-64 aspect-square overflow-auto text-left p-4 rounded-lg bg-white text-black">
                       <h4 className="text-orange-500 font-semibold">&rarr; {eachCategory.label}</h4>
-                      {eachCategory.hasSubcategories &&
+                      {eachCategory.subCategories &&
                         eachCategory.subCategories.map((item, index) => (
                           <li
                             key={index}
@@ -52,7 +52,7 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
                   }
                   hasSubcategories={eachCategory.hasSubcategories}
                   mainCategory={eachCategory.label}
-                  country={country}
+                  country={toKebabCase(country)}
                   pageType={'business'}
                 />
               </li>
