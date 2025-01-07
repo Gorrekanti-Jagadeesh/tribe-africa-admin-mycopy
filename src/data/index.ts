@@ -454,7 +454,7 @@ export const eventTypes = [
   },
 ];
 
-// -----------Must see and do ---------------
+// -----------Must see and do --------------
 export const msadCategories = [
   { category: 'action-enthusiasts', title: 'Action Enthusiasts' },
   { category: 'historical-cultural-sites', title: 'Historical & Cultural Sites' },
