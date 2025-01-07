@@ -1,6 +1,6 @@
 import React from 'react';
 import { StarRating } from '../rating/star-rating';
-import { ReviewProps } from '../../types';
+import { ReviewProps } from '@/types';
 import { sanityImageUrlBuilder } from '../../api';
 import { fromSnakeCase } from '@utils/common';
 

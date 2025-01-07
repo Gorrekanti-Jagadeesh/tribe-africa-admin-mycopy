@@ -3,7 +3,7 @@ import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StarRating } from '../rating/star-rating';
 import { useNavigate, useParams } from 'react-router-dom';
-import { accommodationCardProps } from '../../types/index';
+import { accommodationCardProps } from '@/types';
 import { sanityImageUrlBuilder } from '@api/index';
 import { toKebabCase } from '@utils/common';
 import { getAverageOfObjectValues } from '@utils/common';
@@ -27,7 +27,7 @@ const AccommodationCard: React.FC<{
       <div className="p-4">
         <h3 className="text-lg font-semibold">{name}</h3>
         <div className="flex items-center text-orange-500 mt-1">
-          <StarRating rating={getAverageOfObjectValues(data.reviews.fields)} />
+          <StarRating rating={getAverageOfObjectValues(data.reviews.fields)} type="brief" />
           <span className="text-gray-500 ml-2 text-sm">{data.reviews.count} reviews</span>
         </div>
         <div className="flex items-center text-gray-500 text-sm mt-2">
