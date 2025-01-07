@@ -1,5 +1,4 @@
 import { NavigateFunction } from 'react-router';
-import { SanityAsset } from '@sanity/image-url/lib/types/types';
 import { TypedObject } from '@sanity/block-tools';
 
 // data
