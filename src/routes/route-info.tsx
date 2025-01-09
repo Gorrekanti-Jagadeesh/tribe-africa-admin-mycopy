@@ -120,12 +120,12 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'tribe africa pages',
-    path: '/tribe-africa-pages/:category',
+    path: '/:country/business/tribe-africa-pages/:category/:subcategory',
     element: <TribeAfricaPagesContainer />,
   },
   {
     name: 'tribe africa details pages',
-    path: '/tribe-africa-pages/:category/:id',
+    path: '/:country/business/tribe-africa-pages/:category/:id',
     element: <TribeAfricaPagesDetailsContainer />,
   },
   {

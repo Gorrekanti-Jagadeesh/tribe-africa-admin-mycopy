@@ -29,6 +29,10 @@ export const query = {
   },
   BUSINESS: {
     LANDING: `*[_type == "business-landing-page"]`,
+    NETWORK: {
+      GOVT_OFFICIALS: (country, category) =>
+        `*[_type == "government-officials" && country == "${country}" && _type == "government-officials"]`,
+    },
   },
   COUNTRY: {
     DETAILS: (country, fields) =>

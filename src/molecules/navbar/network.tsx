@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { FloatingSibling } from '@molecules/common/floating-sibling';
 import { sanity } from '@utils/sanity';
 import { sanityImageUrlBuilder } from '@api/index';
-import { toKebabCase } from '@utils/common';
+import { fromKebabCase, toKebabCase } from '@utils/common';
 import { LinkList } from '@molecules/layout/link-list';
 import { networkURLs } from '@data/index';
 import { Loading } from '@atoms/common/loading';
@@ -31,23 +31,31 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
             return (
               <li className="text-sm md:text-base cursor-pointer hover:underline my-2" key={index}>
                 <FloatingSibling
-                  component={<span>{eachCategory.label}</span>}
+                  component={<span>{eachCategory?.label}</span>}
                   sibling={
                     <div className="min-w-40 h-full md:min-w-64 aspect-square overflow-auto text-left p-4 rounded-lg bg-white text-black">
                       <h4 className="text-orange-500 font-semibold">&rarr; {eachCategory.label}</h4>
-                      {eachCategory.hasSubcategories &&
-                        eachCategory.subCategories.map((item, index) => (
-                          <li
-                            key={index}
-                            onClick={() =>
-                              navigation(
-                                `/${toKebabCase(country)}/business/${toKebabCase(eachCategory.label)}/${toKebabCase(item)}`
-                              )
-                            }
-                          >
-                            {item}
-                          </li>
-                        ))}
+                      {eachCategory?.hasSubcategories &&
+                        eachCategory?.subCategories?.map((item, index) => {
+                          return (
+                            <li
+                              key={index}
+                              onClick={() => {
+                                if (toKebabCase(eachCategory.label) === 'accommodation') {
+                                  return navigation(
+                                    `/${toKebabCase(country)}/business/${toKebabCase(eachCategory.label)}/${toKebabCase(item.title)}`
+                                  );
+                                  // return navigation(`/${country}/business/details/${toKebabCase(item.title)}`);
+                                }
+                                return navigation(
+                                  `/${toKebabCase(country)}/business/tribe-africa-pages/${toKebabCase(eachCategory.label)}/${toKebabCase(item.title)}`
+                                );
+                              }}
+                            >
+                              {fromKebabCase(item.title)}
+                            </li>
+                          );
+                        })}
                     </div>
                   }
                   hasSubcategories={eachCategory.hasSubcategories}
