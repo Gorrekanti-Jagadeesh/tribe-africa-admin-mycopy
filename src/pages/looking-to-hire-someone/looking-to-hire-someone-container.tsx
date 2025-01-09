@@ -1,7 +1,6 @@
 import LookingToHireSomeoneScreen from './looking-to-hire-someone-screen';
 import { useQuery } from '@tanstack/react-query';
 import { Loading } from '@atoms/common/loading';
-import ministerImage from '../../assets/minister-image.png';
 import ASVGComponent from '../../assets/svgs/1';
 import BSVGComponent from '../../assets/svgs/2';
 import CSVGComponent from '../../assets/svgs/3';
@@ -9,57 +8,9 @@ import DSVGComponent from '../../assets/svgs/d';
 import ESVGComponent from '../../assets/svgs/e';
 import FSVGComponent from '../../assets/svgs/f';
 import GSVGComponent from '../../assets/svgs/g';
-
-const fetchProffesionalData = () => {
-  const data = [
-    {
-      _id: '1',
-      name: 'John Doe',
-      department: 'IT',
-      role: 'Software Engineer',
-      experience: '7+ Years Experience',
-      phone_no: '081234567890',
-      email: 'john.doe@example.com',
-      website: 'john.com',
-      image: ministerImage,
-      description:
-        'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      country: 'Abuja, Nigeria',
-      address: 'Freetown, Sierra Leone',
-    },
-    {
-      _id: '2',
-      name: 'John Doe',
-      department: 'Artist',
-      role: 'Actor',
-      experience: '7+ Years Experience',
-      phone_no: '081234567890',
-      email: 'john.doe@example.com',
-      website: 'john.com',
-      image: ministerImage,
-      description:
-        'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      country: 'Abuja, Nigeria',
-      address: 'Freetown, Sierra Leone',
-    },
-    {
-      _id: '3',
-      name: 'John Doe',
-      department: 'IT',
-      role: 'Web Developer',
-      experience: '7+ Years Experience',
-      phone_no: '081234567890',
-      email: 'john.doe@example.com',
-      website: 'john.com',
-      image: ministerImage,
-      description:
-        'John Doe is a software engineer with 7+ years of experience. He is skilled in JavaScript, React, and Node.js. He is currently looking for a new opportunity.',
-      country: 'Abuja, Nigeria',
-      address: 'Freetown, Sierra Leone',
-    },
-  ];
-  return data;
-};
+import { sanity } from '@utils/sanity';
+import { useParams } from 'react-router';
+import { fromKebabCase } from '@utils/common';
 
 const proffesionalOptions = [
   { label: 'Actor', value: 'actor' },
@@ -82,13 +33,14 @@ const data = [
 ];
 
 const LookingToHireSomeoneContainer: React.FC = () => {
+  const { country } = useParams();
   const {
     data: proffesionalData,
     error,
     isLoading,
   } = useQuery({
-    queryKey: ['proffesionalData'],
-    queryFn: fetchProffesionalData,
+    queryKey: ['proffessional-data'],
+    queryFn: () => sanity.GET(`*[_type == "proffessional-data" && country == "${fromKebabCase(country)}"]`),
   });
 
   if (isLoading) return <Loading />;
@@ -96,6 +48,7 @@ const LookingToHireSomeoneContainer: React.FC = () => {
 
   return (
     <LookingToHireSomeoneScreen
+      // proffesionalData={fetchProffesionalData()}
       proffesionalData={proffesionalData}
       proffesionalOptions={proffesionalOptions}
       professions={data}

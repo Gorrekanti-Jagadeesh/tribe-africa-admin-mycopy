@@ -1,7 +1,7 @@
 import { Loading } from '@atoms/common/loading';
 import Button from '@atoms/custom-button/button';
 import AccommodationCard from '@atoms/card/accomodation-card';
-import { accommodationCardProps } from '../../types/index';
+import { accommodationCardProps } from '@/types/index';
 import { fromKebabCase } from '@utils/common';
 
 interface AccomodationScreenProps {

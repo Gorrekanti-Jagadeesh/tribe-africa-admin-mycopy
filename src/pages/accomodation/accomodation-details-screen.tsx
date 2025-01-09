@@ -9,7 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import StarRatingInput from '../../atoms/rating/start-rating-input';
 import FileUploadWithPreview from '../../atoms/input-elements/file-upload-with-preview';
 import { Loading } from '@atoms/common/loading';
-import { ReviewProps, accomodationProps } from '../../types';
+import { ReviewProps, accomodationProps } from '@/types';
 import { Control } from 'react-hook-form';
 import { sanityImageUrlBuilder } from '@api/index';
 import { PortableText } from '@portabletext/react';

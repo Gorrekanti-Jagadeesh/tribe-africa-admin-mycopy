@@ -9,6 +9,8 @@ import search from '@assets/icons/search.svg';
 
 import { ProffesionalData } from '../../../src/types/index';
 import { useState } from 'react';
+import { toKebabCase, truncateText } from '@utils/common';
+import { sanityImageUrlBuilder } from '@api/index';
 
 interface ProffesionalIcons {
   label: string;
@@ -90,22 +92,29 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
         <TribeAfricaPagesCard
           key={proffesional._id}
           onClick={() =>
-            navigate(`/${country}/business/looking-to-hire-someone/${proffesional._id}`, { state: proffesional })
+            navigate(`/${toKebabCase(country)}/business/details/looking-to-hire-someone/${proffesional._id}`, {
+              state: proffesional,
+            })
           }
-          image={proffesional.image}
+          image={sanityImageUrlBuilder(proffesional.image).url()}
           content={
             <div className="text-sm m-4">
-              <p>
-                <strong>{proffesional.name}</strong>
-              </p>
-              <p>{proffesional.description}</p>
+              <div className="flex items-center gap-3">
+                <h1 className="text-lg">
+                  <strong>{proffesional.name}</strong>
+                </h1>
+                <p> {proffesional.role}</p>
+              </div>
+
+              <p>{proffesional.experience}</p>
+              <p>{truncateText(proffesional.description, 100)}</p>
               <Button className="bg-orange-500 text-white mt-4">View Reviews</Button>
             </div>
           }
           footer={
             <div className="text-sm">
               <p>
-                <strong>+ {proffesional.phone_no}</strong>{' '}
+                <strong>+ {proffesional.phoneNumber}</strong>
               </p>
               {proffesional.address}
             </div>

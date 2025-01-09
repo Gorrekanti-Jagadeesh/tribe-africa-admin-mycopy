@@ -3,34 +3,8 @@ import DualHeading from '@atoms/heading/dual-heading';
 import ReviewCard from '@atoms/card/review-card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import type { ProffesionalData, ReviewProps } from '../../../src/types/index';
-
-const reviews: ReviewProps[] = [
-  {
-    _id: 'okati',
-    key: 'review:person:manodu',
-    content: 'Ma anna devudu lanti vadu',
-    ratings: [
-      {
-        title: 'Quality of service',
-        score: 5,
-      },
-      {
-        title: 'Reliability',
-        score: 4,
-      },
-      {
-        title: 'Punctuality',
-        score: 2,
-      },
-      {
-        title: 'Integrity',
-        score: 5,
-      },
-    ],
-    submitted_by: 'some chillara fan',
-  },
-];
+import type { ProffesionalData } from '../../../src/types/index';
+import { sanityImageUrlBuilder } from '@api/index';
 
 const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: ProffesionalData }> = ({
   proffesionalPersonData,
@@ -40,12 +14,12 @@ const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: Prof
       <DualHeading className="font-bold">{proffesionalPersonData.name}</DualHeading>
       <TribeAfricaPagesCard
         className="border-none"
-        image={proffesionalPersonData.image}
+        image={sanityImageUrlBuilder(proffesionalPersonData.image).url()}
         content={
           <div>
             <p>{proffesionalPersonData.role}</p>
             <p>{proffesionalPersonData.experience}</p>
-            <p>{proffesionalPersonData.phone_no}</p>
+            <p>{proffesionalPersonData.phoneNumber}</p>
             <p>{proffesionalPersonData.email}</p>
             <p>{proffesionalPersonData.website}↗</p>
             <p>{proffesionalPersonData.description}</p>
@@ -60,7 +34,7 @@ const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: Prof
           </button>
         </div>
         <div id="reviews" className="flex flex-col gap-4">
-          {reviews?.map((item, index) => <ReviewCard key={index} data={item} />)}
+          {proffesionalPersonData.reviews?.map((item, index) => <ReviewCard key={index} data={item} />)}
         </div>
       </div>
     </div>
