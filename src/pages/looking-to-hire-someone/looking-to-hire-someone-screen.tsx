@@ -42,7 +42,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
   function filterByDepartment(this, department) {
     if (active != department) {
       setActive(department);
-      setData(proffesionalData.filter((p) => p.department.toLowerCase() == department));
+      setData(proffesionalData.filter((p) => p.proffession.toLowerCase() == department));
     }
   }
 
@@ -96,7 +96,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
               state: proffesional,
             })
           }
-          image={sanityImageUrlBuilder(proffesional.image).url()}
+          image={sanityImageUrlBuilder(proffesional.proffessionalImage).url()}
           content={
             <div className="text-sm m-4">
               <div className="flex items-center gap-3">
@@ -116,7 +116,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
               <p>
                 <strong>+ {proffesional.phoneNumber}</strong>
               </p>
-              {proffesional.address}
+              <p> {proffesional.region}</p>
             </div>
           }
         />

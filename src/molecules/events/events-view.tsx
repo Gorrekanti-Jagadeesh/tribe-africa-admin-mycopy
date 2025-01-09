@@ -52,37 +52,42 @@ const EventDetailsPage = () => {
           </div>
           {eventDetails.website && (
             <div className="flex gap-3">
-              <a href={eventDetails.website} target="_blank" rel="noopener noreferrer">
+              <a href={eventDetails.website} target="_blank" rel="noopener noreferrer" className="flex gap-3">
                 <FaGlobe className="text-2xl" />
+                <p>{eventDetails.website}</p>
               </a>
-              <p>{eventDetails.website}</p>
             </div>
           )}
           {eventDetails.phone && (
             <div className="flex gap-3">
-              <a href={`tel:${eventDetails.phone}`}>
+              <a href={`tel:${eventDetails.phone}`} className="flex gap-3">
                 <FaPhone className="text-2xl" />
+                <p>{eventDetails.phone}</p>
               </a>
-              <p>{eventDetails.phone}</p>
             </div>
           )}
           {eventDetails.whatsapp && (
             <div className="flex gap-3">
-              <a href={`https://wa.me/${eventDetails.whatsapp}`} target="_blank" rel="noopener noreferrer">
+              <a
+                href={`https://wa.me/${eventDetails.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-3"
+              >
                 <FaWhatsapp className="text-2xl" />
+                <p>{eventDetails.whatsapp}</p>
               </a>
-              <p>{eventDetails.whatsapp}</p>
             </div>
           )}
           {eventDetails.email && (
             <div className="flex gap-3">
-              <a href={`mailto:${eventDetails.email}`}>
+              <a href={`mailto:${eventDetails.email}`} target="_blank" rel="noopener noreferrer" className="flex gap-3">
                 <FaEnvelope className="text-2xl" />
+                <p>{eventDetails.email}</p>
               </a>
-              <p>{eventDetails.email}</p>
             </div>
           )}
-          {eventDetails.email && (
+          {eventDetails.location && (
             <div className="flex gap-3">
               <a href={`mailto:${eventDetails.location}`}>
                 <FaLocationDot className="text-2xl" />
