@@ -1,8 +1,6 @@
 import DualHeading from '@atoms/heading/dual-heading';
 import TribeAfricaPagesCard from '@atoms/card/tribe-africa-pages-card';
 import React from 'react';
-import ministerImage from '../../assets/minister-image.png';
-import { useNavigate } from 'react-router';
 import { sanityImageUrlBuilder } from '@api/index';
 
 interface Department {
@@ -25,10 +23,6 @@ interface MinistriesScreenProps {
 }
 
 const TribeAfricaPagesScreen: React.FC<MinistriesScreenProps> = ({ data, category }) => {
-  const navigate = useNavigate();
-
-  // console.log(data, 'This is govt officials data...');
-
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       <DualHeading>{category}</DualHeading>

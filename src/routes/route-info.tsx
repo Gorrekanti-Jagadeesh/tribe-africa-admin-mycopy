@@ -21,7 +21,9 @@ import EventDetailsPage from '@molecules/events/events-view';
 import HostelForm from '@molecules/forms/accomodation-creation-form';
 
 import CountryEventsPage from '../pages/events/business-events';
-import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
+import FindABusinessLinksContainer from '../pages/find-a-business/find-a-business-links-container';
+import FindABusinessContainer from '@/pages/find-a-business/find-a-business-container';
+import FindaBusinessDetailsContainer from '@/pages/find-a-business/find-a-business-details-container';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -137,7 +139,7 @@ const appRoutes: RouteConfig[] = [
   {
     name: 'Find a business',
     path: '/:country/business/details/find-a-business',
-    element: <FindABusinessContainer />,
+    element: <FindABusinessLinksContainer />,
   },
   {
     name: 'hire some one details',
@@ -158,6 +160,16 @@ const appRoutes: RouteConfig[] = [
     name: 'hotel form',
     path: '/form',
     element: <HostelForm />,
+  },
+  {
+    name: 'find a business screen',
+    path: '/:country/business/find-a-business/:main_category/:sub_category?',
+    element: <FindABusinessContainer />,
+  },
+  {
+    name: 'find a business details screen',
+    path: '/:country/business/find-a-business/details/:main_category/:sub_category?/:id',
+    element: <FindaBusinessDetailsContainer />,
   },
 ];
 
