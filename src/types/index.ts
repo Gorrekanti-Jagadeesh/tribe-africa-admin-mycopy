@@ -34,6 +34,22 @@ export interface Option {
   label: string;
 }
 
+export interface InputProps {
+  type: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+  defaultValue?: string | number;
+  placeholder?: string;
+  options?: Option[];
+  action?: (value: string | number) => void;
+  required?: boolean;
+  className?: string;
+  name: string;
+  regex?: RegExp;
+  errorMessage?: string;
+  patternMessage?: string;
+  maxLength?: number;
+  minLength?: number;
+}
+
 export interface DropdownProps {
   text: string;
   options: Option[];
@@ -320,16 +336,27 @@ export interface candidateProps {
 export interface ProffesionalData {
   _id: string;
   name: string;
-  department: string;
   role: string;
-  experience: string;
-  phoneNumber?: string;
-  email?: string;
-  website?: string;
-  image: string;
-  description: string;
+  proffession: string;
+  statement?: string;
+  streetAddress: string;
+  city: string;
+  region: string;
+  postalCode?: string;
   country: string;
-  address?: string;
+  phoneNumber: string;
+  email: string;
+  website?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+  linkedinUrl?: string;
+  description: string;
+  skills: string[];
+  experience: string;
+  certificates?: string[];
+  languages: string[];
+  proffessionalImage: string;
   reviews?: ReviewProps[];
 }
 
