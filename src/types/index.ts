@@ -34,6 +34,22 @@ export interface Option {
   label: string;
 }
 
+export interface InputProps {
+  type: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+  defaultValue?: string | number;
+  placeholder?: string;
+  options?: Option[];
+  action?: (value: string | number) => void;
+  required?: boolean;
+  className?: string;
+  name: string;
+  regex?: RegExp;
+  errorMessage?: string;
+  patternMessage?: string;
+  maxLength?: number;
+  minLength?: number;
+}
+
 export interface DropdownProps {
   text: string;
   options: Option[];

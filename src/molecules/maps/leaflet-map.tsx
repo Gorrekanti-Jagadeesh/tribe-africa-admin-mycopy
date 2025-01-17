@@ -35,6 +35,7 @@ const LeafletMap = ({ mark, latitude, longitude }) => {
       style={{
         width: '100%',
         height: '400px',
+        zIndex: 1,
       }}
     ></div>
   );
