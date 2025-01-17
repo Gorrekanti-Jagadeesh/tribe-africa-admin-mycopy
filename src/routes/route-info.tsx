@@ -22,6 +22,7 @@ import HostelForm from '@molecules/forms/accomodation-creation-form';
 
 import CountryEventsPage from '../pages/events/business-events';
 import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
+import CandidateForm from '@/molecules/forms/candidate-form';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -158,6 +159,11 @@ const appRoutes: RouteConfig[] = [
     name: 'hotel form',
     path: '/form',
     element: <HostelForm />,
+  },
+  {
+    name: 'Tribe africa pages - candidate form',
+    path: '/candidate-form',
+    element: <CandidateForm />,
   },
 ];
 

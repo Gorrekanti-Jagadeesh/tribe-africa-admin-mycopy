@@ -103,7 +103,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div
       ref={dropdownRef.current ? dropdownRef.current.ref : null}
-      className={`${className} relative group my-2`}
+      className={`${className} relative group my-3`}
       onClick={() => {
         if (type == 'rich-text') return;
         else if (type == 'select' || type == 'dropdown') {
@@ -116,7 +116,7 @@ const Input: React.FC<InputProps> = ({
       <label
         htmlFor={name}
         className={`absolute duration-300 top-3 left-2.5 origin-0 z-10 bg-white transition-all cursor-text
-          ${(typeof value == 'string' ? value.length : value) ? '-translate-y-6 scale-75 text-sm text-orange-500 px-2 left-0' : ''}
+          ${(typeof value == 'string' ? value.length : value) ? '-translate-y-5 scale-75 text-sm text-orange-500 px-2 left-0' : ''}
         `}
       >
         {placeholder}
