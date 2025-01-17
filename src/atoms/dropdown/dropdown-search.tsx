@@ -69,7 +69,7 @@ const Dropdown = forwardRef<DropdownRef, DropdownProps>(
           {placeholder} {iconVisible && <ChevronDownSVG />}
         </div>
         <ul
-          className={`absolute top-full left-0 z-10 w-full bg-white border border-gray-300 rounded-md max-h-[200px] overflow-y-auto p-0 m-0 list-none ${isOpen ? 'block' : 'hidden'}`}
+          className={`absolute top-full left-0 z-50 w-full bg-white border border-gray-300 rounded-md max-h-[200px] overflow-y-auto p-0 m-0 list-none ${isOpen ? 'block' : 'hidden'}`}
         >
           {searchable && (
             <input

@@ -24,6 +24,7 @@ import CountryEventsPage from '../pages/events/business-events';
 import FindABusinessLinksContainer from '../pages/find-a-business/find-a-business-links-container';
 import FindABusinessContainer from '@/pages/find-a-business/find-a-business-container';
 import FindaBusinessDetailsContainer from '@/pages/find-a-business/find-a-business-details-container';
+import CandidateForm from '@/molecules/forms/candidate-form';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -170,6 +171,11 @@ const appRoutes: RouteConfig[] = [
     name: 'find a business details screen',
     path: '/:country/business/find-a-business/details/:main_category/:sub_category?/:id',
     element: <FindaBusinessDetailsContainer />,
+  },
+  {
+    name: 'Tribe africa pages - candidate form',
+    path: '/candidate-form',
+    element: <CandidateForm />,
   },
 ];
 
