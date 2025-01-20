@@ -7,8 +7,9 @@ import { countImagesInRichText, processContent, splitRichText } from '../../util
 import { uploadImage } from '../../api';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { generateId } from '@/utils/common';
-import { Countries } from '@/data';
+import { Countries, eventTypes } from '@/data';
 import { Loading } from '@/atoms/common/loading';
+import UnderlineHeading from '@/atoms/heading/underline-heading';
 
 interface BlogComposeProps {
   className: string;
@@ -23,12 +24,22 @@ type FormData = {
   title: string;
   author: string;
   content: string;
+  blogType: string;
   email: string;
   phone: string;
   country: string;
   description: string;
   image: File;
 };
+
+const categories = [
+  { title: 'Business Article', value: 'Business' },
+  { title: 'Travel & Leisure Article', value: 'Travel & Leisure' },
+  {
+    title: 'Environment & Sustainability Article',
+    value: 'Environment & Sustainability',
+  },
+];
 
 const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   const {
@@ -49,22 +60,20 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      // Handle image uploads
       setLoader(true);
-      // Count images in rich text content
+
       if (countImagesInRichText(editorContent) > MAX_IMAGES) {
         alert(`Can only have up to ${MAX_IMAGES} images`);
         return;
       }
 
       splitContent = splitRichText(editorContent);
-      const headerPhotoUrl = await uploadImage(selectedFile);
-
       if (splitContent.length < 15) {
         alert('Please add more content to the blog.');
         return;
       }
       const content = await processContent(splitContent);
+      const headerPhotoUrl = await uploadImage(selectedFile);
 
       // Submit to Sanity
       await sanityClient.create({
@@ -82,14 +91,17 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
     } catch (error) {
       console.error('Error submitting data:', error);
       alert('Failed to submit data. Please try again.');
+    } finally {
       setLoader(false);
     }
   };
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <h2 className="text-2xl">Write a BLOG</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="min-h-screen">
+      <UnderlineHeading borderWidth="w-1/4" className="text-2xl">
+        Write a BLOG
+      </UnderlineHeading>
+      <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
         {loader ? (
           <Loading />
         ) : (
@@ -153,6 +165,22 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                   {Countries.map((country) => (
                     <option key={country.label} value={country.value}>
                       {country.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.country && <span className="text-red-500">{errors.country.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Blog Type</label>
+                <select
+                  {...register('blogType', { required: 'Blog Type is required' })}
+                  className="w-full p-2 border border-gray-300 rounded"
+                >
+                  <option value="">Select Blog Category</option>
+                  {categories.map((country) => (
+                    <option key={country.title} value={country.value}>
+                      {country.title}
                     </option>
                   ))}
                 </select>
