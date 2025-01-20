@@ -25,7 +25,14 @@ type FormData = {
   category: string;
   type: string;
   eventBy: string;
-  [key: string]: any; // For additional dynamic keys like `RichTextEditor` fields
+} & RichTextEditorFields;
+
+type RichTextEditorFields = {
+  description: string;
+  aboutEvent: string;
+  ticketPrices: string;
+  businessPhoto: File;
+  coverPhoto: File;
 };
 
 const categories = eventTypes;
@@ -57,26 +64,13 @@ const EventForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       // Handle image uploads
-      if (businessPhoto) {
-        const businessPhotoUrl = await uploadImage(businessPhoto);
-        data.businessPhoto = {
-          _type: 'image',
-          asset: { _ref: businessPhotoUrl._id },
-        };
-      }
-
-      if (coverPhoto) {
-        const coverPhotoUrl = await uploadImage(coverPhoto);
-        data.coverPhoto = {
-          _type: 'image',
-          asset: { _ref: coverPhotoUrl._id },
-        };
-      }
 
       // Convert RichText fields to Portable Text format
       const description = await processContent(splitRichText(data.description));
       const aboutEvent = await processContent(splitRichText(data.aboutEvent));
       const ticketPrices = await processContent(splitRichText(data.ticketPrices));
+      const coverPhotoUrl = await uploadImage(coverPhoto);
+      const businessPhotoUrl = await uploadImage(businessPhoto);
 
       // Submit to Sanity
       await sanityClient.create({
@@ -86,6 +80,14 @@ const EventForm: React.FC = () => {
         description,
         aboutEvent,
         ticketPrices,
+        coverPhoto: {
+          _type: 'image',
+          asset: { _ref: coverPhotoUrl._id },
+        },
+        businessPhoto: {
+          _type: 'image',
+          asset: { _ref: businessPhotoUrl._id },
+        },
       });
 
       alert('Submitted successfully!');
@@ -119,8 +121,8 @@ const EventForm: React.FC = () => {
       {errors.eventBy && <span className="text-red-500">{errors.eventBy.message}</span>}
 
       <input
-        {...register('eventTimings', { required: 'eventBy is required' })}
-        placeholder="Ticket Pricing"
+        {...register('eventTimings', { required: 'Event Timings are required' })}
+        placeholder="Event Timings"
         className="w-full p-2 border border-gray-300 rounded"
       />
       {errors.eventTimings && <span className="text-red-500">{errors.eventTimings.message}</span>}
@@ -171,7 +173,7 @@ const EventForm: React.FC = () => {
 
       <input
         {...register('whatsapp')}
-        type="text"
+        type="tel"
         placeholder="WhatsApp"
         className="w-full p-2 border border-gray-300 rounded"
       />

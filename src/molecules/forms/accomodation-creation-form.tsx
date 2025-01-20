@@ -54,15 +54,15 @@ const AccommodationForm: React.FC = () => {
       dynamicFields: [{ key: '', value: '' }],
     },
   });
+
+  const { control } = useForm();
   const [landmarks, setLandmarks] = useState([]);
   const [attractions, setAttractions] = useState([]);
 
   // State for tracking selected items from each accordion
   const [selectedIds, setSelectedIds] = useState<{ [key: string]: number[] }>({});
 
-  useEffect(() => {
-    console.log('Fields updated');
-  }, [landmarks, attractions, selectedIds]);
+  useEffect(() => {}, [landmarks, attractions, selectedIds]);
 
   // Callback to handle selection changes in each accordion
   const handleSelectionChange = (accordionKey: string, selectedIds: number[]) => {
@@ -160,6 +160,7 @@ const AccommodationForm: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Name */}
         <Input type="text" name="name" placeholder="Name" />
+        {errors.name && <span className="text-red-500">{errors.name.message}</span>}
 
         {/* Website */}
         <Input type="text" name="website" placeholder="Website" />
