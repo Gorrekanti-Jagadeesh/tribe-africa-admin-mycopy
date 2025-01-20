@@ -29,7 +29,6 @@ const EventDetailsPage = () => {
 
   return (
     <div className="flex flex-col gap-6 m-auto max-w-4xl px-10 md:px-0">
-      {/* Event Title */}
       <h1 className="text-3xl md:text-4xl font-semibold capitalize">{eventDetails.title}</h1>
       <img
         className="h-[50vh] w-full object-contain rounded-md"

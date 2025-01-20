@@ -51,7 +51,7 @@ const CountryEventsPage = () => {
   return (
     <div>
       <EventsScreen
-        heading={`${customCountry} ${customEventType} events`}
+        heading={`${customCountry} - ${customEventType} events`}
         image={sanityImageUrlBuilder(eventImage).url()}
         data={eventsData}
       />
