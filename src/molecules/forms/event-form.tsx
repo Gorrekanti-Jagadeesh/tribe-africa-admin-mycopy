@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-
-import { ImageDragAndDrop } from '@atoms/input-elements/drag-and-drop';
+import { RichTextEditor } from '@/atoms/input-elements/rich-text-editor';
 import { uploadImage } from '@api/index';
-import { parseImageUrl } from '@utils/sanity';
+import { processContent, splitRichText } from '@utils/sanity';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
-import { eventTypes } from '../../data';
+import { Countries, eventTypes } from '@/data';
+import { ImageDragAndDrop } from '@/atoms/input-elements/drag-and-drop';
 
 type FormData = {
   title: string;
   image: string;
   description: string;
-  date: string;
-  time: string;
+  aboutEvent: string;
+  ticketPrices: string;
+  eventTimings: string;
+  email: string;
   location: string;
   country: string;
   website: string;
@@ -22,40 +24,76 @@ type FormData = {
   amount: string;
   category: string;
   type: string;
+  eventBy: string;
+  [key: string]: any; // For additional dynamic keys like `RichTextEditor` fields
 };
 
 const categories = eventTypes;
-
 const EventForm: React.FC = () => {
-  const [image, setImage] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors },
   } = useForm<FormData>();
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    uploadImage(image)
-      .then((res) => {
-        const jsonData = {
-          ...data,
-          _type: 'event',
-          image: parseImageUrl(res._id),
-          _id: `drafts.${generateId()}`,
-        };
-        sanityClient.create(jsonData).then(() => alert('submitted successfully'));
-      })
-      .catch((error) => {
-        console.error('Error uploading image:', error);
-      });
-  };
-
-  const handleFileSelect = (file: File | null): void => {
-    setImage(file);
-  };
 
   const selectedCategory = watch('category');
   const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);
+
+  const [businessPhoto, setBusinessPhoto] = useState<File | null>(null);
+  const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
+
+  const onFileSelect = (file: File, type: 'business' | 'cover') => {
+    if (type === 'business') {
+      setBusinessPhoto(file);
+      setValue('businessPhoto', file); // Sync with form state
+    } else if (type === 'cover') {
+      setCoverPhoto(file);
+      setValue('coverPhoto', file); // Sync with form state
+    }
+  };
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      // Handle image uploads
+      if (businessPhoto) {
+        const businessPhotoUrl = await uploadImage(businessPhoto);
+        data.businessPhoto = {
+          _type: 'image',
+          asset: { _ref: businessPhotoUrl._id },
+        };
+      }
+
+      if (coverPhoto) {
+        const coverPhotoUrl = await uploadImage(coverPhoto);
+        data.coverPhoto = {
+          _type: 'image',
+          asset: { _ref: coverPhotoUrl._id },
+        };
+      }
+
+      // Convert RichText fields to Portable Text format
+      const description = await processContent(splitRichText(data.description));
+      const aboutEvent = await processContent(splitRichText(data.aboutEvent));
+      const ticketPrices = await processContent(splitRichText(data.ticketPrices));
+
+      // Submit to Sanity
+      await sanityClient.create({
+        _type: 'event', // Sanity schema type
+        _id: `drafts.${generateId()}`, // Unique ID
+        ...data,
+        description,
+        aboutEvent,
+        ticketPrices,
+      });
+
+      alert('Submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      alert('Failed to submit data. Please try again.');
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4 bg-white text-black rounded-lg shadow-md">
@@ -67,28 +105,25 @@ const EventForm: React.FC = () => {
       />
       {errors.title && <span className="text-red-500">{errors.title.message}</span>}
 
-      <ImageDragAndDrop onFileSelect={handleFileSelect} />
+      <ImageDragAndDrop onFileSelect={(file) => onFileSelect(file, 'business')} placeholder="Upload a Business Photo" />
+      <p>{businessPhoto?.name || 'No business photo selected'}</p>
 
-      <textarea
-        {...register('description', { required: 'Description is required' })}
-        placeholder="Description"
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-      {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+      <ImageDragAndDrop onFileSelect={(file) => onFileSelect(file, 'cover')} placeholder="Upload a Cover Photo" />
+      <p>{coverPhoto?.name || 'No cover photo selected'}</p>
 
       <input
-        {...register('date', { required: 'Date is required' })}
-        type="date"
+        {...register('eventBy', { required: 'eventBy is required' })}
+        placeholder="Event Conducted by"
         className="w-full p-2 border border-gray-300 rounded"
       />
-      {errors.date && <span className="text-red-500">{errors.date.message}</span>}
+      {errors.eventBy && <span className="text-red-500">{errors.eventBy.message}</span>}
 
       <input
-        {...register('time', { required: 'Time is required' })}
-        type="time"
+        {...register('eventTimings', { required: 'eventBy is required' })}
+        placeholder="Ticket Pricing"
         className="w-full p-2 border border-gray-300 rounded"
       />
-      {errors.time && <span className="text-red-500">{errors.time.message}</span>}
+      {errors.eventTimings && <span className="text-red-500">{errors.eventTimings.message}</span>}
 
       <input
         {...register('location', { required: 'Location is required' })}
@@ -98,12 +133,17 @@ const EventForm: React.FC = () => {
       />
       {errors.location && <span className="text-red-500">{errors.location.message}</span>}
 
-      <input
+      <select
         {...register('country', { required: 'Country is required' })}
-        type="text"
-        placeholder="Country"
         className="w-full p-2 border border-gray-300 rounded"
-      />
+      >
+        <option value="">Select Country</option>
+        {Countries.map((country) => (
+          <option key={country.label} value={country.value}>
+            {country.label}
+          </option>
+        ))}
+      </select>
       {errors.country && <span className="text-red-500">{errors.country.message}</span>}
 
       <input
@@ -112,6 +152,14 @@ const EventForm: React.FC = () => {
         placeholder="Website"
         className="w-full p-2 border border-gray-300 rounded"
       />
+
+      <input
+        {...register('email', { required: 'Email is required' })}
+        type="email"
+        placeholder="Enter Email Address"
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {errors.email && <span className="text-red-500">{errors.email.message}</span>}
 
       <input
         {...register('phone', { required: 'Phone is required' })}
@@ -137,7 +185,7 @@ const EventForm: React.FC = () => {
       {errors.amount && <span className="text-red-500">{errors.amount.message}</span>}
 
       <select
-        {...register('category', { required: 'Category is required' })}
+        {...register('category', { required: 'Event Category is required' })}
         className="w-full p-2 border border-gray-300 rounded"
       >
         <option value="">Select Event Category</option>
@@ -151,7 +199,7 @@ const EventForm: React.FC = () => {
 
       {selectedCategoryOptions && (
         <select
-          {...register('type', { required: 'Type is required' })}
+          {...register('type', { required: 'Event Type is required' })}
           className="w-full p-2 border border-gray-300 rounded"
         >
           <option value="">Select Event Type</option>
@@ -163,6 +211,27 @@ const EventForm: React.FC = () => {
         </select>
       )}
       {errors.type && selectedCategoryOptions && <span className="text-red-500">{errors.type.message}</span>}
+
+      {/* RichTextEditor for Description */}
+      <RichTextEditor
+        placeholder="Enter Event Description"
+        onContentChange={(content) => setValue('description', content)}
+      />
+      {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+
+      {/* RichTextEditor for About Event */}
+      <RichTextEditor
+        placeholder="Share some details About the Event"
+        onContentChange={(content) => setValue('aboutEvent', content)}
+      />
+      {errors.aboutEvent && <span className="text-red-500">{errors.aboutEvent.message}</span>}
+
+      {/* RichTextEditor for Event Timings */}
+      <RichTextEditor
+        placeholder="Enter Ticket Price details"
+        onContentChange={(content) => setValue('ticketPrices', content)}
+      />
+      {errors.ticketPrices && <span className="text-red-500">{errors.ticketPrices.message}</span>}
 
       <button type="submit" className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600">
         Submit

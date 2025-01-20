@@ -4,7 +4,7 @@ import { RichTextEditor } from '../../atoms/input-elements/rich-text-editor';
 import Button from '../../atoms/custom-button/button';
 import { ImageDragAndDrop } from '../../atoms/input-elements/drag-and-drop';
 
-import { processContent } from '../../utils/sanity';
+import { countImagesInRichText, processContent, splitRichText } from '../../utils/sanity';
 
 import { uploadImage } from '../../api';
 
@@ -16,18 +16,6 @@ interface BlogComposeProps {
 const MAX_IMAGES = 3;
 // Split the rich text into text and tags
 let splitContent: string[];
-
-// Function to count images using splitRichText
-function countImagesInRichText(richText: string): number {
-  splitContent = splitRichText(richText);
-  return splitContent.filter((part) => part.startsWith('<img')).length;
-}
-
-// Split rich text into tags and text
-function splitRichText(richText: string): string[] {
-  const regex = /(<[^>]+>|[^<]+)/g;
-  return richText.match(regex) || [];
-}
 
 const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -59,6 +47,8 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
       alert(`Can only have up to ${MAX_IMAGES} images`);
       return;
     }
+
+    splitContent = splitRichText(editorContent);
 
     if (splitContent.length < 15) {
       alert('Please add more content to the blog.');
@@ -111,7 +101,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
           </div>
           <div className="flex flex-col gap-2">
             <label>Blog image</label>
-            <ImageDragAndDrop onFileSelect={handleFileSelect} />
+            <ImageDragAndDrop onFileSelect={handleFileSelect} placeholder="Upload a Title Photo" />
           </div>
           <div className="flex flex-col gap-2">
             <label>Blog description</label>
@@ -125,7 +115,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
           </div>
           <div className="flex flex-col gap-2">
             <label>Blog Content</label>
-            <RichTextEditor onContentChange={handleContentChange} />
+            <RichTextEditor onContentChange={handleContentChange} placeholder="Enter Blog Content" />
           </div>
         </div>
         <Button className="float-right my-4 px-4" type="submit">
