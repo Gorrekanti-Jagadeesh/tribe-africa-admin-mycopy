@@ -3,15 +3,6 @@ import HomeScreen from './home-screen';
 import { useQuery } from '@tanstack/react-query';
 import { sanity, query } from '@utils/sanity';
 
-// interface BusinessArticleProps {
-//   image: string;
-//   title: string;
-//   description: string;
-//   _id: string;
-//   homeBusinessBlogs: string;
-//   blogType: string;
-// }
-
 const HomeContainer = () => {
   // Explore
   const {

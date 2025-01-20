@@ -115,13 +115,13 @@ const EventForm: React.FC = () => {
             onFileSelect={(file) => onFileSelect(file, 'business')}
             placeholder="Upload your Business Photo"
           />
-          <p>{businessPhoto?.name || 'No business photo selected'}</p>
+          {errors.businessPhoto && <span className="text-red-500">{errors.businessPhoto.message}</span>}
 
           <ImageDragAndDrop
             onFileSelect={(file) => onFileSelect(file, 'cover')}
             placeholder="Upload your Cover Photo"
           />
-          <p>{coverPhoto?.name || 'No cover photo selected'}</p>
+          {errors.coverPhoto && <span className="text-red-500">{errors.coverPhoto.message}</span>}
 
           <input
             {...register('eventBy', { required: 'eventBy is required' })}
