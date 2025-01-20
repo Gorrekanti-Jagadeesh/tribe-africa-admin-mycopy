@@ -25,6 +25,8 @@ import FindABusinessLinksContainer from '../pages/find-a-business/find-a-busines
 import FindABusinessContainer from '@/pages/find-a-business/find-a-business-container';
 import FindaBusinessDetailsContainer from '@/pages/find-a-business/find-a-business-details-container';
 import CandidateForm from '@/molecules/forms/candidate-form';
+import CreateBusinessForm from '@/molecules/forms/business-creation-form';
+import ProfessionalDataForm from '@/molecules/forms/proffessional-form';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -176,6 +178,16 @@ const appRoutes: RouteConfig[] = [
     name: 'Tribe africa pages - candidate form',
     path: '/candidate-form',
     element: <CandidateForm />,
+  },
+  {
+    name: 'Tribe africa pages - create business form',
+    path: '/create-business-form',
+    element: <CreateBusinessForm />,
+  },
+  {
+    name: 'Tribe africa pages - Proffessional form',
+    path: '/proffessional-form',
+    element: <ProfessionalDataForm />,
   },
 ];
 
