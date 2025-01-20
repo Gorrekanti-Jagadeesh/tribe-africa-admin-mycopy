@@ -10,7 +10,7 @@ interface ExtendedInputProps extends InputProps {
 
 interface DynamicFormProps {
   fields: InputProps[];
-  setValue: (value: Array<Object>) => void;
+  setValue: (value: Array<object>) => void;
 }
 
 const FieldSet = ({

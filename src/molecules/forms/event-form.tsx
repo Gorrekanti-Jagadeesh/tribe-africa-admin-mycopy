@@ -11,9 +11,6 @@ import { ImageDragAndDrop } from '@/atoms/input-elements/drag-and-drop';
 type FormData = {
   title: string;
   image: string;
-  description: string;
-  aboutEvent: string;
-  ticketPrices: string;
   eventTimings: string;
   email: string;
   location: string;
@@ -25,9 +22,6 @@ type FormData = {
   category: string;
   type: string;
   eventBy: string;
-} & RichTextEditorFields;
-
-type RichTextEditorFields = {
   description: string;
   aboutEvent: string;
   ticketPrices: string;
