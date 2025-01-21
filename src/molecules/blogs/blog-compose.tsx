@@ -7,7 +7,7 @@ import { countImagesInRichText, processContent, splitRichText } from '../../util
 import { uploadImage } from '../../api';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { generateId } from '@/utils/common';
-import { Countries, eventTypes } from '@/data';
+import { Countries } from '@/data';
 import { Loading } from '@/atoms/common/loading';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 
