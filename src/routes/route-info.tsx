@@ -23,6 +23,7 @@ import HostelForm from '@molecules/forms/accomodation-creation-form';
 import CountryEventsPage from '../pages/events/business-events';
 import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
 import CandidateForm from '@/molecules/forms/candidate-form';
+import UserDashboardContainer from '@/pages/user-dashboard/user-dashboard-container';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -31,27 +32,32 @@ export interface RouteConfig {
 
 const appRoutes: RouteConfig[] = [
   {
-    name: 'home',
+    name: 'Home',
     path: '/',
     element: <HomeContainer />,
   },
   {
-    name: 'business',
+    name: 'Business Page',
     path: '/:country/business',
     element: <BusinessContainer />,
   },
   {
-    name: 'holiday',
+    name: 'Holiday Page',
     path: '/:country/holiday',
     element: <HolidayContainer />,
   },
   {
-    name: 'accomodation',
+    name: 'User Dashbaord',
+    path: '/user/dashboard',
+    element: <UserDashboardContainer />,
+  },
+  {
+    name: 'Accommodation',
     path: '/:country/:pageType/:category/:sub_category/:categoryInfoId',
     element: <AccommodationDetailsContainer />,
   },
   {
-    name: 'accomodations list',
+    name: 'Accommodations List',
     path: ':country/:pageType/:category/:sub_category',
     element: <AccomodationContainer />,
   },
