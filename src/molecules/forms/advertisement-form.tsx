@@ -72,7 +72,6 @@ const AdvertisementForm: React.FC = () => {
   const selectedAdType = watch('adType');
   const days = watch('days');
   const position = watch('position');
-  const item = watch('item');
   const selectedAdTypeOption = adTypes.find((cat) => cat.value === selectedAdType);
 
   const [loader, setLoader] = useState<boolean>(false);

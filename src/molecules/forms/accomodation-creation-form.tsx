@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import Dropdown from '@atoms/dropdown/dropdown-search';
-import AccordionWithCheckboxes from '@molecules/accordion/check-boxes-accordion';
 import Input from '@atoms/input-elements/input';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
-import { useParams } from 'react-router';
 import Checkbox from '@/atoms/input-elements/checkbox';
 import DateInput from '@/atoms/input-elements/date-input';
 import Button from '@/atoms/custom-button/button';
@@ -556,7 +554,6 @@ const RoomsSection: React.FC = () => {
     familyRooms: false,
     other: '',
   });
-
   const [bathroomAmenities, setBathroomAmenities] = useState<{
     privateBathroom: boolean;
     sharedBathroom: boolean;
@@ -594,6 +591,8 @@ const RoomsSection: React.FC = () => {
       [amenity]: checked,
     }));
   };
+
+  console.log(roomAmenities, bathroomAmenities);
 
   return (
     <div>
@@ -725,6 +724,8 @@ const HostelsDormSection: React.FC = () => {
     tv: false,
     other: '',
   });
+
+  console.log(dormRoomFeatures, dormRoomType, privateRoomFeatures);
 
   const handleDormRoomTypeChange = (roomType: string, checked: boolean) => {
     setDormRoomType((prev) => ({
@@ -889,6 +890,7 @@ const CoLivingRoomsSection: React.FC = () => {
     other: '',
   });
 
+  console.log(ensuiteBedroomFeatures, sharedBedroomFeatures);
   const [commonAreasDescription, setCommonAreasDescription] = useState('');
 
   const handleSharedBedroomFeaturesChange = (feature: string, checked: boolean) => {
@@ -1034,6 +1036,8 @@ const VacationRentalsSection: React.FC = () => {
     doubleSink: false,
     towelsAndToiletries: false,
   });
+
+  console.log(bedroomFeatures, bathroomFeatures);
 
   const handleBedroomFeaturesChange = (feature: string, checked: boolean) => {
     setBedroomFeatures((prev) => ({
