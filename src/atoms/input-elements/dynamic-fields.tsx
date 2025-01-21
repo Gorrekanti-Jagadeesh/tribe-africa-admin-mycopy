@@ -11,6 +11,7 @@ interface ExtendedInputProps extends InputProps {
 interface DynamicFormProps {
   fields: InputProps[];
   setValue: (value: Array<object>) => void;
+  max?: number;
 }
 
 const FieldSet = ({
@@ -40,7 +41,7 @@ const FieldSet = ({
   );
 };
 
-const DynamicFields: React.FC<DynamicFormProps> = ({ fields, setValue }) => {
+const DynamicFields: React.FC<DynamicFormProps> = ({ fields, setValue, max = null }) => {
   const [fieldSet, setFieldSet] = useState<{ id: string; fields: InputProps[] }[]>([]);
   const [valueSet, setValueSet] = useState([]);
   const fieldObject = useRef({});
@@ -89,7 +90,7 @@ const DynamicFields: React.FC<DynamicFormProps> = ({ fields, setValue }) => {
           />
         ))}
       </div>
-      <Button className="w-full" onClick={addField}>
+      <Button className="w-full" onClick={addField} disabled={max && fieldSet.length == max}>
         Add Field
       </Button>
     </div>
