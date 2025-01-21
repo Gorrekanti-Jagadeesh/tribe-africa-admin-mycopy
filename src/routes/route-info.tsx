@@ -18,7 +18,7 @@ import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
 import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 import EventDetailsPage from '@molecules/events/events-view';
-import HostelForm from '@molecules/forms/accomodation-creation-form';
+import AccommodationForm from '@molecules/forms/accomodation-creation-form';
 
 import CountryEventsPage from '../pages/events/business-events';
 import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
@@ -158,7 +158,7 @@ const appRoutes: RouteConfig[] = [
   {
     name: 'hotel form',
     path: '/form',
-    element: <HostelForm />,
+    element: <AccommodationForm />,
   },
   {
     name: 'Tribe africa pages - candidate form',
