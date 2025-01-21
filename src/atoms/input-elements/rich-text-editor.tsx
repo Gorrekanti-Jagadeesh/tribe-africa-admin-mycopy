@@ -5,18 +5,22 @@ interface RichTextEditorProps {
   className?: string;
   remove?: string[];
   onContentChange: (content: string) => void;
+  placeholder?: string;
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   className,
   remove = ['color', 'font', 'background', 'code-block'],
   onContentChange,
+  placeholder,
 }) => {
   const [text, setText] = useState<string>('');
 
   const handleChange = (content: string) => {
-    setText(content);
-    onContentChange(content);
+    // Example to remove unwanted tags or clean the content
+    const cleanContent = content.replace(/<p>/g, '').replace(/<\/p>/g, ''); // Remove <p> tags for example
+    setText(cleanContent);
+    onContentChange(cleanContent);
   };
 
   return (
@@ -34,6 +38,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             });
           });
         }}
+        placeholder={placeholder}
         style={{
           height: '320px',
           padding: '2px',

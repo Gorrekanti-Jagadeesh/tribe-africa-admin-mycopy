@@ -23,8 +23,8 @@ export const query = {
             isCharmingHotel
           }`,
     HOLIDAY_DESTINATIONS: `*[_type == "holiday-destinations"]`,
-    WORKING_REMOTELY: `*[_type == "blog" && homeBusinessBlogs =="Working Remotely" && blogType == "Business"]`,
-    BUSINESS_FRIENDLY: `*[_type == "blog"  && homeBusinessBlogs == "Business Friendly" && blogType == "Business"]`,
+    WORKING_REMOTELY: `*[_type == "blog" && homeBusinessBlog =="Working Remotely" && blogType == "Business"]`,
+    BUSINESS_FRIENDLY: `*[_type == "blog"  && homeBusinessBlog == "Business Friendly" && blogType == "Business"]`,
     PREMIER_SERVICES: `*[_type == "home-premier-services"]`,
   },
   BUSINESS: {
@@ -134,3 +134,15 @@ export const processContent = async (html: string[]) => {
   richTextBlocks.push(...blocks);
   return richTextBlocks;
 };
+
+// Function to count images using splitRichText
+export function countImagesInRichText(richText: string): number {
+  const splitContent = splitRichText(richText);
+  return splitContent.filter((part) => part.startsWith('<img')).length;
+}
+
+// Split rich text into tags and text
+export function splitRichText(richText: string): string[] {
+  const regex = /(<[^>]+>|[^<]+)/g;
+  return richText.match(regex) || [];
+}

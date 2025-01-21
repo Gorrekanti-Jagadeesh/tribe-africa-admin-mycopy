@@ -135,7 +135,7 @@ const Network: React.FC<{ country: string }> = ({ country }) => {
       }));
       setEventCategories(formattedData as EventCategory[]);
     }
-  }, [eventsData]);
+  }, [eventsData, country]);
 
   if (eventsDataLoading || networkDataLoading) return <Loading />;
   if (eventsDataError || networkDataError) return <div>Error Loading Data</div>;
