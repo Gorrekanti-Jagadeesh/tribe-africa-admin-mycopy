@@ -6,7 +6,7 @@ import { Loading } from '@/atoms/common/loading';
 import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 import Cookies from 'js-cookie';
-import { getUserEnrollments } from '@/utils/sanity';
+import { getUserEnrollments, sanity } from '@/utils/sanity';
 
 type FormData = {
   adType: string;
@@ -31,9 +31,9 @@ const AdvertisementForm: React.FC = () => {
   const getUserListings = async () => {
     const hotels = await getUserEnrollments('accommodation', email);
     const events = await getUserEnrollments('event', email);
-    const businesses = await getUserEnrollments('findABusiness', email);
-
-    console.log(hotels, '098yg');
+    const businesses = await sanity.GET(
+      `*[_type == "findABusiness" && businessContactInformation.email == "${email}"]`
+    );
 
     const allHotelData = hotels.map((each) => ({ title: each.name, value: each._id }));
     const allEventsData = events.map((each) => ({ title: each.title, value: each._id }));
