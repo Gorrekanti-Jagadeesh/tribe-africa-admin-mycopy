@@ -138,7 +138,7 @@ const EventForm: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Event By</label>
+                <label>Event By {'(Organisation or Company Name)'}</label>
                 <input
                   {...register('eventBy', { required: 'Event By is required' })}
                   placeholder="Event Conducted by"
@@ -190,6 +190,15 @@ const EventForm: React.FC = () => {
                   onContentChange={(content) => setValue('description', content)}
                 />
                 {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>About Event</label>
+                <RichTextEditor
+                  placeholder="Share some details About the Event"
+                  onContentChange={(content) => setValue('aboutEvent', content)}
+                />
+                {errors.aboutEvent && <span className="text-red-500">{errors.aboutEvent.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -279,15 +288,6 @@ const EventForm: React.FC = () => {
                   onContentChange={(content) => setValue('ticketPrices', content)}
                 />
                 {errors.ticketPrices && <span className="text-red-500">{errors.ticketPrices.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>About Event</label>
-                <RichTextEditor
-                  placeholder="Share some details About the Event"
-                  onContentChange={(content) => setValue('aboutEvent', content)}
-                />
-                {errors.aboutEvent && <span className="text-red-500">{errors.aboutEvent.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">

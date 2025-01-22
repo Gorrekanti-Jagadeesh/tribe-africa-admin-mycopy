@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
 import { Loading } from '@/atoms/common/loading';
 import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
+import Cookies from 'js-cookie';
+import { getUserEnrollments } from '@/utils/sanity';
 
 type FormData = {
   adType: string;
@@ -15,52 +17,6 @@ type FormData = {
   phone: string;
 };
 
-const adTypes = [
-  {
-    title: 'Hotel',
-    value: 'Hotel',
-    items: [
-      { title: 'Hotel 1', value: 'Hotel 1', id: 1 },
-      { title: 'Hotel 2', value: 'Hotel 2', id: 2 },
-      { title: 'Hotel 3', value: 'Hotel 3', id: 3 },
-    ],
-  },
-  {
-    title: 'Event',
-    value: 'Event',
-    items: [
-      { title: 'Event 1', value: 'Event 1', id: 4 },
-      { title: 'Event 2', value: 'Event 2', id: 5 },
-      { title: 'Event 3', value: 'Event 3', id: 6 },
-    ],
-  },
-  {
-    title: 'Shop',
-    value: 'Shop',
-    items: [
-      { title: 'Shop 1', value: 'Shop 1', id: 7 },
-      { title: 'Shop 2', value: 'Shop 2', id: 8 },
-      { title: 'Shop 3', value: 'Shop 3', id: 9 },
-    ],
-  },
-];
-
-const pages = [
-  {
-    title: 'Home Page ($20 per day)',
-    value: 'Home Page',
-  },
-  {
-    title: 'Business Page ($10 per day)',
-    value: 'Busienss Page',
-  },
-
-  {
-    title: 'Holiday Page ($10 per day)',
-    value: 'Holiday Page',
-  },
-];
-
 const AdvertisementForm: React.FC = () => {
   const {
     register,
@@ -68,6 +24,60 @@ const AdvertisementForm: React.FC = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>();
+
+  const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
+  const [allData, setAllData] = useState([[], [], []]);
+
+  const getUserListings = async () => {
+    const hotels = await getUserEnrollments('accommodation', email);
+    const events = await getUserEnrollments('event', email);
+    const businesses = await getUserEnrollments('findABusiness', email);
+
+    console.log(hotels, '098yg');
+
+    const allHotelData = hotels.map((each) => ({ title: each.name, value: each._id }));
+    const allEventsData = events.map((each) => ({ title: each.title, value: each._id }));
+    const allBusinessesData = businesses.map((each) => ({ title: each.businessName, value: each._id }));
+
+    setAllData([allHotelData, allEventsData, allBusinessesData]);
+  };
+  useEffect(() => {
+    getUserListings();
+  }, []);
+
+  const adTypes = [
+    {
+      title: 'Hotel',
+      value: 'Hotel',
+      items: allData[0],
+    },
+    {
+      title: 'Event',
+      value: 'Event',
+      items: allData[1],
+    },
+    {
+      title: 'Business',
+      value: 'Business',
+      items: allData[2],
+    },
+  ];
+
+  const pages = [
+    {
+      title: 'Home Page ($20 per day)',
+      value: 'Home Page',
+    },
+    {
+      title: 'Business Page ($10 per day)',
+      value: 'Busienss Page',
+    },
+
+    {
+      title: 'Holiday Page ($10 per day)',
+      value: 'Holiday Page',
+    },
+  ];
 
   const selectedAdType = watch('adType');
   const days = watch('days');
@@ -79,6 +89,10 @@ const AdvertisementForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       // Handle image uploads
+      if (selectedAdTypeOption.items.length === 0) {
+        alert(`Please Complete your enrolment in ${selectedAdType} for Advertising!`);
+        return;
+      }
       setLoader(true);
 
       // Submit to Sanity
@@ -133,17 +147,23 @@ const AdvertisementForm: React.FC = () => {
                   ))}
                 </select>
                 {errors.adType && <span className="text-red-500">{errors.adType.message}</span>}
+                {selectedAdTypeOption && selectedAdTypeOption.items.length === 0 && (
+                  <span className="text-red-500">
+                    You don't have any {selectedAdType} enlistments. Please enroll{' '}
+                    <span className="underline">here</span>
+                  </span>
+                )}
               </div>
 
-              <div className="flex flex-col gap-2">
-                {selectedAdTypeOption && (
+              {selectedAdTypeOption && selectedAdTypeOption.items.length !== 0 && (
+                <div className="flex flex-col gap-2">
                   <>
                     <label>All {selectedAdType}s</label>
                     <select
                       {...register('item', { required: 'Event Type is required' })}
                       className="w-full p-2 border border-gray-300 rounded"
                     >
-                      <option value="">Select Event Sub Cartegory</option>
+                      <option value="">Select Your {selectedAdType}</option>
                       {selectedAdTypeOption.items.map((type) => (
                         <option key={type.value} value={type.value}>
                           {type.title}
@@ -151,9 +171,9 @@ const AdvertisementForm: React.FC = () => {
                       ))}
                     </select>
                   </>
-                )}
-                {errors.item && selectedAdTypeOption && <span className="text-red-500">{errors.item.message}</span>}
-              </div>
+                  {errors.item && selectedAdTypeOption && <span className="text-red-500">{errors.item.message}</span>}
+                </div>
+              )}
 
               <div className="flex flex-col gap-2">
                 <label>Placement of Advertisement</label>
@@ -168,7 +188,7 @@ const AdvertisementForm: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                {errors.adType && <span className="text-red-500">{errors.adType.message}</span>}
+                {errors.position && <span className="text-red-500">{errors.position.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -184,7 +204,7 @@ const AdvertisementForm: React.FC = () => {
                     Your Advertisement will Expire after {days == 1 ? '1 day' : `${days} days`}
                   </span>
                 )}
-                {errors.adType && <span className="text-red-500">{errors.adType.message}</span>}
+                {errors.days && <span className="text-red-500">{errors.days.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
