@@ -3,10 +3,13 @@ import sanityClient from '../../sanityClient';
 import { RichTextEditor } from '../../atoms/input-elements/rich-text-editor';
 import Button from '../../atoms/custom-button/button';
 import { ImageDragAndDrop } from '../../atoms/input-elements/drag-and-drop';
-
-import { processContent } from '../../utils/sanity';
-
+import { countImagesInRichText, processContent, splitRichText } from '../../utils/sanity';
 import { uploadImage } from '../../api';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { generateId } from '@/utils/common';
+import { Countries } from '@/data';
+import { Loading } from '@/atoms/common/loading';
+import UnderlineHeading from '@/atoms/heading/underline-heading';
 
 interface BlogComposeProps {
   className: string;
@@ -17,120 +20,195 @@ const MAX_IMAGES = 3;
 // Split the rich text into text and tags
 let splitContent: string[];
 
-// Function to count images using splitRichText
-function countImagesInRichText(richText: string): number {
-  splitContent = splitRichText(richText);
-  return splitContent.filter((part) => part.startsWith('<img')).length;
-}
+type FormData = {
+  title: string;
+  author: string;
+  content: string;
+  blogType: string;
+  email: string;
+  phone: string;
+  country: string;
+  description: string;
+  image: File;
+};
 
-// Split rich text into tags and text
-function splitRichText(richText: string): string[] {
-  const regex = /(<[^>]+>|[^<]+)/g;
-  return richText.match(regex) || [];
-}
+const categories = [
+  { title: 'Business Article', value: 'Business' },
+  { title: 'Travel & Leisure Article', value: 'Travel & Leisure' },
+  {
+    title: 'Environment & Sustainability Article',
+    value: 'Environment & Sustainability',
+  },
+];
 
 const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editorContent, setEditorContent] = useState<string>('');
-  const [descriptionContent, setDescriptionContent] = useState('');
+  const [loader, setLoader] = useState<boolean>(false);
 
   // Handle changes in the rich text editor content
   const handleContentChange = (content: string): void => setEditorContent(content);
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setDescriptionContent(event.target.value);
-  };
 
   // Handle changes in blog placeholder image in drag-and-drop component
   const handleFileSelect = (file: File | null): void => setSelectedFile(file);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-
-    // console.log("hello")
-
-    if (!selectedFile) {
-      alert('Please upload an image before submitting.');
-      return;
-    }
-
-    // Count images in rich text content
-    if (countImagesInRichText(editorContent) > MAX_IMAGES) {
-      alert(`Can only have up to ${MAX_IMAGES} images`);
-      return;
-    }
-
-    if (splitContent.length < 15) {
-      alert('Please add more content to the blog.');
-      return;
-    }
-
-    // Ensure proper typing for the form element
-    const formElement = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(formElement);
-
-    // list of final blocks after processing rich text
-    const richTextBlocks = await processContent(splitContent);
-
-    let response;
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      const title = formData.get('title') as string;
-      response = await uploadImage(selectedFile);
-      const blogData = {
-        _type: 'blog',
-        title,
+      setLoader(true);
+
+      if (countImagesInRichText(editorContent) > MAX_IMAGES) {
+        alert(`Can only have up to ${MAX_IMAGES} images`);
+        return;
+      }
+
+      splitContent = splitRichText(editorContent);
+      if (splitContent.length < 15) {
+        alert('Please add more content to the blog.');
+        return;
+      }
+      const content = await processContent(splitContent);
+      const headerPhotoUrl = await uploadImage(selectedFile);
+
+      // Submit to Sanity
+      await sanityClient.create({
+        _type: 'blog', // Sanity schema type
+        _id: `drafts.${generateId()}`, // Unique ID
+        ...data,
+        content,
         image: {
           _type: 'image',
-          asset: { _type: 'reference', _ref: response._id },
+          asset: { _ref: headerPhotoUrl._id },
         },
-        content: richTextBlocks,
-        description: descriptionContent,
-      };
-      const res = await sanityClient.create(blogData);
-      alert('submitted successfully');
-      console.log(`Blog created with ID: ${res._id}`);
+      });
+
+      alert('Submitted successfully!');
     } catch (error) {
-      console.error('Error creating blog:', error);
+      console.error('Error submitting data:', error);
+      alert('Failed to submit data. Please try again.');
+    } finally {
+      setLoader(false);
     }
   };
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <h2 className="text-2xl">Write a BLOG</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label>Title</label>
-            <input
-              type="text"
-              name="title"
-              placeholder="Blog title"
-              className="border p-2 rounded-lg outline-none"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Blog image</label>
-            <ImageDragAndDrop onFileSelect={handleFileSelect} />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Blog description</label>
-            <textarea
-              onChange={handleDescriptionChange}
-              name="description"
-              rows={4}
-              placeholder="Enter short Blog description"
-              className="border p-2 rounded-lg outline-none"
-            ></textarea>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Blog Content</label>
-            <RichTextEditor onContentChange={handleContentChange} />
-          </div>
-        </div>
-        <Button className="float-right my-4 px-4" type="submit">
-          Submit
-        </Button>
+      <UnderlineHeading borderWidth="w-1/4" className="text-2xl">
+        Write a BLOG
+      </UnderlineHeading>
+      <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
+        {loader ? (
+          <Loading />
+        ) : (
+          <>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <label>Title</label>
+                <input
+                  type="text"
+                  {...register('title', { required: 'Location is required' })}
+                  placeholder="Blog title"
+                  className="border p-2 rounded-lg outline-none"
+                />
+                {errors.title && <span className="text-red-500">{errors.title.message}</span>}
+              </div>
+              <div className="flex flex-col gap-2">
+                <label>Author Name</label>
+                <input
+                  type="text"
+                  {...register('author', { required: 'Author Name is required' })}
+                  placeholder="Blog Author Name"
+                  className="border p-2 rounded-lg outline-none"
+                />
+                {errors.author && <span className="text-red-500">{errors.author.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Email ID</label>
+                <input
+                  type="email"
+                  {...register('email', { required: 'Email ID required' })}
+                  placeholder="Email ID"
+                  className="border p-2 rounded-lg outline-none"
+                />
+                {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Contact Number</label>
+                <input
+                  type="text"
+                  {...register('phone', { required: 'Phone is required' })}
+                  placeholder="Contact Number"
+                  className="border p-2 rounded-lg outline-none"
+                />
+                {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
+              </div>
+              <div className="flex flex-col gap-2">
+                <label>Blog Image</label>
+                <ImageDragAndDrop onFileSelect={handleFileSelect} placeholder="Upload your Blog Header Photo" />
+                {errors.image && <span className="text-red-500">{errors.image.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Country</label>
+                <select
+                  {...register('country', { required: 'Event Category is required' })}
+                  className="w-full p-2 border border-gray-300 rounded"
+                >
+                  <option value="">Select Country</option>
+                  {Countries.map((country) => (
+                    <option key={country.label} value={country.value}>
+                      {country.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.country && <span className="text-red-500">{errors.country.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Blog Type</label>
+                <select
+                  {...register('blogType', { required: 'Blog Type is required' })}
+                  className="w-full p-2 border border-gray-300 rounded"
+                >
+                  <option value="">Select Blog Category</option>
+                  {categories.map((country) => (
+                    <option key={country.title} value={country.value}>
+                      {country.title}
+                    </option>
+                  ))}
+                </select>
+                {errors.country && <span className="text-red-500">{errors.country.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Blog description</label>
+                <textarea
+                  {...register('description', { required: 'Blog Description is required' })}
+                  name="description"
+                  rows={4}
+                  placeholder="Enter short Blog description"
+                  className="border p-2 rounded-lg outline-none"
+                ></textarea>
+                {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+              </div>
+              <div className="flex flex-col gap-2">
+                <label>Blog Content</label>
+                <RichTextEditor onContentChange={handleContentChange} placeholder="Enter Blog Content" />
+                {errors.content && <span className="text-red-500">{errors.content.message}</span>}
+              </div>
+            </div>
+            <Button className="float-right my-4 px-4" type="submit">
+              Submit
+            </Button>
+          </>
+        )}
       </form>
     </div>
   );

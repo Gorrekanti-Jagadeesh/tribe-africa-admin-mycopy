@@ -3,15 +3,16 @@ import { useDropzone } from 'react-dropzone';
 
 interface ImageDragAndDropProps {
   onFileSelect: (file: File | null) => void;
+  placeholder: string;
 }
 
-export const disableDragAndDrop = (selector: string) => {
-  document.querySelector(selector)?.addEventListener('onmousedown', () => {
-    return false;
-  });
-};
+// export const disableDragAndDrop = (selector: string) => {
+//   document.querySelector(selector)?.addEventListener('onmousedown', () => {
+//     return false;
+//   });
+// };
 
-export const ImageDragAndDrop: React.FC<ImageDragAndDropProps> = ({ onFileSelect }) => {
+export const ImageDragAndDrop: React.FC<ImageDragAndDropProps> = ({ onFileSelect, placeholder }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const onDrop = useCallback(
@@ -61,7 +62,7 @@ export const ImageDragAndDrop: React.FC<ImageDragAndDropProps> = ({ onFileSelect
           ) : (
             <>
               <div className="mt-4 text-gray-600">
-                Click to <span className="font-bold text-orange-500">Upload a file</span>
+                Click to <span className="font-bold text-orange-500">{placeholder}</span>
                 <p className="pl-1">
                   (or)
                   <br />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Dropdown from '@atoms/dropdown/dropdown-search';
 import { Countries, Purpose } from '@data/index';
+import { toKebabCase } from '@/utils/common';
 
 // HeroSection Component
 
@@ -16,7 +17,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ video, image }) => {
 
   const handleGoClick = () => {
     if (country) {
-      purpose === 'business' ? navigate(`/${country}/business`) : navigate(`/${country}/holiday`);
+      purpose === 'business'
+        ? navigate(`/${toKebabCase(country)}/business`)
+        : navigate(`/${toKebabCase(country)}/holiday`);
     }
   };
 

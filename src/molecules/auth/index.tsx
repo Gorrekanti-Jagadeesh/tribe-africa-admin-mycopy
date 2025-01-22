@@ -6,6 +6,7 @@ import Signup from './signup';
 import Button from '@atoms/custom-button/button';
 import { signInWithGoogle } from '../../../firebaseDB';
 import AuthWrapper from './auth-wrapper';
+import { Link } from 'react-router-dom';
 
 interface User {
   email: string | null;
@@ -88,7 +89,7 @@ export const Auth = () => {
   const [type, setType] = useState('login');
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-3">
       {isLogin ? (
         <UserPlaceholder user={googleUser ? googleUser : emailUser} handleLogout={handleLogout} />
       ) : (
@@ -104,6 +105,10 @@ export const Auth = () => {
           </Button>
         </div>
       )}
+
+      <Link to={'/user/dashboard'}>
+        <Button className="hidden md:inline-block bg-violet-500">Dashboard</Button>
+      </Link>
 
       {/* Modal for Auth forms */}
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>

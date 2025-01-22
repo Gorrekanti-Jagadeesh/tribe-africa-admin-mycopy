@@ -214,6 +214,7 @@
 // };
 
 // export default ProfessionalDataForm;
+import Button from '@/atoms/custom-button/button';
 import React from 'react';
 import { useState } from 'react';
 
@@ -522,9 +523,11 @@ const ProfessionalDataForm = () => {
           />
         </div>
 
-        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
+        <Button type="button">Submit</Button>
+
+        {/* <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
           Submit
-        </button>
+        </button> */}
       </form>
     </div>
   );

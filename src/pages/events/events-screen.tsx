@@ -6,6 +6,7 @@ import Modal from '../../molecules/modal';
 import EventForm from '../../molecules/forms/event-form';
 import { useNavigate } from 'react-router';
 import { sanityImageUrlBuilder } from '@api/index';
+import { PortableText } from '@portabletext/react';
 
 interface EventsScreenProps {
   heading: string;
@@ -33,80 +34,68 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
 
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
+      <div className="flex flex-col md:flex-row md:items-center my-3">
+        <UnderlineHeading className="font-bold">{heading}</UnderlineHeading>
+        <Button className="md:ms-auto px-4" onClick={() => setIsOpen(true)}>
+          List your event
+        </Button>
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          <EventForm />
+        </Modal>
+      </div>
+
       {data && data.length ? (
-        <>
-          <UnderlineHeading className="font-bold">{heading}</UnderlineHeading>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto my-3">
-            {data.map((item) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+          {data.map((item) => (
+            <div
+              className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
+              key={item._id}
+              onClick={() => navigation(`${item._id}`)}
+            >
               <div
-                className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
-                key={item._id}
-                onClick={() => navigation(`${item._id}`)}
+                className="aspect-video bg-cover group relative overflow-auto"
+                style={{
+                  backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
+                }}
               >
-                <div
-                  className="aspect-video bg-cover group relative overflow-auto"
-                  style={{
-                    backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
-                  }}
-                >
-                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
-                    <div className="text-white">
-                      {item.description.map((block: { _type: string; children: { text: string }[] }, index) => {
-                        if (block._type === 'block') {
-                          return (
-                            <p key={index} className="text-base">
-                              {block.children?.[0]?.text}
-                            </p>
-                          );
-                        }
-                      })}
-                    </div>
+                <div className="absolute top-0 left-0 right-0 bottom-0 bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
+                  <div className="text-white">
+                    <PortableText value={item.description} />
                   </div>
                 </div>
-                <div className="text-sm flex flex-col gap-2 m-2">
-                  <p id="title" className="font-semibold text-lg">
-                    {item.title}
-                  </p>
-                  <p>
-                    <strong> Date & Time:</strong> {item.eventTimings}
-                  </p>
-                  <p>
-                    <strong> Location:</strong> {item.location}
-                  </p>
-                  <p>
-                    <strong> Country: </strong>
-                    {item.country}
-                  </p>
-                  <p>
-                    <strong> Website:</strong> {item.website}
-                  </p>
-                  <p>
-                    <strong>Tel:</strong>
-                    {item.phone}
-                  </p>
-                  <p>
-                    <strong>Whats App:</strong>
-                    {item.whatsapp}
-                  </p>
-                  <Button>{item.amount}</Button>
-                </div>
               </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className="shadow-2xl">
-          <div className="flex flex-col md:flex-row p-8 text-center">
-            <h1 className="text-4xl font-bold mb-4">{heading}</h1>
-            <Button className="md:ms-auto px-4" onClick={() => setIsOpen(true)}>
-              List your event
-            </Button>
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-              <EventForm />
-            </Modal>
-          </div>
-          <img src={image} className="aspect-video object-cover" />
+              <div className="text-sm flex flex-col gap-2 m-2">
+                <p id="title" className="font-semibold text-lg">
+                  {item.title}
+                </p>
+                <p>
+                  <strong> Date & Time:</strong> {item.eventTimings}
+                </p>
+                <p>
+                  <strong> Location:</strong> {item.location}
+                </p>
+                <p>
+                  <strong> Country: </strong>
+                  {item.country}
+                </p>
+                <p>
+                  <strong> Website:</strong> {item.website}
+                </p>
+                <p>
+                  <strong>Tel:</strong>
+                  {item.phone}
+                </p>
+                <p>
+                  <strong>Whats App:</strong>
+                  {item.whatsapp}
+                </p>
+                <Button>{item.amount}</Button>
+              </div>
+            </div>
+          ))}
         </div>
+      ) : (
+        <img src={image} className="aspect-video object-cover" />
       )}
     </div>
   );
