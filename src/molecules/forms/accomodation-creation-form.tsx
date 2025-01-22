@@ -255,49 +255,61 @@ const AccommodationForm: React.FC = () => {
         {errors.name && <span className="text-red-500">{errors.name.message}</span>}
 
         {/* Brand */}
-        {formType == 'hotel' ||
-          formType == 'resort' ||
-          (formType == 'bed-and-breakfast' && <Input type="text" name="brand" placeholder="Brand name" />)}
+        {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
+          <Input type="text" name="brand" placeholder="Brand name" />
+        )}
 
         {/* Star Rating */}
-        {formType == 'hotel' ||
-          formType == 'resort' ||
-          (formType == 'bed-and-breakfast' && (
-            <Input
-              type="dropdown"
-              name="star_rating"
-              placeholder="Star Rating"
-              options={[
-                {
-                  label: '1 Star',
-                  value: '1',
-                },
-                {
-                  label: '1.5 Star',
-                  value: '1.5',
-                },
-                {
-                  label: '2 Star',
-                  value: '2',
-                },
-                {
-                  label: '2.5 Star',
-                  value: '2.5',
-                },
-                // TODO: Extend list of stars until 7 Star
-              ]}
-              required={false}
-            />
-          ))}
+        {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
+          <Input
+            type="dropdown"
+            name="star_rating"
+            placeholder="Star Rating"
+            options={[
+              {
+                label: '1 Star',
+                value: '1',
+              },
+              {
+                label: '1.5 Star',
+                value: '1.5',
+              },
+              {
+                label: '2 Star',
+                value: '2',
+              },
+              {
+                label: '2.5 Star',
+                value: '2.5',
+              },
+              {
+                label: '3 Star',
+                value: '3',
+              },
 
-        {/* Property type/category */}
-        {formType && propertyTypes[formType] && (
-          <div>
-            <label className="font-semibold">Property Type</label>
-            {propertyTypes[formType].options.map((type) => (
-              <Checkbox key={type.value} label={type.label} onChange={(checked) => (type.checked = checked)} />
-            ))}
-          </div>
+              {
+                label: '3.5 Star',
+                value: '3.5',
+              },
+
+              {
+                label: '4 Star',
+                value: '4',
+              },
+
+              {
+                label: '4.5 Star',
+                value: '4.5',
+              },
+
+              {
+                label: '5 Star',
+                value: '5',
+              },
+              // TODO: Extend list of stars until 7 Star
+            ]}
+            required={false}
+          />
         )}
 
         {/* Price Range / Amount */}
@@ -309,6 +321,15 @@ const AccommodationForm: React.FC = () => {
           <Checkbox label={'Luxury (e.g.: $100+ per night)'} onChange={() => {}} />
         </div>
 
+        {/* Property type/category */}
+        {formType && propertyTypes[formType] && (
+          <div>
+            <label className="font-semibold">Category</label>
+            {propertyTypes[formType].options.map((type) => (
+              <Checkbox key={type.value} label={type.label} onChange={(checked) => (type.checked = checked)} />
+            ))}
+          </div>
+        )}
         {/* Address */}
         <div>
           Address
