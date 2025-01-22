@@ -54,6 +54,8 @@ const AccommodationForm: React.FC = () => {
       dynamicFields: [{ key: '', value: '' }],
     },
   });
+
+  const { control } = useForm();
   const [landmarks, setLandmarks] = useState([]);
   const [attractions, setAttractions] = useState([]);
 
