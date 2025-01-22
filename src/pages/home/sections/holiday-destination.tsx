@@ -7,6 +7,7 @@ import ColsGrid from '@molecules/layout/cols-grid';
 import { Loading } from '@atoms/common/loading';
 import useScreenWidth from '@hooks/useScreenWidth';
 import { Link } from 'react-router-dom';
+import AdvertisementForm from '@/molecules/forms/advertisement-form';
 
 interface Destination {
   image: string;
@@ -18,6 +19,8 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+
   const [country, setCountry] = useState('');
   const [layout, setLayout] = useState(3);
   const screenWidth = useScreenWidth();
@@ -71,7 +74,9 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
       <div className="max-w-6xl m-auto">
         <div className="flex">
           <DualHeading className="text-white">Favourite *Holiday Destinations*</DualHeading>
-          <Button className="ms-auto">Advertise with Us</Button>
+          <Button className="ms-auto" onClick={() => setIsAddOpen(true)}>
+            Advertise with Us
+          </Button>
         </div>
         <div
           id="slider"
@@ -151,6 +156,10 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
           </div>
         </div>
       </div>
+
+      <Modal isOpen={isAddOpen} setIsOpen={setIsAddOpen} containerClasses="ms-auto">
+        <AdvertisementForm />
+      </Modal>
       <style>
         {`
           .active-slide {

@@ -25,7 +25,7 @@ const NavLayout: React.FC<{
 }> = ({ eventCategories, showButton, navLayoutHeading }) => {
   const { setModalContent, setModalIsOpen } = useModalContext();
 
-  useEffect(() => setModalContent(<EventForm />), []);
+  useEffect(() => setModalContent(<EventForm />), [setModalContent]);
 
   return (
     <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">
