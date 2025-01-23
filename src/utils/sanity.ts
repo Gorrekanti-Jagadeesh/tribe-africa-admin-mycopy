@@ -81,6 +81,11 @@ export const parseImageUrl = (imageStr: string) => {
   );
 };
 
+export const getUserEnrollments = async (type: string, email: string) => {
+  const data = await sanity.GET(`*[_type == "${type}" && email == "${email}"]`);
+  return data;
+};
+
 const schema = Schema.compile({
   name: 'blogContentSchema',
   types: [
