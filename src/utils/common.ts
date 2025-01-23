@@ -82,3 +82,16 @@ export const getAverageOfObjectValues = (obj: object) => {
 export const appendToAverage = (average: number, count: number, value: number) => {
   return (average * count + value) / (count + 1);
 };
+
+export const deepMerge = (...objects) => {
+  return objects.reduce((acc, obj) => {
+    for (let key in obj) {
+      if (obj[key] && typeof obj[key] === 'object' && acc[key] && typeof acc[key] === 'object') {
+        acc[key] = deepMerge(acc[key], obj[key]);
+      } else {
+        acc[key] = obj[key];
+      }
+    }
+    return acc;
+  }, {});
+};

@@ -34,7 +34,7 @@ export interface Option {
   label: string;
 }
 
-export interface InputProps {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
   defaultValue?: string | number;
   name?: string;
@@ -48,7 +48,6 @@ export interface InputProps {
   patternMessage?: string;
   maxLength?: number;
   minLength?: number;
-  props?: React.HTMLAttributes<HTMLInputElement>;
 }
 
 export interface DropdownProps {

@@ -10,6 +10,9 @@ import Button from '@/atoms/custom-button/button';
 import { Option } from '@/types';
 import { RichTextEditor } from '@/atoms/input-elements/rich-text-editor';
 import { Select } from '@/atoms/input-elements/select';
+import { deepMerge } from '@/utils/common';
+import { Textarea } from '@/atoms/input-elements/text-area';
+import { GetCoordinateOnMap } from '../maps/leaflet-map';
 
 export interface AccommodationFormInputs {
   accommodation_type: string;
@@ -184,6 +187,90 @@ export interface AccommodationFormInputs {
     emergencyContact?: string;
     idPhoto?: File;
   };
+  dorm: {
+    numberOfBeds: string;
+    numberOfRooms: string;
+    numberOfSuites: string;
+    commonArea: string;
+    maxOccupancy: string;
+    propertySize: string;
+    gardenSize: string;
+    terraceSize: string;
+    types: {
+      mixedDorm: boolean;
+      femaleDorm: boolean;
+      maleDorm: boolean;
+    };
+    room: {
+      features: {
+        tv: boolean;
+        kitchen: boolean;
+        coffeeTeaMaker: boolean;
+        coffeeMachine: boolean;
+        electricKettle: boolean;
+        miniBar: boolean;
+        hairdryer: boolean;
+        safe: boolean;
+        balcony: boolean;
+        familyRooms: boolean;
+        lockers: boolean;
+        readingLights: boolean;
+        chargingPorts: boolean;
+        curtainsForPrivacy: boolean;
+      };
+    };
+    bathroom: {
+      features: {
+        privateBathroom: boolean;
+        sharedBathroom: boolean;
+        bathtub: boolean;
+        shower: boolean;
+        walkInShower: boolean;
+        showerChair: boolean;
+        showerWithGrabRail: boolean;
+        toiletWithGrabRail: boolean;
+        towelsProvided: boolean;
+        toiletriesProvided: boolean;
+      };
+    };
+    private: {
+      numberOfRooms: string;
+      numberOfSuites: string;
+      features: {
+        enSuiteBathroom: boolean;
+        balcony: boolean;
+        closetStorageSpace: boolean;
+        tv: boolean;
+      };
+    };
+    shared: {
+      numberOfRooms: string;
+      numberOfBathrooms: string;
+      features: {
+        balcony: boolean;
+        closetStorageSpace: boolean;
+        readingLights: boolean;
+        chargingPorts: boolean;
+        tv: boolean;
+        wifi: boolean;
+        airConditioning: boolean;
+        workspace: boolean;
+      };
+    };
+    ensuite: {
+      numberOfRooms: string;
+      features: {
+        balcony: boolean;
+        closetStorageSpace: boolean;
+        readingLights: boolean;
+        chargingPorts: boolean;
+        tv: boolean;
+        wifi: boolean;
+        airConditioning: boolean;
+        workspace: boolean;
+      };
+    };
+  };
 }
 
 const FormContext = createContext(null);
@@ -198,11 +285,8 @@ const AccommodationForm: React.FC = () => {
   });
 
   const { control } = useForm();
-  const [landmarks, setLandmarks] = useState([]);
-  const [attractions, setAttractions] = useState([]);
   const [formType, setFormType] = useState(null);
-
-  useEffect(() => {}, [landmarks, attractions]);
+  const [formData, setFormData] = useState({});
 
   // Property types
   const propertyTypes = {
@@ -353,8 +437,29 @@ const AccommodationForm: React.FC = () => {
     { label: 'Community Initiatives', value: 'communityInitiatives' },
   ];
 
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => {
+      const newData = { ...prev }; // Copy previous state to avoid direct mutation
+
+      const keys = field.split('.'); // Split the field name into keys
+      let current = newData;
+
+      // Traverse or create nested objects
+      keys.forEach((key, index) => {
+        if (index === keys.length - 1) {
+          current[key] = value; // Set the final value at the last key
+        } else {
+          current[key] = current[key] || {}; // Create nested object if it doesn't exist
+          current = current[key]; // Move deeper into the structure
+        }
+      });
+
+      return newData;
+    });
+  };
+
   const onSubmit: SubmitHandler<AccommodationFormInputs> = (data) => {
-    console.log(data);
+    console.log(deepMerge(formData, data));
   };
 
   const atmCards = [
@@ -408,7 +513,10 @@ const AccommodationForm: React.FC = () => {
                 value: 'vacation-rental',
               },
             ]}
-            onChange={setFormType}
+            onChange={(value) => {
+              setFormType(value);
+              handleInputChange('accommodation_type', value);
+            }}
           />
 
           {/* Name */}
@@ -416,38 +524,39 @@ const AccommodationForm: React.FC = () => {
           {errors.name && <span className="text-red-500">{errors.name.message}</span>}
 
           {/* Brand */}
-          {formType == 'hotel' ||
-            formType == 'resort' ||
-            (formType == 'bed-and-breakfast' && <Input type="text" {...register('brand')} placeholder="Brand name" />)}
+          {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
+            <Input type="text" {...register('brand')} placeholder="Brand name" />
+          )}
 
           {/* Star Rating */}
-          {formType == 'hotel' ||
-            formType == 'resort' ||
-            (formType == 'bed-and-breakfast' && (
-              <Select
-                name="star_rating"
-                placeholder="Star Rating"
-                options={[
-                  {
-                    label: '1 Star',
-                    value: '1',
-                  },
-                  {
-                    label: '1.5 Star',
-                    value: '1.5',
-                  },
-                  {
-                    label: '2 Star',
-                    value: '2',
-                  },
-                  {
-                    label: '2.5 Star',
-                    value: '2.5',
-                  },
-                  // TODO: Extend list of stars until 7 Star
-                ]}
-              />
-            ))}
+          {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
+            <Select
+              name="star_rating"
+              placeholder="Star Rating"
+              options={[
+                {
+                  label: '1 Star',
+                  value: '1',
+                },
+                {
+                  label: '1.5 Star',
+                  value: '1.5',
+                },
+                {
+                  label: '2 Star',
+                  value: '2',
+                },
+                {
+                  label: '2.5 Star',
+                  value: '2.5',
+                },
+                // TODO: Extend list of stars until 7 Star
+              ]}
+              onChange={(value) => {
+                handleInputChange('star_rating', value);
+              }}
+            />
+          )}
 
           {/* Property type/category */}
           {formType && propertyTypes[formType] && (
@@ -511,12 +620,12 @@ const AccommodationForm: React.FC = () => {
             <Input
               type="text"
               {...register('description.tagline')}
-              name="tagline"
+              name="description.tagline"
               maxLength={50}
               placeholder="Tagline: Short & catchy"
             />
             <label>Describe about the accommodation</label>
-            <RichTextEditor onContentChange={() => {}} />
+            <RichTextEditor onContentChange={(value) => handleInputChange('description.description', value)} />
             <label className="font-semibold">Highlights(upto 6)</label>
             <DynamicFields
               fields={[
@@ -526,7 +635,7 @@ const AccommodationForm: React.FC = () => {
                   placeholder: 'Highlight',
                 },
               ]}
-              setValue={() => {}}
+              setValue={(value) => handleInputChange('description.highlights', value)}
               max={6}
             />
           </div>
@@ -543,12 +652,13 @@ const AccommodationForm: React.FC = () => {
           </div>
 
           {/* Business establishment */}
-          <DateInput onChange={() => {}} />
+          <DateInput onChange={(value) => handleInputChange('establishedIn', value)} />
 
           {/* Accommodation Policies */}
           <div>
             <label className="font-semibold">Policies</label>
-            <RichTextEditor onContentChange={() => {}} />
+            <RichTextEditor onContentChange={(value) => handleInputChange('policy', value)} />
+            {/* TODO: Policy sections pending */}
           </div>
 
           {/* Dynamic Key-Value Pair Creation Operation seasons */}
@@ -567,7 +677,7 @@ const AccommodationForm: React.FC = () => {
                   placeholder: 'Distance',
                 },
               ]}
-              setValue={setLandmarks}
+              setValue={(value) => handleInputChange('operationSeasons', value)}
             />
           </div>
 
@@ -593,9 +703,12 @@ const AccommodationForm: React.FC = () => {
                   ],
                 },
               ]}
-              setValue={setAttractions}
+              setValue={(value) => handleInputChange('attractions', value)}
             />
           </div>
+
+          {/* Location on map */}
+          <GetCoordinateOnMap setCoordinates={(coordinates) => handleInputChange('location', coordinates)} />
 
           {/* Payment Methods */}
           <div>
@@ -627,6 +740,7 @@ const AccommodationForm: React.FC = () => {
               action={() => {}}
               buttonStyles={'md:w-24 py-1 px-2 border'}
             />
+            {/* TODO: Accepted cards section is pending */}
           </div>
 
           {/* General Amenities */}
@@ -663,10 +777,10 @@ const AccommodationForm: React.FC = () => {
           </div>
 
           {/* Amenities details */}
-          {/* {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && <RoomsSection />}
-        {formType == 'hostel' && <HostelsDormSection />}
-        {formType == 'co-living' && <CoLivingRoomsSection />}
-        {formType == 'vacation-rental' && <VacationRentalsSection />} */}
+          {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && <RoomsSection />}
+          {formType == 'hostel' && <HostelsDormSection />}
+          {formType == 'co-living' && <CoLivingRoomsSection />}
+          {formType == 'vacation-rental' && <VacationRentalsSection />}
 
           {/* owner / manager Details */}
           <div>
@@ -736,34 +850,6 @@ const AccordionSection: React.FC<{ title: string; options: Option[]; pre: string
 };
 
 const RoomsSection: React.FC = () => {
-  // State for room and bathroom amenities
-  const [roomAmenities, setRoomAmenities] = useState<{ [key: string]: boolean }>({
-    tv: false,
-    kitchen: false,
-    coffeeTeaMaker: false,
-    coffeeMachine: false,
-    electricKettle: false,
-    miniBar: false,
-    hairdryer: false,
-    safe: false,
-    balcony: false,
-    familyRooms: false,
-    other: false,
-  });
-
-  const [bathroomAmenities, setBathroomAmenities] = useState<{ [key: string]: boolean }>({
-    privateBathroom: false,
-    sharedBathroom: false,
-    bathtub: false,
-    shower: false,
-    walkInShower: false,
-    showerChair: false,
-    showerWithGrabRail: false,
-    toiletWithGrabRail: false,
-    towelsProvided: false,
-    toiletriesProvided: false,
-  });
-
   // Array of amenities with label and value for room amenities
   const roomAmenitiesList = [
     { label: 'TV', value: 'tv' },
@@ -792,60 +878,23 @@ const RoomsSection: React.FC = () => {
     { label: 'Toiletries Provided', value: 'toiletriesProvided' },
   ];
 
-  // Generalized function to handle amenity change for both room and bathroom
-  const handleAmenityChange = (type: 'room' | 'bathroom', value: string, checked: boolean) => {
-    if (type === 'room') {
-      setRoomAmenities((prev) => ({
-        ...prev,
-        [value]: checked,
-      }));
-    } else if (type === 'bathroom') {
-      setBathroomAmenities((prev) => ({
-        ...prev,
-        [value]: checked,
-      }));
-    }
-  };
-
-  const { register } = useContext(FormContext);
-
-  console.log(roomAmenities, bathroomAmenities);
+  const register = useContext(FormContext);
 
   return (
     <div>
       <h2 className="font-semibold my-4">Room & Bathroom Details</h2>
 
       {/* Input fields */}
-      <Input
-        type="number"
-        placeholder="Total Number of Beds"
-        name="totalBeds"
-        action={(value) => console.log('Total Beds:', value)}
-      />
-      <Input
-        type="number"
-        placeholder="Number of Rooms"
-        name="numberOfRooms"
-        action={(value) => console.log('Number of Rooms:', value)}
-      />
-      <Input
-        type="number"
-        placeholder="Number of Suites"
-        name="numberOfSuites"
-        action={(value) => console.log('Number of Suites:', value)}
-      />
+      <Input type="number" placeholder="Total Number of Beds" {...register('dorm.numberOfBeds')} />
+      <Input type="number" placeholder="Number of Rooms" {...register('dorm.numberOfRooms')} />
+      <Input type="number" placeholder="Number of Suites" {...register('dorm.numberOfSuites')} />
 
       {/* Room Amenities */}
       <div className="my-4">
         <h3 className="font-semibold">Room Amenities</h3>
         <div>
           {roomAmenitiesList.map((amenity) => (
-            <Checkbox
-              key={amenity.value}
-              {...register(amenity.value)}
-              label={amenity.label}
-              onChange={(checked) => handleAmenityChange('room', amenity.value, checked)}
-            />
+            <Checkbox key={amenity.value} {...register('dorm.room.features.' + amenity.value)} label={amenity.label} />
           ))}
         </div>
       </div>
@@ -857,9 +906,8 @@ const RoomsSection: React.FC = () => {
           {bathroomAmenitiesList.map((amenity) => (
             <Checkbox
               key={amenity.value}
-              {...register(amenity.value)}
+              {...register('dorm.bathroom.features.' + amenity.value)}
               label={amenity.label}
-              onChange={(checked) => handleAmenityChange('bathroom', amenity.value, checked)}
             />
           ))}
         </div>
@@ -869,30 +917,6 @@ const RoomsSection: React.FC = () => {
 };
 
 const HostelsDormSection: React.FC = () => {
-  // State for dorm room type, dorm features, and private room features
-  const [dormRoomType, setDormRoomType] = useState<{ [key: string]: boolean }>({
-    mixedDorm: false,
-    femaleDorm: false,
-    maleDorm: false,
-    other: false,
-  });
-
-  const [dormRoomFeatures, setDormRoomFeatures] = useState<{ [key: string]: boolean }>({
-    lockers: false,
-    readingLights: false,
-    chargingPorts: false,
-    curtainsForPrivacy: false,
-    other: false,
-  });
-
-  const [privateRoomFeatures, setPrivateRoomFeatures] = useState<{ [key: string]: boolean }>({
-    enSuiteBathroom: false,
-    balcony: false,
-    closetStorageSpace: false,
-    tv: false,
-    other: false,
-  });
-
   // Arrays of objects for dorm room types, dorm features, and private room features
   const dormRoomTypeList = [
     { label: 'Mixed Dorm', value: 'mixedDorm' },
@@ -914,61 +938,22 @@ const HostelsDormSection: React.FC = () => {
     { label: 'TV', value: 'tv' },
   ];
 
-  // Generalized change handler for dorm room type
-  const handleDormRoomTypeChange = (value: string, checked: boolean) => {
-    setDormRoomType((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  // Generalized change handler for dorm room features
-  const handleDormRoomFeaturesChange = (value: string, checked: boolean) => {
-    setDormRoomFeatures((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  // Generalized change handler for private room features
-  const handlePrivateRoomFeaturesChange = (value: string, checked: boolean) => {
-    setPrivateRoomFeatures((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  const { register } = useContext(FormContext);
+  const register = useContext(FormContext);
 
   return (
     <div>
       <h2 className="text-2xl font-semibold my-4">Hostel Room & Bathroom Details</h2>
 
       {/* Input fields */}
-      <Input
-        type="number"
-        placeholder="Total Number of Beds"
-        name="totalBeds"
-        action={(value) => console.log('Total Beds:', value)}
-      />
-      <Input
-        type="number"
-        placeholder="Number of Dormitory Rooms"
-        name="numberOfDormRooms"
-        action={(value) => console.log('Number of Dormitory Rooms:', value)}
-      />
+      <Input type="number" placeholder="Total Number of Beds" {...register('dorm.numberOfBeds')} />
+      <Input type="number" placeholder="Number of Dormitory Rooms" {...register('dorm.numberOfRooms')} />
 
       {/* Dorm Room Type */}
       <div className="my-4">
         <h3 className="text-xl font-semibold">Dorm Room Type</h3>
         <div>
           {dormRoomTypeList.map((roomType) => (
-            <Checkbox
-              key={roomType.value}
-              {...register(roomType.value)}
-              label={roomType.label}
-              onChange={(checked) => handleDormRoomTypeChange(roomType.value, checked)}
-            />
+            <Checkbox key={roomType.value} {...register('dorm.types.' + roomType.value)} label={roomType.label} />
           ))}
         </div>
       </div>
@@ -978,12 +963,7 @@ const HostelsDormSection: React.FC = () => {
         <h3 className="text-xl font-semibold">Dorm Room Features</h3>
         <div>
           {dormRoomFeaturesList.map((feature) => (
-            <Checkbox
-              key={feature.value}
-              {...register(feature.value)}
-              label={feature.label}
-              onChange={(checked) => handleDormRoomFeaturesChange(feature.value, checked)}
-            />
+            <Checkbox key={feature.value} {...register('dorm.room.features.' + feature.value)} label={feature.label} />
           ))}
         </div>
       </div>
@@ -993,23 +973,17 @@ const HostelsDormSection: React.FC = () => {
         type="number"
         placeholder="Number of Shared Bathrooms"
         name="numberOfSharedBathrooms"
-        action={(value) => console.log('Number of Shared Bathrooms:', value)}
+        {...register('dorm.shared.numberOfRooms')}
       />
 
       {/* Number of Private Rooms */}
-      <Input
-        type="number"
-        placeholder="Number of Private Rooms"
-        name="numberOfPrivateRooms"
-        action={(value) => console.log('Number of Private Rooms:', value)}
-      />
+      <Input type="number" placeholder="Number of Private Rooms" {...register('dorm.private.numberOfRooms')} />
 
       {/* Number of en-Suite Private Rooms */}
       <Input
         type="number"
         placeholder="Number of en-Suite Private Rooms"
-        name="numberOfEnSuitePrivateRooms"
-        action={(value) => console.log('Number of en-Suite Private Rooms:', value)}
+        {...register('dorm.private.numberOfSuites')}
       />
 
       {/* Private Room Features */}
@@ -1019,9 +993,8 @@ const HostelsDormSection: React.FC = () => {
           {privateRoomFeaturesList.map((feature) => (
             <Checkbox
               key={feature.value}
-              {...register(feature.value)}
+              {...register('dorm.private.features.' + feature.value)}
               label={feature.label}
-              onChange={(checked) => handlePrivateRoomFeaturesChange(feature.value, checked)}
             />
           ))}
         </div>
@@ -1031,34 +1004,6 @@ const HostelsDormSection: React.FC = () => {
 };
 
 const CoLivingRoomsSection: React.FC = () => {
-  // State for bedroom features
-  const [sharedBedroomFeatures, setSharedBedroomFeatures] = useState<{ [key: string]: boolean }>({
-    balcony: false,
-    closetStorageSpace: false,
-    readingLights: false,
-    chargingPorts: false,
-    tv: false,
-    wifi: false,
-    airConditioning: false,
-    workspace: false,
-    other: false,
-  });
-
-  const [ensuiteBedroomFeatures, setEnsuiteBedroomFeatures] = useState<{ [key: string]: boolean }>({
-    balcony: false,
-    closetStorageSpace: false,
-    readingLights: false,
-    chargingPorts: false,
-    tv: false,
-    wifi: false,
-    airConditioning: false,
-    workspace: false,
-    other: false,
-  });
-
-  console.log(ensuiteBedroomFeatures, sharedBedroomFeatures);
-  const [commonAreasDescription, setCommonAreasDescription] = useState('');
-
   // Arrays for shared bedroom and ensuite bedroom features
   const sharedBedroomFeaturesList = [
     { label: 'Balcony/Terrace', value: 'balcony' },
@@ -1082,22 +1027,7 @@ const CoLivingRoomsSection: React.FC = () => {
     { label: 'Workspace', value: 'workspace' },
   ];
 
-  // Generalized change handlers for features
-  const handleSharedBedroomFeaturesChange = (value: string, checked: boolean) => {
-    setSharedBedroomFeatures((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  const handleEnsuiteBedroomFeaturesChange = (value: string, checked: boolean) => {
-    setEnsuiteBedroomFeatures((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  const { register } = useContext(FormContext);
+  const register = useContext(FormContext);
 
   return (
     <div>
@@ -1107,8 +1037,7 @@ const CoLivingRoomsSection: React.FC = () => {
       <Input
         type="number"
         placeholder="Number of Bedrooms Available with Shared Bathrooms"
-        name="numberOfBedroomsWithSharedBathrooms"
-        action={(value) => console.log('Number of Bedrooms with Shared Bathrooms:', value)}
+        {...register('dorm.shared.numberOfRooms')}
       />
 
       {/* Bedroom Features with Shared Bathrooms */}
@@ -1118,29 +1047,18 @@ const CoLivingRoomsSection: React.FC = () => {
           {sharedBedroomFeaturesList.map((feature) => (
             <Checkbox
               key={feature.value}
-              {...register(feature.value)}
+              {...register('dorm.shared.features.' + feature.value)}
               label={feature.label}
-              onChange={(checked) => handleSharedBedroomFeaturesChange(feature.value, checked)}
             />
           ))}
         </div>
       </div>
 
       {/* Number of Shared Bathrooms */}
-      <Input
-        type="number"
-        placeholder="Number of Shared Bathrooms"
-        name="numberOfSharedBathrooms"
-        action={(value) => console.log('Number of Shared Bathrooms:', value)}
-      />
+      <Input type="number" placeholder="Number of Shared Bathrooms" {...register('dorm.shared.numberOfBathrooms')} />
 
       {/* Number of En-Suite Bedrooms */}
-      <Input
-        type="number"
-        placeholder="Number of En-Suite Bedrooms"
-        name="numberOfEnsuiteBedrooms"
-        action={(value) => console.log('Number of En-Suite Bedrooms:', value)}
-      />
+      <Input type="number" placeholder="Number of En-Suite Bedrooms" {...register('dorm.ensuite.numberOfRooms')} />
 
       {/* En-Suite Bedroom Features */}
       <div className="my-4">
@@ -1149,9 +1067,8 @@ const CoLivingRoomsSection: React.FC = () => {
           {ensuiteBedroomFeaturesList.map((feature) => (
             <Checkbox
               key={feature.value}
-              {...register(feature.value)}
+              {...register('dorm.ensuite.features.' + feature.value)}
               label={feature.label}
-              onChange={(checked) => handleEnsuiteBedroomFeaturesChange(feature.value, checked)}
             />
           ))}
         </div>
@@ -1160,10 +1077,9 @@ const CoLivingRoomsSection: React.FC = () => {
       {/* Common Areas */}
       <div className="my-4">
         <h3 className="text-xl font-semibold">Common Areas</h3>
-        <textarea
+        <Textarea
           placeholder="Describe the shared spaces (e.g., kitchen, lounge, gym)"
-          value={commonAreasDescription}
-          onChange={(e) => setCommonAreasDescription(e.target.value)}
+          {...register('dorm.commonArea')}
           className="p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500"
         />
       </div>
@@ -1172,21 +1088,6 @@ const CoLivingRoomsSection: React.FC = () => {
 };
 
 const VacationRentalsSection: React.FC = () => {
-  // State for bedroom and bathroom features
-  const [bedroomFeatures, setBedroomFeatures] = useState<{ [key: string]: boolean }>({
-    enSuiteBathroom: false,
-    balcony: false,
-    closetStorageSpace: false,
-    airConditioning: false,
-  });
-
-  const [bathroomFeatures, setBathroomFeatures] = useState<{ [key: string]: boolean }>({
-    bathtub: false,
-    shower: false,
-    doubleSink: false,
-    towelsAndToiletries: false,
-  });
-
   // Arrays for bedroom and bathroom features
   const bedroomFeaturesList = [
     { label: 'En-Suite Bathroom', value: 'enSuiteBathroom' },
@@ -1202,66 +1103,30 @@ const VacationRentalsSection: React.FC = () => {
     { label: 'Towels and Toiletries', value: 'towelsAndToiletries' },
   ];
 
-  // Generalized change handlers for bedroom and bathroom features
-  const handleBedroomFeaturesChange = (value: string, checked: boolean) => {
-    setBedroomFeatures((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  const handleBathroomFeaturesChange = (value: string, checked: boolean) => {
-    setBathroomFeatures((prev) => ({
-      ...prev,
-      [value]: checked,
-    }));
-  };
-
-  const { register } = useContext(FormContext);
+  const register = useContext(FormContext);
 
   return (
     <div>
       <h2 className="text-2xl font-semibold my-4">Vacation Rental Details</h2>
 
       {/* Max Occupancy */}
-      <Input
-        type="number"
-        placeholder="Max Occupancy"
-        name="maxOccupancy"
-        action={(value) => console.log('Max Occupancy:', value)}
-      />
+      <Input type="number" placeholder="Max Occupancy" {...register('dorm.maxOccupancy')} />
 
       {/* Number of Bedrooms (with Bed Type) */}
-      <Input
-        type="text"
-        placeholder="Number of Bedrooms"
-        name="numberOfBedrooms"
-        action={(value) => console.log('Number of Bedrooms:', value)}
-      />
+      <Input type="text" placeholder="Number of Bedrooms" {...register('dorm.numberOfRooms')} />
 
       {/* Number of En-suite Bedrooms (with Bed Type) */}
-      <Input
-        type="text"
-        placeholder="Number of En-Suite Bedrooms"
-        name="numberOfEnsuiteBedrooms"
-        action={(value) => console.log('Number of En-Suite Bedrooms:', value)}
-      />
+      <Input type="text" placeholder="Number of En-Suite Bedrooms" {...register('dorm.ensuite.numberOfRooms')} />
 
       {/* Number of Separate Bathrooms */}
-      <Input
-        type="number"
-        placeholder="Number of Separate Bathrooms"
-        name="numberOfSeparateBathrooms"
-        action={(value) => console.log('Number of Separate Bathrooms:', value)}
-      />
+      <Input type="number" placeholder="Number of Separate Bathrooms" {...register('dorm.private.numberOfRooms')} />
 
       {/* Property Size */}
       <Input
         type="text"
         placeholder="Property Size (In sq. meters or feet)"
         className="text-sm"
-        name="propertySize"
-        action={(value) => console.log('Property Size:', value)}
+        {...register('dorm.propertySize')}
       />
 
       {/* Outdoor Terrace Size */}
@@ -1269,29 +1134,18 @@ const VacationRentalsSection: React.FC = () => {
         type="text"
         placeholder="Outdoor Terrace Size (In sq. meters or feet)"
         className="text-sm overflow-hidden"
-        name="outdoorTerraceSize"
-        action={(value) => console.log('Outdoor Terrace Size:', value)}
+        {...register('dorm.terraceSize')}
       />
 
       {/* Garden Size */}
-      <Input
-        type="text"
-        placeholder="Garden Size (In sq. meters or feet)"
-        name="gardenSize"
-        action={(value) => console.log('Garden Size:', value)}
-      />
+      <Input type="text" placeholder="Garden Size (In sq. meters or feet)" {...register('dorm.gardenSize')} />
 
       {/* Bedroom Features */}
       <div className="my-4">
         <h3 className="text-xl font-semibold">Bedroom Features</h3>
         <div>
           {bedroomFeaturesList.map((feature) => (
-            <Checkbox
-              key={feature.value}
-              {...register(feature.value)}
-              label={feature.label}
-              onChange={(checked) => handleBedroomFeaturesChange(feature.value, checked)}
-            />
+            <Checkbox key={feature.value} {...register('dorm.room.features.' + feature.value)} label={feature.label} />
           ))}
         </div>
       </div>
@@ -1303,9 +1157,8 @@ const VacationRentalsSection: React.FC = () => {
           {bathroomFeaturesList.map((feature) => (
             <Checkbox
               key={feature.value}
-              {...register(feature.value)}
+              {...register('dorm.bathroom.features.' + feature.value)}
               label={feature.label}
-              onChange={(checked) => handleBathroomFeaturesChange(feature.value, checked)}
             />
           ))}
         </div>
