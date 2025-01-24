@@ -18,8 +18,8 @@ const UserPlaceholder = ({ user, handleLogout }: { user: User; handleLogout: () 
   const [hover, setHover] = useState(false);
 
   return (
-    <div className="relative" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <div className="flex items-center gap-2" onClick={() => console.log('clicked')}>
+    <div className="relative" onClick={() => setHover(!hover)}>
+      <div className="flex items-center gap-2 cursor-pointer">
         <img
           src={
             user?.photoURL
@@ -27,15 +27,28 @@ const UserPlaceholder = ({ user, handleLogout }: { user: User; handleLogout: () 
               : 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg'
           }
           alt="Profile"
-          className="w-8 h-8 rounded-full"
+          className="w-8 h-8 rounded-full border border-black"
         />
-        <span>Hi, {user.displayName}</span>
+        <span className="text-gray-700 font-mono">▼</span>
       </div>
-      <div className={`absolute right-0 z-10 ${hover ? 'visible' : 'invisible'}`}>
-        <button className="bg-red-500 text-white p-2 px-4 rounded mb-4 w-full" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
+
+      {hover && (
+        <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
+          <div className="p-4">
+            <h1 className="font-semibold text-gray-800">{user.displayName}</h1>
+          </div>
+          <div className="border-t">
+            <Link to={'/user/dashboard'} className="block px-4 py-2 hover:bg-gray-100">
+              <button className="w-full text-left text-violet-500">Dashboard</button>
+            </Link>
+          </div>
+          <div className="border-t">
+            <button className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -105,10 +118,6 @@ export const Auth = () => {
           </Button>
         </div>
       )}
-
-      <Link to={'/user/dashboard'}>
-        <Button className="hidden md:inline-block bg-violet-500">Dashboard</Button>
-      </Link>
 
       {/* Modal for Auth forms */}
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>

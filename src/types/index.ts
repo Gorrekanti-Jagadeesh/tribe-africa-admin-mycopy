@@ -34,17 +34,17 @@ export interface Option {
   label: string;
 }
 
-export interface InputProps {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
   defaultValue?: string | number;
+  name?: string;
   placeholder?: string;
   options?: Option[];
   action?: (value: string | number) => void;
   required?: boolean;
   className?: string;
-  name: string;
   regex?: RegExp;
-  errorMessage?: string;
+  error?: string;
   patternMessage?: string;
   maxLength?: number;
   minLength?: number;

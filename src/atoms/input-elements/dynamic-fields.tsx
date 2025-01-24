@@ -32,7 +32,7 @@ const FieldSet = ({
           name={field.name}
           placeholder={field.placeholder}
           className="flex-1"
-          action={(value) => action(field.name.split('~')[0], value)}
+          onInput={(e) => action(field.name.split('~')[0], e.currentTarget.value)}
           options={field.options}
         />
       ))}

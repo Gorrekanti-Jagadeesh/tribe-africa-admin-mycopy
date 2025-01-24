@@ -289,13 +289,11 @@ const CandidateForm: React.FC = () => {
       <h3>Consent and Verification:</h3>
       <Checkbox
         label="I consent to my professional information being listed in the Tribe Africa Pages Directory."
-        checked={formData.consent}
         onChange={(checked) => handleInputChange('consent', checked)}
       />
 
       <Checkbox
         label="I confirm that the information provided is accurate to the best of my knowledge."
-        checked={formData.accuracyVerification}
         onChange={(checked) => handleInputChange('accuracyVerification', checked)}
       />
 

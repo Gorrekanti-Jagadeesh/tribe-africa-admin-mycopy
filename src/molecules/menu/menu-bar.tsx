@@ -36,7 +36,13 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
         </div>
 
         {country && (
-          <Modal isOpen={isOpen} setIsOpen={setIsOpen} trigger={<img src={calculatorLogo} className="m-auto w-6" />}>
+          <Modal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            trigger={<img src={calculatorLogo} className="m-auto w-6" />}
+            customClasses="flex items-center justify-center h-screen"
+            closeButtonClasses="right-[19%] top-[33%] z-10"
+          >
             <CurrencyCalculator />
           </Modal>
         )}
