@@ -525,12 +525,13 @@ const AccommodationForm: React.FC = () => {
 
           {/* Brand */}
           {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
-            <Input type="text" {...register('brand')} placeholder="Brand name" />
+            <Input type="text" name="brand" placeholder="Brand name" />
           )}
 
           {/* Star Rating */}
           {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
-            <Select
+            <Input
+              type="dropdown"
               name="star_rating"
               placeholder="Star Rating"
               options={[
@@ -550,28 +551,34 @@ const AccommodationForm: React.FC = () => {
                   label: '2.5 Star',
                   value: '2.5',
                 },
+                {
+                  label: '3 Star',
+                  value: '3',
+                },
+
+                {
+                  label: '3.5 Star',
+                  value: '3.5',
+                },
+
+                {
+                  label: '4 Star',
+                  value: '4',
+                },
+
+                {
+                  label: '4.5 Star',
+                  value: '4.5',
+                },
+
+                {
+                  label: '5 Star',
+                  value: '5',
+                },
                 // TODO: Extend list of stars until 7 Star
               ]}
-              onChange={(value) => {
-                handleInputChange('star_rating', value);
-              }}
+              required={false}
             />
-          )}
-
-          {/* Property type/category */}
-          {formType && propertyTypes[formType] && (
-            <div>
-              <label className="font-semibold">Property Type</label>
-              {propertyTypes[formType].options.map((type) => (
-                <Checkbox
-                  key={type.value}
-                  label={type.label}
-                  {...register(`property_type`)}
-                  onChange={(checked) => (type.checked = checked)}
-                />
-              ))}
-            </div>
-            // TODO: Change property type in schema for multiple select
           )}
 
           {/* Price Range / Amount */}
@@ -595,15 +602,28 @@ const AccommodationForm: React.FC = () => {
             <Checkbox {...register(`priceRange.luxury`)} label={'Luxury (e.g.: $100+ per night)'} onChange={() => {}} />
           </div>
 
+          {/* Property type/category */}
+          {formType && propertyTypes[formType] && (
+            <div>
+              <label className="font-semibold">Category</label>
+              {propertyTypes[formType].options.map((type) => (
+                <Checkbox key={type.value} label={type.label} onChange={(checked) => (type.checked = checked)} />
+              ))}
+            </div>
+          )}
           {/* Address */}
           <div>
             Address
             {/* Street address */}
-            <Input type="text" {...register('address.street')} placeholder="Street address" />
-            <Input type="text" {...register('address.city')} placeholder="Town / City" />
-            <Input type="text" {...register('address.region')} placeholder="State / Region" />
-            <Input type="text" {...register('address.postalCode')} placeholder="Postal Code" />
-            <Input type="text" {...register('address.country')} placeholder="Country" />
+            <Input type="text" name="street" placeholder="Street address" />
+            {/* Town / City */}
+            <Input type="text" name="city" placeholder="Town / City" />
+            {/* State / Region */}
+            <Input type="text" name="region" placeholder="State / Region" />
+            {/* Postal Code */}
+            <Input type="text" name="postal_code" placeholder="Postal Code" />
+            {/* Country */}
+            <Input type="text" name="country" placeholder="Country" />
           </div>
 
           {/* Contact Information */}
