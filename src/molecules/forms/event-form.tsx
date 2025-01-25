@@ -14,6 +14,7 @@ import Input from '@/atoms/input-elements/input';
 import { Select } from '@/atoms/input-elements/select';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
 import CustomInput from '@/atoms/input-elements/custom-input';
+import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 
 type FormData = {
   title: string;
@@ -25,6 +26,9 @@ type FormData = {
   country: string;
   website: string;
   phone: string;
+  instagram: string;
+  twitter: string;
+  linkedin: string;
   whatsapp: string;
   amount: string;
   category: string;
@@ -104,7 +108,7 @@ const EventForm: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 bg-white overflow-auto p-4 rounded-lg">
+    <div className="flex flex-col gap-2 bg-white overflow-auto p-6 rounded-lg">
       <UnderlineHeading borderWidth="w-1/2" className="text-2xl">
         Event Enrollment Form
       </UnderlineHeading>
@@ -121,7 +125,6 @@ const EventForm: React.FC = () => {
                   options={categories}
                   label="Event Category"
                   error={errors.category}
-                  required
                 />
               </div>
 
@@ -147,36 +150,23 @@ const EventForm: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Contact Number for Enquiries</label>
-                <select
-                  {...register('countryCode', { required: 'Country code is required' })}
-                  className="p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Select Country's Mobile Code</option>
-                  {africanCountriesPhoneCodes.map((country) => (
-                    <option key={country.code} value={country.code}>
-                      {country.name} ({country.code})
-                    </option>
-                  ))}
-                </select>
-                <input
-                  {...register('phone', { required: 'Contact Number is required' })}
-                  type="tel"
-                  placeholder="Contact Number"
-                  className="w-full p-2 border border-gray-300 rounded"
+                <MobileNumberInput
+                  register={register}
+                  errors={[errors.countryCode, errors.phone]}
+                  countryCodes={africanCountriesPhoneCodes}
+                  label="Enter Your Mobile Number"
                 />
-                {errors.phone && <span className="text-red-500 text-xs">{errors.phone.message}</span>}
               </div>
 
-              <h3>Social Media Links (Optional):</h3>
-              <Input type="select" placeholder="Facebook" {...register('email')} required={false} />
-
-              <Input
-                placeholder="Instagram"
-                {...register('email', { required: 'Event Category is required' })}
-                required={false}
-              />
-
+              <div className="flex flex-col gap-2">
+                <h3>Social Media Links (Optional):</h3>
+                <CustomInput
+                  {...register('instagram')}
+                  placeholder="Instagram Profile"
+                  error={errors.eventBy}
+                  required={false}
+                />
+              </div>
               <div className="flex flex-col gap-2">
                 <label>Email</label>
                 <input

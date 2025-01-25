@@ -467,11 +467,11 @@ export const eventTypes = [
 ];
 
 export const africanCountriesPhoneCodes = [
-  { code: '+27', name: 'South Africa' },
-  { code: '+234', name: 'Nigeria' },
-  { code: '+233', name: 'Ghana' },
-  { code: '+254', name: 'Kenya' },
-  { code: '+20', name: 'Egypt' },
+  { value: '+27', label: 'South Africa' },
+  { value: '+234', label: 'Nigeria' },
+  { value: '+233', label: 'Ghana' },
+  { value: '+254', label: 'Kenya' },
+  { value: '+20', label: 'Egypt' },
 ];
 // -----------Must see and do --------------
 export const msadCategories = [
