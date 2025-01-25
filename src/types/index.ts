@@ -48,7 +48,6 @@ export interface InputProps {
   patternMessage?: string;
   maxLength?: number;
   minLength?: number;
-  props?: React.HTMLAttributes<HTMLInputElement>;
 }
 
 export interface DropdownProps {
