@@ -25,7 +25,7 @@ export const CustomSelect = forwardRef<
       placeholder,
       error,
       className,
-      required,
+      required = true,
       label,
       defaultValue,
       value,
@@ -52,9 +52,9 @@ export const CustomSelect = forwardRef<
           onFocus={handleFocus}
           value={value}
           defaultValue={defaultValue}
-          {...props}
-          className={`p-2 text-sm block w-full bg-transparent border outline-none rounded-md focus:border-orange-500
+          className={`p-2 text-sm block w-full h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
           ${error ? 'border-red-500' : 'border-gray-400'}  appearance-none ${customInputClasses}`}
+          {...props}
         >
           <option value="" disabled selected={Boolean(!defaultValue)}>
             {placeholder}

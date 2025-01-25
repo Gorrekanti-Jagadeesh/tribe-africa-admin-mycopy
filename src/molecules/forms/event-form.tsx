@@ -10,13 +10,11 @@ import { ImageDragAndDrop } from '@/atoms/input-elements/drag-and-drop';
 import { Loading } from '@/atoms/common/loading';
 import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
-import Input from '@/atoms/input-elements/input';
-import { Select } from '@/atoms/input-elements/select';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
 import CustomInput from '@/atoms/input-elements/custom-input';
 import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 
-type FormData = {
+export type EventFormData = {
   title: string;
   image: string;
   eventTimings: string;
@@ -28,7 +26,8 @@ type FormData = {
   phone: string;
   instagram: string;
   twitter: string;
-  linkedin: string;
+  facebook: string;
+  otherSocialMedia: string;
   whatsapp: string;
   amount: string;
   category: string;
@@ -48,9 +47,8 @@ const EventForm: React.FC = () => {
     handleSubmit,
     setValue,
     watch,
-    setError,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<EventFormData>();
 
   const selectedCategory = watch('category');
   const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);
@@ -69,7 +67,7 @@ const EventForm: React.FC = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const onSubmit: SubmitHandler<EventFormData> = async (data) => {
     try {
       // Handle image uploads
       setLoader(true);
@@ -120,10 +118,10 @@ const EventForm: React.FC = () => {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <CustomSelect
-                  {...register('category', { required: 'Event Category is required' })}
-                  placeholder="Select Event Category"
+                  {...register('category', { required: 'Event Type is required' })}
+                  placeholder="Select Event Type"
                   options={categories}
-                  label="Event Category"
+                  label="Event Type"
                   error={errors.category}
                 />
               </div>
@@ -131,10 +129,10 @@ const EventForm: React.FC = () => {
               {selectedCategoryOptions && (
                 <div className="flex flex-col gap-2">
                   <CustomSelect
-                    {...register('type', { required: 'Event Sub Category is required' })}
-                    placeholder="Select Event Sub Category"
+                    {...register('type', { required: 'Event Category is required' })}
+                    placeholder="Select Event Category"
                     options={selectedCategoryOptions.items}
-                    label={'Event Sub Category'}
+                    label={'Event Category'}
                     error={errors.type}
                   />
                 </div>
@@ -142,10 +140,11 @@ const EventForm: React.FC = () => {
 
               <div className="flex flex-col gap-2">
                 <CustomInput
-                  {...register('eventBy', { required: 'Event By is required' })}
+                  {...register('eventBy')}
                   label={'Organisation/Company Name (if applicable)'}
                   placeholder="Event Conducted by"
                   error={errors.eventBy}
+                  required={false}
                 />
               </div>
 
@@ -154,49 +153,92 @@ const EventForm: React.FC = () => {
                   register={register}
                   errors={[errors.countryCode, errors.phone]}
                   countryCodes={africanCountriesPhoneCodes}
-                  label="Enter Your Mobile Number"
+                  label="Contact Number for Enquiries:"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <h3>Social Media Links (Optional):</h3>
                 <CustomInput
-                  {...register('instagram')}
-                  placeholder="Instagram Profile"
-                  error={errors.eventBy}
+                  {...register('email', { required: 'Email is required' })}
+                  label={'Email'}
+                  placeholder="Email"
+                  error={errors.email}
+                  type="email"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <CustomInput
+                  {...register('website')}
+                  label={'Website (if applicable)'}
+                  placeholder="Website URL"
+                  error={errors.website}
+                  type="url"
                   required={false}
                 />
               </div>
-              <div className="flex flex-col gap-2">
-                <label>Email</label>
-                <input
-                  {...register('email', { required: 'Email is required' })}
-                  type="email"
-                  placeholder="Enter Email Address"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.email && <span className="text-red-500 text-xs">{errors.email.message}</span>}
-              </div>
 
               <div className="flex flex-col gap-2">
-                <label>Website</label>
-                <input
-                  {...register('website')}
+                <h3 className="font-semibold">Social Media Links (Optional):</h3>
+                <CustomInput
+                  {...register('instagram')}
+                  placeholder="Instagram Profile"
+                  error={errors.instagram}
+                  required={false}
                   type="url"
-                  placeholder="Website"
-                  className="w-full p-2 border border-gray-300 rounded"
+                />
+                <CustomInput
+                  {...register('twitter')}
+                  placeholder="Twitter Profile"
+                  error={errors.twitter}
+                  required={false}
+                  type="url"
+                />
+                <CustomInput
+                  {...register('facebook')}
+                  placeholder="Facebook Profile"
+                  error={errors.facebook}
+                  required={false}
+                  type="url"
+                />
+                <CustomInput
+                  {...register('otherSocialMedia')}
+                  placeholder="Other"
+                  error={errors.otherSocialMedia}
+                  required={false}
+                  type="url"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Title</label>
-                <input
+                <CustomInput
                   {...register('title', { required: 'Title is required' })}
-                  type="text"
-                  placeholder="Title"
-                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="Event Title"
+                  label="Event Title"
+                  error={errors.title}
                 />
-                {errors.title && <span className="text-red-500 text-xs">{errors.title.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <RichTextEditor
+                  label="Brief Summary of the Event"
+                  placeholder="Enter Event Description"
+                  name="description"
+                  {...register('description', {
+                    required: 'Event description is required',
+                    minLength: {
+                      value: 60,
+                      message: 'Description must be at least 60 characters',
+                    },
+                    maxLength: {
+                      value: 1000,
+                      message: 'Description must not exceed 600 characters',
+                    },
+                  })}
+                  error={errors.description?.message}
+                  onContentChange={(content) => setValue('description', content)}
+                  className="w-full"
+                />
               </div>
 
               <div className="flex flex-col gap-2">
@@ -218,20 +260,11 @@ const EventForm: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Event Description</label>
-                <RichTextEditor
-                  placeholder="Enter Event Description"
-                  onContentChange={(content) => setValue('description', content)}
-                />
-                {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
                 <label>About Event</label>
-                <RichTextEditor
+                {/* <RichTextEditor
                   placeholder="Share some details About the Event"
                   onContentChange={(content) => setValue('aboutEvent', content)}
-                />
+                /> */}
                 {errors.aboutEvent && <span className="text-red-500 text-xs">{errors.aboutEvent.message}</span>}
               </div>
 
@@ -295,10 +328,10 @@ const EventForm: React.FC = () => {
 
               <div className="flex flex-col gap-2">
                 <label>Ticket Prices Information</label>
-                <RichTextEditor
+                {/* <RichTextEditor
                   placeholder="Enter Ticket Price details"
                   onContentChange={(content) => setValue('ticketPrices', content)}
-                />
+                /> */}
                 {errors.ticketPrices && <span className="text-red-500 text-xs">{errors.ticketPrices.message}</span>}
               </div>
             </div>

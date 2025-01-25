@@ -52,7 +52,7 @@ export interface InputProps {
 }
 
 export interface HookInputProps {
-  type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+  type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown' | 'url' | 'tel';
   defaultValue?: string | number;
   name?: string;
   label?: string;
@@ -61,6 +61,7 @@ export interface HookInputProps {
   action?: (value: string | number) => void;
   required?: boolean;
   className?: string;
+  customInputClassNames?: string;
   regex?: RegExp;
   error?: FieldError;
   patternMessage?: string;

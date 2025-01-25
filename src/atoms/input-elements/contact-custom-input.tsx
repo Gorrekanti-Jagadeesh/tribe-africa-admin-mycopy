@@ -1,48 +1,58 @@
 import React from 'react';
-import { FieldError, UseFormRegister } from 'react-hook-form';
+import { FieldError, Path, UseFormRegister } from 'react-hook-form';
+import CustomInput from './custom-input';
 
-interface MobileNumberInputProps {
-  register: UseFormRegister<any>;
-  errors: [FieldError, FieldError];
+interface MobileNumberInputProps<T> {
+  errors: [FieldError | undefined, FieldError | undefined];
   countryCodes: { label: string; value: string }[];
-  phoneName?: string;
-  countryCodeName?: string;
+  customSelectClasses?: string;
+  phoneName?: Path<T>;
+  countryCodeName?: Path<T>;
   phonePlaceholder?: string;
   label?: string;
+  register: UseFormRegister<T>;
   required?: boolean;
 }
 
-const MobileNumberInput: React.FC<MobileNumberInputProps> = ({
-  register,
+const MobileNumberInput = <T,>({
   errors,
   countryCodes,
-  phoneName = 'phone',
-  countryCodeName = 'countryCode',
+  phoneName = 'phone' as Path<T>,
+  countryCodeName = 'countryCode' as Path<T>,
   phonePlaceholder = 'Contact Number',
   label = 'Contact Number for Enquiries',
+  customSelectClasses,
   required = true,
-}) => {
+  register,
+}: MobileNumberInputProps<T>) => {
   return (
     <div className="flex flex-col gap-2">
       {label && (
         <label className="font-semibold">
           {label}
-          {required && <span className="text-red-500 text-sm"> *</span>}
+          {required && <span className="text-red-500 text-sm">*</span>}
         </label>
       )}
-      <div className="flex">
-        <select
-          {...register(countryCodeName, { required: 'Country code is required' })}
-          className={`p-2 w-40 border rounded ${errors[countryCodeName] ? 'border-red-500' : 'border-gray-300'}`}
-        >
-          <option value="">Country's Code</option>
-          {countryCodes.map((country) => (
-            <option key={country.value} value={country.value}>
-              {country.label} ({country.value})
+      <div className="flex gap-2">
+        <div className="flex flex-col gap-2">
+          <select
+            {...register(countryCodeName, { required: 'Country code is required' })}
+            className={`p-2 text-sm block h-10 w-fit bg-transparent border outline-none rounded-md focus:border-orange-500
+          ${errors[0] ? 'border-red-500' : 'border-gray-400'} ${customSelectClasses}`}
+          >
+            <option value="" disabled selected>
+              Country Code
             </option>
-          ))}
-        </select>
-        <input
+            {countryCodes.map((country) => (
+              <option key={country.value} value={country.value}>
+                {country.label} ({country.value})
+              </option>
+            ))}
+          </select>
+          {errors[0] && <span className="text-red-500 text-xs">{errors[0]?.message}*</span>}
+        </div>
+
+        <CustomInput
           {...register(phoneName, {
             required: 'Contact Number is required',
             pattern: {
@@ -50,13 +60,12 @@ const MobileNumberInput: React.FC<MobileNumberInputProps> = ({
               message: 'Please enter a valid phone number',
             },
           })}
-          type="tel"
+          customInputClassNames="w-64"
           placeholder={phonePlaceholder}
-          className={`p-2 border rounded w-full ${errors[phoneName] ? 'border-red-500' : 'border-gray-300'}`}
+          error={errors[1]}
+          type="tel"
         />
       </div>
-      {errors[0] && <span className="text-red-500 text-xs">{errors[0]?.message}*</span>}
-      {errors[1] && <span className="text-red-500 text-xs">{errors[1]?.message}*</span>}
     </div>
   );
 };
