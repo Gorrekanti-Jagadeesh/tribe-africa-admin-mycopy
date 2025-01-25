@@ -16,14 +16,19 @@ import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 
 export type EventFormData = {
   title: string;
-  image: string;
   eventStartDate: string;
   eventEndDate: string;
   eventStartTime: string;
   eventEndTime: string;
   email: string;
-  location: string;
+  venue: string;
+  city: string;
   countryCode: string;
+  isEventFree: boolean;
+  general: string;
+  earlyBird: string;
+  vip: string;
+  allDayEvent: boolean;
   country: string;
   website: string;
   phone: string;
@@ -31,14 +36,22 @@ export type EventFormData = {
   twitter: string;
   facebook: string;
   otherSocialMedia: string;
-  whatsapp: string;
-  amount: string;
   category: string;
+  organizerName: string;
+  organizerEmergencyPhone: string;
+  organizerRole: string;
+  organizerEmail: string;
+  organizerPhone: string;
+  organizerCountryCode: string;
+  organizerDisplayName: string;
+  organizerEmergencyCountryCode: string;
   type: string;
   eventBy: string;
   description: string;
   aboutEvent: string;
-  ticketPrices: string;
+  confirmDetails: boolean;
+  agreeToFeature: boolean;
+  rightsToContent: boolean;
   businessPhoto: File;
   coverPhoto: File;
 };
@@ -54,6 +67,7 @@ const EventForm: React.FC = () => {
   } = useForm<EventFormData>();
 
   const selectedCategory = watch('category');
+  const allDayEvent = watch('allDayEvent');
   const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);
 
   const [businessPhoto, setBusinessPhoto] = useState<File | null>(null);
@@ -72,23 +86,64 @@ const EventForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<EventFormData> = async (data) => {
     try {
-      // Handle image uploads
+      // Display loader
       setLoader(true);
+
       // Convert RichText fields to Portable Text format
       const description = await processContent(splitRichText(data.description));
       const aboutEvent = await processContent(splitRichText(data.aboutEvent));
-      const ticketPrices = await processContent(splitRichText(data.ticketPrices));
-      const coverPhotoUrl = await uploadImage(coverPhoto);
-      const businessPhotoUrl = await uploadImage(businessPhoto);
+
+      // Handle image uploads
+      const coverPhotoUrl = await uploadImage(data.coverPhoto);
+      const businessPhotoUrl = await uploadImage(data.businessPhoto);
+
+      // Prepare ticket prices
+      const ticketPrices = {
+        general: data.general,
+        earlyBird: data.earlyBird,
+        vip: data.vip,
+      };
+
+      // Prepare social media details
+      const socialMedia = {
+        email: data.email,
+        website: data.website,
+        phone: data.phone,
+        instagram: data.instagram,
+        twitter: data.twitter,
+        facebook: data.facebook,
+        other: data.otherSocialMedia,
+      };
+
+      // Prepare organizer details
+      const organizer = {
+        name: data.organizerName,
+        role: data.organizerRole,
+        displayName: data.organizerDisplayName,
+        email: data.organizerEmail,
+        phone: data.organizerPhone,
+        countryCode: data.organizerCountryCode,
+        emergencyPhone: data.organizerEmergencyPhone,
+        emergencyCountryCode: data.organizerEmergencyCountryCode,
+      };
 
       // Submit to Sanity
       await sanityClient.create({
         _type: 'event', // Sanity schema type
-        _id: `drafts.${generateId()}`, // Unique ID
-        ...data,
+        _id: `drafts.${generateId()}`, // Unique ID for draft
+        title: data.title,
+        eventBy: data.eventBy,
+        eventStartDate: data.eventStartDate,
+        eventEndDate: data.eventEndDate,
+        eventStartTime: data.eventStartTime,
+        eventEndTime: data.eventEndTime,
+        allDayEvent: data.allDayEvent,
+        isEventFree: data.isEventFree,
+        ticketPrices,
+        socialMedia,
+        organizer,
         description,
         aboutEvent,
-        ticketPrices,
         coverPhoto: {
           _type: 'image',
           asset: { _ref: coverPhotoUrl._id },
@@ -97,13 +152,25 @@ const EventForm: React.FC = () => {
           _type: 'image',
           asset: { _ref: businessPhotoUrl._id },
         },
+        venue: data.venue,
+        city: data.city,
+        country: data.country,
+        countryCode: data.countryCode,
+        category: data.category,
+        type: data.type,
+        confirmDetails: data.confirmDetails,
+        agreeToFeature: data.agreeToFeature,
+        rightsToContent: data.rightsToContent,
       });
 
-      alert('Submitted successfully!');
+      // Notify success
+      alert('Event submitted successfully!');
     } catch (error) {
-      console.error('Error submitting data:', error);
-      alert('Failed to submit data. Please try again.');
+      // Handle errors
+      console.error('Error submitting event:', error);
+      alert('Failed to submit event. Please try again.');
     } finally {
+      // Hide loader
       setLoader(false);
     }
   };
@@ -181,7 +248,7 @@ const EventForm: React.FC = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <h3 className="font-semibold">Social Media Links (Optional):</h3>
                 <CustomInput
                   {...register('instagram')}
@@ -291,42 +358,108 @@ const EventForm: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-xl">Event Timings</label>
                 <div className="flex gap-5">
-                  <CustomInput
-                    {...register('eventStartTime', { required: 'Event Start Time required' })}
-                    placeholder="Start Time"
-                    label="Start Time:"
-                    error={errors.eventStartTime}
-                    type="time"
-                    customInputClassNames="w-[100px]"
-                  />
-                  <CustomInput
-                    {...register('eventEndTime', { required: 'Event End Time required' })}
-                    placeholder="End Time"
-                    label="End Time:"
-                    error={errors.eventEndTime}
-                    type="time"
-                    customInputClassNames="w-[100px]"
-                  />
+                  {!allDayEvent && (
+                    <>
+                      <CustomInput
+                        {...register('eventStartTime', { required: 'Event Start Time required' })}
+                        placeholder="Start Time"
+                        label="Start Time:"
+                        error={errors.eventStartTime}
+                        type="time"
+                        customInputClassNames="w-[100px]"
+                      />
+                      <CustomInput
+                        {...register('eventEndTime', { required: 'Event End Time required' })}
+                        placeholder="End Time"
+                        label="End Time:"
+                        error={errors.eventEndTime}
+                        type="time"
+                        customInputClassNames="w-[100px]"
+                      />
+                    </>
+                  )}
+
+                  <label className="flex items-center gap-2">
+                    <CustomInput
+                      {...register('allDayEvent')}
+                      placeholder=""
+                      error={errors.allDayEvent}
+                      type="checkbox"
+                      customInputClassNames="w-4"
+                      required={false}
+                    />
+                    All Day Event?
+                  </label>
                 </div>
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Location</label>
-                <input
-                  {...register('location', { required: 'Location is required' })}
-                  type="text"
-                  placeholder="Location"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.location && <span className="text-red-500 text-xs">{errors.location.message}</span>}
+                <h3 className="font-semibold">
+                  Is the Event Free?
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2">
+                    <CustomInput
+                      type="radio"
+                      {...register('isEventFree', { required: 'Please select Yes or No' })}
+                      customInputClassNames="w-4"
+                      value="Yes"
+                      placeholder=""
+                    />
+                    Yes
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <CustomInput
+                      type="radio"
+                      {...register('isEventFree', { required: 'Please select Yes or No' })}
+                      customInputClassNames="w-4"
+                      placeholder=""
+                    />
+                    No
+                  </label>
+                </div>
+                {errors.isEventFree && <span className="text-red-500 text-xs">{errors.isEventFree.message}</span>}
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label>Country</label>
-                <select
-                  {...register('country', { required: 'Country is required' })}
-                  className="w-full p-2 border border-gray-300 rounded"
-                >
+              <div className="flex flex-col gap-3">
+                <h3 className="font-semibold">
+                  Ticket Prices:
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <CustomInput
+                  {...register('general', { required: 'Please Provide General Ticket Prices' })}
+                  placeholder="General Admission TicketPrice"
+                  error={errors.general}
+                />
+                <CustomInput
+                  {...register('vip', { required: 'Please provide VIP/other ticket Price' })}
+                  placeholder="VIP/Other Ticket Price"
+                  error={errors.vip}
+                />
+                <CustomInput
+                  {...register('earlyBird')}
+                  placeholder="Early Bird Ticket Price (if applicable)"
+                  error={errors.earlyBird}
+                />
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <h3 className="font-semibold">
+                  Event Location (Enter Full Address)
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <CustomInput
+                  {...register('venue', { required: 'Please Provide Venue name' })}
+                  placeholder="Venue Name"
+                  error={errors.venue}
+                />
+                <CustomInput
+                  {...register('city', { required: 'Please provide City/Region' })}
+                  placeholder="City/Region:"
+                  error={errors.city}
+                />
+                <select className="p-2 text-sm block w-1/2 h-10 bg-transparent border border-gray-400 outline-none rounded-md focus:border-orange-500">
                   <option value="">Select Country</option>
                   {Countries.map((country) => (
                     <option key={country.label} value={country.value}>
@@ -338,24 +471,103 @@ const EventForm: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Business Photo</label>
-                <ImageDragAndDrop
-                  onFileSelect={(file) => onFileSelect(file, 'business')}
-                  placeholder="Upload your Business Photo"
-                />
-                {errors.businessPhoto && <span className="text-red-500 text-xs">{errors.businessPhoto.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Cover Photo</label>
+                <h3 className="font-semibold">
+                  Upload Event Poster or Banner
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
                 <ImageDragAndDrop
                   onFileSelect={(file) => onFileSelect(file, 'cover')}
-                  placeholder="Upload your Cover Photo"
+                  placeholder="Upload your Event Poster/Banner"
                 />
                 {errors.coverPhoto && <span className="text-red-500 text-xs">{errors.coverPhoto.message}</span>}
               </div>
 
+              <div className="flex flex-col gap-3">
+                <h3 className="font-semibold">
+                  About You (Organizer’s Information)
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <CustomInput
+                  {...register('organizerName', { required: 'Please Provide Organizer name' })}
+                  placeholder="Enter Organizer Name"
+                  error={errors.organizerName}
+                />
+                <CustomInput
+                  {...register('organizerRole', { required: 'Please Provide Organizer Role' })}
+                  placeholder="Enter Organizer Role"
+                  error={errors.organizerRole}
+                />
+                <CustomInput
+                  {...register('organizerEmail', { required: 'Please Provide Organizer Email' })}
+                  placeholder="Enter Organizer Email"
+                  error={errors.organizerEmail}
+                  type="email"
+                />
+                {/* <CustomInput
+                  {...register('organizerPhone', { required: 'Please Provide Organizer Contact Number' })}
+                  placeholder="Enter Organizer Contact Number"
+                  error={errors.earlyBird}
+                /> */}
+                <MobileNumberInput
+                  register={register}
+                  errors={[errors.organizerCountryCode, errors.organizerPhone]}
+                  phoneName={'organizerPhone'}
+                  countryCodeName="organizerCountryCode"
+                  countryCodes={africanCountriesPhoneCodes}
+                  phonePlaceholder={'Contact Number'}
+                  label=""
+                />
+                <MobileNumberInput
+                  register={register}
+                  errors={[errors.organizerEmergencyCountryCode, errors.organizerEmergencyPhone]}
+                  phoneName={'organizerEmergencyPhone'}
+                  countryCodeName="organizerEmergencyCountryCode"
+                  countryCodes={africanCountriesPhoneCodes}
+                  phonePlaceholder={'Emergency Contact Number'}
+                  label=""
+                />
+                <div className="gap-4">
+                  <h3 className="font-semibold text-sm">
+                    Do you want your name to appear as the event organizer or the organization/company name?
+                    <span className="text-red-500 text-sm">*</span>
+                  </h3>
+                  <div className="gap-0 text-sm">
+                    <label className="flex items-center gap-2 text-sm">
+                      <CustomInput
+                        type="radio"
+                        {...register('organizerDisplayName', { required: 'Please select One of the Option' })}
+                        customInputClassNames="w-4"
+                        value="Yes"
+                        placeholder=""
+                      />
+                      My Name
+                    </label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <CustomInput
+                        type="radio"
+                        {...register('organizerDisplayName', { required: 'Please select One of the Option' })}
+                        customInputClassNames="w-4"
+                        placeholder=""
+                      />
+                      Organizer/Company name
+                    </label>
+                  </div>
+                </div>
+                {errors.isEventFree && <span className="text-red-500 text-xs">{errors.isEventFree.message}</span>}
+              </div>
+
               <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Upload Passport/ID<span className="text-red-500 text-sm">*</span>
+                </h3>
+                <ImageDragAndDrop
+                  onFileSelect={(file) => onFileSelect(file, 'business')}
+                  placeholder="Upload your Passport/ID"
+                />
+                {errors.businessPhoto && <span className="text-red-500 text-xs">{errors.businessPhoto.message}</span>}
+              </div>
+
+              {/* <div className="flex flex-col gap-2">
                 <label>Whatsapp Number</label>
                 <input
                   {...register('whatsapp')}
@@ -363,26 +575,47 @@ const EventForm: React.FC = () => {
                   placeholder="WhatsApp Number"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-              </div>
 
+              </div> */}
+              <h3 className="font-semibold text-lg">Agreement & Confirmation</h3>
               <div className="flex flex-col gap-2">
-                <label>Entry Fee</label>
-                <input
-                  {...register('amount', { required: 'Entry Fee is required' })}
-                  type="number"
-                  placeholder="Entry Fee Amount"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.amount && <span className="text-red-500 text-xs">{errors.amount.message}</span>}
-              </div>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register('confirmDetails', {
+                      required: 'You must confirm that all event details are accurate.',
+                    })}
+                    className="h-4 w-4 rounded border-gray-400"
+                  />
+                  I confirm that all the event details provided are accurate.
+                </label>
+                {errors.confirmDetails && <span className="text-red-500 text-xs">{errors.confirmDetails.message}</span>}
 
-              <div className="flex flex-col gap-2">
-                <label>Ticket Prices Information</label>
-                {/* <RichTextEditor
-                  placeholder="Enter Ticket Price details"
-                  onContentChange={(content) => setValue('ticketPrices', content)}
-                /> */}
-                {errors.ticketPrices && <span className="text-red-500 text-xs">{errors.ticketPrices.message}</span>}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register('agreeToFeature', {
+                      required: 'You must agree that your event may be featured.',
+                    })}
+                    className="h-4 w-4 rounded border-gray-400"
+                  />
+                  I agree that my event may be featured on this platform.
+                </label>
+                {errors.agreeToFeature && <span className="text-red-500 text-xs">{errors.agreeToFeature.message}</span>}
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register('rightsToContent', {
+                      required: 'You must confirm you have the rights to share all content.',
+                    })}
+                    className="h-4 w-4 rounded border-gray-400"
+                  />
+                  I have the rights to share all content, including images submitted.
+                </label>
+                {errors.rightsToContent && (
+                  <span className="text-red-500 text-xs">{errors.rightsToContent.message}</span>
+                )}
               </div>
             </div>
             <Button className="float-right my-4 px-4" type="submit">

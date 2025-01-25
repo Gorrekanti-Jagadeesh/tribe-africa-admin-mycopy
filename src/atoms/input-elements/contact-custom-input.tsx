@@ -1,4 +1,3 @@
-import React from 'react';
 import { FieldError, Path, UseFormRegister } from 'react-hook-form';
 import CustomInput from './custom-input';
 

@@ -6,6 +6,7 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
     {
       type = 'text',
       name,
+      value,
       defaultValue,
       placeholder = 'Provide input',
       action,
@@ -47,9 +48,10 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
           ref={ref}
           type={type}
           name={name}
+          value={value}
           placeholder={!error || touched ? placeholder : ''}
           onFocus={handleFocus}
-          className={`p-2 h-10 text-sm block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400
+          className={`p-2 h-10 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400
           ${error ? 'border-red-500 ' : 'border-gray-400 '} ${customInputClassNames}`}
           {...props}
         />

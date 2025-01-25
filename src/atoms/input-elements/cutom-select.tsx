@@ -41,7 +41,7 @@ export const CustomSelect = forwardRef<
     return (
       <div className={`relative ${containerClasses}`}>
         {label && (
-          <label className="block mb-1 font-semibold">
+          <label className="static block mb-1 font-semibold">
             {label}
             {required && <span className="text-red-500 text-sm">*</span>}
           </label>
@@ -52,7 +52,7 @@ export const CustomSelect = forwardRef<
           onFocus={handleFocus}
           value={value}
           defaultValue={defaultValue}
-          className={`p-2 text-sm block w-full h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
+          className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
           ${error ? 'border-red-500' : 'border-gray-400'}  appearance-none ${customInputClasses}`}
           {...props}
         >
@@ -73,7 +73,7 @@ export const CustomSelect = forwardRef<
           >
             {placeholder}
           </label>
-          <span className="absolute right-4 top-10 pointer-events-none text-gray-600 text-xs" aria-hidden="true">
+          <span className="absolute right-[52%] top-10 pointer-events-none text-gray-600 text-xs" aria-hidden="true">
             ▼
           </span>
         </div>

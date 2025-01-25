@@ -62,9 +62,12 @@ export interface HookInputProps {
     | 'dropdown'
     | 'url'
     | 'tel'
+    | 'checkbox'
+    | 'radio'
     | 'date'
     | 'time';
   defaultValue?: string | number;
+  value?: string;
   name?: string;
   label?: string;
   placeholder?: string;
