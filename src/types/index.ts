@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router';
 import { TypedObject } from '@sanity/block-tools';
+import { FieldError } from 'react-hook-form';
 
 // data
 export interface ServicesProps {
@@ -45,6 +46,23 @@ export interface InputProps {
   className?: string;
   regex?: RegExp;
   error?: string;
+  patternMessage?: string;
+  maxLength?: number;
+  minLength?: number;
+}
+
+export interface HookInputProps {
+  type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+  defaultValue?: string | number;
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  options?: Option[];
+  action?: (value: string | number) => void;
+  required?: boolean;
+  className?: string;
+  regex?: RegExp;
+  error?: FieldError;
   patternMessage?: string;
   maxLength?: number;
   minLength?: number;

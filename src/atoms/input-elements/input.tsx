@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, forwardRef } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { InputProps } from '../../types/index';
 
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(

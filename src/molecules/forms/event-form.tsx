@@ -13,6 +13,7 @@ import UnderlineHeading from '@/atoms/heading/underline-heading';
 import Input from '@/atoms/input-elements/input';
 import { Select } from '@/atoms/input-elements/select';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
+import CustomInput from '@/atoms/input-elements/custom-input';
 
 type FormData = {
   title: string;
@@ -114,38 +115,35 @@ const EventForm: React.FC = () => {
           <>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label>Event Category</label>
                 <CustomSelect
+                  {...register('category', { required: 'Event Category is required' })}
                   placeholder="Select Event Category"
                   options={categories}
-                  {...register('category', { required: 'Event By is required' })}
+                  label="Event Category"
+                  error={errors.category}
+                  required
                 />
-                {errors.category && <span className="text-red-500">{errors.category.message}</span>}
               </div>
 
-              <div className="flex flex-col gap-2">
-                {selectedCategoryOptions && (
-                  <>
-                    <label>Event Sub Category</label>
-                    <Select
-                      placeholder="Select Event Sub Category"
-                      options={selectedCategoryOptions.items}
-                      onChange={(value: string) => {
-                        setValue('type', value, { shouldValidate: true });
-                      }}
-                    />
-                  </>
-                )}
-                {errors.type && <span className="text-red-500">{errors.type.message}</span>}
-              </div>
+              {selectedCategoryOptions && (
+                <div className="flex flex-col gap-2">
+                  <CustomSelect
+                    {...register('type', { required: 'Event Sub Category is required' })}
+                    placeholder="Select Event Sub Category"
+                    options={selectedCategoryOptions.items}
+                    label={'Event Sub Category'}
+                    error={errors.type}
+                  />
+                </div>
+              )}
 
               <div className="flex flex-col gap-2">
-                <label>{'Organisation/Company Name (if applicable)'}</label>
-                <Input
+                <CustomInput
                   {...register('eventBy', { required: 'Event By is required' })}
+                  label={'Organisation/Company Name (if applicable)'}
                   placeholder="Event Conducted by"
+                  error={errors.eventBy}
                 />
-                {errors.eventBy && <span className="text-red-500">{errors.eventBy.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -167,7 +165,7 @@ const EventForm: React.FC = () => {
                   placeholder="Contact Number"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-                {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
+                {errors.phone && <span className="text-red-500 text-xs">{errors.phone.message}</span>}
               </div>
 
               <h3>Social Media Links (Optional):</h3>
@@ -187,7 +185,7 @@ const EventForm: React.FC = () => {
                   placeholder="Enter Email Address"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-                {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+                {errors.email && <span className="text-red-500 text-xs">{errors.email.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -208,7 +206,7 @@ const EventForm: React.FC = () => {
                   placeholder="Title"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-                {errors.title && <span className="text-red-500">{errors.title.message}</span>}
+                {errors.title && <span className="text-red-500 text-xs">{errors.title.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -217,7 +215,7 @@ const EventForm: React.FC = () => {
                   onFileSelect={(file) => onFileSelect(file, 'business')}
                   placeholder="Upload your Business Photo"
                 />
-                {errors.businessPhoto && <span className="text-red-500">{errors.businessPhoto.message}</span>}
+                {errors.businessPhoto && <span className="text-red-500 text-xs">{errors.businessPhoto.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -226,7 +224,7 @@ const EventForm: React.FC = () => {
                   onFileSelect={(file) => onFileSelect(file, 'cover')}
                   placeholder="Upload your Cover Photo"
                 />
-                {errors.coverPhoto && <span className="text-red-500">{errors.coverPhoto.message}</span>}
+                {errors.coverPhoto && <span className="text-red-500 text-xs">{errors.coverPhoto.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -235,7 +233,7 @@ const EventForm: React.FC = () => {
                   placeholder="Enter Event Description"
                   onContentChange={(content) => setValue('description', content)}
                 />
-                {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+                {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -244,7 +242,7 @@ const EventForm: React.FC = () => {
                   placeholder="Share some details About the Event"
                   onContentChange={(content) => setValue('aboutEvent', content)}
                 />
-                {errors.aboutEvent && <span className="text-red-500">{errors.aboutEvent.message}</span>}
+                {errors.aboutEvent && <span className="text-red-500 text-xs">{errors.aboutEvent.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -254,7 +252,7 @@ const EventForm: React.FC = () => {
                   placeholder="Event Timings"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-                {errors.eventTimings && <span className="text-red-500">{errors.eventTimings.message}</span>}
+                {errors.eventTimings && <span className="text-red-500 text-xs">{errors.eventTimings.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -265,7 +263,7 @@ const EventForm: React.FC = () => {
                   placeholder="Location"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-                {errors.location && <span className="text-red-500">{errors.location.message}</span>}
+                {errors.location && <span className="text-red-500 text-xs">{errors.location.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -281,7 +279,7 @@ const EventForm: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                {errors.country && <span className="text-red-500">{errors.country.message}</span>}
+                {errors.country && <span className="text-red-500 text-xs">{errors.country.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -302,7 +300,7 @@ const EventForm: React.FC = () => {
                   placeholder="Entry Fee Amount"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
-                {errors.amount && <span className="text-red-500">{errors.amount.message}</span>}
+                {errors.amount && <span className="text-red-500 text-xs">{errors.amount.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -311,7 +309,7 @@ const EventForm: React.FC = () => {
                   placeholder="Enter Ticket Price details"
                   onContentChange={(content) => setValue('ticketPrices', content)}
                 />
-                {errors.ticketPrices && <span className="text-red-500">{errors.ticketPrices.message}</span>}
+                {errors.ticketPrices && <span className="text-red-500 text-xs">{errors.ticketPrices.message}</span>}
               </div>
             </div>
             <Button className="float-right my-4 px-4" type="submit">
