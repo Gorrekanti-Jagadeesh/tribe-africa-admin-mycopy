@@ -4,12 +4,12 @@ import { InputProps } from '../../types/index';
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      type,
+      type = 'text',
       name,
       defaultValue,
       placeholder = 'Provide input',
       action,
-      required = true,
+      required = false,
       className,
       regex,
       error = null,
@@ -40,7 +40,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
           name={name}
           placeholder={placeholder}
           onFocus={handleFocus}
-          className={`p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-800
+          className={`p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-500
           ${error ? 'border-red-500 ' : 'border-gray-400 '}${className}`}
           required={required}
           {...props}

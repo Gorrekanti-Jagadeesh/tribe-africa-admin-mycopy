@@ -34,8 +34,8 @@ export interface Option {
   label: string;
 }
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  type: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+export interface InputProps {
+  type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
   defaultValue?: string | number;
   name?: string;
   placeholder?: string;

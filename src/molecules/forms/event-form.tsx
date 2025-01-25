@@ -5,11 +5,14 @@ import { uploadImage } from '@api/index';
 import { processContent, splitRichText } from '@utils/sanity';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
-import { Countries, eventTypes } from '@/data';
+import { africanCountriesPhoneCodes, Countries, eventTypes } from '@/data';
 import { ImageDragAndDrop } from '@/atoms/input-elements/drag-and-drop';
 import { Loading } from '@/atoms/common/loading';
 import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
+import Input from '@/atoms/input-elements/input';
+import { Select } from '@/atoms/input-elements/select';
+import { CustomSelect } from '@/atoms/input-elements/cutom-select';
 
 type FormData = {
   title: string;
@@ -17,6 +20,7 @@ type FormData = {
   eventTimings: string;
   email: string;
   location: string;
+  countryCode: string;
   country: string;
   website: string;
   phone: string;
@@ -39,6 +43,7 @@ const EventForm: React.FC = () => {
     handleSubmit,
     setValue,
     watch,
+    setError,
     formState: { errors },
   } = useForm<FormData>();
 
@@ -109,6 +114,93 @@ const EventForm: React.FC = () => {
           <>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
+                <label>Event Category</label>
+                <CustomSelect
+                  placeholder="Select Event Category"
+                  options={categories}
+                  {...register('category', { required: 'Event By is required' })}
+                />
+                {errors.category && <span className="text-red-500">{errors.category.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                {selectedCategoryOptions && (
+                  <>
+                    <label>Event Sub Category</label>
+                    <Select
+                      placeholder="Select Event Sub Category"
+                      options={selectedCategoryOptions.items}
+                      onChange={(value: string) => {
+                        setValue('type', value, { shouldValidate: true });
+                      }}
+                    />
+                  </>
+                )}
+                {errors.type && <span className="text-red-500">{errors.type.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>{'Organisation/Company Name (if applicable)'}</label>
+                <Input
+                  {...register('eventBy', { required: 'Event By is required' })}
+                  placeholder="Event Conducted by"
+                />
+                {errors.eventBy && <span className="text-red-500">{errors.eventBy.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Contact Number for Enquiries</label>
+                <select
+                  {...register('countryCode', { required: 'Country code is required' })}
+                  className="p-2 border border-gray-300 rounded"
+                >
+                  <option value="">Select Country's Mobile Code</option>
+                  {africanCountriesPhoneCodes.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name} ({country.code})
+                    </option>
+                  ))}
+                </select>
+                <input
+                  {...register('phone', { required: 'Contact Number is required' })}
+                  type="tel"
+                  placeholder="Contact Number"
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+                {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
+              </div>
+
+              <h3>Social Media Links (Optional):</h3>
+              <Input type="select" placeholder="Facebook" {...register('email')} required={false} />
+
+              <Input
+                placeholder="Instagram"
+                {...register('email', { required: 'Event Category is required' })}
+                required={false}
+              />
+
+              <div className="flex flex-col gap-2">
+                <label>Email</label>
+                <input
+                  {...register('email', { required: 'Email is required' })}
+                  type="email"
+                  placeholder="Enter Email Address"
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+                {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Website</label>
+                <input
+                  {...register('website')}
+                  type="url"
+                  placeholder="Website"
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
                 <label>Title</label>
                 <input
                   {...register('title', { required: 'Title is required' })}
@@ -135,52 +227,6 @@ const EventForm: React.FC = () => {
                   placeholder="Upload your Cover Photo"
                 />
                 {errors.coverPhoto && <span className="text-red-500">{errors.coverPhoto.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Event By {'(Organisation or Company Name)'}</label>
-                <input
-                  {...register('eventBy', { required: 'Event By is required' })}
-                  placeholder="Event Conducted by"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.eventBy && <span className="text-red-500">{errors.eventBy.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Event Category</label>
-                <select
-                  {...register('category', { required: 'Event Category is required' })}
-                  className="w-full p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Select Event Category</option>
-                  {categories.map((category) => (
-                    <option key={category.title} value={category.value}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-                {errors.category && <span className="text-red-500">{errors.category.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                {selectedCategoryOptions && (
-                  <>
-                    <label>Event Sub Category</label>
-                    <select
-                      {...register('type', { required: 'Event Type is required' })}
-                      className="w-full p-2 border border-gray-300 rounded"
-                    >
-                      <option value="">Select Event Sub Cartegory</option>
-                      {selectedCategoryOptions.items.map((type) => (
-                        <option key={type.value} value={type.value}>
-                          {type.title}
-                        </option>
-                      ))}
-                    </select>
-                  </>
-                )}
-                {errors.type && selectedCategoryOptions && <span className="text-red-500">{errors.type.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
@@ -239,28 +285,6 @@ const EventForm: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Email</label>
-                <input
-                  {...register('email', { required: 'Email is required' })}
-                  type="email"
-                  placeholder="Enter Email Address"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.email && <span className="text-red-500">{errors.email.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Contact Number</label>
-                <input
-                  {...register('phone', { required: 'Contact Number is required' })}
-                  type="tel"
-                  placeholder="Contact Number"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
                 <label>Whatsapp Number</label>
                 <input
                   {...register('whatsapp')}
@@ -288,16 +312,6 @@ const EventForm: React.FC = () => {
                   onContentChange={(content) => setValue('ticketPrices', content)}
                 />
                 {errors.ticketPrices && <span className="text-red-500">{errors.ticketPrices.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Website</label>
-                <input
-                  {...register('website')}
-                  type="url"
-                  placeholder="Website"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
               </div>
             </div>
             <Button className="float-right my-4 px-4" type="submit">
