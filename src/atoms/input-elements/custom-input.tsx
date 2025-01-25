@@ -9,13 +9,10 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
       value,
       defaultValue,
       placeholder = 'Provide input',
-      action,
       required = true,
       className,
       customInputClassNames,
-      regex,
       error,
-      patternMessage,
       label,
       ...props
     },
@@ -26,7 +23,6 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
     const handleFocus = () => {
       setTouched(true);
     };
-
     return (
       <div className={`${className} relative group`}>
         {label && (
@@ -49,6 +45,7 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
           type={type}
           name={name}
           value={value}
+          defaultValue={defaultValue}
           placeholder={!error || touched ? placeholder : ''}
           onFocus={handleFocus}
           className={`p-2 h-10 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400

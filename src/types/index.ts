@@ -72,13 +72,10 @@ export interface HookInputProps {
   label?: string;
   placeholder?: string;
   options?: Option[];
-  action?: (value: string | number) => void;
   required?: boolean;
   className?: string;
   customInputClassNames?: string;
-  regex?: RegExp;
   error?: FieldError;
-  patternMessage?: string;
   maxLength?: number;
   minLength?: number;
 }

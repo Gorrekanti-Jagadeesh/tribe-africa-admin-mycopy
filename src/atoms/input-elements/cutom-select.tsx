@@ -13,7 +13,6 @@ export const CustomSelect = forwardRef<
     containerClasses?: string;
     customInputClasses?: string;
     label?: string;
-    className?: string;
     required?: boolean;
     props?: React.HTMLAttributes<HTMLSelectElement>;
   }
@@ -24,7 +23,6 @@ export const CustomSelect = forwardRef<
       name,
       placeholder,
       error,
-      className,
       required = true,
       label,
       defaultValue,
