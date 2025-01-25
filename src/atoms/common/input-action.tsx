@@ -6,7 +6,6 @@ interface InputActionProps {
   inputPlaceholder: string;
   buttonPlaceholder: string;
 }
-
 const InputAction: React.FC<InputActionProps> = ({ handleSubmit, inputType, inputPlaceholder, buttonPlaceholder }) => {
   return (
     <form onSubmit={handleSubmit}>
