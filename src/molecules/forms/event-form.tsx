@@ -68,18 +68,15 @@ const EventForm: React.FC = () => {
 
   const selectedCategory = watch('category');
   const allDayEvent = watch('allDayEvent');
+  const isEventFree = watch('isEventFree');
   const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);
 
-  const [businessPhoto, setBusinessPhoto] = useState<File | null>(null);
-  const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
   const [loader, setLoader] = useState<boolean>(false);
 
   const onFileSelect = (file: File, type: 'business' | 'cover') => {
     if (type === 'business') {
-      setBusinessPhoto(file);
       setValue('businessPhoto', file); // Sync with form state
     } else if (type === 'cover') {
-      setCoverPhoto(file);
       setValue('coverPhoto', file); // Sync with form state
     }
   };
@@ -106,9 +103,6 @@ const EventForm: React.FC = () => {
 
       // Prepare social media details
       const socialMedia = {
-        email: data.email,
-        website: data.website,
-        phone: data.phone,
         instagram: data.instagram,
         twitter: data.twitter,
         facebook: data.facebook,
@@ -138,7 +132,7 @@ const EventForm: React.FC = () => {
         eventStartTime: data.eventStartTime,
         eventEndTime: data.eventEndTime,
         allDayEvent: data.allDayEvent,
-        isEventFree: data.isEventFree,
+        isEventFree: Boolean(data.isEventFree),
         ticketPrices,
         socialMedia,
         organizer,
@@ -156,10 +150,13 @@ const EventForm: React.FC = () => {
         city: data.city,
         country: data.country,
         countryCode: data.countryCode,
+        phone: data.phone,
+        website: data.website,
         category: data.category,
         type: data.type,
         confirmDetails: data.confirmDetails,
         agreeToFeature: data.agreeToFeature,
+        email: data.email,
         rightsToContent: data.rightsToContent,
       });
 
@@ -422,27 +419,29 @@ const EventForm: React.FC = () => {
                 {errors.isEventFree && <span className="text-red-500 text-xs">{errors.isEventFree.message}</span>}
               </div>
 
-              <div className="flex flex-col gap-3">
-                <h3 className="font-semibold">
-                  Ticket Prices:
-                  <span className="text-red-500 text-sm">*</span>
-                </h3>
-                <CustomInput
-                  {...register('general', { required: 'Please Provide General Ticket Prices' })}
-                  placeholder="General Admission TicketPrice"
-                  error={errors.general}
-                />
-                <CustomInput
-                  {...register('vip', { required: 'Please provide VIP/other ticket Price' })}
-                  placeholder="VIP/Other Ticket Price"
-                  error={errors.vip}
-                />
-                <CustomInput
-                  {...register('earlyBird')}
-                  placeholder="Early Bird Ticket Price (if applicable)"
-                  error={errors.earlyBird}
-                />
-              </div>
+              {!isEventFree && (
+                <div className="flex flex-col gap-3">
+                  <h3 className="font-semibold">
+                    Ticket Prices:
+                    <span className="text-red-500 text-sm">*</span>
+                  </h3>
+                  <CustomInput
+                    {...register('general', { required: 'Please Provide General Ticket Prices' })}
+                    placeholder="General Admission TicketPrice"
+                    error={errors.general}
+                  />
+                  <CustomInput
+                    {...register('vip', { required: 'Please provide VIP/other ticket Price' })}
+                    placeholder="VIP/Other Ticket Price"
+                    error={errors.vip}
+                  />
+                  <CustomInput
+                    {...register('earlyBird')}
+                    placeholder="Early Bird Ticket Price (if applicable)"
+                    error={errors.earlyBird}
+                  />
+                </div>
+              )}
 
               <div className="flex flex-col gap-3">
                 <h3 className="font-semibold">
@@ -459,7 +458,10 @@ const EventForm: React.FC = () => {
                   placeholder="City/Region:"
                   error={errors.city}
                 />
-                <select className="p-2 text-sm block w-1/2 h-10 bg-transparent border border-gray-400 outline-none rounded-md focus:border-orange-500">
+                <select
+                  {...register('country', { required: 'Please provide Country' })}
+                  className="p-2 text-sm block w-1/2 h-10 bg-transparent border border-gray-400 outline-none rounded-md focus:border-orange-500"
+                >
                   <option value="">Select Country</option>
                   {Countries.map((country) => (
                     <option key={country.label} value={country.value}>
