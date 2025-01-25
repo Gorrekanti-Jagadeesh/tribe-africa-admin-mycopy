@@ -702,12 +702,7 @@ const AccommodationForm: React.FC = () => {
               onChange={() => {}}
             />
             <Checkbox {...register('policy.cancellation.nonRefundable')} label={'Non-refundable'} onChange={() => {}} />
-            <Input
-              type="text"
-              {...register('policy.cancellation.description')}
-              placeholder="Policy description"
-              onChange={() => {}}
-            />
+            <Input type="text" {...register('policy.cancellation.description')} placeholder="Policy description" />
 
             <label className="font-semibold">Rules</label>
             <RichTextEditor onContentChange={(value) => handleInputChange('policy.rules', value)} />
