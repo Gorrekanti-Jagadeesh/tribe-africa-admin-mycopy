@@ -17,7 +17,10 @@ import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 export type EventFormData = {
   title: string;
   image: string;
-  eventTimings: string;
+  eventStartDate: string;
+  eventEndDate: string;
+  eventStartTime: string;
+  eventEndTime: string;
   email: string;
   location: string;
   countryCode: string;
@@ -222,60 +225,89 @@ const EventForm: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <RichTextEditor
                   label="Brief Summary of the Event"
-                  placeholder="Enter Event Description"
-                  name="description"
+                  placeholder="In 30 words, Provide the highlights of the event, including its purpose, key attractions, or speakers."
                   {...register('description', {
                     required: 'Event description is required',
                     minLength: {
-                      value: 60,
-                      message: 'Description must be at least 60 characters',
+                      value: 40,
+                      message: 'Description must be at least 40 characters',
+                    },
+                    maxLength: {
+                      value: 300,
+                      message: 'Description must not exceed 300 characters',
+                    },
+                  })}
+                  height={80}
+                  onContentChange={(content) => setValue('description', content)}
+                  error={errors.description?.message}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <RichTextEditor
+                  label="About this Event"
+                  placeholder="Provide an engaging description of your event in 500-1000 characters"
+                  {...register('aboutEvent', {
+                    required: 'About Event is required',
+                    minLength: {
+                      value: 500,
+                      message: 'About Event must be at least 500 characters',
                     },
                     maxLength: {
                       value: 1000,
-                      message: 'Description must not exceed 600 characters',
+                      message: 'About Event must not exceed 1000 characters',
                     },
                   })}
-                  error={errors.description?.message}
-                  onContentChange={(content) => setValue('description', content)}
-                  className="w-full"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Business Photo</label>
-                <ImageDragAndDrop
-                  onFileSelect={(file) => onFileSelect(file, 'business')}
-                  placeholder="Upload your Business Photo"
-                />
-                {errors.businessPhoto && <span className="text-red-500 text-xs">{errors.businessPhoto.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>Cover Photo</label>
-                <ImageDragAndDrop
-                  onFileSelect={(file) => onFileSelect(file, 'cover')}
-                  placeholder="Upload your Cover Photo"
-                />
-                {errors.coverPhoto && <span className="text-red-500 text-xs">{errors.coverPhoto.message}</span>}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label>About Event</label>
-                {/* <RichTextEditor
-                  placeholder="Share some details About the Event"
                   onContentChange={(content) => setValue('aboutEvent', content)}
-                /> */}
-                {errors.aboutEvent && <span className="text-red-500 text-xs">{errors.aboutEvent.message}</span>}
+                  error={errors.aboutEvent?.message}
+                  required
+                />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Event Timings</label>
-                <input
-                  {...register('eventTimings', { required: 'Event Timings are required' })}
-                  placeholder="Event Timings"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-                {errors.eventTimings && <span className="text-red-500 text-xs">{errors.eventTimings.message}</span>}
+                <label className="font-semibold text-xl">Event Date(s)</label>
+                <div className="flex gap-5">
+                  <CustomInput
+                    {...register('eventStartDate', { required: 'Event Start Date required' })}
+                    placeholder="Start Date"
+                    label="Start Date:"
+                    error={errors.eventStartDate}
+                    type="date"
+                    customInputClassNames="w-[150px]"
+                  />
+                  <CustomInput
+                    {...register('eventEndDate')}
+                    placeholder="End Date"
+                    label="End Date (if applicable):"
+                    error={errors.eventEndDate}
+                    type="date"
+                    required={false}
+                    customInputClassNames="w-[150px]"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="font-semibold text-xl">Event Timings</label>
+                <div className="flex gap-5">
+                  <CustomInput
+                    {...register('eventStartTime', { required: 'Event Start Time required' })}
+                    placeholder="Start Time"
+                    label="Start Time:"
+                    error={errors.eventStartTime}
+                    type="time"
+                    customInputClassNames="w-[100px]"
+                  />
+                  <CustomInput
+                    {...register('eventEndTime', { required: 'Event End Time required' })}
+                    placeholder="End Time"
+                    label="End Time:"
+                    error={errors.eventEndTime}
+                    type="time"
+                    customInputClassNames="w-[100px]"
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col gap-2">
@@ -303,6 +335,24 @@ const EventForm: React.FC = () => {
                   ))}
                 </select>
                 {errors.country && <span className="text-red-500 text-xs">{errors.country.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Business Photo</label>
+                <ImageDragAndDrop
+                  onFileSelect={(file) => onFileSelect(file, 'business')}
+                  placeholder="Upload your Business Photo"
+                />
+                {errors.businessPhoto && <span className="text-red-500 text-xs">{errors.businessPhoto.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Cover Photo</label>
+                <ImageDragAndDrop
+                  onFileSelect={(file) => onFileSelect(file, 'cover')}
+                  placeholder="Upload your Cover Photo"
+                />
+                {errors.coverPhoto && <span className="text-red-500 text-xs">{errors.coverPhoto.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
