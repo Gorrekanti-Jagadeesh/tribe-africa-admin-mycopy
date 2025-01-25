@@ -11,6 +11,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       action,
       required = false,
       className,
+      value,
       regex,
       error = null,
       patternMessage,
@@ -18,7 +19,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const [value, setValue] = useState(defaultValue || '');
+    const [val, setValue] = useState(defaultValue || '');
     const [touched, setTouched] = useState(false);
 
     const [validationError, setValidationError] = useState<string | null>(error);
@@ -28,7 +29,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const handleBlur = () => {
-      if (regex && !regex.test(value)) {
+      if (regex && !regex.test(val)) {
         setValidationError(patternMessage || 'Invalid input');
       } else {
         setValidationError(null);
@@ -68,7 +69,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           type={type}
           name={name}
-          value={value}
+          defaultValue={defaultValue}
           placeholder={placeholder}
           onChange={handleChange}
           onBlur={handleBlur}

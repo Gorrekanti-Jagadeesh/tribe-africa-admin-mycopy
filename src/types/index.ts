@@ -38,6 +38,7 @@ export interface Option {
 export interface InputProps {
   type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
   defaultValue?: string;
+  value?: string;
   name?: string;
   placeholder?: string;
   options?: Option[];
