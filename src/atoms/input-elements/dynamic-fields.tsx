@@ -23,6 +23,7 @@ const FieldSet = ({
   remove: () => void;
   action: (fieldName: string, value: string | number) => void;
 }) => {
+  console.log(action, 'What is the purpose of creatign this?');
   return (
     <div className="flex gap-1">
       {fields.map((field) => (
