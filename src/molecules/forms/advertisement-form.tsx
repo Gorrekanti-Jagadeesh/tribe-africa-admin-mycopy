@@ -125,7 +125,7 @@ const AdvertisementForm: React.FC = () => {
   return (
     <div className="flex flex-col gap-2 bg-white overflow-auto p-4 rounded-lg">
       <UnderlineHeading borderWidth="w-1/2" className="text-2xl">
-        Advertisement Enrollment Form
+        Advertisement Submission Form
       </UnderlineHeading>
       <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
         {loader ? (
