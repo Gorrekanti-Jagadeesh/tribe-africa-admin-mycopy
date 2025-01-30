@@ -28,7 +28,6 @@ export type EventFormData = {
   general: string;
   earlyBird: string;
   vip: string;
-  allDayEvent: boolean;
   country: string;
   website: string;
   phone: string;
@@ -67,7 +66,6 @@ const EventForm: React.FC = () => {
   } = useForm<EventFormData>();
 
   const selectedCategory = watch('category');
-  const allDayEvent = watch('allDayEvent');
   const isEventFree = watch('isEventFree');
   const selectedCategoryOptions = categories.find((cat) => cat.value === selectedCategory);
 
@@ -131,7 +129,6 @@ const EventForm: React.FC = () => {
         eventEndDate: data.eventEndDate,
         eventStartTime: data.eventStartTime,
         eventEndTime: data.eventEndTime,
-        allDayEvent: data.allDayEvent,
         isEventFree: Boolean(data.isEventFree),
         ticketPrices,
         socialMedia,
@@ -175,7 +172,7 @@ const EventForm: React.FC = () => {
   return (
     <div className="flex flex-col gap-2 bg-white overflow-auto p-6 rounded-lg">
       <UnderlineHeading borderWidth="w-1/2" className="text-2xl">
-        Event Enrollment Form
+        Event Submission Form
       </UnderlineHeading>
       <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
         {loader ? (
@@ -208,10 +205,9 @@ const EventForm: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <CustomInput
                   {...register('eventBy')}
-                  label={'Organisation/Company Name (if applicable)'}
+                  label={'Organisation/Company Name'}
                   placeholder="Event Conducted by"
                   error={errors.eventBy}
-                  required={false}
                 />
               </div>
 
@@ -246,7 +242,7 @@ const EventForm: React.FC = () => {
               </div>
 
               <div className="flex flex-col gap-3">
-                <h3 className="font-semibold">Social Media Links (Optional):</h3>
+                <h3 className="font-semibold">Social Media Links (At least one):</h3>
                 <CustomInput
                   {...register('instagram')}
                   placeholder="Instagram Profile"
@@ -270,7 +266,7 @@ const EventForm: React.FC = () => {
                 />
                 <CustomInput
                   {...register('otherSocialMedia')}
-                  placeholder="Other"
+                  placeholder="Other Social Media link"
                   error={errors.otherSocialMedia}
                   required={false}
                   type="url"
@@ -289,7 +285,7 @@ const EventForm: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <RichTextEditor
                   label="Brief Summary of the Event"
-                  placeholder="In 30 words, Provide the highlights of the event, including its purpose, key attractions, or speakers."
+                  placeholder="In 150 characters, Provide the highlights of the event, including its purpose, key attractions, or speakers."
                   {...register('description', {
                     required: 'Event description is required',
                     minLength: {
@@ -343,10 +339,9 @@ const EventForm: React.FC = () => {
                   <CustomInput
                     {...register('eventEndDate')}
                     placeholder="End Date"
-                    label="End Date (if applicable):"
+                    label="End Date"
                     error={errors.eventEndDate}
                     type="date"
-                    required={false}
                     customInputClassNames="w-[150px]"
                   />
                 </div>
@@ -355,38 +350,24 @@ const EventForm: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-xl">Event Timings</label>
                 <div className="flex gap-5">
-                  {!allDayEvent && (
-                    <>
-                      <CustomInput
-                        {...register('eventStartTime', { required: 'Event Start Time required' })}
-                        placeholder="Start Time"
-                        label="Start Time:"
-                        error={errors.eventStartTime}
-                        type="time"
-                        customInputClassNames="w-[100px]"
-                      />
-                      <CustomInput
-                        {...register('eventEndTime', { required: 'Event End Time required' })}
-                        placeholder="End Time"
-                        label="End Time:"
-                        error={errors.eventEndTime}
-                        type="time"
-                        customInputClassNames="w-[100px]"
-                      />
-                    </>
-                  )}
-
-                  <label className="flex items-center gap-2">
+                  <>
                     <CustomInput
-                      {...register('allDayEvent')}
-                      placeholder=""
-                      error={errors.allDayEvent}
-                      type="checkbox"
-                      customInputClassNames="w-4"
-                      required={false}
+                      {...register('eventStartTime', { required: 'Event Start Time required' })}
+                      placeholder="Start Time"
+                      label="Start Time:"
+                      error={errors.eventStartTime}
+                      type="time"
+                      customInputClassNames="w-[100px]"
                     />
-                    All Day Event?
-                  </label>
+                    <CustomInput
+                      {...register('eventEndTime', { required: 'Event End Time required' })}
+                      placeholder="End Time"
+                      label="End Time:"
+                      error={errors.eventEndTime}
+                      type="time"
+                      customInputClassNames="w-[100px]"
+                    />
+                  </>
                 </div>
               </div>
 
@@ -427,17 +408,17 @@ const EventForm: React.FC = () => {
                   </h3>
                   <CustomInput
                     {...register('general', { required: 'Please Provide General Ticket Prices' })}
-                    placeholder="General Admission TicketPrice"
+                    placeholder="General Admission TicketPrice (Mention Currency)"
                     error={errors.general}
                   />
                   <CustomInput
-                    {...register('vip', { required: 'Please provide VIP/other ticket Price' })}
-                    placeholder="VIP/Other Ticket Price"
+                    {...register('vip')}
+                    placeholder="VIP/Other Ticket Price (Mention Currency)"
                     error={errors.vip}
                   />
                   <CustomInput
                     {...register('earlyBird')}
-                    placeholder="Early Bird Ticket Price (if applicable)"
+                    placeholder="Early Bird Ticket Price (if applicable) (Mention Currency)"
                     error={errors.earlyBird}
                   />
                 </div>
@@ -460,7 +441,8 @@ const EventForm: React.FC = () => {
                 />
                 <select
                   {...register('country', { required: 'Please provide Country' })}
-                  className="p-2 text-sm block w-1/2 h-10 bg-transparent border border-gray-400 outline-none rounded-md focus:border-orange-500"
+                  className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
+          ${errors.country ? 'border-red-500' : 'border-gray-400'}`}
                 >
                   <option value="">Select Country</option>
                   {Countries.map((country) => (
@@ -478,6 +460,7 @@ const EventForm: React.FC = () => {
                   <span className="text-red-500 text-sm">*</span>
                 </h3>
                 <ImageDragAndDrop
+                  {...register('coverPhoto', { required: 'Please Provide Event Poster/ Banner' })}
                   onFileSelect={(file) => onFileSelect(file, 'cover')}
                   placeholder="Upload your Event Poster/Banner"
                 />
@@ -505,11 +488,6 @@ const EventForm: React.FC = () => {
                   error={errors.organizerEmail}
                   type="email"
                 />
-                {/* <CustomInput
-                  {...register('organizerPhone', { required: 'Please Provide Organizer Contact Number' })}
-                  placeholder="Enter Organizer Contact Number"
-                  error={errors.earlyBird}
-                /> */}
                 <MobileNumberInput
                   register={register}
                   errors={[errors.organizerCountryCode, errors.organizerPhone]}
@@ -560,25 +538,16 @@ const EventForm: React.FC = () => {
 
               <div className="flex flex-col gap-2">
                 <h3 className="font-semibold">
-                  Upload Passport/ID<span className="text-red-500 text-sm">*</span>
+                  Upload Passport (Main page with Clear Photo and Passport Number) or ID (Front and Back)
+                  <span className="text-red-500 text-sm">*</span>
                 </h3>
                 <ImageDragAndDrop
+                  {...register('businessPhoto', { required: 'Please Provide Valid ID/Passport' })}
                   onFileSelect={(file) => onFileSelect(file, 'business')}
-                  placeholder="Upload your Passport/ID"
+                  placeholder="Upload Passport (Main page with Clear Photo and Passport Number) or ID (Front and Back)"
                 />
                 {errors.businessPhoto && <span className="text-red-500 text-xs">{errors.businessPhoto.message}</span>}
               </div>
-
-              {/* <div className="flex flex-col gap-2">
-                <label>Whatsapp Number</label>
-                <input
-                  {...register('whatsapp')}
-                  type="tel"
-                  placeholder="WhatsApp Number"
-                  className="w-full p-2 border border-gray-300 rounded"
-                />
-
-              </div> */}
               <h3 className="font-semibold text-lg">Agreement & Confirmation</h3>
               <div className="flex flex-col gap-2">
                 <label className="flex items-center gap-2">
