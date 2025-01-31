@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import Dropdown from '@atoms/dropdown/dropdown-search';
@@ -271,6 +271,9 @@ export interface AccommodationFormInputs {
       };
     };
   };
+  signature: string;
+  consent: boolean;
+  confirmation: boolean;
 }
 
 const FormContext = createContext(null);
@@ -555,27 +558,38 @@ const AccommodationForm: React.FC = () => {
                   label: '3 Star',
                   value: '3',
                 },
-
                 {
                   label: '3.5 Star',
                   value: '3.5',
                 },
-
                 {
                   label: '4 Star',
                   value: '4',
                 },
-
                 {
                   label: '4.5 Star',
                   value: '4.5',
                 },
-
                 {
                   label: '5 Star',
                   value: '5',
                 },
-                // TODO: Extend list of stars until 7 Star
+                {
+                  label: '5.5 Star',
+                  value: '5.5',
+                },
+                {
+                  label: '6 Star',
+                  value: '6',
+                },
+                {
+                  label: '6.5 Star',
+                  value: '6.5',
+                },
+                {
+                  label: '7 Star',
+                  value: '7',
+                },
               ]}
               required={false}
             />
@@ -677,8 +691,23 @@ const AccommodationForm: React.FC = () => {
           {/* Accommodation Policies */}
           <div>
             <label className="font-semibold">Policies</label>
-            <RichTextEditor onContentChange={(value) => handleInputChange('policy', value)} />
-            {/* TODO: Policy sections pending */}
+            <label>Cancellation</label>
+            <Checkbox
+              {...register('policy.cancellation.freeCancellation')}
+              label={'Free cancellation'}
+              onChange={() => {}}
+            />
+            <Checkbox {...register('policy.cancellation.nonRefundable')} label={'Non-refundable'} onChange={() => {}} />
+            <Input type="text" {...register('policy.cancellation.description')} placeholder="Policy description" />
+
+            <label className="font-semibold">Rules</label>
+            <RichTextEditor onContentChange={(value) => handleInputChange('policy.rules', value)} />
+
+            <label>Check-in time</label>
+            <input type="time" {...register('policy.checkInTime')} />
+
+            <label>Check-out time</label>
+            <input type="time" {...register('policy.checkOutTime')} />
           </div>
 
           {/* Dynamic Key-Value Pair Creation Operation seasons */}
@@ -821,10 +850,31 @@ const AccommodationForm: React.FC = () => {
               placeholder="Emergency Contact(optional)"
               required={false}
             />
-            {/* TODO: Add field to upload passport / ID */}
+
+            <label>Upload passport / ID</label>
+            <input type="file" {...register('manager.idPhoto')} />
           </div>
 
-          {/* TODO: Add Consent and verification section */}
+          {/* Consent and verification section */}
+          <div>
+            <Checkbox
+              label="I consent to my business information being listed in the Tribe Africa Pages Directory."
+              {...register('consent')}
+              onChange={() => {}}
+            />
+            <Checkbox
+              label="I confirm that the information provided is accurate to the best of my knowledge."
+              {...register('confirmation')}
+              onChange={() => {}}
+            />
+            <Input
+              type="text"
+              name="signature"
+              {...register('signature')}
+              placeholder="Full Name (for electronic signature)"
+            />
+            <DateInput onChange={() => {}} />
+          </div>
 
           {/* Submit Button */}
           <div>

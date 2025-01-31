@@ -1,5 +1,3 @@
-import { HomeHeader } from '@/molecules/header';
-import { Header } from '@/molecules/header/header';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 

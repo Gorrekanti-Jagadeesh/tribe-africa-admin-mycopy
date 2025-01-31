@@ -426,43 +426,53 @@ export const networkURLs = {
 
 export const eventTypes = [
   {
-    title: 'Business Events',
+    label: 'Business Events',
     value: 'Business',
     items: [
-      { title: 'Trade Shows', value: 'Trade Shows' },
-      { title: 'Conferences & Seminars', value: 'Conferences & Seminars' },
-      { title: 'Product Launches', value: 'Product Launches' },
-      { title: 'Training & Workshops', value: 'Training & Workshops' },
-      { title: 'Networking', value: 'Networking' },
-      { title: 'Others', value: 'Others' },
+      { label: 'Trade Shows', value: 'Trade Shows' },
+      { label: 'Conventions', value: 'Conventions' },
+      { label: 'Conferences & Seminars', value: 'Conferences & Seminars' },
+      { label: 'Product Launches', value: 'Product Launches' },
+      { label: 'Training & Workshops', value: 'Training & Workshops' },
+      { label: 'Networking', value: 'Networking' },
+      { label: 'Others', value: 'Others' },
     ],
   },
   {
-    title: 'Entertainment',
+    label: 'Entertainment',
     value: 'Entertainment',
     items: [
-      { title: 'Arts', value: 'Arts' },
-      { title: 'Cultural Events & Festivals', value: 'Cultural Events & Festivals' },
-      { title: 'Dance', value: 'Dance' },
-      { title: 'Fashion', value: 'Fashion' },
-      { title: 'Music', value: 'Music' },
-      { title: 'Theater & Comedy', value: 'Theater & Comedy' },
+      { label: 'Arts', value: 'Arts' },
+      { label: 'Cultural Events & Festivals', value: 'Cultural Events & Festivals' },
+      { label: 'Dance', value: 'Dance' },
+      { label: 'Fashion', value: 'Fashion' },
+      { label: 'Music', value: 'Music' },
+      { label: 'Theater & Comedy', value: 'Theater & Comedy' },
+      { label: 'Others', value: 'Others' },
     ],
   },
   {
-    title: 'Sports',
+    label: 'Sports',
     value: 'Sports',
     items: [
-      { title: 'Boxing', value: 'Boxing' },
-      { title: 'Football', value: 'Football' },
-      { title: 'Marathons', value: 'Marathons' },
-      { title: 'Races', value: 'Races' },
-      { title: 'Racket Sports', value: 'Racket Sports' },
-      { title: 'Wrestling', value: 'Wrestling' },
+      { label: 'Boxing', value: 'Boxing' },
+      { label: 'Football', value: 'Football' },
+      { label: 'Marathons', value: 'Marathons' },
+      { label: 'Races', value: 'Races' },
+      { label: 'Racket Sports', value: 'Racket Sports' },
+      { label: 'Wrestling', value: 'Wrestling' },
+      { label: 'Others', value: 'Others' },
     ],
   },
 ];
 
+export const africanCountriesPhoneCodes = [
+  { value: '+20', label: 'Egypt' },
+  { value: '+233', label: 'Ghana' },
+  { value: '+254', label: 'Kenya' },
+  { value: '+234', label: 'Nigeria' },
+  { value: '+27', label: 'South Africa' },
+];
 // -----------Must see and do --------------
 export const msadCategories = [
   { category: 'action-enthusiasts', title: 'Action Enthusiasts' },

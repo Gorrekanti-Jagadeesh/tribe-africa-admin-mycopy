@@ -23,6 +23,7 @@ const FieldSet = ({
   remove: () => void;
   action: (fieldName: string, value: string | number) => void;
 }) => {
+  console.log(action, 'What is the purpose of creatign this?');
   return (
     <div className="flex gap-1">
       {fields.map((field) => (
@@ -32,7 +33,7 @@ const FieldSet = ({
           name={field.name}
           placeholder={field.placeholder}
           className="flex-1"
-          onInput={(e) => action(field.name.split('~')[0], e.currentTarget.value)}
+          // onInput={(e) => action(field.name.split('~')[0], e.currentTarget.value)}
           options={field.options}
         />
       ))}

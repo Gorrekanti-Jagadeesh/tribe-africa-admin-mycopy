@@ -1,5 +1,6 @@
 import { NavigateFunction } from 'react-router';
 import { TypedObject } from '@sanity/block-tools';
+import { FieldError } from 'react-hook-form';
 
 // data
 export interface ServicesProps {
@@ -34,9 +35,10 @@ export interface Option {
   label: string;
 }
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  type: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
-  defaultValue?: string | number;
+export interface InputProps {
+  type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+  defaultValue?: string;
+  value?: string;
   name?: string;
   placeholder?: string;
   options?: Option[];
@@ -46,6 +48,35 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   regex?: RegExp;
   error?: string;
   patternMessage?: string;
+  maxLength?: number;
+  minLength?: number;
+}
+
+export interface HookInputProps {
+  type?:
+    | 'number'
+    | 'text'
+    | 'email'
+    | 'text-area'
+    | 'rich-text'
+    | 'select'
+    | 'dropdown'
+    | 'url'
+    | 'tel'
+    | 'checkbox'
+    | 'radio'
+    | 'date'
+    | 'time';
+  defaultValue?: string | number;
+  value?: string;
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  options?: Option[];
+  required?: boolean;
+  className?: string;
+  customInputClassNames?: string;
+  error?: FieldError;
   maxLength?: number;
   minLength?: number;
 }

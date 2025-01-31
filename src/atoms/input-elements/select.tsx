@@ -32,6 +32,7 @@ export const Select = forwardRef<
         }}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        required={required}
         {...props}
         className={`p-2 block w-full bg-transparent border outline-none rounded-md focus:border-orange-500 
           ${error ? 'border-red-500' : 'border-gray-400'} appearance-none`}
