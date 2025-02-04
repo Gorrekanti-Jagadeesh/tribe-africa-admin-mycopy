@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
@@ -131,7 +131,6 @@ const AfterWorkFrom: React.FC = () => {
   });
 
   // const [formType, setFormType] = useState(null);
-  const [formData, setFormData] = useState({});
   const { control } = useForm();
 
   const typeOfBusiness = watch('businessType');

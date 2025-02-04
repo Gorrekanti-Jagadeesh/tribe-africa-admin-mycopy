@@ -61,8 +61,6 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
     formState: { errors },
   } = useForm<BlogFormData>();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [editorContent, setEditorContent] = useState<string>('');
   const [loader, setLoader] = useState<boolean>(false);
 
   const onFileSelect = (file: File, type: 'author' | 'cover') => {
@@ -77,18 +75,19 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
     try {
       setLoader(true);
 
-      if (countImagesInRichText(editorContent) > MAX_IMAGES) {
+      if (countImagesInRichText(data.content) > MAX_IMAGES) {
         alert(`Can only have up to ${MAX_IMAGES} images`);
         return;
       }
 
-      splitContent = splitRichText(editorContent);
+      splitContent = splitRichText(data.content);
       if (splitContent.length < 15) {
         alert('Please add more content to the blog.');
         return;
       }
       const content = await processContent(splitContent);
-      const headerPhotoUrl = await uploadImage(selectedFile);
+      const headerPhotoUrl = await uploadImage(data.coverPhoto);
+      const authorPhotoUrl = await uploadImage(data.authorPhoto);
 
       // Submit to Sanity
       await sanityClient.create({
@@ -96,9 +95,13 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
         _id: `drafts.${generateId()}`, // Unique ID
         ...data,
         content,
-        image: {
+        coverPhoto: {
           _type: 'image',
           asset: { _ref: headerPhotoUrl._id },
+        },
+        authorPhoto: {
+          _type: 'image',
+          asset: { _ref: authorPhotoUrl._id },
         },
       });
 

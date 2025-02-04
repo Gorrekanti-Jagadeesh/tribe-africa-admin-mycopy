@@ -1,5 +1,4 @@
 import Button from '@/atoms/custom-button/button';
-import RoomImage from '../../assets/room_image.png';
 import { faFacebookF, faTwitter, faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
@@ -45,13 +44,13 @@ interface data {
 }
 
 const FindaBusinessDetailsScreen: React.FC<data> = ({ data }) => {
-  const socialLinks = [
-    { href: 'https://facebook.com', icon: faFacebookF },
-    { href: 'https://twitter.com', icon: faTwitter },
-    { href: 'https://twitter.com', icon: faYoutube },
-    { href: 'https://instagram.com', icon: faInstagram },
-    { href: 'https://linkedin.com', icon: faLinkedinIn },
-  ];
+  // const socialLinks = [
+  //   { href: 'https://facebook.com', icon: faFacebookF },
+  //   { href: 'https://twitter.com', icon: faTwitter },
+  //   { href: 'https://twitter.com', icon: faYoutube },
+  //   { href: 'https://instagram.com', icon: faInstagram },
+  //   { href: 'https://linkedin.com', icon: faLinkedinIn },
+  // ];
 
   const reviews = [
     {

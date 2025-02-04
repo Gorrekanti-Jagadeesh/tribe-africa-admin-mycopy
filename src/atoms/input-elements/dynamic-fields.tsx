@@ -17,7 +17,6 @@ interface DynamicFormProps {
 const FieldSet = ({
   fields,
   remove,
-  action,
 }: {
   fields: ExtendedInputProps[];
   remove: () => void;

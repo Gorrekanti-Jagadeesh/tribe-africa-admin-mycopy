@@ -36,6 +36,9 @@ type BusinessForm = {
   subCategory: string;
 };
 
+// type openingHours = {
+//   { day: string, openingTime: , closingTime: '' }
+// }
 const BusinessFormComponent = () => {
   const [formData, setFormData] = useState<BusinessForm>({
     businessName: '',
@@ -53,14 +56,14 @@ const BusinessFormComponent = () => {
     subCategory: '',
   });
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | number | boolean | File) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const handleNestedChange = (field: string, subField: string, value: any) => {
+  const handleNestedChange = (field: string, subField: string, value: string | number | boolean | File) => {
     setFormData((prev) => ({
       ...prev,
       [field]: {
@@ -70,7 +73,12 @@ const BusinessFormComponent = () => {
     }));
   };
 
-  const handleArrayChange = (field: string, index: number, subField: string, value: any) => {
+  const handleArrayChange = (
+    field: string,
+    index: number,
+    subField: string,
+    value: string | number | boolean | File
+  ) => {
     setFormData((prev) => {
       const updatedArray = [...prev[field]];
       updatedArray[index] = {
@@ -84,7 +92,10 @@ const BusinessFormComponent = () => {
     });
   };
 
-  const addArrayItem = (field: string, newItem: any) => {
+  const addArrayItem = (
+    field: string,
+    newItem: string | number | boolean | { day: string; openingTime: string; closingTime: string }
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: [...prev[field], newItem],

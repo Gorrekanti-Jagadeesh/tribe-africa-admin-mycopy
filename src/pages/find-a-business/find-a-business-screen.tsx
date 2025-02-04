@@ -1,7 +1,6 @@
 import TribeAfricaPagesCard from '@/atoms/card/tribe-africa-pages-card';
 import DualHeading from '@/atoms/heading/dual-heading';
 import { useNavigate, useParams } from 'react-router';
-import ministerImage from '../../assets/minister-image.png';
 import { fromKebabCase, toKebabCase } from '@/utils/common';
 import { sanityImageUrlBuilder } from '@/api';
 
