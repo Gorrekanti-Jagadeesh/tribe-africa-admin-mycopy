@@ -25,7 +25,6 @@ const AdvertisementForm: React.FC = () => {
     register,
     handleSubmit,
     watch,
-    control,
     formState: { errors },
   } = useForm<FormData>();
 
