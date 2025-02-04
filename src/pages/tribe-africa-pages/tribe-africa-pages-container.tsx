@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom';
 import ministerImage from '../../assets/minister-image.png';
 import TribeAfricaPagesScreen from './tribe-africa-pages-screen';
 import { Loading } from '@atoms/common/loading';
+import { query, sanity } from '@utils/sanity';
+import { fromKebabCase, toKebabCase } from '@utils/common';
 
 const fetchCategoryData = (category: string | undefined) => {
   switch (category) {
     case 'ministries':
     case 'police':
-    case 'national-boards':
+    case 'nationalboards':
       return [
         {
           id: '1',
@@ -53,12 +55,28 @@ const fetchCategoryData = (category: string | undefined) => {
 };
 
 const TribeAfricaPagesContainer: React.FC = () => {
-  const { category } = useParams();
+  const { country, subcategory } = useParams();
 
-  const { data: categoryData, isLoading } = useQuery({
-    queryKey: ['categoryData', category],
-    queryFn: () => fetchCategoryData(category),
+  const structureFunction = async () => {
+    const data = await sanity.GET(query.BUSINESS.NETWORK.GOVT_OFFICIALS(fromKebabCase(country), subcategory));
+
+    // console.log('this is gove officials data...', data);
+    return data;
+  };
+
+  const {
+    data: categoryData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['govt-officials', country],
+    queryFn: structureFunction, // Use the structureFunction for fetching and formatting data
   });
+
+  // const { data: categoryData, isLoading } = useQuery({
+  //   queryKey: ['categoryData', subcategory],
+  //   queryFn: () => fetchCategoryData(subcategory),
+  // });
 
   if (isLoading)
     return (
@@ -67,7 +85,7 @@ const TribeAfricaPagesContainer: React.FC = () => {
       </div>
     );
 
-  return <TribeAfricaPagesScreen data={categoryData || []} category={category} />;
+  return <TribeAfricaPagesScreen data={categoryData || []} category={toKebabCase(subcategory)} />;
 };
 
 export default TribeAfricaPagesContainer;

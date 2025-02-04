@@ -21,9 +21,15 @@ import EventDetailsPage from '@molecules/events/events-view';
 import AccommodationForm from '@molecules/forms/accomodation-creation-form';
 
 import CountryEventsPage from '../pages/events/business-events';
-import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
+import FindABusinessLinksContainer from '../pages/find-a-business/find-a-business-links-container';
+import FindABusinessContainer from '@/pages/find-a-business/find-a-business-container';
+import FindaBusinessDetailsContainer from '@/pages/find-a-business/find-a-business-details-container';
 import CandidateForm from '@/molecules/forms/candidate-form';
+import CreateBusinessForm from '@/molecules/forms/business-creation-form';
+import ProfessionalDataForm from '@/molecules/forms/proffessional-form';
 import UserDashboardContainer from '@/pages/user-dashboard/user-dashboard-container';
+import AfterWorkFrom from '@/molecules/forms/after-work-form';
+
 export interface RouteConfig {
   name: string;
   path: string;
@@ -128,12 +134,12 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'tribe africa pages',
-    path: '/tribe-africa-pages/:category',
+    path: '/:country/business/tribe-africa-pages/:category/:subcategory',
     element: <TribeAfricaPagesContainer />,
   },
   {
     name: 'tribe africa details pages',
-    path: '/tribe-africa-pages/:category/:id',
+    path: '/:country/business/tribe-africa-pages/:category/:id',
     element: <TribeAfricaPagesDetailsContainer />,
   },
   {
@@ -144,7 +150,7 @@ const appRoutes: RouteConfig[] = [
   {
     name: 'Find a business',
     path: '/:country/business/details/find-a-business',
-    element: <FindABusinessContainer />,
+    element: <FindABusinessLinksContainer />,
   },
   {
     name: 'hire some one details',
@@ -167,9 +173,34 @@ const appRoutes: RouteConfig[] = [
     element: <AccommodationForm />,
   },
   {
+    name: 'find a business screen',
+    path: '/:country/business/find-a-business/:main_category/:sub_category?',
+    element: <FindABusinessContainer />,
+  },
+  {
+    name: 'find a business details screen',
+    path: '/:country/business/find-a-business/details/:main_category/:sub_category?/:id',
+    element: <FindaBusinessDetailsContainer />,
+  },
+  {
     name: 'Tribe africa pages - candidate form',
     path: '/candidate-form',
     element: <CandidateForm />,
+  },
+  {
+    name: 'Tribe africa pages - create business form',
+    path: '/create-business-form',
+    element: <CreateBusinessForm />,
+  },
+  {
+    name: 'Tribe africa pages - Proffessional form',
+    path: '/proffessional-form',
+    element: <ProfessionalDataForm />,
+  },
+  {
+    name: 'After work form',
+    path: '/after-work-form',
+    element: <AfterWorkFrom />,
   },
 ];
 

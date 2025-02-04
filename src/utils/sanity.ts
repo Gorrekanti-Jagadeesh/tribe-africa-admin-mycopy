@@ -29,6 +29,18 @@ export const query = {
   },
   BUSINESS: {
     LANDING: `*[_type == "business-landing-page"]`,
+    NETWORK: {
+      GOVT_OFFICIALS: (country, category) =>
+        `*[_type == "government-officials" && country == "${country}" && _type == "government-officials"]`,
+      FIND_A_BUSINESS_DATA: (country, mainCategory, subCategory) => {
+        if (subCategory) {
+          return `*[_type == "findABusiness" && country == "${country}" && mainCategory == "${mainCategory}" && subCategory == "${subCategory}"]`;
+        } else {
+          return `*[_type == "findABusiness" && country == "${country}" && mainCategory == "${mainCategory}"]`;
+        }
+      },
+      FIND_A_BUSINESS_DETAILS: (id) => `*[_type == "findABusiness" && _id == "${id}"]`,
+    },
   },
   COUNTRY: {
     DETAILS: (country, fields) =>
