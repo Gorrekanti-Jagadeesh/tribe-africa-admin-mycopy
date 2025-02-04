@@ -28,6 +28,8 @@ import CandidateForm from '@/molecules/forms/candidate-form';
 import CreateBusinessForm from '@/molecules/forms/business-creation-form';
 import ProfessionalDataForm from '@/molecules/forms/proffessional-form';
 import UserDashboardContainer from '@/pages/user-dashboard/user-dashboard-container';
+import AfterWorkFrom from '@/molecules/forms/after-work-form';
+
 export interface RouteConfig {
   name: string;
   path: string;
@@ -194,6 +196,11 @@ const appRoutes: RouteConfig[] = [
     name: 'Tribe africa pages - Proffessional form',
     path: '/proffessional-form',
     element: <ProfessionalDataForm />,
+  },
+  {
+    name: 'After work form',
+    path: '/after-work-form',
+    element: <AfterWorkFrom />,
   },
 ];
 

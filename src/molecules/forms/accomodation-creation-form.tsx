@@ -821,8 +821,8 @@ const AccommodationForm: React.FC = () => {
 
           {/* Accommodation Images */}
           <div>
-            <p className="block text-sm font-medium mb-1">Add some Photos</p>
-            <FileUploadWithPreview control={control} />
+            <p className="block text-sm font-medium mb-1 semi-bold">Add some Photos</p>
+            <FileUploadWithPreview control={control} maxFilesLength={3} />
           </div>
 
           {/* Amenities details */}
