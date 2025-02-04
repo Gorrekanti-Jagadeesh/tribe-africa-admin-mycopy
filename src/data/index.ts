@@ -49,12 +49,20 @@ export const demoData = [
 ];
 
 export const Countries: Option[] = [
-  { value: 'algeria', label: 'Algeria' },
-  { value: 'angola', label: 'Angola' },
-  { value: 'benin', label: 'Benin' },
-  { value: 'botswana', label: 'Botswana' },
-  { value: 'south-africa', label: 'South Africa' },
-  { value: 'zimbabwe', label: 'Zimbabwe' },
+  { label: 'Algeria', value: 'Algeria' },
+  { label: 'Botswana', value: 'Botswana' },
+  { label: 'Rwanda', value: 'Rwanda' },
+  { label: 'Sierra Leone', value: 'Sierra-Leone' },
+  { label: 'Ghana', value: 'Ghana' },
+  { label: 'Tanzania', value: 'Tanzania' },
+  { label: 'Zambia', value: 'Zambia' },
+  { label: 'Mauritius', value: 'Mauritius' },
+  { label: 'The Gambia', value: 'The-Gambia' },
+  { label: 'Zimbabwe', value: 'Zimbabwe' },
+  { label: 'Angola', value: 'Angola' },
+  { label: 'Benin', value: 'Benin' },
+  { label: 'South Africa', value: 'South-Africa' },
+  { label: 'Mozambique', value: 'Mozambique' },
 ];
 
 export const CountriesGeoData: Record<string, CountryDataType> = {
@@ -418,43 +426,54 @@ export const networkURLs = {
 
 export const eventTypes = [
   {
-    title: 'Business Events',
-    value: 'business',
+    label: 'Business Events',
+    value: 'Business',
     items: [
-      { title: 'Trade Shows', value: 'trade-shows' },
-      { title: 'Conferences & Seminars', value: 'conferences-seminars' },
-      { title: 'Product Launches', value: 'product-launches' },
-      { title: 'Training & Workshops', value: 'training-workshops' },
-      { title: 'Networking', value: 'networking' },
+      { label: 'Trade Shows', value: 'Trade Shows' },
+      { label: 'Conventions', value: 'Conventions' },
+      { label: 'Conferences & Seminars', value: 'Conferences & Seminars' },
+      { label: 'Product Launches', value: 'Product Launches' },
+      { label: 'Training & Workshops', value: 'Training & Workshops' },
+      { label: 'Networking', value: 'Networking' },
+      { label: 'Others', value: 'Others' },
     ],
   },
   {
-    title: 'Entertainment',
-    value: 'entertainment',
+    label: 'Entertainment',
+    value: 'Entertainment',
     items: [
-      { title: 'Arts', value: 'arts' },
-      { title: 'Cultural Events & Festivals', value: 'cultural-events-festivals' },
-      { title: 'Dance', value: 'dance' },
-      { title: 'Fashion', value: 'fashion' },
-      { title: 'Music', value: 'music' },
-      { title: 'Theater & Comedy', value: 'theater-comedy' },
+      { label: 'Arts', value: 'Arts' },
+      { label: 'Cultural Events & Festivals', value: 'Cultural Events & Festivals' },
+      { label: 'Dance', value: 'Dance' },
+      { label: 'Fashion', value: 'Fashion' },
+      { label: 'Music', value: 'Music' },
+      { label: 'Theater & Comedy', value: 'Theater & Comedy' },
+      { label: 'Others', value: 'Others' },
     ],
   },
   {
-    title: 'Sports',
-    value: 'sports',
+    label: 'Sports',
+    value: 'Sports',
     items: [
-      { title: 'Boxing', value: 'boxing' },
-      { title: 'Football', value: 'football' },
-      { title: 'Marathons', value: 'marathons' },
-      { title: 'Races', value: 'races' },
-      { title: 'Racket sports', value: 'racket-sports' },
-      { title: 'Wrestling', value: 'wrestling' },
+      { label: 'Boxing', value: 'Boxing' },
+      { label: 'Football', value: 'Football' },
+      { label: 'Marathons', value: 'Marathons' },
+      { label: 'Races', value: 'Races' },
+      { label: 'Racket Sports', value: 'Racket Sports' },
+      { label: 'Wrestling', value: 'Wrestling' },
+      { label: 'Others', value: 'Others' },
     ],
   },
 ];
 
-// -----------Must see and do ---------------
+export const africanCountriesPhoneCodes = [
+  { value: '+20', label: 'Egypt' },
+  { value: '+233', label: 'Ghana' },
+  { value: '+254', label: 'Kenya' },
+  { value: '+234', label: 'Nigeria' },
+  { value: '+27', label: 'South Africa' },
+];
+// -----------Must see and do --------------
 export const msadCategories = [
   { category: 'action-enthusiasts', title: 'Action Enthusiasts' },
   { category: 'historical-cultural-sites', title: 'Historical & Cultural Sites' },

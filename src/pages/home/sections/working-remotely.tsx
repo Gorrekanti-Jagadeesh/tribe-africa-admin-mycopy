@@ -8,7 +8,7 @@ interface workingRemotelyFields {
   title: string;
   description: string;
   _id: string;
-  homeBusinessBlogs: string;
+  homeBusinessBlog: string;
   blogType: string;
 }
 

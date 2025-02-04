@@ -1,6 +1,6 @@
 import { NavigateFunction } from 'react-router';
-import { SanityAsset } from '@sanity/image-url/lib/types/types';
 import { TypedObject } from '@sanity/block-tools';
+import { FieldError } from 'react-hook-form';
 
 // data
 export interface ServicesProps {
@@ -33,6 +33,52 @@ export interface customHeadingProps {
 export interface Option {
   value: string;
   label: string;
+}
+
+export interface InputProps {
+  type?: 'number' | 'text' | 'email' | 'text-area' | 'rich-text' | 'select' | 'dropdown';
+  defaultValue?: string;
+  value?: string;
+  name?: string;
+  placeholder?: string;
+  options?: Option[];
+  action?: (value: string | number) => void;
+  required?: boolean;
+  className?: string;
+  regex?: RegExp;
+  error?: string;
+  patternMessage?: string;
+  maxLength?: number;
+  minLength?: number;
+}
+
+export interface HookInputProps {
+  type?:
+    | 'number'
+    | 'text'
+    | 'email'
+    | 'text-area'
+    | 'rich-text'
+    | 'select'
+    | 'dropdown'
+    | 'url'
+    | 'tel'
+    | 'checkbox'
+    | 'radio'
+    | 'date'
+    | 'time';
+  defaultValue?: string | number;
+  value?: string;
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  options?: Option[];
+  required?: boolean;
+  className?: string;
+  customInputClassNames?: string;
+  error?: FieldError;
+  maxLength?: number;
+  minLength?: number;
 }
 
 export interface DropdownProps {
@@ -205,12 +251,11 @@ export interface RatingProps {
 export interface ReviewProps {
   _id: string;
   key: string; // `review:accomodation:${accomodation_id}` or `review:people:${person_id}`
-  content: string;
-  images?: Array<SanityAsset>;
+  reviewDescription: string;
+  reviewerImage?: string;
   ratings: { title: string; score: number }[];
-  submitted_by: string;
-  created_at?: string;
-  updated_at?: string;
+  submittedBy: string;
+  submittedDate: string;
 }
 
 export interface accomodationProps {
@@ -322,16 +367,28 @@ export interface candidateProps {
 export interface ProffesionalData {
   _id: string;
   name: string;
-  department: string;
   role: string;
-  experience: string;
-  phone_no?: string;
-  email?: string;
-  website?: string;
-  image: string;
-  description: string;
+  proffession: string;
+  statement?: string;
+  streetAddress: string;
+  city: string;
+  region: string;
+  postalCode?: string;
   country: string;
-  address?: string;
+  phoneNumber: string;
+  email: string;
+  website?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+  linkedinUrl?: string;
+  description: string;
+  skills: string[];
+  experience: string;
+  certificates?: string[];
+  languages: string[];
+  proffessionalImage: string;
+  reviews?: ReviewProps[];
 }
 
 export default module.exports;

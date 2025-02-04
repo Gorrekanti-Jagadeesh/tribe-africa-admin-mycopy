@@ -18,9 +18,12 @@ import CountryDetails from '../pages/country-details/country-details-container';
 import NotFound from '@molecules/common/not-found';
 import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 import EventDetailsPage from '@molecules/events/events-view';
-import HostelForm from '@molecules/forms/accomodation-creation-form';
+import AccommodationForm from '@molecules/forms/accomodation-creation-form';
 
 import CountryEventsPage from '../pages/events/business-events';
+import FindABusinessContainer from '../pages/find-a-business/find-a-business-container';
+import CandidateForm from '@/molecules/forms/candidate-form';
+import UserDashboardContainer from '@/pages/user-dashboard/user-dashboard-container';
 export interface RouteConfig {
   name: string;
   path: string;
@@ -29,27 +32,32 @@ export interface RouteConfig {
 
 const appRoutes: RouteConfig[] = [
   {
-    name: 'home',
+    name: 'Home',
     path: '/',
     element: <HomeContainer />,
   },
   {
-    name: 'business',
+    name: 'Business Page',
     path: '/:country/business',
     element: <BusinessContainer />,
   },
   {
-    name: 'holiday',
+    name: 'Holiday Page',
     path: '/:country/holiday',
     element: <HolidayContainer />,
   },
   {
-    name: 'accomodation',
+    name: 'User Dashbaord',
+    path: '/user/dashboard',
+    element: <UserDashboardContainer />,
+  },
+  {
+    name: 'Accommodation',
     path: '/:country/:pageType/:category/:sub_category/:categoryInfoId',
     element: <AccommodationDetailsContainer />,
   },
   {
-    name: 'accomodations list',
+    name: 'Accommodations List',
     path: ':country/:pageType/:category/:sub_category',
     element: <AccomodationContainer />,
   },
@@ -130,12 +138,17 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'hire some one',
-    path: '/:country/business/looking-to-hire-someone',
+    path: '/:country/business/details/looking-to-hire-someone',
     element: <LookingToHireSomeoneContainer />,
   },
   {
+    name: 'Find a business',
+    path: '/:country/business/details/find-a-business',
+    element: <FindABusinessContainer />,
+  },
+  {
     name: 'hire some one details',
-    path: '/:country/business/looking-to-hire-someone/:id',
+    path: '/:country/business/details/looking-to-hire-someone/:proffessionalId',
     element: <LookingToHireSomeoneDetailsContainer />,
   },
   {
@@ -151,7 +164,12 @@ const appRoutes: RouteConfig[] = [
   {
     name: 'hotel form',
     path: '/form',
-    element: <HostelForm />,
+    element: <AccommodationForm />,
+  },
+  {
+    name: 'Tribe africa pages - candidate form',
+    path: '/candidate-form',
+    element: <CandidateForm />,
   },
 ];
 

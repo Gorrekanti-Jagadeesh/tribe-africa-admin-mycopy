@@ -28,7 +28,22 @@ const BlogDetailsPage = () => {
     <div className="flex flex-col gap-6 m-auto max-w-4xl px-10 md:px-0">
       <h1 className="text-4xl my-4 font-semibold capitalize">{data.title}</h1>
       <img className="h-[50vh] w-full object-contain rounded-md" src={sanityImageUrlBuilder(data.image).url()} />
-      {typeof data.content == 'string' ? (
+      <PortableText
+        value={data.content}
+        components={{
+          types: {
+            image: ({ value }) => <img src={parseImageUrl(value.asset._ref)} alt={value.alt || 'Blog Image'} />,
+          },
+          marks: {
+            link: ({ children, value }) => (
+              <a href={value.href} target="_blank" rel="noopener noreferrer">
+                {children}
+              </a>
+            ),
+          },
+        }}
+      />
+      {/* {typeof data.content == 'string' ? (
         <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
       ) : (
         <PortableText
@@ -46,7 +61,7 @@ const BlogDetailsPage = () => {
             },
           }}
         />
-      )}
+      )} */}
     </div>
   );
 };

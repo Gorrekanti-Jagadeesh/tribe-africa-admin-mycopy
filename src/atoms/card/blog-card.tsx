@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { BlogContentProps } from '../../types';
+import { BlogContentProps } from '@/types';
 import { sanityImageUrlBuilder } from '@api/index';
 
 const BlogCard = ({ data }: { data: BlogContentProps }) => {

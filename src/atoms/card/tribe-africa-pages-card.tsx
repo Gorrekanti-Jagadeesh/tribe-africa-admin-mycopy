@@ -16,9 +16,9 @@ const TribeAfricaPagesCard: React.FC<TribeAfricaPagesCardProps> = ({ image, cont
     >
       <div className={`flex flex-col md:flex-row md:w-full`}>
         <div className={`${footer ? 'md:w-2/5' : 'md:w-2/5'}`}>
-          <img src={image} alt="default" className="w-full" />
+          <img src={image} alt="default" className="w-full aspect-square" />
         </div>
-        <div className={`md:w-${footer ? '3/5' : 'full'} md:w-4/5 md:ml-2`}>{content}</div>
+        <div className={`md:w-${footer ? '3/5' : 'full'} md:ml-2`}>{content}</div>
       </div>
       {footer && <div className="md:w-1/2 ml-auto flex items-center">{footer}</div>}
     </div>

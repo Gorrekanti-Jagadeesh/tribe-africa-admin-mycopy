@@ -4,7 +4,7 @@ import Button from '../custom-button/button';
 import { getFormData } from '../../utils/common';
 import { qna, getDataByEntryType } from '../../api';
 import { Loading } from '../common/loading';
-import { QNAProps } from '../../types';
+import { QNAProps } from '@/types';
 
 interface CardProps {
   _id: string;

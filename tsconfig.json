@@ -5,7 +5,7 @@
     "moduleResolution": "bundler",
     "baseUrl": "src",
     "paths": {
-      "@*": ["/*"],
+      "@/*": ["./*"],
       "@assets/*": ["assets/*"],
       "@atoms/*": ["atoms/*"],
       "@molecules/*": ["molecules/*"],

@@ -3,10 +3,15 @@ import sanityClient from '../../sanityClient';
 import { RichTextEditor } from '../../atoms/input-elements/rich-text-editor';
 import Button from '../../atoms/custom-button/button';
 import { ImageDragAndDrop } from '../../atoms/input-elements/drag-and-drop';
-
-import { processContent } from '../../utils/sanity';
-
+import { countImagesInRichText, processContent, splitRichText } from '../../utils/sanity';
 import { uploadImage } from '../../api';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { generateId } from '@/utils/common';
+import { Countries } from '@/data';
+import { Loading } from '@/atoms/common/loading';
+import UnderlineHeading from '@/atoms/heading/underline-heading';
+import CustomInput from '@/atoms/input-elements/custom-input';
+import { CustomSelect } from '@/atoms/input-elements/cutom-select';
 
 interface BlogComposeProps {
   className: string;
@@ -17,120 +22,338 @@ const MAX_IMAGES = 3;
 // Split the rich text into text and tags
 let splitContent: string[];
 
-// Function to count images using splitRichText
-function countImagesInRichText(richText: string): number {
-  splitContent = splitRichText(richText);
-  return splitContent.filter((part) => part.startsWith('<img')).length;
-}
+type BlogFormData = {
+  author: string;
+  email: string;
+  website: string;
+  bio: string;
+  instagram: string;
+  twitter: string;
+  linkedin: string;
+  otherSocialMedia: string;
+  country: string;
+  authorPhoto: File;
+  title: string;
+  blogType: string;
+  wordCount: string;
+  coverPhoto: File;
+  description: string;
+  content: string;
+  confirmDetails: boolean;
+  agreeToFeature: boolean;
+  rightsToContent: boolean;
+};
 
-// Split rich text into tags and text
-function splitRichText(richText: string): string[] {
-  const regex = /(<[^>]+>|[^<]+)/g;
-  return richText.match(regex) || [];
-}
+const categories = [
+  { title: 'Business Article', value: 'Business' },
+  { title: 'Travel & Leisure Article', value: 'Travel & Leisure' },
+  {
+    title: 'Environment & Sustainability Article',
+    value: 'Environment & Sustainability',
+  },
+];
 
 const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<BlogFormData>();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editorContent, setEditorContent] = useState<string>('');
-  const [descriptionContent, setDescriptionContent] = useState('');
+  const [loader, setLoader] = useState<boolean>(false);
+
+  const onFileSelect = (file: File, type: 'author' | 'cover') => {
+    if (type === 'author') {
+      setValue('authorPhoto', file); // Sync with form state
+    } else if (type === 'cover') {
+      setValue('coverPhoto', file); // Sync with form state
+    }
+  };
 
   // Handle changes in the rich text editor content
   const handleContentChange = (content: string): void => setEditorContent(content);
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setDescriptionContent(event.target.value);
-  };
 
   // Handle changes in blog placeholder image in drag-and-drop component
   const handleFileSelect = (file: File | null): void => setSelectedFile(file);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-
-    // console.log("hello")
-
-    if (!selectedFile) {
-      alert('Please upload an image before submitting.');
-      return;
-    }
-
-    // Count images in rich text content
-    if (countImagesInRichText(editorContent) > MAX_IMAGES) {
-      alert(`Can only have up to ${MAX_IMAGES} images`);
-      return;
-    }
-
-    if (splitContent.length < 15) {
-      alert('Please add more content to the blog.');
-      return;
-    }
-
-    // Ensure proper typing for the form element
-    const formElement = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(formElement);
-
-    // list of final blocks after processing rich text
-    const richTextBlocks = await processContent(splitContent);
-
-    let response;
+  const onSubmit: SubmitHandler<BlogFormData> = async (data) => {
     try {
-      const title = formData.get('title') as string;
-      response = await uploadImage(selectedFile);
-      const blogData = {
-        _type: 'blog',
-        title,
+      setLoader(true);
+
+      if (countImagesInRichText(editorContent) > MAX_IMAGES) {
+        alert(`Can only have up to ${MAX_IMAGES} images`);
+        return;
+      }
+
+      splitContent = splitRichText(editorContent);
+      if (splitContent.length < 15) {
+        alert('Please add more content to the blog.');
+        return;
+      }
+      const content = await processContent(splitContent);
+      const headerPhotoUrl = await uploadImage(selectedFile);
+
+      // Submit to Sanity
+      await sanityClient.create({
+        _type: 'blog', // Sanity schema type
+        _id: generateId(), // Unique ID
+        ...data,
+        content,
         image: {
           _type: 'image',
-          asset: { _type: 'reference', _ref: response._id },
+          asset: { _ref: headerPhotoUrl._id },
         },
-        content: richTextBlocks,
-        description: descriptionContent,
-      };
-      const res = await sanityClient.create(blogData);
-      alert('submitted successfully');
-      console.log(`Blog created with ID: ${res._id}`);
+      });
+
+      alert('Submitted successfully!');
     } catch (error) {
-      console.error('Error creating blog:', error);
+      console.error('Error submitting data:', error);
+      alert('Failed to submit data. Please try again.');
+    } finally {
+      setLoader(false);
     }
   };
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <h2 className="text-2xl">Write a BLOG</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label>Title</label>
-            <input
-              type="text"
-              name="title"
-              placeholder="Blog title"
-              className="border p-2 rounded-lg outline-none"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Blog image</label>
-            <ImageDragAndDrop onFileSelect={handleFileSelect} />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Blog description</label>
-            <textarea
-              onChange={handleDescriptionChange}
-              name="description"
-              rows={4}
-              placeholder="Enter short Blog description"
-              className="border p-2 rounded-lg outline-none"
-            ></textarea>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Blog Content</label>
-            <RichTextEditor onContentChange={handleContentChange} />
-          </div>
-        </div>
-        <Button className="float-right my-4 px-4" type="submit">
-          Submit
-        </Button>
+      <UnderlineHeading borderWidth="w-1/4" className="text-2xl">
+        Write a BLOG
+      </UnderlineHeading>
+      <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
+        {loader ? (
+          <Loading />
+        ) : (
+          <>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  About You
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <CustomInput
+                  {...register('author', { required: 'Please Provide Your Full Name*' })}
+                  placeholder="Enter Author Name"
+                  error={errors.author}
+                />
+                <CustomInput
+                  {...register('email', { required: 'Please Provide Valid Email' })}
+                  placeholder="Enter Author Role"
+                  error={errors.email}
+                />
+                <CustomInput
+                  {...register('website')}
+                  placeholder="Enter Webiste/Portfolio"
+                  error={errors.website}
+                  type="url"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Author Bio
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <textarea
+                  {...register('bio', { required: 'Please Provide Author Bio' })}
+                  rows={4}
+                  placeholder="Tell us a little about yourself, your experiences, and what inspires your writing."
+                  className={`p-2 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400 ${errors.bio ? 'border-red-500 ' : 'border-gray-400 '}`}
+                ></textarea>
+                {errors.bio && <span className="text-red-500 text-xs">{errors.bio.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Social media Links (Add atleast one)
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <CustomInput
+                  {...register('instagram')}
+                  placeholder="Instagram Profile"
+                  error={errors.instagram}
+                  required={false}
+                  type="url"
+                />
+                <CustomInput
+                  {...register('twitter')}
+                  placeholder="Twitter Profile"
+                  error={errors.twitter}
+                  required={false}
+                  type="url"
+                />
+                <CustomInput
+                  {...register('linkedin')}
+                  placeholder="Linkedin Profile"
+                  error={errors.linkedin}
+                  required={false}
+                  type="url"
+                />
+                <CustomInput
+                  {...register('otherSocialMedia')}
+                  placeholder="Other Social Media link"
+                  error={errors.otherSocialMedia}
+                  required={false}
+                  type="url"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Upload Your Author Photo
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <ImageDragAndDrop
+                  {...register('authorPhoto', { required: 'Please Provide Author Photo' })}
+                  onFileSelect={(file) => onFileSelect(file, 'author')}
+                  placeholder="Upload your Blog Poster/Banner"
+                />
+                {errors.authorPhoto && <span className="text-red-500 text-xs">{errors.authorPhoto.message}</span>}
+              </div>
+
+              <h3 className="font-semibold text-xl">
+                Your Article Submission
+                <span className="text-red-500 text-sm">*</span>
+              </h3>
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Proposed Title of Your Blog Post<span className="text-red-500 text-sm">*</span>
+                  <span className="font-normal text-sm">
+                    (Make sure your title is engaging and accurately represents the essence of your story)
+                  </span>
+                </h3>
+                <CustomInput
+                  {...register('title', { required: 'Blog Title is required' })}
+                  placeholder="Blog Title"
+                  error={errors.title}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <CustomSelect
+                  {...register('country', { required: 'Country of the blog is required' })}
+                  placeholder="Select Country"
+                  options={Countries}
+                  label="Country"
+                  error={errors.country}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="block font-semibold">
+                  Article Type<span className="text-red-500 text-sm">*</span>
+                </label>
+                <select
+                  {...register('blogType', { required: 'Blog Type is required' })}
+                  className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500 ${errors.blogType ? 'border-red-500' : 'border-gray-400'}`}
+                >
+                  <option value="">Select Blog Category</option>
+                  {categories.map((each) => (
+                    <option key={each.title} value={each.value}>
+                      {each.title}
+                    </option>
+                  ))}
+                </select>
+                {errors.blogType && <span className="text-red-500 text-xs">{errors.blogType.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Short Summary of Your Article (2–3 sentences):
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <textarea
+                  {...register('description', { required: 'Please Provide Short summary of the blog' })}
+                  rows={5}
+                  placeholder="Provide a brief overview of your article’s content and key message."
+                  className={`p-2 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400 ${errors.bio ? 'border-red-500 ' : 'border-gray-400 '}`}
+                ></textarea>
+                {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <RichTextEditor
+                  label="Blog Content"
+                  placeholder="In 500-2500 characters, Provide the Content for the blog along with corresponding Images with captions"
+                  {...register('content', {
+                    required: 'Blog Content is required',
+                    minLength: {
+                      value: 500,
+                      message: 'Description must be at least 500 characters',
+                    },
+                    maxLength: {
+                      value: 2500,
+                      message: 'Description must not exceed 2500 characters',
+                    },
+                  })}
+                  height={200}
+                  onContentChange={(content) => setValue('content', content)}
+                  error={errors.content?.message}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold">
+                  Upload Blog Poster or Banner
+                  <span className="text-red-500 text-sm">*</span>
+                </h3>
+                <ImageDragAndDrop
+                  {...register('coverPhoto', { required: 'Please Provide Blog Poster/Banner' })}
+                  onFileSelect={(file) => onFileSelect(file, 'cover')}
+                  placeholder="Upload your Blog Poster/Banner"
+                />
+                {errors.coverPhoto && <span className="text-red-500 text-xs">{errors.coverPhoto.message}</span>}
+              </div>
+
+              <h3 className="font-semibold text-lg">Agreement & Confirmation</h3>
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register('confirmDetails', {
+                      required: 'You must confirm that all blog details are accurate.',
+                    })}
+                    className="h-4 w-4 rounded border-gray-400"
+                  />
+                  I confirm that all the blog details provided are accurate.
+                </label>
+                {errors.confirmDetails && <span className="text-red-500 text-xs">{errors.confirmDetails.message}</span>}
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register('agreeToFeature', {
+                      required: 'You must agree that your blog may be featured.',
+                    })}
+                    className="h-4 w-4 rounded border-gray-400"
+                  />
+                  I agree that my blog may be featured on this platform.
+                </label>
+                {errors.agreeToFeature && <span className="text-red-500 text-xs">{errors.agreeToFeature.message}</span>}
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    {...register('rightsToContent', {
+                      required: 'You must confirm you have the rights to share all content.',
+                    })}
+                    className="h-4 w-4 rounded border-gray-400"
+                  />
+                  I have the rights to share all content, including images submitted.
+                </label>
+                {errors.rightsToContent && (
+                  <span className="text-red-500 text-xs">{errors.rightsToContent.message}</span>
+                )}
+              </div>
+            </div>
+            <Button className="float-right my-4 px-4" type="submit">
+              Submit
+            </Button>
+          </>
+        )}
       </form>
     </div>
   );

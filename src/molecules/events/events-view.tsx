@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Loading } from '@atoms/common/loading';
 import { FaGlobe, FaPhone, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
+import { parseImageUrl } from '@/utils/sanity';
+import { truncateText } from '@/utils/common';
 
 const EventDetailsPage = () => {
   const { eventId } = useParams();
@@ -27,7 +29,6 @@ const EventDetailsPage = () => {
 
   return (
     <div className="flex flex-col gap-6 m-auto max-w-4xl px-10 md:px-0">
-      {/* Event Title */}
       <h1 className="text-3xl md:text-4xl font-semibold capitalize">{eventDetails.title}</h1>
       <img
         className="h-[50vh] w-full object-contain rounded-md"
@@ -36,7 +37,16 @@ const EventDetailsPage = () => {
       />
       <section>
         <h3 className="text-2xl font-semibold mb-2">Description</h3>
-        <PortableText value={eventDetails.description} />
+        <PortableText
+          value={eventDetails.description}
+          components={{
+            types: {
+              image: ({ value }) => (
+                <img src={parseImageUrl(value.asset._ref)} alt={value.alt || 'Blog Image'} height={100} width={100} />
+              ),
+            },
+          }}
+        />
       </section>
       <div className="flex flex-col md:flex-row justify-around">
         <div className=" text-gray-700 text-lg mt-4 space-y-4">
@@ -52,37 +62,42 @@ const EventDetailsPage = () => {
           </div>
           {eventDetails.website && (
             <div className="flex gap-3">
-              <a href={eventDetails.website} target="_blank" rel="noopener noreferrer">
+              <a href={eventDetails.website} target="_blank" rel="noopener noreferrer" className="flex gap-3">
                 <FaGlobe className="text-2xl" />
+                <p>{truncateText(eventDetails.website, 40)}</p>
               </a>
-              <p>{eventDetails.website}</p>
             </div>
           )}
           {eventDetails.phone && (
             <div className="flex gap-3">
-              <a href={`tel:${eventDetails.phone}`}>
+              <a href={`tel:${eventDetails.phone}`} className="flex gap-3">
                 <FaPhone className="text-2xl" />
+                <p>{eventDetails.phone}</p>
               </a>
-              <p>{eventDetails.phone}</p>
             </div>
           )}
           {eventDetails.whatsapp && (
             <div className="flex gap-3">
-              <a href={`https://wa.me/${eventDetails.whatsapp}`} target="_blank" rel="noopener noreferrer">
+              <a
+                href={`https://wa.me/${eventDetails.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-3"
+              >
                 <FaWhatsapp className="text-2xl" />
+                <p>{eventDetails.whatsapp}</p>
               </a>
-              <p>{eventDetails.whatsapp}</p>
             </div>
           )}
           {eventDetails.email && (
             <div className="flex gap-3">
-              <a href={`mailto:${eventDetails.email}`}>
+              <a href={`mailto:${eventDetails.email}`} target="_blank" rel="noopener noreferrer" className="flex gap-3">
                 <FaEnvelope className="text-2xl" />
+                <p>{eventDetails.email}</p>
               </a>
-              <p>{eventDetails.email}</p>
             </div>
           )}
-          {eventDetails.email && (
+          {eventDetails.location && (
             <div className="flex gap-3">
               <a href={`mailto:${eventDetails.location}`}>
                 <FaLocationDot className="text-2xl" />
@@ -95,7 +110,21 @@ const EventDetailsPage = () => {
           {eventDetails.ticketPrices && (
             <div className="mt-6">
               <h3 className="text-xl font-bold">Ticket Prices</h3>
-              <PortableText value={eventDetails.ticketPrices} />
+              <PortableText
+                value={eventDetails.ticketPrices}
+                components={{
+                  types: {
+                    image: ({ value }) => (
+                      <img
+                        src={parseImageUrl(value.asset._ref)}
+                        alt={value.alt || 'Blog Image'}
+                        height={100}
+                        width={100}
+                      />
+                    ),
+                  },
+                }}
+              />
             </div>
           )}
           <div className="mt-6">
@@ -106,7 +135,14 @@ const EventDetailsPage = () => {
       </div>
       <div className="mt-6">
         <h3 className="text-xl font-bold">About the Event</h3>
-        <PortableText value={eventDetails.aboutEvent} />
+        <PortableText
+          value={eventDetails.aboutEvent}
+          components={{
+            types: {
+              image: ({ value }) => <img src={parseImageUrl(value.asset._ref)} alt={value.alt || 'Blog Image'} />,
+            },
+          }}
+        />
       </div>
     </div>
   );
