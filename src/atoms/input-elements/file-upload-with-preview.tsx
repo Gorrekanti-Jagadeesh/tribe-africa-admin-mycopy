@@ -2,11 +2,11 @@ import React, { useState, useRef } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import { FaCamera } from 'react-icons/fa';
 
-const FileUploadWithPreview = ({ control }: { control: Control }) => {
+const FileUploadWithPreview = ({ control, maxFilesLength }: { control: Control; maxFilesLength: number }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileURLs, setFileURLs] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const maxFiles = 3;
+  const maxFiles = maxFilesLength;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: FieldValues) => {
     if (event.target.files) {

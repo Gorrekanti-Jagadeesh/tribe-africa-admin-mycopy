@@ -482,3 +482,26 @@ export const msadCategories = [
   { category: 'excursions', title: 'Excursions' },
   { category: 'voluntourism', title: 'Voluntourism' },
 ];
+
+export const afterWorkBusinessType = [
+  { value: 'restaurants', label: 'Restaurants' },
+  { value: 'night-clubs', label: 'Night clubs' },
+  { value: 'bars-pubs', label: 'Bars & Pubs' },
+  { value: 'clubs_special_groups', label: 'Clubs & Special groups' },
+];
+
+export const afterWorkRestaurantsType = [
+  { value: 'traditional', label: 'Traditional' },
+  { value: 'casual-dining', label: 'Casual Dining' },
+  { value: 'beach-bars', label: 'Beach & Bars' },
+  { value: 'vegeterian-vegan', label: 'Vegeterian & Vegan' },
+  { value: 'fine-dining', label: 'Fine Dining' },
+  { value: 'street-food', label: 'Street food' },
+];
+
+export const afterWorkClubsAndSpecialGroupType = [
+  { value: 'rotary-clubs', label: 'Rotary Clubs' },
+  { value: 'lion-club', label: 'Lion Club' },
+  { value: 'toast-master', label: 'Toast Masters' },
+  { value: 'masonic-lodges', label: 'Masonic Lodges' },
+];

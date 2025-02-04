@@ -21,7 +21,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
       <div className="flex flex-grow">
         <div className="flex-shrink-0 mr-2">
           <img
-            src={sanityImageUrlBuilder(reviewerImage).url()}
+            src={
+              reviewerImage
+                ? sanityImageUrlBuilder(reviewerImage).url()
+                : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+            }
             alt={'Reviewer Image'}
             className="w-12 h-12 rounded-md"
           />
