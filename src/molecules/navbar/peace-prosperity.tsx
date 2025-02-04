@@ -11,7 +11,7 @@ const PeaceProsperity: React.FC = () => {
     isLoading: ppInstituteLoading,
   } = useQuery({
     queryKey: ['peace-prosperity-institute-data'],
-    queryFn: () => sanity.GET(`*[_type == "peace-prosperity-institute"][1]`), // Handle undefined 'country'
+    queryFn: () => sanity.GET(`*[_type == "peace-prosperity-institute"][1]`), // Handle undefined 'country '
   });
 
   if (ppInstituteLoading) {
