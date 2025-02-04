@@ -81,7 +81,9 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
       }
 
       splitContent = splitRichText(data.content);
+
       if (splitContent.length < 15) {
+        console.log(splitContent, 'iied');
         alert('Please add more content to the blog.');
         return;
       }
@@ -315,7 +317,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                     })}
                     className="h-4 w-4 rounded border-gray-400"
                   />
-                  I confirm that all the blog details provided are accurate.
+                  I confirm this article is original work and has not been published elsewhere.
                 </label>
                 {errors.confirmDetails && <span className="text-red-500 text-xs">{errors.confirmDetails.message}</span>}
 
@@ -327,7 +329,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                     })}
                     className="h-4 w-4 rounded border-gray-400"
                   />
-                  I agree that my blog may be featured on this platform.
+                  I agree to minor edits for grammar, clarity, and formatting.
                 </label>
                 {errors.agreeToFeature && <span className="text-red-500 text-xs">{errors.agreeToFeature.message}</span>}
 
@@ -339,7 +341,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                     })}
                     className="h-4 w-4 rounded border-gray-400"
                   />
-                  I have the rights to share all content, including images submitted.
+                  I retain the copyright to my work but grant permission to publish it on this blog.
                 </label>
                 {errors.rightsToContent && (
                   <span className="text-red-500 text-xs">{errors.rightsToContent.message}</span>
