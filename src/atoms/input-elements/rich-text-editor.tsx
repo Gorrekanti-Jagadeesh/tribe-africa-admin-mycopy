@@ -32,6 +32,54 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     onContentChange(cleanContent);
   };
 
+  const customToolbar = (
+    <div id="custom-toolbar">
+      <span className="ql-formats">
+        <select className="ql-font">
+          <option value="sans-serif" selected>
+            Sans Serif
+          </option>
+          <option value="serif">Serif</option>
+          <option value="monospace">Monospace</option>
+        </select>
+      </span>
+      <span className="ql-formats">
+        <select className="ql-size">
+          <option value="small">Small</option>
+          <option value="normal" selected>
+            Normal
+          </option>
+          <option value="large">Large</option>
+          <option value="huge">Huge</option>
+        </select>
+      </span>
+      <span className="ql-formats">
+        <button className="ql-bold"></button>
+        <button className="ql-italic"></button>
+        <button className="ql-underline"></button>
+      </span>
+      <span className="ql-formats">
+        <select className="ql-color"></select>
+        <select className="ql-background"></select>
+      </span>
+      <span className="ql-formats">
+        <button className="ql-list" value="ordered"></button>
+        <button className="ql-list" value="bullet"></button>
+      </span>
+      <span className="ql-formats">
+        <button className="ql-align" value=""></button>
+        <button className="ql-align" value="center"></button>
+        <button className="ql-align" value="right"></button>
+        <button className="ql-align" value="justify"></button>
+      </span>
+      <span className="ql-formats">
+        <button className="ql-link"></button>
+        <button className="ql-image"></button>
+        <button className="ql-code-block"></button>
+      </span>
+    </div>
+  );
+
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       {label && (
@@ -53,6 +101,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         style={{
           height: height,
         }}
+        headerTemplate={customToolbar} // Apply custom toolbar
         {...props}
         className={className}
       />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
 import { Loading } from '@/atoms/common/loading';
@@ -7,6 +7,8 @@ import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 import Cookies from 'js-cookie';
 import { getUserEnrollments, sanity } from '@/utils/sanity';
+import { Countries } from '@/data';
+import Select from 'react-select';
 
 type FormData = {
   adType: string;
@@ -15,6 +17,7 @@ type FormData = {
   days: number;
   email: string;
   phone: string;
+  countries: string[];
 };
 
 const AdvertisementForm: React.FC = () => {
@@ -22,6 +25,7 @@ const AdvertisementForm: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<FormData>();
 
@@ -189,6 +193,26 @@ const AdvertisementForm: React.FC = () => {
                   ))}
                 </select>
                 {errors.position && <span className="text-red-500">{errors.position.message}</span>}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Countries</label>
+                <Controller
+                  name="countries"
+                  control={control}
+                  rules={{ required: 'Please select at least one country' }}
+                  render={({ field }) => (
+                    <Select<Option, true> // Specify the Option type and that it's multi-select
+                      {...field}
+                      options={Countries}
+                      isMulti
+                      className="w-1/2"
+                      onChange={(selectedOptions) => field.onChange(selectedOptions)}
+                      value={field.value}
+                    />
+                  )}
+                />
+                {errors.countries && <span className="text-red-500">{errors.countries.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">

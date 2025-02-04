@@ -67,17 +67,11 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
 
   const onFileSelect = (file: File, type: 'author' | 'cover') => {
     if (type === 'author') {
-      setValue('authorPhoto', file); // Sync with form state
+      setValue('authorPhoto', file);
     } else if (type === 'cover') {
-      setValue('coverPhoto', file); // Sync with form state
+      setValue('coverPhoto', file);
     }
   };
-
-  // Handle changes in the rich text editor content
-  const handleContentChange = (content: string): void => setEditorContent(content);
-
-  // Handle changes in blog placeholder image in drag-and-drop component
-  const handleFileSelect = (file: File | null): void => setSelectedFile(file);
 
   const onSubmit: SubmitHandler<BlogFormData> = async (data) => {
     try {
@@ -99,7 +93,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
       // Submit to Sanity
       await sanityClient.create({
         _type: 'blog', // Sanity schema type
-        _id: generateId(), // Unique ID
+        _id: `drafts.${generateId()}`, // Unique ID
         ...data,
         content,
         image: {
@@ -120,7 +114,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <UnderlineHeading borderWidth="w-1/4" className="text-2xl">
-        Write a BLOG
+        Blog Submission Form
       </UnderlineHeading>
       <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
         {loader ? (
