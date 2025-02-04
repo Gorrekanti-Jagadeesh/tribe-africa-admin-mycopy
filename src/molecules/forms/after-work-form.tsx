@@ -115,7 +115,6 @@ const AfterWorkFrom: React.FC = () => {
     handleSubmit,
     setValue,
     watch,
-    control,
     formState: { errors },
   } = useForm<AfterWorkFormInputs>({
     defaultValues: {
@@ -133,6 +132,7 @@ const AfterWorkFrom: React.FC = () => {
 
   // const [formType, setFormType] = useState(null);
   const [formData, setFormData] = useState({});
+  const { control } = useForm();
 
   const typeOfBusiness = watch('businessType');
 
