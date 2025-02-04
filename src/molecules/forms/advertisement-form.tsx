@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
 import { Loading } from '@/atoms/common/loading';
@@ -7,8 +7,8 @@ import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 import Cookies from 'js-cookie';
 import { getUserEnrollments, sanity } from '@/utils/sanity';
-import { Countries } from '@/data';
-import Select from 'react-select';
+// import { Countries } from '@/data';
+// import Select from 'react-select';
 
 type FormData = {
   adType: string;
@@ -195,7 +195,7 @@ const AdvertisementForm: React.FC = () => {
                 {errors.position && <span className="text-red-500">{errors.position.message}</span>}
               </div>
 
-              <div className="flex flex-col gap-2">
+              {/* <div className="flex flex-col gap-2">
                 <label>Countries</label>
                 <Controller
                   name="countries"
@@ -213,7 +213,7 @@ const AdvertisementForm: React.FC = () => {
                   )}
                 />
                 {errors.countries && <span className="text-red-500">{errors.countries.message}</span>}
-              </div>
+              </div> */}
 
               <div className="flex flex-col gap-2">
                 <label>Specify how many days the Advertisement should be active</label>

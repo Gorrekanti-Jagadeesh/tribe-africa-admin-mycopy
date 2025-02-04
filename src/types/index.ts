@@ -216,7 +216,7 @@ export interface NetworkCategory {
   items: {
     label: string;
     hasSubcategories: boolean;
-    subCategories?: string[];
+    subCategories?: { _key: string; title: string }[];
   }[];
   image: string;
 }
