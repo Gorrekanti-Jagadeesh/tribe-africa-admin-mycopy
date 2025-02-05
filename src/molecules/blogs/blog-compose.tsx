@@ -51,10 +51,10 @@ type BlogFormData = {
 };
 
 const categories = [
-  { title: 'Business Article', value: 'Business' },
-  { title: 'Travel & Leisure Article', value: 'Travel & Leisure' },
+  { label: 'Business Article', value: 'Business' },
+  { label: 'Travel & Leisure Article', value: 'Travel & Leisure' },
   {
-    title: 'Environment & Sustainability Article',
+    label: 'Environment & Sustainability Article',
     value: 'Environment & Sustainability',
   },
 ];
@@ -250,7 +250,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                 <CustomSelect
                   {...register('blogType', { required: 'Blog Type is required' })}
                   placeholder="Select Article Type"
-                  options={Countries}
+                  options={categories}
                   label="Article Type"
                   error={errors.blogType}
                 />
