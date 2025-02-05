@@ -22,6 +22,12 @@ const MAX_IMAGES = 3;
 // Split the rich text into text and tags
 let splitContent: string[];
 
+const wordCount = [
+  { label: '500–800 words', value: '500–800 words' },
+  { label: '1,000–1,500 words', value: '1,000–1,500 words' },
+  { label: '1,500+ words', value: '1,500+ words' },
+];
+
 type BlogFormData = {
   author: string;
   email: string;
@@ -241,21 +247,23 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="block font-semibold">
-                  Article Type<span className="text-red-500 text-sm">*</span>
-                </label>
-                <select
+                <CustomSelect
                   {...register('blogType', { required: 'Blog Type is required' })}
-                  className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500 ${errors.blogType ? 'border-red-500' : 'border-gray-400'}`}
-                >
-                  <option value="">Select Blog Category</option>
-                  {categories.map((each) => (
-                    <option key={each.title} value={each.value}>
-                      {each.title}
-                    </option>
-                  ))}
-                </select>
-                {errors.blogType && <span className="text-red-500 text-xs">{errors.blogType.message}</span>}
+                  placeholder="Select Article Type"
+                  options={Countries}
+                  label="Article Type"
+                  error={errors.blogType}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <CustomSelect
+                  {...register('wordCount', { required: 'Word Count is required' })}
+                  placeholder="Select Word Count range"
+                  options={wordCount}
+                  label="Word Count (approxiamte):"
+                  error={errors.wordCount}
+                />
               </div>
 
               <div className="flex flex-col gap-2">
