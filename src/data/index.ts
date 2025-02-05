@@ -505,4 +505,3 @@ export const afterWorkClubsAndSpecialGroupType = [
   { value: 'toast-master', label: 'Toast Masters' },
   { value: 'masonic-lodges', label: 'Masonic Lodges' },
 ];
-
