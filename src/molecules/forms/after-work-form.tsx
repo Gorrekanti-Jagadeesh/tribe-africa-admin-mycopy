@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
@@ -15,6 +15,11 @@ import {
 } from '@/data';
 import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
+import { sanity, processContent, splitRichText } from '@/utils/sanity';
+import { useQuery } from '@tanstack/react-query';
+import { uploadImage } from '@api/index';
+import sanityClient from '@/sanityClient';
+import { generateId } from '@utils/common';
 
 type BusinessType = 'night_club' | 'bar_pub' | 'clubs_special_groups' | 'restaurants';
 type RestaurantSubCategoryTypes = 'traditional' | 'casual_dining' | 'beach_bar' | 'fine_dining' | 'street_food';
@@ -26,88 +31,178 @@ export interface weekTimes {
 }
 
 export interface AfterWorkFormInputs {
-  businessName: string;
+  restaurantSubCategory: string;
+  ageRestriction: string;
   businessAddress: {
-    street: string;
-    city: string;
     region: string;
-    postalCode?: string;
     country: string;
+    city: string;
+    street: string;
+    postalCode: string;
   };
   businessContact: {
     phoneNumber: string;
     email: string;
-    website: string;
+    website?: string;
   };
-  socialmediaLinks: string[];
-  businessType: BusinessType;
-  restaurantSubCategory?: RestaurantSubCategoryTypes;
-  clubsAndSpecialGroups?: ClubsAndSpecialGroupsTypes;
+  businessLogo: File;
+  businessPhotos: File;
+  businessName: string;
+  businessType: string;
+  confirmation: boolean;
+  consent: boolean;
   cuisineType: {
     african: boolean;
-    Italian: boolean;
-    Chinese: boolean;
-    Indian: boolean;
-    Mexican: boolean;
-    Vegan_vegetarian: boolean;
-    Seafood: boolean;
+    italian: boolean;
+    chinese: boolean;
+    indian: boolean;
+    mexican: boolean;
+    vegan_vegetarian: boolean;
+    seafood: boolean;
     other: string;
   };
-  keyFeatures: {
-    Halal: boolean;
-    Kosher: boolean;
-    NoAlcoholServed: boolean;
-    PetFriendly: boolean;
-    DanceFloors: boolean;
-    LiveMusic: boolean;
-    Karaoke: boolean;
-    TriviaNights: boolean;
-    ComedyShows: boolean;
-    DJNightlife: boolean;
-    OutdoorSeating: boolean;
-    HappyHourSpecials: boolean;
-    AvailableForPrivateEvents: boolean;
-    AvailableForCorporateEvents: boolean;
-    FamilyFriendly: boolean;
-    ThemedNights: boolean;
-    SeasonalOrHolidaySpecials: boolean;
-    WeeklySpecials: boolean;
-    BirthdayEventPackages: boolean;
-    LiveStreamingOnlineEvents: boolean;
-    SportsViewing: boolean;
-    SalahRoomArea: boolean;
-    Other: string;
-  };
-  indoorSeatingCapacity: string;
-  outdoorSeatingCapacity: string;
-  menuServicesAtmosphereHighlights: string;
+  otherCuisineType?: string; // Optional field if "other" is selected
   fullDescription: string;
-  uploadMenu: FileList;
-  operatingHours: {
-    monday: weekTimes;
-    tuesday: weekTimes;
-    wednesday: weekTimes;
-    thursday: weekTimes;
-    friday: weekTimes;
-    saturday: weekTimes;
-    sunday: weekTimes;
+  indoorSeatingCapacity: string;
+  keyFeatures: {
+    halal?: boolean;
+    kosher?: boolean;
+    noAlcoholServed?: boolean;
+    petFriendly?: boolean;
+    danceFloors?: boolean;
+    liveMusic?: boolean;
+    karaoke?: boolean;
+    triviaNights?: boolean;
+    comedyShows?: boolean;
+    djNightlife?: boolean;
+    outdoorSeating?: boolean;
+    happyHourSpecials?: boolean;
+    privateEvents?: boolean;
+    corporateEvents?: boolean;
+    familyFriendly?: boolean;
+    themedNights?: boolean;
+    seasonalHolidaySpecials?: boolean;
+    weeklySpecials?: boolean;
+    birthdayEventPackages?: boolean;
+    liveStreamingOnline?: boolean;
+    sportsViewing?: boolean;
+    salahRoomArea?: boolean;
+    other?: boolean;
   };
-  ageRestriction: string;
-  businessLogo: FileList;
-  businessPhotos: FileList;
+  otherKeyFeature?: string; // If "other" is selected, specify
+  menuServicesAtmosphereHighlights: string;
+  operatingHours: {
+    monday?: { open: string; close: string };
+    tuesday?: { open: string; close: string };
+    wednesday?: { open: string; close: string };
+    thursday?: { open: string; close: string };
+    friday?: { open: string; close: string };
+    saturday?: { open: string; close: string };
+    sunday?: { open: string; close: string };
+  };
+  outdoorSeatingCapacity: string;
   ownerContactDetails: {
     name: string;
-    role: string;
+    role?: string;
     phoneNumber: string;
     email: string;
     emergencyContact?: string;
     idPhoto?: File;
   };
+  restaurantCategory: string;
   signature: string;
-  consent: boolean;
-  confirmation: boolean;
-  date: string;
+  socialMedia?: {
+    linkedin?: string;
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+  };
+  uploadMenu: FileList;
 }
+
+// export interface AfterWorkFormInputs {
+//   businessName: string;
+//   businessAddress: {
+//     street: string;
+//     city: string;
+//     region: string;
+//     postalCode?: string;
+//     country: string;
+//   };
+//   businessContact: {
+//     phoneNumber: string;
+//     email: string;
+//     website: string;
+//   };
+//   socialmediaLinks: string[];
+//   businessType: string;
+//   restaurantSubCategory: string;
+//   // clubsAndSpecialGroups?: ClubsAndSpecialGroupsTypes;
+//   cuisineType: {
+//     African: boolean;
+//     Italian: boolean;
+//     Chinese: boolean;
+//     Indian: boolean;
+//     Mexican: boolean;
+//     Vegan_vegetarian: boolean;
+//     Seafood: boolean;
+//     other: string;
+//   };
+//   keyFeatures: {
+//     Halal: boolean;
+//     Kosher: boolean;
+//     NoAlcoholServed: boolean;
+//     PetFriendly: boolean;
+//     DanceFloors: boolean;
+//     LiveMusic: boolean;
+//     Karaoke: boolean;
+//     TriviaNights: boolean;
+//     ComedyShows: boolean;
+//     DJNightlife: boolean;
+//     OutdoorSeating: boolean;
+//     HappyHourSpecials: boolean;
+//     AvailableForPrivateEvents: boolean;
+//     AvailableForCorporateEvents: boolean;
+//     FamilyFriendly: boolean;
+//     ThemedNights: boolean;
+//     SeasonalOrHolidaySpecials: boolean;
+//     WeeklySpecials: boolean;
+//     BirthdayEventPackages: boolean;
+//     LiveStreamingOnlineEvents: boolean;
+//     SportsViewing: boolean;
+//     SalahRoomArea: boolean;
+//     Other: string;
+//   };
+//   indoorSeatingCapacity: string;
+//   outdoorSeatingCapacity: string;
+//   menuServicesAtmosphereHighlights: string;
+//   fullDescription: string;
+//   uploadMenu: FileList;
+//   operatingHours: {
+//     monday: weekTimes;
+//     tuesday: weekTimes;
+//     wednesday: weekTimes;
+//     thursday: weekTimes;
+//     friday: weekTimes;
+//     saturday: weekTimes;
+//     sunday: weekTimes;
+//   };
+//   ageRestriction: string;
+//   businessLogo: FileList;
+//   businessPhotos: FileList;
+//   ownerContactDetails: {
+//     name: string;
+//     role: string;
+//     phoneNumber: string;
+//     email: string;
+//     emergencyContact?: string;
+//     idPhoto?: File;
+//   };
+//   signature: string;
+//   consent: boolean;
+//   confirmation: boolean;
+//   date: string;
+// }
 
 const AfterWorkFrom: React.FC = () => {
   const {
@@ -119,13 +214,13 @@ const AfterWorkFrom: React.FC = () => {
   } = useForm<AfterWorkFormInputs>({
     defaultValues: {
       operatingHours: {
-        monday: { start: '', end: '' },
-        tuesday: { start: '', end: '' },
-        wednesday: { start: '', end: '' },
-        thursday: { start: '', end: '' },
-        friday: { start: '', end: '' },
-        saturday: { start: '', end: '' },
-        sunday: { start: '', end: '' },
+        monday: { open: '', close: '' },
+        tuesday: { open: '', close: '' },
+        wednesday: { open: '', close: '' },
+        thursday: { open: '', close: '' },
+        friday: { open: '', close: '' },
+        saturday: { open: '', close: '' },
+        sunday: { open: '', close: '' },
       },
     },
   });
@@ -135,10 +230,86 @@ const AfterWorkFrom: React.FC = () => {
 
   const typeOfBusiness = watch('businessType');
 
-  const onAfterFormSubmit: SubmitHandler<AfterWorkFormInputs> = async (data) => {
-    console.log(data);
-  };
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['after-work-form'],
+    queryFn: () => sanity.GET(`*[_type == "afterWorkListing"]`),
+  });
 
+  // console.log('nikhil-------', data);
+
+  const onAfterFormSubmit: SubmitHandler<AfterWorkFormInputs> = async (data) => {
+    try {
+      // Display loader
+      console.log('request-------', data);
+
+      // Convert RichText fields to Portable Text format
+      const fullDescription = data.fullDescription;
+      const menuServicesAtmosphereHighlights = data.menuServicesAtmosphereHighlights;
+
+      // Handle image uploads
+      const businessLogo = await uploadImage(data.businessLogo);
+      // const businessPhotos = await uploadImage(data.businessPhotos);
+
+      // Submit to Sanity
+      await sanityClient.create({
+        _type: 'afterWorkListing', // Sanity schema type
+        _id: `drafts.${generateId()}`, // Unique ID for draft
+        ageRestriction: data.ageRestriction,
+        businessAddress: {
+          street: data.businessAddress.street,
+          city: data.businessAddress.city,
+          region: data.businessAddress.region,
+          postalCode: data.businessAddress.postalCode,
+          country: data.businessAddress.country,
+        },
+        businessContact: {
+          phoneNumber: data.businessContact.phoneNumber,
+          email: data.businessContact.email,
+          website: data.businessContact.website,
+        },
+        businessLogo: {
+          _type: 'image',
+          asset: { _ref: businessLogo._id },
+        },
+        businessName: data.businessName,
+        businessType: data.businessType,
+        confirmation: data.confirmation,
+        consent: data.consent,
+        cuisineType: data.cuisineType,
+        fullDescription: fullDescription,
+        indoorSeatingCapacity: data.indoorSeatingCapacity,
+        keyFeatures: data.keyFeatures,
+        menuServicesAtmosphereHighlights: menuServicesAtmosphereHighlights,
+        operatingHours: data.operatingHours,
+        otherCuisineType: data.otherCuisineType,
+        otherKeyFeature: data.otherKeyFeature,
+        outdoorSeatingCapacity: data.outdoorSeatingCapacity,
+        ownerContactDetails: data.ownerContactDetails,
+        restaurantCategory: data.restaurantCategory,
+        signature: data.signature,
+        socialMedia: data.socialMedia,
+        // uploadMenu: {
+        //   _type: 'file',
+        //   asset: { _ref: data.uploadMenu[0].name },
+        // },
+
+        // businessPhoto: {
+        //   _type: 'image',
+        //   asset: { _ref: businessPhotoUrl._id },
+        // },
+      });
+
+      // Notify success
+      alert('Event submitted successfully!');
+    } catch (error) {
+      // Handle errors
+      console.error('Error submitting event:', error);
+      alert('Failed to submit event. Please try again.');
+    } finally {
+      // Hide loader
+      // setLoader(false);
+    }
+  };
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">After Work Registration Form</h2>
@@ -260,7 +431,7 @@ const AfterWorkFrom: React.FC = () => {
             />
           </div>
         )}
-        {typeOfBusiness === 'clubs_special_groups' && (
+        {/* {typeOfBusiness === 'clubs_special_groups' && (
           <div className="flex flex-col gap-2">
             <CustomSelect
               {...register('clubsAndSpecialGroups', { required: 'Clubs and Special Groups Sub Category is required' })}
@@ -270,69 +441,69 @@ const AfterWorkFrom: React.FC = () => {
               error={errors.clubsAndSpecialGroups}
             />
           </div>
-        )}
+        )} */}
         {/* Business Cuisine Type */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold">Cuisine Type</label>
           <Checkbox {...register(`cuisineType.african`)} label={'African (Specify type/Region'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.Italian`)} label={'Italian'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.Chinese`)} label={'Chinese'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.Indian`)} label={'Indian'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.Mexican`)} label={'Mexican'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.Vegan_vegetarian`)} label={'Vegan/Vegetarian'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.Seafood`)} label={'Seafood'} onChange={() => {}} />
+          <Checkbox {...register(`cuisineType.italian`)} label={'Italian'} onChange={() => {}} />
+          <Checkbox {...register(`cuisineType.chinese`)} label={'Chinese'} onChange={() => {}} />
+          <Checkbox {...register(`cuisineType.indian`)} label={'Indian'} onChange={() => {}} />
+          <Checkbox {...register(`cuisineType.mexican`)} label={'Mexican'} onChange={() => {}} />
+          <Checkbox {...register(`cuisineType.vegan_vegetarian`)} label={'Vegan/Vegetarian'} onChange={() => {}} />
+          <Checkbox {...register(`cuisineType.seafood`)} label={'Seafood'} onChange={() => {}} />
           <Checkbox {...register(`cuisineType.other`)} label={'Other'} onChange={() => {}} />
         </div>
         {/* Business Key Features */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold">Key Features</label>
-          <Checkbox {...register(`keyFeatures.Halal`)} label={'Halal'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.Kosher`)} label={'Kosher'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.NoAlcoholServed`)} label={'No Alcohol Served'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.PetFriendly`)} label={'Pet Friendly'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.DanceFloors`)} label={'Dance Floors'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.LiveMusic`)} label={'Live Music'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.Karaoke`)} label={'Karaoke'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.TriviaNights`)} label={'Trivia Nights'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.ComedyShows`)} label={'Comedy Shows'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.DJNightlife`)} label={'DJ Nightlife'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.OutdoorSeating`)} label={'Outdoor Seating'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.HappyHourSpecials`)} label={'Happy Hour Specials'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.halal`)} label={'Halal'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.kosher`)} label={'Kosher'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.noAlcoholServed`)} label={'No Alcohol Served'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.petFriendly`)} label={'Pet Friendly'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.danceFloors`)} label={'Dance Floors'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.liveMusic`)} label={'Live Music'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.karaoke`)} label={'Karaoke'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.triviaNights`)} label={'Trivia Nights'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.comedyShows`)} label={'Comedy Shows'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.djNightlife`)} label={'DJ Nightlife'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.outdoorSeating`)} label={'Outdoor Seating'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.happyHourSpecials`)} label={'Happy Hour Specials'} onChange={() => {}} />
           <Checkbox
-            {...register(`keyFeatures.AvailableForPrivateEvents`)}
+            {...register(`keyFeatures.privateEvents`)}
             label={'Available For Private Events'}
             onChange={() => {}}
           />
           <Checkbox
-            {...register(`keyFeatures.AvailableForCorporateEvents`)}
+            {...register(`keyFeatures.corporateEvents`)}
             label={'Available For Corporate Events'}
             onChange={() => {}}
           />
-          <Checkbox {...register(`keyFeatures.FamilyFriendly`)} label={'Family Friendly'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.ThemedNights`)} label={'Themed Nights'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.familyFriendly`)} label={'Family Friendly'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.themedNights`)} label={'Themed Nights'} onChange={() => {}} />
           <Checkbox
-            {...register(`keyFeatures.SeasonalOrHolidaySpecials`)}
+            {...register(`keyFeatures.seasonalHolidaySpecials`)}
             label={'Seasonal or Holiday Specials'}
             onChange={() => {}}
           />
-          <Checkbox {...register(`keyFeatures.WeeklySpecials`)} label={'Weekly Specials'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.weeklySpecials`)} label={'Weekly Specials'} onChange={() => {}} />
           <Checkbox
-            {...register(`keyFeatures.BirthdayEventPackages`)}
+            {...register(`keyFeatures.birthdayEventPackages`)}
             label={'Birthday/Event Packages'}
             onChange={() => {}}
           />
           <Checkbox
-            {...register(`keyFeatures.LiveStreamingOnlineEvents`)}
+            {...register(`keyFeatures.liveStreamingOnline`)}
             label={'Live Streaming/Online Events'}
             onChange={() => {}}
           />
-          <Checkbox {...register(`keyFeatures.SportsViewing`)} label={'Sports Viewing'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.sportsViewing`)} label={'Sports Viewing'} onChange={() => {}} />
           <Checkbox
-            {...register(`keyFeatures.SalahRoomArea`)}
+            {...register(`keyFeatures.salahRoomArea`)}
             label={'Salah Room/area ( Muslim prayer area'}
             onChange={() => {}}
           />
-          <Checkbox {...register(`keyFeatures.Other`)} label={'Other'} onChange={() => {}} />
+          <Checkbox {...register(`keyFeatures.other`)} label={'Other'} onChange={() => {}} />
         </div>
         {/* Business Indoor Seatting Capacity */}
         <div className="flex flex-col gap-2">
@@ -353,10 +524,11 @@ const AfterWorkFrom: React.FC = () => {
           />
         </div>
         {/*Business Menu/Services/Atmosphere Highlights */}
+        {/* Menu/Services/Atmosphere Highlights */}
         <div className="flex flex-col gap-2">
-          <RichTextEditor
-            label="Menu/Services/Atmosphere Highlights:"
-            placeholder="30 words max. Highlight your signature dishes, cocktails, Views, or services"
+          <label className="text-sm font-medium">Menu/Services/Atmosphere Highlights:</label>
+          <textarea
+            placeholder="30 words max. Highlight your signature dishes, cocktails, views, or services"
             {...register('menuServicesAtmosphereHighlights', {
               minLength: {
                 value: 10,
@@ -367,19 +539,22 @@ const AfterWorkFrom: React.FC = () => {
                 message: 'Description must not exceed 100 characters',
               },
             })}
-            height={80}
-            onContentChange={(content) => setValue('menuServicesAtmosphereHighlights', content)}
-            error={errors?.menuServicesAtmosphereHighlights?.message}
-            required={false}
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={4} // Adjust height
+            onChange={(e) => setValue('menuServicesAtmosphereHighlights', e.target.value)}
           />
+          {errors.menuServicesAtmosphereHighlights && (
+            <p className="text-red-500 text-sm">{errors.menuServicesAtmosphereHighlights.message}</p>
+          )}
         </div>
+
         {/* Business Full Description */}
         <div className="flex flex-col gap-2">
-          <RichTextEditor
-            label="Full Description"
+          <label className="text-sm font-medium">Full Description:</label>
+          <textarea
             placeholder="100 - 500 words – detailed description including ambiance, offerings, and specialties"
             {...register('fullDescription', {
-              required: 'About Event is required',
+              required: 'Full Description is required',
               minLength: {
                 value: 500,
                 message: 'Full Description must be at least 500 characters',
@@ -389,10 +564,11 @@ const AfterWorkFrom: React.FC = () => {
                 message: 'Full Description must not exceed 1000 characters',
               },
             })}
-            onContentChange={(content) => setValue('fullDescription', content)}
-            error={errors.fullDescription?.message}
-            required
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={10} // Bigger area
+            onChange={(e) => setValue('fullDescription', e.target.value)}
           />
+          {errors.fullDescription && <p className="text-red-500 text-sm">{errors.fullDescription.message}</p>}
         </div>
         {/* Business Menu Photo */}
         <div className="flex flex-col gap-2">
@@ -400,7 +576,15 @@ const AfterWorkFrom: React.FC = () => {
           <Controller
             name="uploadMenu"
             control={control}
-            render={({ field }) => <FileUploadWithPreview {...field} control={control} maxFilesLength={1} />}
+            render={({ field }) => (
+              <FileUploadWithPreview
+                {...field}
+                control={control}
+                maxFilesLength={1}
+                setValue={setValue}
+                fieldName="businessLogo123"
+              />
+            )}
           />
           {/* <FileUploadWithPreview control={control} maxFilesLength={1} /> */}
         </div>
@@ -442,13 +626,15 @@ const AfterWorkFrom: React.FC = () => {
         </div>
         {/* Business Logo */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold">Upload Business Logo:</label>
-          <FileUploadWithPreview control={control} maxFilesLength={1} />
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold">Upload Business Logo:</label>
+            <FileUploadWithPreview control={control} maxFilesLength={1} setValue={setValue} fieldName="businessLogo" />
+          </div>
         </div>
         {/* Business Photos */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold">Upload Photos of Business and Offerings:</label>
-          <FileUploadWithPreview control={control} maxFilesLength={5} />
+          <FileUploadWithPreview control={control} maxFilesLength={5} setValue={setValue} fieldName="businessLogo123" />
         </div>
         {/* Business Owner Contact Details */}
         <div className="flex flex-col gap-2">
@@ -483,7 +669,7 @@ const AfterWorkFrom: React.FC = () => {
             countryCodes={africanCountriesPhoneCodes}
             label=""
           />
-          <FileUploadWithPreview control={control} maxFilesLength={1} />
+          <FileUploadWithPreview control={control} maxFilesLength={1} setValue={setValue} fieldName="businessLogo123" />
         </div>
         {/* Business Details Confirmation checkboxes */}
         <div className="flex flex-col gap-2">

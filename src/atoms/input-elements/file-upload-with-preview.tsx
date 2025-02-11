@@ -2,22 +2,39 @@ import React, { useState, useRef } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import { FaCamera } from 'react-icons/fa';
 
-const FileUploadWithPreview = ({ control, maxFilesLength }: { control: Control; maxFilesLength?: number }) => {
+const FileUploadWithPreview = ({
+  control,
+  maxFilesLength,
+  setValue,
+  fieldName,
+}: {
+  control: Control;
+  maxFilesLength?: number;
+  setValue: (name: string, value: any) => void;
+  fieldName: string;
+}) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileURLs, setFileURLs] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const maxFiles = maxFilesLength || 3;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, field: FieldValues) => {
+    console.log('-----image111');
+
     if (event.target.files) {
       const newFiles = Array.from(event.target.files);
-      const newFileURLs = newFiles.map((file) => URL.createObjectURL(file));
+      // create a preview URL for each file using URL.createObjectURL(file)
+      const newFileURLs = newFiles.map((file) => {
+        const previewURL = URL.createObjectURL(file);
+        return previewURL;
+      });
       const updatedFiles = [...selectedFiles, ...newFiles];
       const updatedFileURLs = [...fileURLs, ...newFileURLs];
 
       setSelectedFiles(updatedFiles);
       setFileURLs(updatedFileURLs);
-
+      setValue(fieldName, updatedFileURLs[0]);
+      console.log('-----image', updatedFileURLs);
       field.onChange(updatedFiles);
     }
   };
@@ -34,7 +51,7 @@ const FileUploadWithPreview = ({ control, maxFilesLength }: { control: Control; 
       }
       return prevURLs;
     });
-
+    setValue(fieldName, updatedFiles[0] || null);
     field.onChange(updatedFiles);
   };
 

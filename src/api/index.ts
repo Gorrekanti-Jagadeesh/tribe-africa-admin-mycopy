@@ -152,14 +152,29 @@ export const getHotelsInLocationWithLimit = (countryId: string) => {
 // Upload image to Sanity
 export const uploadImage = async (file: UploadBody | string) => {
   try {
-    const imageAsset = await sanityClient.assets.upload('image', typeof file === 'string' ? base64ToBlob(file) : file);
+    let imageFile: File | Blob;
+
+    if (typeof file === 'string') {
+      // Check if the input is a blob URL
+      if (file.startsWith('blob:')) {
+        const response = await fetch(file);
+        const blob = await response.blob();
+        imageFile = blob;
+      } else {
+        // If it's base64, convert it
+        imageFile = base64ToBlob(file);
+      }
+    } else {
+      imageFile = file;
+    }
+
+    const imageAsset = await sanityClient.assets.upload('image', imageFile);
     return imageAsset;
   } catch (error) {
     console.error('Error uploading image:', error);
     throw error;
   }
 };
-
 export const sanityImageUrlBuilder = (image: string | []) => {
   const builder = imageUrlBuilder(sanityClient);
   return builder.image(image);
