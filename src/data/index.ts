@@ -484,19 +484,19 @@ export const msadCategories = [
 ];
 
 export const afterWorkBusinessType = [
-  { value: 'restaurants', label: 'Restaurants' },
-  { value: 'night-clubs', label: 'Night clubs' },
-  { value: 'bars-pubs', label: 'Bars & Pubs' },
-  { value: 'clubs_special_groups', label: 'Clubs & Special groups' },
+  { value: 'restaurants', label: 'restaurant_eateries' },
+  { value: 'nightclub', label: 'Nightclubs' },
+  { value: 'bars_pubs', label: 'Bars & Pubs' },
+  { value: 'event_venue', label: 'Event Venue' },
 ];
 
 export const afterWorkRestaurantsType = [
   { value: 'traditional', label: 'Traditional' },
-  { value: 'casual-dining', label: 'Casual Dining' },
-  { value: 'beach-bars', label: 'Beach & Bars' },
-  { value: 'vegeterian-vegan', label: 'Vegeterian & Vegan' },
-  { value: 'fine-dining', label: 'Fine Dining' },
-  { value: 'street-food', label: 'Street food' },
+  { value: 'casual_dining', label: 'Casual Dining' },
+  { value: 'beach_bars', label: 'Beach & Bars' },
+  { value: 'vegan_vegetarian', label: 'Vegeterian & Vegan' },
+  { value: 'fine_dining', label: 'Fine Dining' },
+  { value: 'street_food', label: 'Street food' },
 ];
 
 export const afterWorkClubsAndSpecialGroupType = [
@@ -505,4 +505,3 @@ export const afterWorkClubsAndSpecialGroupType = [
   { value: 'toast-master', label: 'Toast Masters' },
   { value: 'masonic-lodges', label: 'Masonic Lodges' },
 ];
-
