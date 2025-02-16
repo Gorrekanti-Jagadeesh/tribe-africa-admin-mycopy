@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { generateId } from '@utils/common';
 import sanityClient from '../../sanityClient';
 import { Loading } from '@/atoms/common/loading';
@@ -7,17 +7,23 @@ import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 import Cookies from 'js-cookie';
 import { getUserEnrollments, sanity } from '@/utils/sanity';
-// import { Countries } from '@/data';
-// import Select from 'react-select';
+import { africanCountriesPhoneCodes, Countries } from '@/data';
+import Select from 'react-select';
+import { Option } from '@/types';
+import { CustomSelect } from '@/atoms/input-elements/cutom-select';
+import CustomInput from '@/atoms/input-elements/custom-input';
+import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 
 type FormData = {
   adType: string;
   item: string;
+  page: string;
   position: string;
   days: number;
   email: string;
+  countryCode: string;
   phone: string;
-  countries: string[];
+  countries: { label: string; value: string }[]; // Array of objects
 };
 
 const AdvertisementForm: React.FC = () => {
@@ -25,42 +31,37 @@ const AdvertisementForm: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<FormData>();
 
   const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
   const [allData, setAllData] = useState([[], [], []]);
+  const [loader, setLoader] = useState<boolean>(false);
 
-  const getUserListings = async () => {
-    const hotels = await getUserEnrollments('accommodation', email);
-    const events = await getUserEnrollments('event', email);
-    const businesses = await sanity.GET(
-      `*[_type == "findABusiness" && businessContactInformation.email == "${email}"]`
-    );
+  const PRICE = 10;
 
-    const allHotelData = hotels.map((each) => ({ title: each.name, value: each._id }));
-    const allEventsData = events.map((each) => ({ title: each.title, value: each._id }));
-    const allBusinessesData = businesses.map((each) => ({ title: each.businessName, value: each._id }));
-
-    setAllData([allHotelData, allEventsData, allBusinessesData]);
+  const POSITION_MULTIPLIER = {
+    'Position 1': 5,
+    'Position 2': 4,
+    'Position 3': 3,
+    'Position 4': 2,
+    'Position 5': 1,
   };
-  useEffect(() => {
-    getUserListings();
-  }, []);
 
   const adTypes = [
     {
-      title: 'Hotel',
+      label: 'Hotel',
       value: 'Hotel',
       items: allData[0],
     },
     {
-      title: 'Event',
+      label: 'Event',
       value: 'Event',
       items: allData[1],
     },
     {
-      title: 'Business',
+      label: 'Business',
       value: 'Business',
       items: allData[2],
     },
@@ -68,26 +69,34 @@ const AdvertisementForm: React.FC = () => {
 
   const pages = [
     {
-      title: 'Home Page ($20 per day)',
+      label: 'Home Page ($20 per day)',
       value: 'Home Page',
     },
     {
-      title: 'Business Page ($10 per day)',
+      label: 'Business Page ($10 per day)',
       value: 'Busienss Page',
     },
 
     {
-      title: 'Holiday Page ($10 per day)',
+      label: 'Holiday Page ($10 per day)',
       value: 'Holiday Page',
     },
   ];
 
+  const positions = [
+    { label: 'Position 1', value: 'Position 1' },
+    { label: 'Position 2', value: 'Position 2' },
+    { label: 'Position 3', value: 'Position 3' },
+    { label: 'Position 4', value: 'Position 4' },
+    { label: 'Position 5', value: 'Position 5' },
+  ];
+
   const selectedAdType = watch('adType');
   const days = watch('days');
+  const page = watch('page');
   const position = watch('position');
+  const countries = watch('countries');
   const selectedAdTypeOption = adTypes.find((cat) => cat.value === selectedAdType);
-
-  const [loader, setLoader] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
@@ -103,9 +112,10 @@ const AdvertisementForm: React.FC = () => {
         _type: 'advertisement', // Sanity schema type
         _id: `drafts.${generateId()}`, // Unique ID
         ...data,
+        countries: data.countries.map((country) => country.value), // Extracting only values
         item: {
           _type: 'reference',
-          _ref: 'bc54a813-1a22-4e2e-ba3e-c1754b22cb02', // Reference the document ID
+          _ref: data.item, // Reference the document ID
         },
         amount: `$${getPrice()}`,
       });
@@ -119,11 +129,34 @@ const AdvertisementForm: React.FC = () => {
     }
   };
 
-  const PRICE = 10;
-
   const getPrice = () => {
-    return position === 'Home Page' ? 2 * PRICE * days : PRICE * days;
+    const positionPay = POSITION_MULTIPLIER[position] || 1; // Default to 1 if not found
+
+    if (!position || !positionPay || !countries) {
+      return 0;
+    }
+    return page === 'Home Page'
+      ? 2 * PRICE * days * positionPay * countries.length
+      : PRICE * days * positionPay * countries.length;
   };
+
+  const getUserListings = async () => {
+    const hotels = await getUserEnrollments('accommodation', email);
+    const events = await getUserEnrollments('event', email);
+    const businesses = await sanity.GET(
+      `*[_type == "findABusiness" && businessContactInformation.email == "${email}"]`
+    );
+
+    const allHotelData = hotels.map((each) => ({ title: each.name, value: each._id }));
+    const allEventsData = events.map((each) => ({ title: each.title, value: each._id }));
+    const allBusinessesData = businesses.map((each) => ({ title: each.businessName, value: each._id }));
+
+    setAllData([allHotelData, allEventsData, allBusinessesData]);
+  };
+
+  useEffect(() => {
+    getUserListings();
+  }, []);
 
   return (
     <div className="flex flex-col gap-2 bg-white overflow-auto p-4 rounded-lg">
@@ -137,19 +170,14 @@ const AdvertisementForm: React.FC = () => {
           <>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label>Advertisement Type</label>
-                <select
-                  {...register('adType', { required: 'Event Category is required' })}
-                  className="w-full p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Select Advertisement Type</option>
-                  {adTypes.map((category) => (
-                    <option key={category.title} value={category.value}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-                {errors.adType && <span className="text-red-500">{errors.adType.message}</span>}
+                <CustomSelect
+                  {...register('adType', { required: 'Advertisement type is required' })}
+                  placeholder="Select Advertisement Type"
+                  options={adTypes}
+                  label="Advertisement Type"
+                  error={errors.adType}
+                />
+
                 {selectedAdTypeOption && selectedAdTypeOption.items.length === 0 && (
                   <span className="text-red-500">
                     You don't have any {selectedAdType} enlistments. Please enroll{' '}
@@ -161,10 +189,13 @@ const AdvertisementForm: React.FC = () => {
               {selectedAdTypeOption && selectedAdTypeOption.items.length !== 0 && (
                 <div className="flex flex-col gap-2">
                   <>
-                    <label>All {selectedAdType}s</label>
+                    <label className="font-semibold">
+                      All {selectedAdType}s<span className="text-red-500 text-sm">*</span>
+                    </label>
                     <select
                       {...register('item', { required: 'Event Type is required' })}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
+          ${errors.item ? 'border-red-500' : 'border-gray-400'}`}
                     >
                       <option value="">Select Your {selectedAdType}</option>
                       {selectedAdTypeOption.items.map((type) => (
@@ -179,85 +210,85 @@ const AdvertisementForm: React.FC = () => {
               )}
 
               <div className="flex flex-col gap-2">
-                <label>Placement of Advertisement</label>
-                <select
-                  {...register('position', { required: 'Event Category is required' })}
-                  className="w-full p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Select Advertisement Placement which suits you</option>
-                  {pages.map((category) => (
-                    <option key={category.title} value={category.value}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-                {errors.position && <span className="text-red-500">{errors.position.message}</span>}
+                <CustomSelect
+                  {...register('page', { required: 'Page of advertisement is required' })}
+                  placeholder="Select Advertisement Page which suits you"
+                  options={pages}
+                  label="Page of Advertisement"
+                  error={errors.page}
+                />
               </div>
 
-              {/* <div className="flex flex-col gap-2">
-                <label>Countries</label>
+              <div className="flex flex-col gap-2">
+                <CustomSelect
+                  {...register('position', { required: 'Position of advertisement is required' })}
+                  placeholder="Select Advertisement Placement which suits you"
+                  options={positions}
+                  label="Placement of Advertisement"
+                  error={errors.position}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="font-semibold">
+                  Countries <span className="text-red-500 text-sm">*</span>
+                </label>
                 <Controller
                   name="countries"
                   control={control}
                   rules={{ required: 'Please select at least one country' }}
                   render={({ field }) => (
                     <Select<Option, true> // Specify the Option type and that it's multi-select
-                      {...field}
                       options={Countries}
+                      {...register('countries', { required: 'Event Category is required' })}
                       isMulti
                       className="w-1/2"
                       onChange={(selectedOptions) => field.onChange(selectedOptions)}
-                      value={field.value}
                     />
                   )}
                 />
                 {errors.countries && <span className="text-red-500">{errors.countries.message}</span>}
-              </div> */}
+              </div>
 
               <div className="flex flex-col gap-2">
-                <label>Specify how many days the Advertisement should be active</label>
-                <input
-                  {...register('days', { required: 'Event Category is required' })}
-                  type="number"
-                  className="w-full p-2 border border-gray-300 rounded"
+                <CustomInput
+                  {...register('days', { required: 'Advertisement Active Days is required' })}
                   placeholder="Enter Active Days"
+                  label="Specify how many days the Advertisement should be active"
+                  error={errors.days}
                 />
                 {days && (
                   <span className="text-gray-500 text-sm">
                     Your Advertisement will Expire after {days == 1 ? '1 day' : `${days} days`}
                   </span>
                 )}
-                {errors.days && <span className="text-red-500">{errors.days.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Total Amount {'($)'}</label>
+                <label className="font-semibold">Total Amount {'($)'}</label>
                 <input
                   type="text"
                   value={`$${getPrice()}`}
-                  className="w-full p-2 border border-gray-300 rounded text-gray-500 cursor-not-allowed"
+                  className="w-1/2 p-2 border border-gray-300 rounded text-gray-500 cursor-not-allowed"
                   disabled
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Email</label>
-                <input
+                <CustomInput
                   {...register('email', { required: 'Email is required' })}
-                  type="email"
+                  label="Email"
                   placeholder="Enter Email Address"
-                  className="w-full p-2 border border-gray-300 rounded"
+                  error={errors.email}
                 />
-                {errors.email && <span className="text-red-500">{errors.email.message}</span>}
               </div>
 
               <div className="flex flex-col gap-2">
-                <label>Contact Number</label>
-                <input
-                  {...register('phone', { required: 'Contact Number is required' })}
-                  type="tel"
-                  placeholder="Contact Number"
-                  className="w-full p-2 border border-gray-300 rounded"
+                <MobileNumberInput
+                  register={register}
+                  errors={[errors.countryCode, errors.phone]}
+                  countryCodes={africanCountriesPhoneCodes}
+                  label="Contact Number for Enquiry"
                 />
                 {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
               </div>

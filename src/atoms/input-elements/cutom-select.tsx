@@ -66,8 +66,8 @@ export const CustomSelect = forwardRef<
         <div>
           <label
             htmlFor={name}
-            className={`absolute duration-300 top-9 text-sm left-2.5 origin-0 z-10 bg-white transition-all cursor-text
-          ${isFocused ? '-translate-y-4 scale-75 text-orange-500 px-2 left-0' : 'text-gray-400'}`}
+            className={`absolute duration-300 top-10 text-sm left-2.5 origin-0 z-10 bg-white transition-all cursor-text
+          ${isFocused ? '-translate-y-5 scale-75 text-orange-500 px-2 left-0' : 'text-gray-400'}`}
           >
             {placeholder}
           </label>
