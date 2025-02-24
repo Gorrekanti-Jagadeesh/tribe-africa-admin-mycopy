@@ -8,7 +8,7 @@ import { Loading } from '@/atoms/common/loading';
 const UserDashboardScreen = () => {
   const [activeTab, setActiveTab] = useState('Advertisements');
   const navigation = useNavigate();
-
+  console.log(navigation);
   const tabs = ['Advertisements', 'Events', 'Business', 'Hotels', 'Payments'];
   const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
 
