@@ -74,7 +74,7 @@ const AdvertisementForm: React.FC = () => {
     },
     {
       label: 'Business Page ($10 per day)',
-      value: 'Busienss Page',
+      value: 'Business Page',
     },
 
     {

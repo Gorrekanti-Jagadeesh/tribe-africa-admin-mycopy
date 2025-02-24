@@ -1,14 +1,16 @@
 import { sanity } from '@/utils/sanity';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Loading } from '@/atoms/common/loading';
+import Modal from '@/molecules/modal';
 
 const UserDashboardScreen = () => {
   const [activeTab, setActiveTab] = useState('Advertisements');
-  const navigation = useNavigate();
-  console.log(navigation);
+  const [selectedAd, setSelectedAd] = useState(null);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+
   const tabs = ['Advertisements', 'Events', 'Business', 'Hotels', 'Payments'];
   const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
 
@@ -20,17 +22,22 @@ const UserDashboardScreen = () => {
     queryKey: ['user-submissions-data', email],
     queryFn: () =>
       sanity.GET(`*[_type == "advertisement" && email == "${email}"]{
-      _id, 
-      adType, 
-      status, 
-      item->{
-        _id,
-        title  // Assuming the referenced document has a 'title' field
-      }
-    }`),
+        _id, 
+        adType, 
+        status, 
+        page, 
+        position,
+        amount, 
+        days,
+        countries,
+        expiryDate,
+        item->{
+          _id,
+          title  
+        }
+      }`),
   });
 
-  console.log(userSubmissionsData, 'wew');
   const sampleData = {
     Advertisements: userSubmissionsData,
     Events: [
@@ -59,6 +66,33 @@ const UserDashboardScreen = () => {
     return 'Something is wrong';
   }
 
+  const handlePayment = (ad) => {
+    setSelectedAd(ad);
+    setShowPaymentPopup(true);
+  };
+
+  const confirmPayment = async () => {
+    try {
+      const paymentTime = new Date();
+      const expiryDate = new Date(paymentTime); // Clone the date object
+
+      expiryDate.setDate(expiryDate.getDate() + Number(selectedAd.days)); // Ensure it's a number
+
+      // Update Sanity with payment details
+      await sanity.PUT(selectedAd._id, {
+        status: 'Paid',
+        paymentTime: paymentTime.toISOString(),
+        expiryDate: expiryDate.toISOString(), // Ensure correct format
+      });
+
+      setShowPaymentPopup(false);
+      alert('Payment Successful!'); // Optional success message
+    } catch (error) {
+      console.error('Payment update failed:', error);
+      alert('Payment failed. Please try again.');
+    }
+  };
+
   return (
     <div className="p-6">
       <Link to={'/'}>
@@ -82,33 +116,101 @@ const UserDashboardScreen = () => {
       <div className="mt-6">
         {activeTab === 'Advertisements' && (
           <div>
-            {sampleData.Advertisements.map((ad) => (
-              <div key={ad.id} className="p-4 border rounded mb-2 flex justify-between items-center">
+            {userSubmissionsData.map((ad) => (
+              <div key={ad._id} className="p-4 border rounded mb-2 flex justify-between items-center">
                 <div>
                   <h2 className="text-lg font-semibold">{ad.item.title}</h2>
-
                   <h2 className="text-sm p-2 bg-blue-300 rounded-full font-semibold w-fit">{ad.adType}</h2>
                 </div>
 
-                <span
-                  className={`px-3 py-1 rounded-full text-sm ${
-                    ad.status === 'Paid'
-                      ? 'bg-green-100 text-green-600'
-                      : ad.status === 'Expired'
-                        ? 'bg-red-100 text-red-600'
-                        : 'bg-blue-100 text-blue-600'
-                  }`}
-                >
-                  {ad.status}
-                  {ad.status === 'Paid' && (
-                    <span>{`
-                  (Expires in ${ad.expiry})`}</span>
+                <div>
+                  {ad.status === 'Pending' && (
+                    <span className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-600">Pending</span>
                   )}
-                </span>
+
+                  {ad.status === 'Approved' && (
+                    <button className="px-3 py-1 rounded bg-blue-500 text-white" onClick={() => handlePayment(ad)}>
+                      Pay
+                    </button>
+                  )}
+
+                  {ad.status === 'Paid' && (
+                    <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-600">
+                      Paid (Expires on{' '}
+                      {new Date(ad.expiryDate).toLocaleString('en-GB', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZone: 'GMT',
+                        timeZoneName: 'short',
+                      })}
+                      )
+                    </span>
+                  )}
+
+                  {ad.status === 'Rejected' && (
+                    <span className="px-3 py-1 rounded-full text-sm bg-red-300 text-gray-600">Rejected</span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         )}
+
+        <Modal isOpen={showPaymentPopup} setIsOpen={setShowPaymentPopup}>
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[40%] text-center">
+              <h2 className="text-xl font-semibold mb-4">Confirm Payment</h2>
+
+              {/* Ad Details */}
+              <div className="mb-4 text-left">
+                <p className="text-lg font-medium">
+                  📌 <span className="font-semibold">Ad Name:</span> {selectedAd?.item?.title}
+                </p>
+                <p className="text-lg font-medium">
+                  📍 <span className="font-semibold">Ad Type:</span> {selectedAd?.adType}
+                </p>
+                <p className="text-lg font-medium">
+                  📍 <span className="font-semibold">Ad Position:</span> {selectedAd?.position}
+                </p>
+                <p className="text-lg font-medium">
+                  📍 <span className="font-semibold">Ad Page:</span> {selectedAd?.page}
+                </p>
+                <p className="text-lg font-medium">
+                  📍 <span className="font-semibold">Ad Countries:</span> {selectedAd?.countries.join(', ')}
+                </p>
+                <p className="text-lg font-medium">
+                  📅 <span className="font-semibold">Active Days:</span> {selectedAd?.days} days
+                </p>
+              </div>
+
+              {/* Payment Amount */}
+              <p className="text-lg font-medium mb-4">
+                💰 <span className="font-semibold">Amount:</span> {selectedAd?.amount}
+              </p>
+
+              {/* Buttons */}
+              <div className="flex justify-center gap-4">
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                  onClick={confirmPayment}
+                >
+                  Pay Now
+                </button>
+                <button
+                  className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                  onClick={() => setShowPaymentPopup(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+
         {activeTab === 'Events' && (
           <div>
             {sampleData.Events.map((event) => (
