@@ -94,7 +94,7 @@ const UserDashboardScreen = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-6xl m-auto">
       <Link to={'/'}>
         <h1>{'< Back'}</h1>
       </Link>
@@ -117,42 +117,45 @@ const UserDashboardScreen = () => {
         {activeTab === 'Advertisements' && (
           <div>
             {userSubmissionsData.map((ad) => (
-              <div key={ad._id} className="p-4 border rounded mb-2 flex justify-between items-center">
+              <div key={ad._id} className="p-6 border rounded mb-2 flex justify-between items-center">
                 <div>
                   <h2 className="text-lg font-semibold">{ad.item.title}</h2>
-                  <h2 className="text-sm p-2 bg-blue-300 rounded-full font-semibold w-fit">{ad.adType}</h2>
+                  <h2 className="text-sm px-5 py-1 bg-blue-300 rounded-full font-semibold w-fit">{ad.adType}</h2>
                 </div>
 
                 <div>
                   {ad.status === 'Pending' && (
-                    <span className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-600">Pending</span>
+                    <span className="px-3 py-1 rounded-full text-sm bg-yellow-400 text-gray-600">Pending</span>
                   )}
 
-                  {ad.status === 'Approved' && (
-                    <button className="px-3 py-1 rounded bg-blue-500 text-white" onClick={() => handlePayment(ad)}>
+                  {ad.status == 'Approved' && (
+                    <button className="px-3 py-1 rounded bg-orange-500 text-white" onClick={() => handlePayment(ad)}>
                       Pay
                     </button>
                   )}
 
                   {ad.status === 'Paid' && (
-                    <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-600">
-                      Paid (Expires on{' '}
-                      {new Date(ad.expiryDate).toLocaleString('en-GB', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZone: 'GMT',
-                        timeZoneName: 'short',
-                      })}
-                      )
-                    </span>
+                    <div className="flex flex-col items-end">
+                      <p className="px-5 py-1 rounded-full text-sm bg-green-600 text-white w-fit">Paid</p>
+                      <p>
+                        (Expires on{' '}
+                        {new Date(ad.expiryDate).toLocaleString('en-GB', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          timeZone: 'GMT',
+                          timeZoneName: 'short',
+                        })}
+                        )
+                      </p>
+                    </div>
                   )}
 
                   {ad.status === 'Rejected' && (
-                    <span className="px-3 py-1 rounded-full text-sm bg-red-300 text-gray-600">Rejected</span>
+                    <span className="px-3 py-1 rounded-full text-sm bg-red-400 text-white">Rejected</span>
                   )}
                 </div>
               </div>
