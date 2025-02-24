@@ -8,7 +8,6 @@ interface MarkerType {
   category: string;
   subCategory?: string;
 }
-
 interface CountryDataType {
   center: [number, number];
   markers: MarkerType[];
