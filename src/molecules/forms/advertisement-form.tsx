@@ -118,6 +118,7 @@ const AdvertisementForm: React.FC = () => {
           _ref: data.item, // Reference the document ID
         },
         amount: `$${getPrice()}`,
+        status: 'Pending',
       });
 
       alert('Submitted successfully!');
@@ -136,8 +137,8 @@ const AdvertisementForm: React.FC = () => {
       return 0;
     }
     return page === 'Home Page'
-      ? 2 * PRICE * days * positionPay * countries.length
-      : PRICE * days * positionPay * countries.length;
+      ? 2 * PRICE * days * countries.length + positionPay
+      : PRICE * days * countries.length + positionPay;
   };
 
   const getUserListings = async () => {
@@ -153,6 +154,8 @@ const AdvertisementForm: React.FC = () => {
 
     setAllData([allHotelData, allEventsData, allBusinessesData]);
   };
+
+  console.log(allData, 'ppp', email);
 
   useEffect(() => {
     getUserListings();

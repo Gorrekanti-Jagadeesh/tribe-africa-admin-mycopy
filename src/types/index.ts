@@ -313,7 +313,7 @@ export interface accomodationProps {
 
 export interface accommodationCardProps {
   _id: string;
-  name: string;
+  title: string;
   phone_no: string;
   website: string;
   address: string;

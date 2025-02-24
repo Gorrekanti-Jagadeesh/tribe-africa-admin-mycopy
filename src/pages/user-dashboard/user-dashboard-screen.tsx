@@ -1,17 +1,38 @@
+import { sanity } from '@/utils/sanity';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { Loading } from '@/atoms/common/loading';
 
 const UserDashboardScreen = () => {
   const [activeTab, setActiveTab] = useState('Advertisements');
+  const navigation = useNavigate();
 
   const tabs = ['Advertisements', 'Events', 'Business', 'Hotels', 'Payments'];
+  const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
 
+  const {
+    data: userSubmissionsData,
+    error: userSubmissionsError,
+    isLoading: userSubmissionsLoading,
+  } = useQuery({
+    queryKey: ['user-submissions-data', email],
+    queryFn: () =>
+      sanity.GET(`*[_type == "advertisement" && email == "${email}"]{
+      _id, 
+      adType, 
+      status, 
+      item->{
+        _id,
+        title  // Assuming the referenced document has a 'title' field
+      }
+    }`),
+  });
+
+  console.log(userSubmissionsData, 'wew');
   const sampleData = {
-    Advertisements: [
-      { id: 1, title: 'Ad 1', status: 'Expired' },
-      { id: 2, title: 'Ad 2', status: 'Verification in Progress' },
-      { id: 3, title: 'Ad 3', status: 'Live', expiry: '7 days' },
-    ],
+    Advertisements: userSubmissionsData,
     Events: [
       { id: 1, name: 'Event 1', date: '2025-02-10' },
       { id: 2, name: 'Event 2', date: '2025-03-15' },
@@ -29,6 +50,14 @@ const UserDashboardScreen = () => {
       { id: 2, amount: '₹2000', status: 'Pending', date: '2025-01-18' },
     ],
   };
+
+  if (userSubmissionsLoading) {
+    return <Loading />;
+  }
+
+  if (userSubmissionsError) {
+    return 'Something is wrong';
+  }
 
   return (
     <div className="p-6">
@@ -56,19 +85,22 @@ const UserDashboardScreen = () => {
             {sampleData.Advertisements.map((ad) => (
               <div key={ad.id} className="p-4 border rounded mb-2 flex justify-between items-center">
                 <div>
-                  <h2 className="text-lg font-semibold">{ad.title}</h2>
+                  <h2 className="text-lg font-semibold">{ad.item.title}</h2>
+
+                  <h2 className="text-sm p-2 bg-blue-300 rounded-full font-semibold w-fit">{ad.adType}</h2>
                 </div>
+
                 <span
                   className={`px-3 py-1 rounded-full text-sm ${
-                    ad.status === 'Live'
+                    ad.status === 'Paid'
                       ? 'bg-green-100 text-green-600'
                       : ad.status === 'Expired'
                         ? 'bg-red-100 text-red-600'
                         : 'bg-blue-100 text-blue-600'
                   }`}
                 >
-                  {ad.status}{' '}
-                  {ad.status === 'Live' && (
+                  {ad.status}
+                  {ad.status === 'Paid' && (
                     <span>{`
                   (Expires in ${ad.expiry})`}</span>
                   )}

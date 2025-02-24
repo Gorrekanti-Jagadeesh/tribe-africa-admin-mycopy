@@ -28,7 +28,7 @@ interface owenDetails {
 
 interface findAbusinessDetails {
   // _id: string;
-  businessName?: string;
+  title?: string;
   businessMotive: string;
   address: address;
   businessContactInformation?: businessAddress;
@@ -115,10 +115,12 @@ const FindaBusinessDetailsScreen: React.FC<data> = ({ data }) => {
     },
   ];
 
+  console.log(data, 'erfer');
+
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       <div className="flex flex-col justify-end items-end md:pb-8">
-        <h1 className="font-bold text-2xl">{data?.businessName}</h1>
+        <h1 className="font-bold text-2xl">{data?.title}</h1>
         <p>{data?.businessMotive}</p>
       </div>
       <div className="overflow-hidden">

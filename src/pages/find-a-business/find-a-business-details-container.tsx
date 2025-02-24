@@ -9,7 +9,7 @@ const FindaBusinessDetailsContainer = () => {
 
   const fetchFindABusinessData = async () => {
     const data = await sanity.GET(query.BUSINESS.NETWORK.FIND_A_BUSINESS_DETAILS(id));
-    return data[0];
+    return data;
   };
 
   const { data, error, isLoading } = useQuery({
