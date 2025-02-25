@@ -11,7 +11,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ label, onC
   const inputId = `checkbox-${Math.random().toString(36).substr(2, 9)}`; // Generate a unique ID for the checkbox
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center mt-2">
       <input
         type="checkbox"
         onChange={(e) => onChange(e.target.checked)}

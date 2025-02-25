@@ -50,6 +50,7 @@ export interface InputProps {
   patternMessage?: string;
   maxLength?: number;
   minLength?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // New onChange prop for controlled input
 }
 
 export interface HookInputProps {

@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
-import Dropdown from '@atoms/dropdown/dropdown-search';
+import sanityClient from '../../sanityClient';
 import Input from '@atoms/input-elements/input';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
 import Checkbox from '@/atoms/input-elements/checkbox';
@@ -11,8 +10,18 @@ import { Option } from '@/types';
 import { RichTextEditor } from '@/atoms/input-elements/rich-text-editor';
 import { Select } from '@/atoms/input-elements/select';
 import { deepMerge } from '@/utils/common';
-import { Textarea } from '@/atoms/input-elements/text-area';
+import { generateId } from '@utils/common';
 import { GetCoordinateOnMap } from '../maps/leaflet-map';
+import { uploadImage } from '@api/index';
+
+import {
+  amenitiesMapping,
+  getAmenitiesConfig,
+  nameLabels,
+  categoryLabels,
+  policyLabels,
+  priceRangeOptions,
+} from '@/data/amanitieConfig';
 
 export interface AccommodationFormInputs {
   accommodation_type: string;
@@ -26,6 +35,17 @@ export interface AccommodationFormInputs {
     upScale: boolean;
     luxury: boolean;
   };
+  category: string;
+  locationType: {
+    beach: string;
+    mountain: string;
+    river: string;
+    lakeside: string;
+    desert: string;
+    island: string;
+    urban: string;
+    other: string;
+  };
   address: {
     street: string;
     city: string;
@@ -37,6 +57,7 @@ export interface AccommodationFormInputs {
     website: string;
     phoneNumber: string;
     email: string;
+    socialMedia?: string;
   };
   description: {
     tagline: string;
@@ -44,11 +65,14 @@ export interface AccommodationFormInputs {
     highlights: string[];
   };
   languages: {
+    arabic: boolean;
     english: boolean;
     french: boolean;
     spanish: boolean;
     portuguese: boolean;
     german: boolean;
+    mandarin: boolean;
+    bahasa: boolean;
     other?: string;
   };
   establishedIn: string;
@@ -57,6 +81,11 @@ export interface AccommodationFormInputs {
       freeCancellation: boolean;
       nonRefundable: boolean;
       description?: string;
+    };
+    securityDeposit: {
+      hasDeposit: boolean;
+      amount?: string;
+      conditions?: string;
     };
     rules?: string;
     checkInTime?: string;
@@ -75,71 +104,47 @@ export interface AccommodationFormInputs {
     jcb: boolean;
     other: string;
   };
-  operatingSeasons: {
-    title: string;
-    description: string;
+  operatingSeason: {
+    isYearRound: boolean; // true if open year-round, false if seasonal
+    seasonalMonths?: string; // Specify seasonal months
+    lowSeason?: string; // Specify low season months
+    highSeason?: string; //
   }[];
-  keyLocations: { title: string; distance: string }[];
-  attractions: { title: string; distance: string }[];
   location: {
     latitude: string;
     longitude: string;
   };
   amenities: {
-    general: {
+    generalAmenities: {
       security24h: boolean;
       cctvCameras: boolean;
       freeParking: boolean;
       paidParking: boolean;
+      valetParking: boolean;
       electricVehicleChargingStation: boolean;
+      conciergeService: boolean;
+      frontDesk24h: boolean;
       freeWiFi: boolean;
+      airportShuttleService: boolean;
+      luggageStorage: boolean;
       wheelchairAccessibleFacilities: boolean;
-      restrooms: boolean;
-      showers: boolean;
-      laundryFacilities: boolean;
-      sharedKitchenFacilities: boolean;
-      smokingAllowed: boolean;
-      alcoholAllowed: boolean;
-      playground: boolean;
-      petFriendlySpaces: boolean;
+      upperFloorsAccessibleByElevator: boolean;
+      roomService: boolean;
+      laundryService: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      breakfastIncluded: boolean;
       breakfastAvailableForPurchase: boolean;
       salahRoom: boolean;
       chapel: boolean;
-      otherSpecify: boolean;
+      garden: boolean;
+      terrace: boolean;
+      otherSpecify: string;
     };
-    utilities: {
-      electricity: boolean;
-      water: boolean;
-      sewer: boolean;
-      dumpStation: boolean;
-      wifi: boolean;
-    };
-    recreationalFacilities: {
-      onSiteCafe: boolean;
-      onSiteBar: boolean;
-      sharedLounge: boolean;
-      poolTable: boolean;
-      tableTennis: boolean;
-      library: boolean;
-      bbqGrill: boolean;
-      firePit: boolean;
-      picnicTables: boolean;
-      swimmingPool: boolean;
-      gymFitnessArea: boolean;
-      massageWellnessServices: boolean;
-      basketball: boolean;
-      volleyball: boolean;
-      weeklyEvents: boolean;
-      culturalEvents: boolean;
-      otherSpecify: boolean;
-    };
-    workConnectivity: {
-      coWorkingSpaces: boolean;
-      networkingOpportunities: boolean;
-      powerOutletsUsbPorts: boolean;
-      printingScanningServices: boolean;
-      highSpeedWifi: boolean;
-      otherSpecify: boolean;
+    barDining: {
+      barLounge: boolean;
+      poolBar: boolean;
+      otherSpecify: string;
     };
     specialMenus: {
       dairyFree: boolean;
@@ -148,15 +153,52 @@ export interface AccommodationFormInputs {
       vegan: boolean;
       halal: boolean;
       kosher: boolean;
-      otherSpecify: boolean;
+      otherSpecify: string;
     };
-    travelSupport: {
+    recreational: {
+      indoorSwimmingPool: boolean;
+      outdoorSwimmingPool: boolean;
+      spaServices: boolean;
+      fitnessCenterGym: boolean;
+      tennisCourt: boolean;
+      golfCourse: boolean;
+      kidsClub: boolean;
+      kidsPlayArea: boolean;
+      otherSpecify: string;
+      culturalEvents: boolean;
+      notApplicable: boolean;
+    };
+    travelAdventureSupport: {
       tourDesk: boolean;
-      transportServices: boolean;
-      travelGuides: boolean;
-      storageForOutdoorGear: boolean;
+      guidedTours: boolean;
+      privateTourGuides: boolean;
+      transportServices: boolean; // Courtesy Bus/Car Service
+      vehiclesForRent: boolean;
       bicyclesForRent: boolean;
-      otherSpecify: boolean;
+      storageForOutdoorGear: boolean; // Surfboards, Bicycles, etc.
+      otherSpecify?: string; // Optional string input for additional options
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      businessCenter: boolean;
+      networkingOpportunities: boolean;
+      printingScanningServices: boolean;
+      powerOutletsUSBPorts: boolean;
+      highSpeedWiFi: boolean;
+      translators: boolean;
+      otherSpecify?: string; // Optional string input for additional options
+    };
+
+    meetingRooms: {
+      numberOfRooms?: string; // Number of meeting rooms (input field)
+      maxCapacity?: string; // Maximum capacity (input field)
+    };
+
+    eventServices: {
+      weddings?: boolean;
+      corporateEvents?: boolean;
+      banquets?: boolean;
+      otherSpecify?: string; // Input field for specifying other event services
     };
     ecoFriendlyPractices: {
       greenCertification: boolean;
@@ -178,7 +220,577 @@ export interface AccommodationFormInputs {
       communityInitiatives: boolean;
     };
   };
-  images: FileList;
+  amenitiesForHostel: {
+    generalAmenities: {
+      frontDesk: boolean;
+      security: boolean;
+      keyAccess: boolean;
+      cctv: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      evCharging: boolean;
+      wheelchairAccess: boolean;
+      elevator: boolean;
+      freeWiFi: boolean;
+      luggageStorage: boolean;
+      lockers: boolean;
+      safetyDepositBox: boolean;
+      laundryFacilities: boolean;
+      cleaningServices: boolean;
+      sharedKitchen: boolean;
+      smokingAllowed: boolean;
+      alcoholAllowed: boolean;
+      petsAllowed: boolean;
+      linenProvided: boolean;
+      towelsProvided: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      freeBreakfast: boolean;
+      breakfastAvailable: boolean;
+      salahRoom: boolean;
+      chapel: boolean;
+      other?: string; // For specifying other amenities
+    };
+    recreational: {
+      onSiteCafe: boolean;
+      onSiteBar: boolean;
+      sharedLounge: boolean;
+      gameEntertainment: boolean;
+      poolTable: boolean;
+      tableTennis: boolean;
+      library: boolean;
+      rooftopTerrace: boolean;
+      kidsPlayArea: boolean;
+      bbqArea: boolean;
+      weeklyEvents: boolean;
+      culturalEvents: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      networkingOpportunities: boolean;
+      powerOutletsUsbPorts: boolean;
+      printingScanningServices: boolean;
+      highSpeedWiFi: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    wellness: {
+      gymFitnessArea: boolean;
+      swimmingPool: boolean;
+      massageWellnessServices: boolean;
+      otherSpecify?: string;
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    travelAdventureSupport: {
+      tourDesk: boolean;
+      transportServices: boolean;
+      travelGuides: boolean;
+      outdoorGearStorage: boolean;
+      bicyclesForRent: boolean;
+      otherSpecify?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+  amenitiesForCoLiving: {
+    generalAmenities: {
+      frontDesk: boolean;
+      security: boolean;
+      keyAccess: boolean;
+      cctv: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      evCharging: boolean;
+      wheelchairAccess: boolean;
+      elevator: boolean;
+      freeWiFi: boolean;
+      luggageStorage: boolean;
+      lockers: boolean;
+      safetyDepositBox: boolean;
+      laundryFacilities: boolean;
+      cleaningServices: boolean;
+      sharedKitchen: boolean;
+      smokingAllowed: boolean;
+      alcoholAllowed: boolean;
+      petsAllowed: boolean;
+      linenProvided: boolean;
+      towelsProvided: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      freeBreakfast: boolean;
+      breakfastAvailable: boolean;
+      salahRoom: boolean;
+      chapel: boolean;
+      other?: string; // For specifying other amenities
+    };
+    recreational: {
+      onSiteCafe: boolean;
+      onSiteBar: boolean;
+      sharedLounge: boolean;
+      gameEntertainment: boolean;
+      poolTable: boolean;
+      tableTennis: boolean;
+      library: boolean;
+      rooftopTerrace: boolean;
+      kidsPlayArea: boolean;
+      bbqArea: boolean;
+      weeklyEvents: boolean;
+      culturalEvents: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      networkingOpportunities: boolean;
+      powerOutletsUsbPorts: boolean;
+      printingScanningServices: boolean;
+      highSpeedWiFi: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    wellness: {
+      gymFitnessArea: boolean;
+      swimmingPool: boolean;
+      massageWellnessServices: boolean;
+      otherSpecify?: string;
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    travelAdventureSupport: {
+      transportServices: boolean;
+      outdoorGearStorage: boolean;
+      otherSpecify?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+
+  amenitiesForCampground: {
+    generalAmenities: {
+      security: boolean; // 24/7 Security
+      cctv: boolean; // CCTV Cameras
+      freeParking: boolean; // Free Parking
+      paidParking: boolean; // Paid Parking
+      evCharging: boolean; // Electric Vehicle Charging Station
+      freeWiFi: boolean; // Free Wi-Fi
+      wheelchairAccess: boolean; // Wheelchair-Accessible Facilities
+      restrooms: boolean; // Restrooms
+      showers: boolean; // Showers
+      laundryFacilities: boolean; // Laundry Facilities
+      sharedKitchen: boolean; // Shared Kitchen Facilities
+      smokingAllowed: boolean; // Smoking Allowed
+      alcoholAllowed: boolean; // Alcohol Allowed
+      playground: boolean; // Playground
+      petFriendly: boolean; // Pet-Friendly Spaces
+      breakfastAvailable: boolean; // Breakfast Available for Purchase
+      salahRoom: boolean; // Salah Room (Muslim Prayer Room)
+      chapel: boolean; // Chapel
+      other?: string; // Optional field for custom input
+    };
+
+    utilities: {
+      electricity: boolean;
+      water: boolean;
+      sewer: boolean;
+      dumpStation: boolean;
+      wifi: boolean;
+    };
+    recreational: {
+      onSiteCafe: boolean;
+      onSiteBar: boolean;
+      sharedLounge: boolean;
+      gameEntertainment: boolean;
+      poolTable: boolean;
+      tableTennis: boolean;
+      library: boolean;
+      rooftopTerrace: boolean;
+      kidsPlayArea: boolean;
+      bbqArea: boolean;
+      weeklyEvents: boolean;
+      culturalEvents: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      networkingOpportunities: boolean;
+      powerOutletsUsbPorts: boolean;
+      printingScanningServices: boolean;
+      highSpeedWiFi: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    travelAdventureSupport: {
+      tourDesk: boolean;
+      transportServices: boolean;
+      travelGuides: boolean;
+      outdoorGearStorage: boolean;
+      bicyclesForRent: boolean;
+      otherSpecify?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+  aminitiesForRental: {
+    generalAmenities: {
+      frontDesk: boolean;
+      security: boolean;
+      keyAccess: boolean;
+      cctv: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      streetParking: boolean;
+      noParking: boolean;
+      garageParking: boolean;
+      valetParking: boolean;
+      evCharging: boolean;
+      wheelchairAccess: boolean;
+      elevator: boolean;
+      freeWiFi: boolean;
+      wifi: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      petsAllowed: boolean;
+      fireplace: boolean;
+      cableSatelliteTV: boolean;
+      gymFitness: boolean;
+      other?: string; // Optional field for custom input
+    };
+    recreational: {
+      poolTable: boolean;
+      gameConsole: boolean;
+      boardGames: boolean;
+    };
+    livingAreas: {
+      livingRoom: boolean;
+      diningArea: boolean;
+      workspaceOffice: boolean;
+      familyTvRoom: boolean;
+      other?: string;
+    };
+    kitchen: {
+      fullyEquippedKitchen: boolean;
+      refrigerator: boolean;
+      stoveOven: boolean;
+      microwave: boolean;
+      dishwasher: boolean;
+      coffeeMaker: boolean;
+      toaster: boolean;
+      washingMachine: boolean;
+      dryer: boolean;
+      other?: string;
+    };
+    outdoorFacilities: {
+      privatePool: boolean;
+      sharedPool: boolean;
+      hotTubJacuzzi: boolean;
+      bbqGrillArea: boolean;
+      gardenLawn: boolean;
+      patioTerrace: boolean;
+      outdoorDiningArea: boolean;
+      other?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      communityInitiatives: boolean;
+      otherSpecify: string;
+    };
+  };
+  nearbyAttraction: {
+    name: string;
+    distance: string;
+    beach?: boolean;
+    desert?: boolean;
+    parkReserve?: boolean;
+    lake?: boolean;
+    river?: boolean;
+    kayakingCanoeing?: boolean;
+    hikingTrails?: boolean;
+    bikingTrails?: boolean;
+  }[];
+  hotelResortsbathroomDetails: {
+    numberOfBeds: string;
+    numberOfRooms: string;
+    numberOfSuites: string;
+    roomAmenities: {
+      tv: boolean;
+      kitchen: boolean;
+      coffeeTeaMaker: boolean;
+      coffeeMachine: boolean;
+      electricKettle: boolean;
+      miniBar: boolean;
+      hairdryer: boolean;
+      safe: boolean;
+      balcony: boolean;
+      familyRooms: boolean;
+      other: string;
+    };
+    bathroomAmenities: {
+      privateBathroom: boolean;
+      sharedBathroom: boolean;
+      bathtub: boolean;
+      shower: boolean;
+      walkInShower: boolean;
+      showerChair: boolean;
+      showerWithGrabRail: boolean;
+      toiletWithGrabRail: boolean;
+      towelsProvided: boolean;
+      toiletriesProvided: boolean;
+      other: string;
+    };
+  };
+  bedBreakfastRoomBathroomDetails: {
+    numberOfBeds: string;
+    numberOfRooms: string;
+    numberOfEnSuiteRooms: string;
+    numberOfSharedBathrooms: string;
+    roomAmenities: {
+      tv: boolean;
+      kitchen: boolean;
+      coffeeTeaMaker: boolean;
+      coffeeMachine: boolean;
+      electricKettle: boolean;
+      miniBar: boolean;
+      hairdryer: boolean;
+      safe: boolean;
+      balcony: boolean;
+      familyRooms: boolean;
+      other: string;
+    };
+    bathroomAmenities: {
+      privateBathroom: boolean;
+      sharedBathroom: boolean;
+      bathtub: boolean;
+      shower: boolean;
+      walkInShower: boolean;
+      showerChair: boolean;
+      showerWithGrabRail: boolean;
+      toiletWithGrabRail: boolean;
+      towelsProvided: boolean;
+      toiletriesProvided: boolean;
+      other: string;
+    };
+  };
+  hostelRoomBathroomDetails: {
+    totalBeds: string;
+    dormitoryRooms: string;
+    dormRoomType: {
+      mixedDorm: boolean;
+      femaleDorm: boolean;
+      maleDorm: boolean;
+      other: string;
+    };
+    dormRoomFeatures: {
+      lockers: boolean;
+      readingLights: boolean;
+      chargingPorts: boolean;
+      curtainsForPrivacy: boolean;
+      other: string;
+    };
+    sharedBathrooms: string;
+    privateRooms: string;
+    enSuitePrivateRooms: string;
+    privateRoomFeatures: {
+      enSuiteBathroom: boolean;
+      balconyTerrace: boolean;
+      closetStorageSpace: boolean;
+      tv: boolean;
+      other: string;
+    };
+  };
+  coLivingRoomBathroomDetails: {
+    sharedBedrooms: string;
+    sharedBedroomFeatures: {
+      balconyTerrace: boolean;
+      closetStorageSpace: boolean;
+      readingLights: boolean;
+      chargingPorts: boolean;
+      tv: boolean;
+      wifi: boolean;
+      airConditioningHeating: boolean;
+      workspace: boolean;
+      other: string;
+    };
+    sharedBathrooms: string;
+    enSuiteBedrooms: string;
+    enSuiteBedroomFeatures: {
+      balconyTerrace: boolean;
+      closetStorageSpace: boolean;
+      readingLights: boolean;
+      chargingPorts: boolean;
+      tv: boolean;
+      wifi: boolean;
+      airConditioningHeating: boolean;
+      workspace: boolean;
+      other: string;
+    };
+    commonAreas: string;
+  };
+  vacationRentalRoomBathroomDetails: {
+    maxOccupancy: string;
+    bedrooms: {
+      count: string;
+      bedTypes: string;
+    };
+    enSuiteBedrooms: {
+      count: string;
+      bedTypes: string;
+    };
+    separateBathrooms: string;
+    propertySize: string;
+    outdoorTerraceSize: string;
+    gardenSize: string;
+    bedroomFeatures: {
+      enSuiteBathroom: boolean;
+      balcony: boolean;
+      closetStorageSpace: boolean;
+      airConditioning: boolean;
+    };
+    bathroomFeatures: {
+      bathtub: boolean;
+      shower: boolean;
+      doubleSink: boolean;
+      towelsToiletries: boolean;
+    };
+  };
+  distanceToKeyLocations: {
+    nearestAirport: string;
+    trainBusStation: string;
+    taxiStands: string;
+    cityCenter: string;
+    localMarkets: string;
+    popularRestaurants: string;
+  };
+  uploadedPhotoshotel: {
+    exterior?: string[];
+    lobby?: string[];
+    commonAreas?: string[];
+    rooms?: string[];
+    amenities?: string[];
+  };
+  uploadedPhotosresort: {
+    exterior?: string[];
+    lobby?: string[];
+    commonAreas?: string[];
+    rooms?: string[];
+    amenities?: string[];
+  };
+  uploadedPhotosbedAndBreakfast: {
+    exterior?: string[];
+    lobby?: string[];
+    commonAreas?: string[];
+    rooms?: string[];
+    amenities?: string[];
+  };
+  uploadedPhotoshostel: {
+    exterior?: string[];
+    commonAreas?: string[];
+    dormitories?: string[];
+    privateRooms?: string[];
+    socialSpaces?: string[];
+    diningAreas?: string[];
+  };
+  uploadedPhotoscoLiving: {
+    exterior?: string[];
+    commonAreas?: string[];
+    bedrooms?: string[];
+    bathrooms?: string[];
+    enSuiteBedrooms?: string[];
+    socialSpaces?: string[];
+    diningRoom?: string[];
+  };
+  uploadedPhotosvacationRental: {
+    exterior?: string[];
+    bedrooms?: string[];
+    livingRoom?: string[];
+    kitchen?: string[];
+    bathrooms?: string[];
+    outdoorSpaces?: string[];
+  };
+  uploadedPhotoscampground: {
+    campground?: string[];
+    restrooms?: string[];
+    showers?: string[];
+    socialSpaces?: string[];
+    coWorkingSpace?: string[];
+  };
   manager: {
     name: string;
     role: string;
@@ -187,90 +799,7 @@ export interface AccommodationFormInputs {
     emergencyContact?: string;
     idPhoto?: File;
   };
-  dorm: {
-    numberOfBeds: string;
-    numberOfRooms: string;
-    numberOfSuites: string;
-    commonArea: string;
-    maxOccupancy: string;
-    propertySize: string;
-    gardenSize: string;
-    terraceSize: string;
-    types: {
-      mixedDorm: boolean;
-      femaleDorm: boolean;
-      maleDorm: boolean;
-    };
-    room: {
-      features: {
-        tv: boolean;
-        kitchen: boolean;
-        coffeeTeaMaker: boolean;
-        coffeeMachine: boolean;
-        electricKettle: boolean;
-        miniBar: boolean;
-        hairdryer: boolean;
-        safe: boolean;
-        balcony: boolean;
-        familyRooms: boolean;
-        lockers: boolean;
-        readingLights: boolean;
-        chargingPorts: boolean;
-        curtainsForPrivacy: boolean;
-      };
-    };
-    bathroom: {
-      features: {
-        privateBathroom: boolean;
-        sharedBathroom: boolean;
-        bathtub: boolean;
-        shower: boolean;
-        walkInShower: boolean;
-        showerChair: boolean;
-        showerWithGrabRail: boolean;
-        toiletWithGrabRail: boolean;
-        towelsProvided: boolean;
-        toiletriesProvided: boolean;
-      };
-    };
-    private: {
-      numberOfRooms: string;
-      numberOfSuites: string;
-      features: {
-        enSuiteBathroom: boolean;
-        balcony: boolean;
-        closetStorageSpace: boolean;
-        tv: boolean;
-      };
-    };
-    shared: {
-      numberOfRooms: string;
-      numberOfBathrooms: string;
-      features: {
-        balcony: boolean;
-        closetStorageSpace: boolean;
-        readingLights: boolean;
-        chargingPorts: boolean;
-        tv: boolean;
-        wifi: boolean;
-        airConditioning: boolean;
-        workspace: boolean;
-      };
-    };
-    ensuite: {
-      numberOfRooms: string;
-      features: {
-        balcony: boolean;
-        closetStorageSpace: boolean;
-        readingLights: boolean;
-        chargingPorts: boolean;
-        tv: boolean;
-        wifi: boolean;
-        airConditioning: boolean;
-        workspace: boolean;
-      };
-    };
-  };
+  dateOfSubmit: string;
   signature: string;
   consent: boolean;
   confirmation: boolean;
@@ -287,13 +816,69 @@ const AccommodationForm: React.FC = () => {
     defaultValues: {},
   });
 
-  const { control } = useForm();
   const [formType, setFormType] = useState(null);
   const [formData, setFormData] = useState({});
-
+  // const amenities = getAmenitiesConfig(formType, 'generalAmenities');
   // Property types
+
+  const locationTypes = {
+    hotel: {
+      options: [
+        { label: 'Beach', value: 'beach' },
+        { label: 'Mountain', value: 'mountain' },
+        { label: 'River', value: 'river' },
+        { label: 'Lakeside', value: 'lakeside' },
+        { label: 'Desert', value: 'desert' },
+        { label: 'Island', value: 'island' },
+        { label: 'Urban', value: 'urban' },
+        { label: 'Other (Specify)', value: 'other' },
+      ],
+    },
+    resort: {
+      options: [
+        { label: 'Beach', value: 'beach' },
+        { label: 'Mountain', value: 'mountain' },
+        { label: 'River', value: 'river' },
+        { label: 'Lakeside', value: 'lakeside' },
+        { label: 'Desert', value: 'desert' },
+        { label: 'Island', value: 'island' },
+        { label: 'Urban', value: 'urban' },
+        { label: 'Other (Specify)', value: 'other' },
+      ],
+    },
+    'bed-and-breakfast': {
+      options: [
+        { label: 'Beach', value: 'beach' },
+        { label: 'Mountain', value: 'mountain' },
+        { label: 'River', value: 'river' },
+        { label: 'Lakeside', value: 'lakeside' },
+        { label: 'Desert', value: 'desert' },
+        { label: 'Island', value: 'island' },
+        { label: 'Urban', value: 'urban' },
+        { label: 'Other (Specify)', value: 'other' },
+      ],
+    },
+  };
   const propertyTypes = {
     hotel: {
+      options: [
+        { label: 'Budget', value: 'budget', checked: false },
+        { label: 'Luxury', value: 'luxury', checked: false },
+        { label: 'Boutique', value: 'boutique', checked: false },
+        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+        { label: 'Business Friendly', value: 'businessFriendly', checked: false },
+      ],
+    },
+    resort: {
+      options: [
+        { label: 'Budget', value: 'budget', checked: false },
+        { label: 'Luxury', value: 'luxury', checked: false },
+        { label: 'Boutique', value: 'boutique', checked: false },
+        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+        { label: 'Business Friendly', value: 'businessFriendly', checked: false },
+      ],
+    },
+    'bed-and-breakfast': {
       options: [
         { label: 'Budget', value: 'budget', checked: false },
         { label: 'Luxury', value: 'luxury', checked: false },
@@ -322,7 +907,7 @@ const AccommodationForm: React.FC = () => {
         { label: 'Other (specify)', value: 'other', checked: false },
       ],
     },
-    coLiving: {
+    'co-living': {
       options: [
         { label: 'Urban Co-Living', value: 'urbanCoLiving', checked: false },
         { label: 'Rural Co-Living', value: 'ruralCoLiving', checked: false },
@@ -333,149 +918,68 @@ const AccommodationForm: React.FC = () => {
         { label: 'Other (specify)', value: 'other', checked: false },
       ],
     },
+    'vacation-rental': {
+      options: [
+        // Apartments
+        { label: 'Beachfront Apartment', value: 'beachfrontApartment', checked: false },
+        { label: 'Mountain Apartment', value: 'mountainApartment', checked: false },
+        { label: 'Countryside Apartment', value: 'countrysideApartment', checked: false },
+        { label: 'City Apartment', value: 'cityApartment', checked: false },
+        { label: 'Luxury Apartment', value: 'luxuryApartment', checked: false },
+        { label: 'Eco-Friendly Apartment', value: 'ecoFriendlyApartment', checked: false },
+        { label: 'Family-Friendly Apartment', value: 'familyFriendlyApartment', checked: false },
+        { label: 'Other (specify)', value: 'otherApartment', checked: false },
+
+        // Villas
+        { label: 'Beachfront Villa', value: 'beachfrontVilla', checked: false },
+        { label: 'Mountain Villa', value: 'mountainVilla', checked: false },
+        { label: 'Countryside Villa', value: 'countrysideVilla', checked: false },
+        { label: 'City Villa', value: 'cityVilla', checked: false },
+        { label: 'Luxury Villa', value: 'luxuryVilla', checked: false },
+        { label: 'Eco-Friendly Villa', value: 'ecoFriendlyVilla', checked: false },
+        { label: 'Family-Friendly Villa', value: 'familyFriendlyVilla', checked: false },
+        { label: 'Other (specify)', value: 'otherVilla', checked: false },
+      ],
+    },
   };
 
-  // Data for all accordions (dynamic data for each accordion)
-  const generalAmenities = [
-    { label: '24/7 Security', value: 'security24h' },
-    { label: 'CCTV Cameras', value: 'cctvCameras' },
-    { label: 'Free Parking', value: 'freeParking' },
-    { label: 'Paid Parking', value: 'paidParking' },
-    { label: 'Electric Vehicle Charging Station', value: 'electricVehicleChargingStation' },
-    { label: 'Free Wi-Fi', value: 'freeWiFi' },
-    { label: 'Wheelchair-Accessible Facilities', value: 'wheelchairAccessibleFacilities' },
-    { label: 'Restrooms', value: 'restrooms' },
-    { label: 'Showers', value: 'showers' },
-    { label: 'Laundry facilities', value: 'laundryFacilities' },
-    { label: 'Shared Kitchen Facilities', value: 'sharedKitchenFacilities' },
-    { label: 'Smoking Allowed', value: 'smokingAllowed' },
-    { label: 'Alcohol Allowed', value: 'alcoholAllowed' },
-    { label: 'Playground', value: 'playground' },
-    { label: 'Pet- Friendly Spaces', value: 'petFriendlySpaces' },
-    { label: 'Breakfast Available for Purchase', value: 'breakfastAvailableForPurchase' },
-    { label: 'Salah Room (Muslim Prayer Room)', value: 'salahRoom' },
-    { label: 'Chapel', value: 'chapel' },
-    { label: 'Other (Specify)', value: 'otherSpecify' },
-  ];
-
-  const utilitiesHookups = [
-    { label: 'Electricity', value: 'electricity' },
-    { label: 'Water', value: 'water' },
-    { label: 'Sewer', value: 'sewer' },
-    { label: 'Dump Station', value: 'dumpStation' },
-    { label: 'Wi-fi', value: 'wifi' },
-  ];
-
-  const recreationalFacilities = [
-    { label: 'On-Site Café', value: 'onSiteCafe' },
-    { label: 'On-Site Bar', value: 'onSiteBar' },
-    { label: 'Shared Lounge/TV Area', value: 'sharedLounge' },
-    { label: 'Pool Table', value: 'poolTable' },
-    { label: 'Table Tennis', value: 'tableTennis' },
-    { label: 'Library', value: 'library' },
-    { label: 'BBQ Grill', value: 'bbqGrill' },
-    { label: 'Fire Pit', value: 'firePit' },
-    { label: 'Picnic Tables', value: 'picnicTables' },
-    { label: 'Swimming Pool', value: 'swimmingPool' },
-    { label: 'Gym / Fitness Area', value: 'gymFitnessArea' },
-    { label: 'Massage / Wellness Services', value: 'massageWellnessServices' },
-    { label: 'Basketball', value: 'basketball' },
-    { label: 'Volleyball', value: 'volleyball' },
-    { label: 'Weekly Events', value: 'weeklyEvents' },
-    { label: 'Cultural Events', value: 'culturalEvents' },
-    { label: 'Other (Specify)', value: 'otherSpecify' },
-  ];
-
-  const workConnectivity = [
-    { label: 'Co-Working Spaces', value: 'coWorkingSpaces' },
-    { label: 'Networking Opportunities', value: 'networkingOpportunities' },
-    { label: 'Power Outlets & USB Ports', value: 'powerOutletsUsbPorts' },
-    { label: 'Printing & Scanning Services', value: 'printingScanningServices' },
-    { label: 'High-Speed Wi-Fi', value: 'highSpeedWifi' },
-    { label: 'Other (Specify)', value: 'otherSpecify' },
-  ];
-
-  const specialMenus = [
-    { label: 'Dairy-Free', value: 'dairyFree' },
-    { label: 'Gluten-Free', value: 'glutenFree' },
-    { label: 'Vegetarian', value: 'vegetarian' },
-    { label: 'Vegan', value: 'vegan' },
-    { label: 'Halal', value: 'halal' },
-    { label: 'Kosher', value: 'kosher' },
-    { label: 'Other (Specify)', value: 'otherSpecify' },
-  ];
-
-  const travelSupport = [
-    { label: 'Tour Desk', value: 'tourDesk' },
-    { label: 'Transport Services', value: 'transportServices' },
-    { label: 'Travel Guides', value: 'travelGuides' },
-    { label: 'Storage for Outdoor Gear (e.g., Surfboards, Bicycles etc)', value: 'storageForOutdoorGear' },
-    { label: 'Bicycles for rent', value: 'bicyclesForRent' },
-    { label: 'Other (Specify)', value: 'otherSpecify' },
-  ];
-
-  const ecoFriendlyPractices = [
-    { label: 'Green Certification', value: 'greenCertification' },
-    { label: 'Energy Usage Transparency', value: 'energyUsageTransparency' },
-    { label: 'Nature Inspired Design', value: 'natureInspiredDesign' },
-    { label: 'Green Spaces for Relaxation', value: 'greenSpacesForRelaxation' },
-    {
-      label: 'Energy Conservation (e.g., Solar Panels, LED Lighting, Energy Saving Appliances etc.)',
-      value: 'energyConservation',
-    },
-    {
-      label: 'Water Conservation Measures (e.g., Low-flow showerheads, dual-flush toilets, etc.)',
-      value: 'waterConservationMeasures',
-    },
-    { label: 'Recycling Bins & Waste Management', value: 'recyclingBinsWasteManagement' },
-    { label: 'Eco-Friendly Toiletries', value: 'ecoFriendlyToiletries' },
-    { label: 'Eco-Friendly Laundry Options', value: 'ecoFriendlyLaundryOptions' },
-    { label: 'Carbon Offset Programs', value: 'carbonOffsetPrograms' },
-    { label: 'Vegan & Vegetarian Options', value: 'veganVegetarianOptions' },
-    { label: 'Eco-Conscious Transportation', value: 'ecoConsciousTransportation' },
-    { label: 'Plastic-Free Practices', value: 'plasticFreePractices' },
-    { label: 'Water Bottle Refill Stations', value: 'waterBottleRefillStations' },
-    { label: 'Use of Local Products', value: 'useOfLocalProducts' },
-    { label: 'Use of Organic Products', value: 'useOfOrganicProducts' },
-    { label: 'Community Initiatives', value: 'communityInitiatives' },
-  ];
-
   const handleInputChange = (field, value) => {
-    setFormData((prev) => {
-      const newData = { ...prev }; // Copy previous state to avoid direct mutation
+    console.log('------- handleInputChange', field, value);
 
-      const keys = field.split('.'); // Split the field name into keys
+    setFormData((prev) => {
+      const newData = JSON.parse(JSON.stringify(prev)); // Deep clone
+      const keys = field.split('.'); // e.g. "priceRange.budget" -> ["priceRange", "budget"]
       let current = newData;
 
-      // Traverse or create nested objects
       keys.forEach((key, index) => {
         if (index === keys.length - 1) {
-          current[key] = value; // Set the final value at the last key
+          current[key] = value; // Set value at the final key
         } else {
-          current[key] = current[key] || {}; // Create nested object if it doesn't exist
-          current = current[key]; // Move deeper into the structure
+          if (!current[key] || typeof current[key] !== 'object') {
+            current[key] = {}; // Ensure nested object exists
+          }
+          current = current[key]; // Move deeper
         }
       });
-
-      return newData;
+      return newData; // Return a new object to trigger React re-render
     });
   };
 
-  const onSubmit: SubmitHandler<AccommodationFormInputs> = (data) => {
-    console.log(deepMerge(formData, data));
-  };
+  const onSubmit: SubmitHandler<AccommodationFormInputs> = async (data) => {
+    console.log(data);
 
-  const atmCards = [
-    { value: 'mastercard', label: 'MasterCard' },
-    { value: 'visa', label: 'Visa' },
-    { value: 'amex', label: 'American Express' },
-    { value: 'discover', label: 'Discover' },
-    { value: 'jcb', label: 'JCB' },
-    { value: 'unionpay', label: 'UnionPay' },
-    { value: 'rupay', label: 'RuPay' },
-    { value: 'interac', label: 'Interac' },
-    { value: 'eftpos', label: 'EFTPOS' },
-  ];
+    var newData = deepMerge(data, formData);
+
+    var newData1 = {
+      _type: 'accommodation',
+      _id: `drafts.${generateId()}`,
+      ...newData,
+    };
+
+    console.log('-------Final Data', newData1);
+
+    await sanityClient.create(newData1);
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -483,284 +987,401 @@ const AccommodationForm: React.FC = () => {
       <FormContext.Provider value={register}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Accommodation type */}
-          <Select
-            name="accommodation_type"
-            placeholder="Accommodation type"
-            options={[
-              {
-                label: 'Hotel',
-                value: 'hotel',
-              },
-              {
-                label: 'Hostel',
-                value: 'hostel',
-              },
-              {
-                label: 'Bed & Breakfast',
-                value: 'bed-and-breakfast',
-              },
-              {
-                label: 'Co-Living',
-                value: 'co-living',
-              },
-              {
-                label: 'Resort',
-                value: 'resort',
-              },
-              {
-                label: 'Campground',
-                value: 'campground',
-              },
-              {
-                label: 'Vacation Rental',
-                value: 'vacation-rental',
-              },
-            ]}
-            onChange={(value) => {
-              setFormType(value);
-              handleInputChange('accommodation_type', value);
-            }}
-          />
+          <div>
+            <label className="font-semibold mb-4">
+              {formType === 'vacation-rental' ? 'Accommodation Type' : 'Property Type'}
+            </label>{' '}
+            <Select
+              className="mt-2 mb-4"
+              name="accommodation_type"
+              placeholder="Accommodation type"
+              options={[
+                {
+                  label: 'Select Accommodation Type', // Default option
+                  value: '',
+                },
+                {
+                  label: 'Hotel',
+                  value: 'hotel',
+                },
+                {
+                  label: 'Hostel',
+                  value: 'hostel',
+                },
+                {
+                  label: 'Bed & Breakfast',
+                  value: 'bed-and-breakfast',
+                },
+                {
+                  label: 'Co-Living',
+                  value: 'co-living',
+                },
+                {
+                  label: 'Resort',
+                  value: 'resort',
+                },
+                {
+                  label: 'Campground',
+                  value: 'campground',
+                },
+                {
+                  label: 'Vacation Rental',
+                  value: 'vacation-rental',
+                },
+              ]}
+              value={formType || ''}
+              onChange={(value) => {
+                setFormData({});
+                setFormType(value);
+                handleInputChange('accommodation_type', value || '');
+              }}
+            />
+          </div>
 
           {/* Name */}
-          <Input type="text" {...register('name')} placeholder="Name" />
-          {errors.name && <span className="text-red-500">{errors.name.message}</span>}
-
+          <div>
+            <label className="font-semibold">{nameLabels[formType] || 'Property Name'}</label>
+            <Input type="text" {...register('name')} placeholder="Enter Name" />
+            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+          </div>
           {/* Brand */}
           {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
-            <Input type="text" name="brand" placeholder="Brand name" />
+            <div>
+              <label className="font-semibold">{'Brand'}</label>
+              <Input type="text" {...register('brand')} name="brand" placeholder="Brand name" />
+            </div>
           )}
 
           {/* Star Rating */}
-          {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
-            <Input
-              type="dropdown"
-              name="star_rating"
-              placeholder="Star Rating"
-              options={[
-                {
-                  label: '1 Star',
-                  value: '1',
-                },
-                {
-                  label: '1.5 Star',
-                  value: '1.5',
-                },
-                {
-                  label: '2 Star',
-                  value: '2',
-                },
-                {
-                  label: '2.5 Star',
-                  value: '2.5',
-                },
-                {
-                  label: '3 Star',
-                  value: '3',
-                },
-                {
-                  label: '3.5 Star',
-                  value: '3.5',
-                },
-                {
-                  label: '4 Star',
-                  value: '4',
-                },
-                {
-                  label: '4.5 Star',
-                  value: '4.5',
-                },
-                {
-                  label: '5 Star',
-                  value: '5',
-                },
-                {
-                  label: '5.5 Star',
-                  value: '5.5',
-                },
-                {
-                  label: '6 Star',
-                  value: '6',
-                },
-                {
-                  label: '6.5 Star',
-                  value: '6.5',
-                },
-                {
-                  label: '7 Star',
-                  value: '7',
-                },
-              ]}
-              required={false}
-            />
+          {formType && ['hotel', 'resort', 'bed-and-breakfast'].includes(formType) && (
+            <div>
+              <label className="font-semibold mb-2">Star Rating</label>
+              <Select
+                name="star_rating"
+                placeholder="Select Star Rating"
+                options={[
+                  { label: '1 Star', value: '1' },
+                  { label: '1.5 Star', value: '1.5' },
+                  { label: '2 Star', value: '2' },
+                  { label: '2.5 Star', value: '2.5' },
+                  { label: '3 Star', value: '3' },
+                  { label: '3.5 Star', value: '3.5' },
+                  { label: '4 Star', value: '4' },
+                  { label: '4.5 Star', value: '4.5' },
+                  { label: '5 Star', value: '5' },
+                  { label: '5.5 Star', value: '5.5' },
+                  { label: '6 Star', value: '6' },
+                  { label: '6.5 Star', value: '6.5' },
+                  { label: '7 Star', value: '7' },
+                ]}
+                onChange={(value) => {
+                  handleInputChange('star_rating', value);
+                }}
+              />
+            </div>
           )}
 
           {/* Price Range / Amount */}
-          <div>
-            <label className="font-semibold">Price Range</label>
-            <Checkbox
-              {...register(`priceRange.budget`)}
-              label={'Budget (e.g.: $10 - $25 per night)'}
-              onChange={() => {}}
-            />
-            <Checkbox
-              {...register(`priceRange.midRange`)}
-              label={'Mid-range (e.g.: $25 - $50 per night)'}
-              onChange={() => {}}
-            />
-            <Checkbox
-              {...register(`priceRange.upScale`)}
-              label={'Upscale (e.g.: $50 - $100 per night)'}
-              onChange={() => {}}
-            />
-            <Checkbox {...register(`priceRange.luxury`)} label={'Luxury (e.g.: $100+ per night)'} onChange={() => {}} />
-          </div>
+          {formType && <PriceRange formType={formType} handleInputChange={handleInputChange} />}
 
           {/* Property type/category */}
           {formType && propertyTypes[formType] && (
             <div>
-              <label className="font-semibold">Category</label>
-              {propertyTypes[formType].options.map((type) => (
-                <Checkbox key={type.value} label={type.label} onChange={(checked) => (type.checked = checked)} />
-              ))}
+              <label className="font-semibold">{categoryLabels[formType] || categoryLabels.default}</label>
+              <div className="mt-2">
+                <Select
+                  name="category"
+                  placeholder="Select Category"
+                  options={propertyTypes[formType].options.map((type) => ({
+                    label: type.label,
+                    value: type.value,
+                  }))}
+                  onChange={(value) => {
+                    handleInputChange(formType.replace(/-/g, '_') + '_property_type', value);
+                  }}
+                />
+              </div>
             </div>
           )}
+          {formType && locationTypes[formType] && (
+            <div>
+              <label className="font-semibold">Location Type</label>
+              <Select
+                name="location"
+                placeholder="Select Location type"
+                options={locationTypes[formType].options.map((type) => ({
+                  label: type.label,
+                  value: type.value,
+                }))}
+                onChange={(value) => {
+                  handleInputChange('locationType', value);
+                }}
+              />
+            </div>
+          )}
+
           {/* Address */}
           <div>
-            Address
+            <label className="font-semibold">Address</label>
+
             {/* Street address */}
-            <Input type="text" name="street" placeholder="Street address" />
+            <Input
+              type="text"
+              {...register('address.street')} // Bind to form data
+              placeholder="Street address"
+            />
+
             {/* Town / City */}
-            <Input type="text" name="city" placeholder="Town / City" />
+            <Input
+              type="text"
+              {...register('address.city')} // Bind to form data
+              placeholder="Town / City"
+            />
+
             {/* State / Region */}
-            <Input type="text" name="region" placeholder="State / Region" />
+            <Input
+              type="text"
+              {...register('address.region')} // Bind to form data
+              placeholder="State / Region"
+            />
+
             {/* Postal Code */}
-            <Input type="text" name="postal_code" placeholder="Postal Code" />
+            <Input
+              type="text"
+              {...register('address.postalCode')} // Bind to form data
+              placeholder="Postal Code (Optional)"
+            />
+
             {/* Country */}
-            <Input type="text" name="country" placeholder="Country" />
+            <Input
+              type="text"
+              {...register('address.country')} // Bind to form data
+              placeholder="Country"
+            />
           </div>
 
           {/* Contact Information */}
           <div>
-            Contact Information
-            <Input type="text" {...register('contact.website')} placeholder="Website" />
-            <Input type="number" {...register('contact.phoneNumber')} placeholder="Phone Number" />
-            <Input type="email" {...register('contact.email')} placeholder="Enter email" />
+            <label className="font-semibold">Contact Information</label>
+
+            {/* Phone Number */}
+            <Input
+              type="number"
+              {...register('contact.phoneNumber')} // Binds phone number to form data
+              placeholder="Phone Number"
+            />
+
+            {/* Email */}
+            <Input
+              type="email"
+              {...register('contact.email')} // Binds email to form data
+              placeholder="Enter email"
+            />
+
+            {/* Website */}
+            <Input
+              type="text"
+              {...register('contact.website')} // This binds the input to the form data
+              placeholder="Website (Optional)"
+            />
+            {/* Social Media */}
+            <Input
+              type="text"
+              {...register('contact.socialMedia')} // This binds the input to the form data
+              placeholder="Social media link (Optional)"
+            />
           </div>
 
           {/* Description */}
           <div>
-            Description
+            <label className="font-semibold">Description</label>
             <Input
               type="text"
               {...register('description.tagline')}
               name="description.tagline"
               maxLength={50}
-              placeholder="Tagline: Short & catchy"
+              placeholder="Tagline: Short, catchy tagline (Max 50 characters): e.g., Pure Luxury, Paradise
+Found."
             />
-            <label>Describe about the accommodation</label>
-            <RichTextEditor onContentChange={(value) => handleInputChange('description.description', value)} />
-            <label className="font-semibold">Highlights(upto 6)</label>
-            <DynamicFields
-              fields={[
-                {
-                  type: 'text',
-                  name: 'highlight',
-                  placeholder: 'Highlight',
-                },
-              ]}
-              setValue={(value) => handleInputChange('description.highlights', value)}
-              max={6}
+            <label className="font-semibold">Describe about the accommodation</label>
+
+            <RichTextEditor
+              placeholder="Describe your accomodation in 100-500 words."
+              onContentChange={(value) => handleInputChange('description.description', value)}
             />
+            <label className="font-semibold">Highlights (Add up to 6 key highlights)</label>
+            <DynamicFields setValue={(value) => handleInputChange('description.highlights', value)} max={6} />
           </div>
 
           {/* Languages spoken */}
-          <div>
-            <label className="font-semibold">Languages Spoken by staff</label>
-            <Checkbox {...register(`languages.english`)} label={'English'} onChange={() => {}} />
-            <Checkbox {...register(`languages.french`)} label={'French'} onChange={() => {}} />
-            <Checkbox {...register(`languages.spanish`)} label={'Spanish'} onChange={() => {}} />
-            <Checkbox {...register(`languages.portuguese`)} label={'Portuguese'} onChange={() => {}} />
-            <Checkbox {...register(`languages.german`)} label={'German'} onChange={() => {}} />
-            <Input type="text" {...register('languages.other')} placeholder="Others(specify)" required={false} />
+          <div className="mt-4">
+            <label className="font-semibold mb-4">Languages Spoken by Staff</label>
+
+            {['arabic', 'english', 'french', 'spanish', 'portuguese', 'german', 'bahasa', 'mandarin'].map((lang) => (
+              <Checkbox
+                key={lang}
+                {...register(`languages.${lang}`)}
+                label={lang.charAt(0).toUpperCase() + lang.slice(1)}
+                onChange={(e) => handleInputChange(`languages.${lang}`, e)}
+              />
+            ))}
+
+            <Input type="text" {...register('languages.other')} placeholder="Others (specify)" required={false} />
           </div>
 
           {/* Business establishment */}
+          <label className="font-semibold">Which year Business was established (Optional)</label>
+
           <DateInput onChange={(value) => handleInputChange('establishedIn', value)} />
 
           {/* Accommodation Policies */}
-          <div>
-            <label className="font-semibold">Policies</label>
-            <label>Cancellation</label>
+          <div className="mb-4">
+            <label className="font-semibold block">{policyLabels[formType] || 'Policies'}</label>
+
+            <label className="block mt-2">Cancellation Policy</label>
             <Checkbox
               {...register('policy.cancellation.freeCancellation')}
-              label={'Free cancellation'}
-              onChange={() => {}}
+              label="Free cancellation"
+              onChange={(e) => handleInputChange('policy.cancellation.freeCancellation', e)}
             />
-            <Checkbox {...register('policy.cancellation.nonRefundable')} label={'Non-refundable'} onChange={() => {}} />
+
+            <Checkbox
+              {...register('policy.cancellation.nonRefundable')}
+              label="Non-refundable"
+              onChange={(e) => handleInputChange('policy.cancellation.nonRefundable', e)}
+            />
             <Input type="text" {...register('policy.cancellation.description')} placeholder="Policy description" />
 
-            <label className="font-semibold">Rules</label>
+            <label className="font-semibold">House Rules</label>
             <RichTextEditor onContentChange={(value) => handleInputChange('policy.rules', value)} />
-
-            <label>Check-in time</label>
+            {formType === 'vacation-rental' && <SecurityDeposit handleInputChange={handleInputChange} />}
+            <label>Check-In Time</label>
             <input type="time" {...register('policy.checkInTime')} />
 
-            <label>Check-out time</label>
+            <label>Check-Out Time</label>
             <input type="time" {...register('policy.checkOutTime')} />
           </div>
 
-          {/* Dynamic Key-Value Pair Creation Operation seasons */}
           <div>
-            <label className="font-semibold">Operating Seasons</label>
-            <DynamicFields
-              fields={[
-                {
-                  type: 'text',
-                  name: 'title',
-                  placeholder: 'Title',
-                },
-                {
-                  type: 'text',
-                  name: 'distance',
-                  placeholder: 'Distance',
-                },
-              ]}
-              setValue={(value) => handleInputChange('operationSeasons', value)}
+            <label className="font-semibold">Payment Methods Accepted</label>
+
+            <Checkbox
+              {...register('paymentMethods.card')}
+              label="Credit/Debit Card"
+              onChange={(e) => handleInputChange('paymentMethods.card', e)}
             />
+
+            <Checkbox
+              {...register('paymentMethods.online')}
+              label="Online"
+              onChange={(e) => handleInputChange('paymentMethods.online', e)}
+            />
+
+            <Checkbox
+              {...register('paymentMethods.cash')}
+              label="Cash on Arrival"
+              onChange={(e) => handleInputChange('paymentMethods.cash', e)}
+            />
+
+            <label className="font-semibold mt-2">Cards Accepted</label>
+            <div className="flex gap-2">
+              <Checkbox
+                {...register('acceptedCards.visaCard')}
+                label="Visa"
+                onChange={(e) => handleInputChange('acceptedCards.visaCard', e)}
+              />
+              <Checkbox
+                {...register('acceptedCards.masterCard')}
+                label="Mastercard"
+                onChange={(e) => handleInputChange('acceptedCards.masterCard', e)}
+              />
+              <Checkbox
+                {...register('acceptedCards.americanExpress')}
+                label="American Express"
+                onChange={(e) => handleInputChange('acceptedCards.americanExpress', e)}
+              />
+              <Checkbox
+                {...register('acceptedCards.discover')}
+                label="Discover"
+                onChange={(e) => handleInputChange('acceptedCards.discover', e)}
+              />
+              <Checkbox
+                {...register('acceptedCards.jcb')}
+                label="Jcb"
+                onChange={(e) => handleInputChange('acceptedCards.jcb', e)}
+              />
+            </div>
+            {/* Input field for 'Other' card types */}
+            <div className="mt-2">
+              <Input
+                type="text"
+                {...register('acceptedCards.other')}
+                placeholder="Other (Specify)"
+                onChange={(e) => handleInputChange('acceptedCards.other', e.target.value)}
+              />
+            </div>
           </div>
 
-          {/* Dynamic Key-Value Pair Creation Near by Attractions */}
-          <div>
-            <label className="font-semibold">Nearby Attractions</label>
-            <DynamicFields
-              fields={[
-                {
-                  type: 'text',
-                  name: 'title',
-                  placeholder: 'Title',
-                },
-                {
-                  type: 'select',
-                  name: 'distance',
-                  placeholder: 'Distance',
-                  options: [
-                    {
-                      value: 'voh',
-                      label: 'Voh..',
-                    },
-                  ],
-                },
-              ]}
-              setValue={(value) => handleInputChange('attractions', value)}
-            />
+          {/* Dynamic Key-Value Pair Creation Operation seasons */}
+          <div className="border p-4 rounded-lg">
+            <label className="font-semibold">Operating Season</label>
+
+            <div className="mt-2">
+              <p className="font-medium">Open Year-Round</p>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="operatingSeason.isYearRound"
+                    value="yes"
+                    onChange={(e) => handleInputChange('operatingSeason.isYearRound', e.target.value === 'yes')}
+                  />
+                  Yes
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="operatingSeason.isYearRound"
+                    value="no"
+                    onChange={(e) => handleInputChange('operatingSeason.isYearRound', e.target.value === 'no')}
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              <input
+                type="text"
+                name="operatingSeason.seasonalMonths"
+                placeholder="Seasonal (Specify months of operation)"
+                className="border p-2 w-full rounded"
+                onChange={(e) => handleInputChange('operatingSeason.seasonalMonths', e.target.value)}
+              />
+
+              <input
+                type="text"
+                name="operatingSeason.lowSeason"
+                placeholder="Low Season Months (Specify months)"
+                className="border p-2 w-full rounded"
+                onChange={(e) => handleInputChange('operatingSeason.lowSeason', e.target.value)}
+              />
+
+              <input
+                type="text"
+                name="operatingSeason.highSeason"
+                placeholder="High Season Months (Specify months)"
+                className="border p-2 w-full rounded"
+                onChange={(e) => handleInputChange('operatingSeason.highSeason', e.target.value)}
+              />
+            </div>
           </div>
 
           {/* Location on map */}
-          <GetCoordinateOnMap setCoordinates={(coordinates) => handleInputChange('location', coordinates)} />
+          {/* <GetCoordinateOnMap setCoordinates={(coordinates) => handleInputChange('location', coordinates)} /> */}
 
           {/* Payment Methods */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium mb-1">Payment Accepted</label>
             <div className="flex space-x-4">
               <label className="flex items-center">
@@ -776,10 +1397,10 @@ const AccommodationForm: React.FC = () => {
                 Online
               </label>
             </div>
-          </div>
+          </div> */}
 
           {/* Accepted Cards Dropdown */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium mb-1">Accepted Cards</label>
             <Dropdown
               iconVisible={true}
@@ -789,47 +1410,158 @@ const AccommodationForm: React.FC = () => {
               action={() => {}}
               buttonStyles={'md:w-24 py-1 px-2 border'}
             />
-            {/* TODO: Accepted cards section is pending */}
-          </div>
+          </div> */}
 
           {/* General Amenities */}
           <div>
-            <AccordionSection
-              pre={'generalAmenities'}
-              title="General Amenities & Facilities"
-              options={generalAmenities}
-            />
-            <AccordionSection pre={'utilitiesHookups'} title="Utilities & Hookups" options={utilitiesHookups} />
-            <AccordionSection
-              pre={'recreationalFacilities'}
-              title="Recreational Facilities"
-              options={recreationalFacilities}
-            />
-            <AccordionSection
-              pre={'workConnectivity'}
-              title="Work & Connectivity Features"
-              options={workConnectivity}
-            />
-            <AccordionSection pre={'specialMenus'} title="Special Menus Available" options={specialMenus} />
-            <AccordionSection pre={'travelSupport'} title="Travel & Adventure Support" options={travelSupport} />
-            <AccordionSection
-              pre={'ecoFriendlyPractices'}
-              title="Eco-Friendly Practices"
-              options={ecoFriendlyPractices}
-            />
-          </div>
+            <label className="font-semibold">Amenities</label>
+            {formType && amenitiesMapping[formType].generalAmenities && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'generalAmenities').zero}
+                pre={'generalAmenities'}
+                title={getAmenitiesConfig(formType, 'generalAmenities').title}
+                options={getAmenitiesConfig(formType, 'generalAmenities').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].utilities && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'utilities').zero}
+                pre={'utilities'}
+                title={getAmenitiesConfig(formType, 'utilities').title}
+                options={getAmenitiesConfig(formType, 'utilities').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].livingArea && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'livingArea').zero}
+                pre={'livingArea'}
+                title={getAmenitiesConfig(formType, 'livingArea').title}
+                options={getAmenitiesConfig(formType, 'livingArea').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].kitchen && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'kitchen').zero}
+                pre={'kitchen'}
+                title={getAmenitiesConfig(formType, 'kitchen').title}
+                options={getAmenitiesConfig(formType, 'kitchen').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].outdoorFacilities && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'outdoorFacilities').zero}
+                pre={'outdoorFacilities'}
+                title={getAmenitiesConfig(formType, 'outdoorFacilities').title}
+                options={getAmenitiesConfig(formType, 'outdoorFacilities').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].barDining && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'barDining').zero}
+                pre={'barDining'}
+                title={getAmenitiesConfig(formType, 'barDining').title}
+                options={getAmenitiesConfig(formType, 'barDining').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].specialMenus && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'specialMenus').zero}
+                pre={'specialMenus'}
+                title={getAmenitiesConfig(formType, 'specialMenus').title}
+                options={getAmenitiesConfig(formType, 'specialMenus').options}
+              />
+            )}
 
-          {/* Accommodation Images */}
-          <div>
-            <p className="block text-sm font-medium mb-1 semi-bold">Add some Photos</p>
-            <FileUploadWithPreview control={control} maxFilesLength={3} />
-          </div>
+            {formType && amenitiesMapping[formType].recreational && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'recreational').zero}
+                pre={'recreational'}
+                title={getAmenitiesConfig(formType, 'recreational').title}
+                options={getAmenitiesConfig(formType, 'recreational').options}
+              />
+            )}
 
-          {/* Amenities details */}
-          {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && <RoomsSection />}
-          {formType == 'hostel' && <HostelsDormSection />}
-          {formType == 'co-living' && <CoLivingRoomsSection />}
-          {formType == 'vacation-rental' && <VacationRentalsSection />}
+            {formType && amenitiesMapping[formType].wellness && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'wellness').zero}
+                pre={'wellness'}
+                title={getAmenitiesConfig(formType, 'wellness').title}
+                options={getAmenitiesConfig(formType, 'wellness').options}
+              />
+            )}
+
+            {formType && amenitiesMapping[formType].travelAdventureSupport && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'travelAdventureSupport').zero}
+                pre={'travelAdventureSupport'}
+                title={getAmenitiesConfig(formType, 'travelAdventureSupport').title}
+                options={getAmenitiesConfig(formType, 'travelAdventureSupport').options}
+              />
+            )}
+            {formType && amenitiesMapping[formType].workConnectivity && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'workConnectivity').zero}
+                pre={'workConnectivity'}
+                title={getAmenitiesConfig(formType, 'workConnectivity').title}
+                options={getAmenitiesConfig(formType, 'workConnectivity').options}
+              />
+            )}
+
+            {formType && amenitiesMapping[formType].meetingRooms && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'meetingRooms').zero}
+                pre={'meetingRooms'}
+                title={getAmenitiesConfig(formType, 'meetingRooms').title}
+                options={getAmenitiesConfig(formType, 'meetingRooms').options}
+              />
+            )}
+
+            {formType && amenitiesMapping[formType].eventServices && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'eventServices').zero}
+                pre={'eventServices'}
+                title={getAmenitiesConfig(formType, 'eventServices').title}
+                options={getAmenitiesConfig(formType, 'eventServices').options}
+              />
+            )}
+
+            {formType && amenitiesMapping[formType].ecoFriendlyPractices && (
+              <AccordionSection
+                handleInputChange={handleInputChange}
+                zero={getAmenitiesConfig(formType, 'ecoFriendlyPractices').zero}
+                pre={'ecoFriendlyPractices'}
+                title={getAmenitiesConfig(formType, 'ecoFriendlyPractices').title}
+                options={getAmenitiesConfig(formType, 'ecoFriendlyPractices').options}
+              />
+            )}
+
+            <NearbyAttractionsForm handleInputChange={handleInputChange} />
+            <div className="p-4 border rounded-lg bg-white shadow-md">
+              <h2 className="font-semibold mb-4">Map Location (optional)</h2>
+              <GetCoordinateOnMap setCoordinates={(coordinates) => handleInputChange('location', coordinates)} />
+            </div>
+            <DistanceToKeyLocations handleInputChange={handleInputChange} />
+            <UploadPhotos formType={formType} handleInputChange={handleInputChange} />
+
+            <HotelResortRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
+            <BedBreakfastRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
+            <HostelRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
+            <CoLivingRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
+            <VacationRentalRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
+          </div>
 
           {/* owner / manager Details */}
           <div>
@@ -860,12 +1592,12 @@ const AccommodationForm: React.FC = () => {
             <Checkbox
               label="I consent to my business information being listed in the Tribe Africa Pages Directory."
               {...register('consent')}
-              onChange={() => {}}
+              onChange={(e) => handleInputChange('consent', e)}
             />
             <Checkbox
               label="I confirm that the information provided is accurate to the best of my knowledge."
               {...register('confirmation')}
-              onChange={() => {}}
+              onChange={(e) => handleInputChange('confirmation', e)}
             />
             <Input
               type="text"
@@ -873,7 +1605,12 @@ const AccommodationForm: React.FC = () => {
               {...register('signature')}
               placeholder="Full Name (for electronic signature)"
             />
-            <DateInput onChange={() => {}} />
+            <DateInput
+              {...register('dateOfSubmit')}
+              onChange={(e) => {
+                handleInputChange('dateOfSubmit', e);
+              }}
+            />
           </div>
 
           {/* Submit Button */}
@@ -886,273 +1623,1290 @@ const AccommodationForm: React.FC = () => {
   );
 };
 
-const AccordionSection: React.FC<{ title: string; options: Option[]; pre: string }> = ({ title, options, pre }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<boolean[]>(new Array(options.length).fill(false));
+interface PriceRangeProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
 
-  const register = useContext(FormContext);
+const PriceRange: React.FC<PriceRangeProps> = ({ formType, handleInputChange }) => {
+  const options = priceRangeOptions[formType] || [];
 
-  const handleChange = (index: number) => {
-    const updatedOptions = [...selectedOptions];
-    updatedOptions[index] = !updatedOptions[index];
-    setSelectedOptions(updatedOptions);
+  // State to track selected checkboxes
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState<Record<string, boolean>>({});
+
+  const handleCheckboxChange = (key: string, checked: boolean) => {
+    console.log('--------key', key);
+    const updatedSelections = { ...selectedPriceRanges, [key]: checked };
+    setSelectedPriceRanges(updatedSelections);
+    handleInputChange('priceRange', updatedSelections); // Update parent state
   };
 
   return (
-    <div className="border-b">
-      <div className="cursor-pointer p-4 bg-gray-200" onClick={() => setIsOpen(!isOpen)}>
-        <h2>{title}</h2>
+    <div className="mb-4">
+      <label className="font-semibold block mb-2">Price Range</label>
+      {options.map(({ key, label }) => (
+        <label key={key} className="flex items-center mb-1">
+          <input
+            type="checkbox"
+            name={`priceRange.${key}`}
+            checked={selectedPriceRanges[key] || false}
+            onChange={(e) => handleCheckboxChange(key, e.target.checked)}
+            className="mr-2"
+          />
+          {label}
+        </label>
+      ))}
+    </div>
+  );
+};
+
+interface SecurityDepositProps {
+  handleInputChange: (field: string, value: any) => void;
+}
+
+const SecurityDeposit: React.FC<SecurityDepositProps> = ({ handleInputChange }) => {
+  const [securityDeposit, setSecurityDeposit] = useState({
+    hasDeposit: false,
+    amount: '',
+    conditions: '',
+  });
+
+  const handleChange = (field: keyof typeof securityDeposit, value: any) => {
+    const updatedDeposit = { ...securityDeposit, [field]: value };
+
+    if (field === 'hasDeposit' && !value) {
+      updatedDeposit.amount = '';
+      updatedDeposit.conditions = '';
+    }
+
+    setSecurityDeposit(updatedDeposit);
+    handleInputChange('policy.securityDeposit', updatedDeposit);
+  };
+
+  return (
+    <div className="mb-4">
+      <label className="font-semibold block mb-2">Security Deposit (Specify)</label>
+
+      <div className="flex gap-4">
+        <label className="flex items-center">
+          <input
+            type="radio"
+            name="hasDeposit"
+            value="no"
+            checked={!securityDeposit.hasDeposit}
+            onChange={() => handleChange('hasDeposit', false)}
+            className="mr-2"
+          />
+          No
+        </label>
+
+        <label className="flex items-center">
+          <input
+            type="radio"
+            name="hasDeposit"
+            value="yes"
+            checked={securityDeposit.hasDeposit}
+            onChange={() => handleChange('hasDeposit', true)}
+            className="mr-2"
+          />
+          Yes
+        </label>
       </div>
-      {isOpen && (
-        <div className="p-4 bg-gray-100">
-          {options.map((option, index) => (
-            <Checkbox
-              {...register(`amenities.${pre}.${option.value}`)}
-              key={option.value}
-              label={option.label}
-              onChange={() => handleChange(index)}
-            />
-          ))}
+
+      {/* Show input fields only if "Yes" is selected */}
+      {securityDeposit.hasDeposit && (
+        <div className="mt-4 space-y-2">
+          <input
+            type="number"
+            name="depositAmount"
+            placeholder="Enter deposit amount"
+            value={securityDeposit.amount}
+            onChange={(e) => handleChange('amount', e.target.value)}
+            className="border p-2 w-full rounded"
+          />
+
+          <textarea
+            name="depositConditions"
+            placeholder="Enter deposit conditions"
+            value={securityDeposit.conditions}
+            onChange={(e) => handleChange('conditions', e.target.value)}
+            className="border p-2 w-full rounded"
+          />
         </div>
       )}
     </div>
   );
 };
 
-const RoomsSection: React.FC = () => {
-  // Array of amenities with label and value for room amenities
-  const roomAmenitiesList = [
-    { label: 'TV', value: 'tv' },
-    { label: 'Kitchen/Kitchenette', value: 'kitchen' },
-    { label: 'Coffee/Tea Maker', value: 'coffeeTeaMaker' },
-    { label: 'Coffee Machine', value: 'coffeeMachine' },
-    { label: 'Electric Kettle', value: 'electricKettle' },
-    { label: 'Mini Bar', value: 'miniBar' },
-    { label: 'Hairdryer', value: 'hairdryer' },
-    { label: 'Safe', value: 'safe' },
-    { label: 'Balcony', value: 'balcony' },
-    { label: 'Family Rooms', value: 'familyRooms' },
-  ];
+interface UploadPhotosProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
 
-  // Array of amenities with label and value for bathroom amenities
-  const bathroomAmenitiesList = [
-    { label: 'Private Bathroom', value: 'privateBathroom' },
-    { label: 'Shared Bathroom', value: 'sharedBathroom' },
-    { label: 'Bathtub', value: 'bathtub' },
-    { label: 'Shower', value: 'shower' },
-    { label: 'Walk-in Shower', value: 'walkInShower' },
-    { label: 'Shower Chair', value: 'showerChair' },
-    { label: 'Shower with Grab Rail', value: 'showerWithGrabRail' },
-    { label: 'Toilet with Grab Rail', value: 'toiletWithGrabRail' },
-    { label: 'Towels Provided', value: 'towelsProvided' },
-    { label: 'Toiletries Provided', value: 'toiletriesProvided' },
-  ];
+// Form categories based on form type
+const formCategories: { [key: string]: { label: string; value: string }[] } = {
+  hotel: [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Lobby', value: 'lobby' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Rooms', value: 'rooms' },
+    { label: 'Amenities', value: 'amenities' },
+  ],
+  resort: [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Lobby', value: 'lobby' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Rooms', value: 'rooms' },
+    { label: 'Amenities', value: 'amenities' },
+  ],
+  'bed-and-breakfast': [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Lobby', value: 'lobby' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Rooms', value: 'rooms' },
+    { label: 'Amenities', value: 'amenities' },
+  ],
+  hostel: [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Dormitories', value: 'dormitories' },
+    { label: 'Private Rooms', value: 'privateRooms' },
+    { label: 'Social Spaces (Rooftop, Garden, etc.)', value: 'socialSpaces' },
+    { label: 'Dining Areas', value: 'diningAreas' },
+  ],
+  'co-living': [
+    { label: 'Exterior of Apartment/House', value: 'exterior' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Bedrooms', value: 'bedrooms' },
+    { label: 'Bathrooms', value: 'bathrooms' },
+    { label: 'En-Suite Bedrooms', value: 'enSuiteBedrooms' },
+    { label: 'Social Spaces (Rooftop, Garden, Lounge, etc.)', value: 'socialSpaces' },
+    { label: 'Dining Room', value: 'diningRoom' },
+  ],
+  'vacation-rental': [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Bedrooms', value: 'bedrooms' },
+    { label: 'Living Room', value: 'livingRoom' },
+    { label: 'Kitchen', value: 'kitchen' },
+    { label: 'Bathrooms', value: 'bathrooms' },
+    { label: 'Outdoor Spaces', value: 'outdoorSpaces' },
+  ],
+  campground: [
+    { label: 'Campground', value: 'campground' },
+    { label: 'Restrooms', value: 'restrooms' },
+    { label: 'Showers', value: 'showers' },
+    { label: 'Social Spaces', value: 'socialSpaces' },
+    { label: 'Co-Working Space', value: 'coWorkingSpace' },
+  ],
+};
+
+const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange }) => {
+  const initialState =
+    formCategories[formType]?.reduce(
+      (acc, category) => {
+        acc[category.value] = [];
+        return acc;
+      },
+      {} as { [key: string]: string[] }
+    ) || {};
+
+  const [photos, setPhotos] = useState(initialState);
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, category: string) => {
+    if (!e.target.files) return;
+
+    const uploadedFiles = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+
+    setPhotos((prev) => {
+      const updatedPhotos = {
+        ...prev,
+        [category]: [...(prev[category] || []), ...uploadedFiles], // Ensure prev[category] is an array
+      };
+
+      handleInputChange(
+        'uploadedPhotos' + formType.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()),
+        updatedPhotos
+      );
+      return updatedPhotos;
+    });
+  };
+
+  return (
+    <div className="my-4 p-4 border rounded-lg bg-white shadow-md">
+      <h2 className="text-lg font-semibold mb-3">Upload Photos</h2>
+      <p className="text-sm text-gray-600 mb-4">Upload photos of the property for each category.</p>
+
+      {formCategories[formType]?.map(({ label, value }) => (
+        <div key={value} className="mb-6">
+          <label className="block text-sm font-medium capitalize">{label}</label>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => handlePhotoUpload(e, value)}
+            className="w-full p-2 border rounded mt-2"
+          />
+
+          <div className="flex flex-wrap gap-2 mt-2">
+            {photos[value]?.map((photo, index) => (
+              <img key={index} src={photo} alt="Preview" className="w-20 h-20 object-cover rounded-md border" />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+interface DistanceToKeyLocationsDetailsProps {
+  handleInputChange: (field: string, value: any) => void;
+}
+
+const DistanceToKeyLocations: React.FC<DistanceToKeyLocationsDetailsProps> = ({ handleInputChange }) => {
+  const [locations, setLocations] = useState({
+    nearestAirport: '',
+    trainBusStation: '',
+    taxiStands: '',
+    cityCenter: '',
+    localMarkets: '',
+    popularRestaurants: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setLocations((prev) => {
+      const updatedLocations = { ...prev, [name]: value };
+
+      // Call the parent function to update the state
+      handleInputChange('distanceToKeyLocations', updatedLocations);
+
+      return updatedLocations;
+    });
+  };
+
+  return (
+    <div className="my-4 p-4 border rounded-lg bg-white shadow-md">
+      <h2 className="text-lg font-semibold mb-3">Distance to Key Locations (optional)</h2>
+
+      {Object.keys(locations).map((key) => (
+        <div key={key} className="mb-4">
+          <label className="block text-sm font-medium capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
+          <input
+            type="text"
+            name={key}
+            value={locations[key as keyof typeof locations]}
+            onChange={handleChange}
+            placeholder="Enter name & distance"
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const AccordionSection: React.FC<{
+  title: string;
+  options: Option[];
+  pre: string;
+  zero: string;
+  handleInputChange: (field: string, value: any) => void;
+}> = ({ title, options, pre, zero, handleInputChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState<boolean[]>(new Array(options.length).fill(false));
+  const [otherSpecify, setOtherSpecify] = useState('');
+  const [otherSpecifyValues, setOtherSpecifyValues] = useState<{ [key: string]: string }>({}); // Stores "Other (Specify)" values
 
   const register = useContext(FormContext);
 
+  const handleChange = useCallback(
+    (e, value: string, index: number, input: boolean) => {
+      if (input) {
+        // If input field (otherSpecify), update its value
+        const newValue = e.target.value;
+        setOtherSpecifyValues((prev) => ({
+          ...prev,
+          [value]: newValue,
+        }));
+        handleInputChange(`${zero}.${pre}.${value}`, newValue);
+      } else if (value === 'otherSpecify' || input) {
+        const newValue = e.target.value;
+        setOtherSpecify(newValue);
+        handleInputChange(`${zero}.${pre}.${value}`, newValue);
+      } else {
+        const isChecked = e;
+        setSelectedOptions((prevSelectedOptions) => {
+          const updatedOptions = [...prevSelectedOptions];
+          updatedOptions[index] = isChecked;
+          return updatedOptions;
+        });
+
+        handleInputChange(`${zero}.${pre}.${value}`, isChecked);
+      }
+    },
+    [handleInputChange, pre] // Dependencies for useCallback
+  );
+
   return (
-    <div>
-      <h2 className="font-semibold my-4">Room & Bathroom Details</h2>
-
-      {/* Input fields */}
-      <Input type="number" placeholder="Total Number of Beds" {...register('dorm.numberOfBeds')} />
-      <Input type="number" placeholder="Number of Rooms" {...register('dorm.numberOfRooms')} />
-      <Input type="number" placeholder="Number of Suites" {...register('dorm.numberOfSuites')} />
-
-      {/* Room Amenities */}
-      <div className="my-4">
-        <h3 className="font-semibold">Room Amenities</h3>
-        <div>
-          {roomAmenitiesList.map((amenity) => (
-            <Checkbox key={amenity.value} {...register('dorm.room.features.' + amenity.value)} label={amenity.label} />
-          ))}
-        </div>
+    <div className="border-b">
+      {/* Prevent dropdown from closing when clicking the header */}
+      <div
+        className="cursor-pointer p-4 bg-gray-200"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen((prev) => !prev);
+        }}
+      >
+        <h2>{title}</h2>
       </div>
 
-      {/* Bathroom Amenities */}
-      <div className="my-4">
-        <h3 className="font-semibold">Bathroom Amenities</h3>
-        <div>
-          {bathroomAmenitiesList.map((amenity) => (
-            <Checkbox
-              key={amenity.value}
-              {...register('dorm.bathroom.features.' + amenity.value)}
-              label={amenity.label}
-            />
-          ))}
+      {isOpen && (
+        <div className="p-4 bg-gray-100" onClick={(e) => e.stopPropagation()}>
+          {options.map((option, index) =>
+            option.value === 'otherSpecify' || option?.input ? (
+              <Input
+                key={option.value}
+                {...register(`${zero}.${pre}.${option.value}`)}
+                placeholder="Other (Specify)"
+                value={otherSpecify}
+                onChange={(e) => handleChange(e, option.value, index, option?.input || false)}
+              />
+            ) : (
+              <Checkbox
+                key={option.value}
+                {...register(`${zero}.${pre}.${option.value}`)}
+                label={option.label}
+                onChange={(e) => handleChange(e, option.value, index, option?.input || false)}
+              />
+            )
+          )}
         </div>
+      )}
+    </div>
+  );
+};
+
+interface HotelResortRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+interface BedBreakfastRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+interface HostelRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+interface CoLivingRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+interface VacationRentalGeneralInfoProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+const VacationRentalRoomBathroomDetails: React.FC<VacationRentalGeneralInfoProps> = ({
+  formType,
+  handleInputChange,
+}) => {
+  if (formType !== 'vacation-rental') return null; // Only render for vacation rentals
+
+  const [formData, setFormData] = useState({
+    maxOccupancy: '',
+    bedrooms: { count: '', bedTypes: '' },
+    enSuiteBedrooms: { count: '', bedTypes: '' },
+    separateBathrooms: '',
+    propertySize: '',
+    outdoorTerraceSize: '',
+    gardenSize: '',
+    bedroomFeatures: {
+      enSuiteBathroom: false,
+      balcony: false,
+      closetStorageSpace: false,
+      airConditioning: false,
+    },
+    bathroomFeatures: {
+      bathtub: false,
+      shower: false,
+      doubleSink: false,
+      towelsToiletries: false,
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prevState) => {
+      const updatedForm = { ...prevState };
+      const keys = name.split('.');
+
+      if (keys.length === 2) {
+        const [category, key] = keys;
+        updatedForm[category] = {
+          ...prevState[category as keyof typeof prevState],
+          [key]: type === 'checkbox' ? checked : value,
+        };
+      } else {
+        updatedForm[name] = value;
+      }
+      handleInputChange('vacationRentalRoomBathroomDetails', formData);
+
+      return updatedForm;
+    });
+  };
+
+  return (
+    <div className="p-4 bg-gray-100 rounded-lg my-4">
+      <h2 className="text-lg font-semibold mb-3">Vacation Rental - General Information</h2>
+
+      {/* Max Occupancy */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Max Occupancy</label>
+        <input
+          type="text"
+          name="maxOccupancy"
+          value={formData.maxOccupancy}
+          onChange={handleChange}
+          placeholder="Enter max occupancy"
+          className="w-full p-2 border rounded"
+        />
+      </div>
+
+      {/* Number of Bedrooms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Number of Bedrooms</label>
+        <input
+          type="text"
+          name="bedrooms.count"
+          value={formData.bedrooms.count}
+          onChange={handleChange}
+          placeholder="Enter number of bedrooms"
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="bedrooms.bedTypes"
+          value={formData.bedrooms.bedTypes}
+          onChange={handleChange}
+          placeholder="Enter bed types (King, Queen, etc.)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+
+      {/* Number of En-suite Bedrooms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Number of En-Suite Bedrooms</label>
+        <input
+          type="text"
+          name="enSuiteBedrooms.count"
+          value={formData.enSuiteBedrooms.count}
+          onChange={handleChange}
+          placeholder="Enter number of en-suite bedrooms"
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="enSuiteBedrooms.bedTypes"
+          value={formData.enSuiteBedrooms.bedTypes}
+          onChange={handleChange}
+          placeholder="Enter bed types (King, Queen, etc.)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+
+      {/* Number of Separate Bathrooms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Number of Separate Bathrooms</label>
+        <input
+          type="text"
+          name="separateBathrooms"
+          value={formData.separateBathrooms}
+          onChange={handleChange}
+          placeholder="Enter number of separate bathrooms"
+          className="w-full p-2 border rounded"
+        />
+      </div>
+
+      {/* Property Sizes */}
+      {[
+        { label: 'Property Size', name: 'propertySize' },
+        { label: 'Outdoor Terrace Size', name: 'outdoorTerraceSize' },
+        { label: 'Garden Size', name: 'gardenSize' },
+      ].map(({ label, name }) => (
+        <div key={name} className="mb-4">
+          <label className="block text-sm font-medium">{label} (sq meters/feet)</label>
+          <input
+            type="text"
+            name={name}
+            value={formData[name as keyof typeof formData]}
+            onChange={handleChange}
+            placeholder={`Enter ${label.toLowerCase()}`}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      ))}
+
+      {/* Bedroom Features */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Bedroom Features</h3>
+        {Object.keys(formData.bedroomFeatures).map((key) => (
+          <label key={key} className="flex items-center">
+            <input
+              type="checkbox"
+              name={`bedroomFeatures.${key}`}
+              checked={formData.bedroomFeatures[key as keyof typeof formData.bedroomFeatures]}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            {key.replace(/([A-Z])/g, ' $1')}
+          </label>
+        ))}
+      </div>
+
+      {/* Bathroom Features */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Bathroom Features</h3>
+        {Object.keys(formData.bathroomFeatures).map((key) => (
+          <label key={key} className="flex items-center">
+            <input
+              type="checkbox"
+              name={`bathroomFeatures.${key}`}
+              checked={formData.bathroomFeatures[key as keyof typeof formData.bathroomFeatures]}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            {key.replace(/([A-Z])/g, ' $1')}
+          </label>
+        ))}
       </div>
     </div>
   );
 };
 
-const HostelsDormSection: React.FC = () => {
-  // Arrays of objects for dorm room types, dorm features, and private room features
-  const dormRoomTypeList = [
-    { label: 'Mixed Dorm', value: 'mixedDorm' },
-    { label: 'Female Dorm', value: 'femaleDorm' },
-    { label: 'Male Dorm', value: 'maleDorm' },
-  ];
+const CoLivingRoomBathroomDetails: React.FC<CoLivingRoomBathroomDetailsProps> = ({ formType, handleInputChange }) => {
+  if (formType !== 'co-living') return null; // Only render for co-living
 
-  const dormRoomFeaturesList = [
-    { label: 'Lockers', value: 'lockers' },
-    { label: 'Reading Lights', value: 'readingLights' },
-    { label: 'Charging Ports', value: 'chargingPorts' },
-    { label: 'Curtains for Privacy', value: 'curtainsForPrivacy' },
-  ];
+  const [formData, setFormData] = useState({
+    sharedBedrooms: '',
+    sharedBedroomFeatures: {
+      balconyTerrace: false,
+      closetStorageSpace: false,
+      readingLights: false,
+      chargingPorts: false,
+      tv: false,
+      wifi: false,
+      airConditioningHeating: false,
+      workspace: false,
+      other: '',
+    },
+    sharedBathrooms: '',
+    enSuiteBedrooms: '',
+    enSuiteBedroomFeatures: {
+      balconyTerrace: false,
+      closetStorageSpace: false,
+      readingLights: false,
+      chargingPorts: false,
+      tv: false,
+      wifi: false,
+      airConditioningHeating: false,
+      workspace: false,
+      other: '',
+    },
+    commonAreas: '',
+  });
 
-  const privateRoomFeaturesList = [
-    { label: 'En-Suite Bathroom', value: 'enSuiteBathroom' },
-    { label: 'Balcony/Terrace', value: 'balcony' },
-    { label: 'Closet/Storage Space', value: 'closetStorageSpace' },
-    { label: 'TV', value: 'tv' },
-  ];
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type, checked } = e.target;
 
-  const register = useContext(FormContext);
+    setFormData((prevState) => {
+      const updatedForm = { ...prevState };
+      const keys = name.split('.');
 
-  return (
-    <div>
-      <h2 className="text-2xl font-semibold my-4">Hostel Room & Bathroom Details</h2>
+      if (keys.length === 2) {
+        const [category, key] = keys;
+        updatedForm[category] = {
+          ...prevState[category as keyof typeof prevState],
+          [key]: type === 'checkbox' ? checked : value,
+        };
+      } else {
+        updatedForm[name] = value;
+      }
+      handleInputChange('coLivingRoomBathroomDetails', formData);
 
-      {/* Input fields */}
-      <Input type="number" placeholder="Total Number of Beds" {...register('dorm.numberOfBeds')} />
-      <Input type="number" placeholder="Number of Dormitory Rooms" {...register('dorm.numberOfRooms')} />
-
-      {/* Dorm Room Type */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Dorm Room Type</h3>
-        <div>
-          {dormRoomTypeList.map((roomType) => (
-            <Checkbox key={roomType.value} {...register('dorm.types.' + roomType.value)} label={roomType.label} />
-          ))}
-        </div>
-      </div>
-
-      {/* Dorm Room Features */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Dorm Room Features</h3>
-        <div>
-          {dormRoomFeaturesList.map((feature) => (
-            <Checkbox key={feature.value} {...register('dorm.room.features.' + feature.value)} label={feature.label} />
-          ))}
-        </div>
-      </div>
-
-      {/* Number of Shared Bathrooms */}
-      <Input
-        type="number"
-        placeholder="Number of Shared Bathrooms"
-        name="numberOfSharedBathrooms"
-        {...register('dorm.shared.numberOfRooms')}
-      />
-
-      {/* Number of Private Rooms */}
-      <Input type="number" placeholder="Number of Private Rooms" {...register('dorm.private.numberOfRooms')} />
-
-      {/* Number of en-Suite Private Rooms */}
-      <Input
-        type="number"
-        placeholder="Number of en-Suite Private Rooms"
-        {...register('dorm.private.numberOfSuites')}
-      />
-
-      {/* Private Room Features */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Private Room Features</h3>
-        <div>
-          {privateRoomFeaturesList.map((feature) => (
-            <Checkbox
-              key={feature.value}
-              {...register('dorm.private.features.' + feature.value)}
-              label={feature.label}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CoLivingRoomsSection: React.FC = () => {
-  // Arrays for shared bedroom and ensuite bedroom features
-  const sharedBedroomFeaturesList = [
-    { label: 'Balcony/Terrace', value: 'balcony' },
-    { label: 'Closet/Storage Space', value: 'closetStorageSpace' },
-    { label: 'Reading Lights', value: 'readingLights' },
-    { label: 'Charging Ports', value: 'chargingPorts' },
-    { label: 'TV', value: 'tv' },
-    { label: 'Wi-Fi', value: 'wifi' },
-    { label: 'Air Conditioning/Heating', value: 'airConditioning' },
-    { label: 'Workspace', value: 'workspace' },
-  ];
-
-  const ensuiteBedroomFeaturesList = [
-    { label: 'Balcony/Terrace', value: 'balcony' },
-    { label: 'Closet/Storage Space', value: 'closetStorageSpace' },
-    { label: 'Reading Lights', value: 'readingLights' },
-    { label: 'Charging Ports', value: 'chargingPorts' },
-    { label: 'TV', value: 'tv' },
-    { label: 'Wi-Fi', value: 'wifi' },
-    { label: 'Air Conditioning/Heating', value: 'airConditioning' },
-    { label: 'Workspace', value: 'workspace' },
-  ];
-
-  const register = useContext(FormContext);
+      return updatedForm;
+    });
+  };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold my-4">Co-Living Room & Accommodation Details</h2>
+    <div className="p-4 bg-gray-100 rounded-lg my-4">
+      <h2 className="text-lg font-semibold mb-3">Co-Living Room & Bathroom Details</h2>
 
-      {/* Number of Bedrooms Available with Shared Bathrooms */}
-      <Input
-        type="number"
-        placeholder="Number of Bedrooms Available with Shared Bathrooms"
-        {...register('dorm.shared.numberOfRooms')}
-      />
-
-      {/* Bedroom Features with Shared Bathrooms */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Bedroom Features with Shared Bathrooms</h3>
-        <div>
-          {sharedBedroomFeaturesList.map((feature) => (
-            <Checkbox
-              key={feature.value}
-              {...register('dorm.shared.features.' + feature.value)}
-              label={feature.label}
-            />
-          ))}
-        </div>
+      {/* Shared Bedrooms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Number of Bedrooms Available with Shared Bathrooms</label>
+        <input
+          type="text"
+          name="sharedBedrooms"
+          value={formData.sharedBedrooms}
+          onChange={handleChange}
+          placeholder="Enter number of shared bedrooms"
+          className="w-full p-2 border rounded"
+        />
       </div>
 
-      {/* Number of Shared Bathrooms */}
-      <Input type="number" placeholder="Number of Shared Bathrooms" {...register('dorm.shared.numberOfBathrooms')} />
+      {/* Shared Bedroom Features */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Shared Bedroom Features</h3>
+        {Object.keys(formData.sharedBedroomFeatures).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`sharedBedroomFeatures.${key}`}
+                checked={formData.sharedBedroomFeatures[key as keyof typeof formData.sharedBedroomFeatures]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1').trim()}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="sharedBedroomFeatures.other"
+          value={formData.sharedBedroomFeatures.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
 
-      {/* Number of En-Suite Bedrooms */}
-      <Input type="number" placeholder="Number of En-Suite Bedrooms" {...register('dorm.ensuite.numberOfRooms')} />
+      {/* Shared Bathrooms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Number of Shared Bathrooms</label>
+        <input
+          type="text"
+          name="sharedBathrooms"
+          value={formData.sharedBathrooms}
+          onChange={handleChange}
+          placeholder="Enter number of shared bathrooms"
+          className="w-full p-2 border rounded"
+        />
+      </div>
+
+      {/* En-Suite Bedrooms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Number of En-Suite Bedrooms</label>
+        <input
+          type="text"
+          name="enSuiteBedrooms"
+          value={formData.enSuiteBedrooms}
+          onChange={handleChange}
+          placeholder="Enter number of en-suite bedrooms"
+          className="w-full p-2 border rounded"
+        />
+      </div>
 
       {/* En-Suite Bedroom Features */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">En-Suite Bedroom Features</h3>
-        <div>
-          {ensuiteBedroomFeaturesList.map((feature) => (
-            <Checkbox
-              key={feature.value}
-              {...register('dorm.ensuite.features.' + feature.value)}
-              label={feature.label}
-            />
-          ))}
-        </div>
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">En-Suite Bedroom Features</h3>
+        {Object.keys(formData.enSuiteBedroomFeatures).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`enSuiteBedroomFeatures.${key}`}
+                checked={formData.enSuiteBedroomFeatures[key as keyof typeof formData.enSuiteBedroomFeatures]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1').trim()}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="enSuiteBedroomFeatures.other"
+          value={formData.enSuiteBedroomFeatures.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
       </div>
 
       {/* Common Areas */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Common Areas</h3>
-        <Textarea
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Common Areas</label>
+        <textarea
+          name="commonAreas"
+          value={formData.commonAreas}
+          onChange={handleChange}
           placeholder="Describe the shared spaces (e.g., kitchen, lounge, gym)"
-          {...register('dorm.commonArea')}
-          className="p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500"
+          className="w-full p-2 border rounded h-24"
         />
       </div>
+    </div>
+  );
+};
+
+const HostelRoomBathroomDetails: React.FC<HostelRoomBathroomDetailsProps> = ({ formType, handleInputChange }) => {
+  if (formType !== 'hostel') return null;
+  const [formData, setFormData] = useState({
+    totalBeds: '',
+    dormitoryRooms: '',
+    dormRoomType: {
+      mixedDorm: false,
+      femaleDorm: false,
+      maleDorm: false,
+      other: '',
+    },
+    dormRoomFeatures: {
+      lockers: false,
+      readingLights: false,
+      chargingPorts: false,
+      curtainsForPrivacy: false,
+      other: '',
+    },
+    sharedBathrooms: '',
+    privateRooms: '',
+    enSuitePrivateRooms: '',
+    privateRoomFeatures: {
+      enSuiteBathroom: false,
+      balconyTerrace: false,
+      closetStorageSpace: false,
+      tv: false,
+      other: '',
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prevState) => {
+      const updatedForm = { ...prevState };
+      const keys = name.split('.'); // Handle nested fields
+
+      if (keys.length === 2) {
+        const [category, key] = keys;
+        updatedForm[category] = {
+          ...prevState[category as keyof typeof prevState],
+          [key]: type === 'checkbox' ? checked : value,
+        };
+      } else {
+        updatedForm[name] = value;
+      }
+      handleInputChange('hostelRoomBathroomDetails', updatedForm);
+      return updatedForm;
+    });
+  };
+
+  return (
+    <div className="p-4 bg-gray-100 rounded-lg my-4">
+      <h2 className="text-lg font-semibold mb-3">Hostel Room & Bathroom Details</h2>
+
+      {/* Room Details */}
+      {[
+        { label: 'Total Number of Beds', name: 'totalBeds' },
+        { label: 'Number of Dormitory Rooms', name: 'dormitoryRooms' },
+        { label: 'Number of Shared Bathrooms', name: 'sharedBathrooms' },
+        { label: 'Number of Private Rooms', name: 'privateRooms' },
+        { label: 'Number of en-Suite Private Rooms', name: 'enSuitePrivateRooms' },
+      ].map(({ label, name }) => (
+        <div key={name} className="mb-4">
+          <label className="block text-sm font-medium">{label}</label>
+          <input
+            type="text"
+            name={name}
+            value={formData[name as keyof typeof formData] as string}
+            onChange={handleChange}
+            placeholder={`Enter ${label.toLowerCase()}`}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      ))}
+
+      {/* Dorm Room Type */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Dorm Room Type</h3>
+        {Object.keys(formData.dormRoomType).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`dormRoomType.${key}`}
+                checked={formData.dormRoomType[key as keyof typeof formData.dormRoomType]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1').trim()}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="dormRoomType.other"
+          value={formData.dormRoomType.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+
+      {/* Dorm Room Features */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Dorm Room Features</h3>
+        {Object.keys(formData.dormRoomFeatures).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`dormRoomFeatures.${key}`}
+                checked={formData.dormRoomFeatures[key as keyof typeof formData.dormRoomFeatures]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1').trim()}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="dormRoomFeatures.other"
+          value={formData.dormRoomFeatures.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+
+      {/* Private Room Features */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Private Room Features</h3>
+        {Object.keys(formData.privateRoomFeatures).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`privateRoomFeatures.${key}`}
+                checked={formData.privateRoomFeatures[key as keyof typeof formData.privateRoomFeatures]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1').trim()}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="privateRoomFeatures.other"
+          value={formData.privateRoomFeatures.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+    </div>
+  );
+};
+
+const BedBreakfastRoomBathroomDetails: React.FC<BedBreakfastRoomBathroomDetailsProps> = ({
+  formType,
+  handleInputChange,
+}) => {
+  if (formType !== 'bed-and-breakfast') return null;
+
+  const [formData, setFormData] = useState({
+    numberOfBeds: '',
+    numberOfRooms: '',
+    numberOfEnSuiteRooms: '',
+    numberOfSharedBathrooms: '',
+    roomAmenities: {
+      tv: false,
+      kitchen: false,
+      coffeeTeaMaker: false,
+      coffeeMachine: false,
+      electricKettle: false,
+      miniBar: false,
+      hairdryer: false,
+      safe: false,
+      balcony: false,
+      familyRooms: false,
+      other: '',
+    },
+    bathroomAmenities: {
+      privateBathroom: false,
+      sharedBathroom: false,
+      bathtub: false,
+      shower: false,
+      walkInShower: false,
+      showerChair: false,
+      showerWithGrabRail: false,
+      toiletWithGrabRail: false,
+      towelsProvided: false,
+      toiletriesProvided: false,
+      other: '',
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prev) => {
+      const updatedForm = { ...prev };
+      const keys = name.split('.');
+
+      if (keys.length === 2) {
+        const [category, key] = keys;
+        updatedForm[category] = {
+          ...prev[category as keyof typeof prev],
+          [key]: type === 'checkbox' ? checked : value,
+        };
+      } else {
+        updatedForm[name] = value;
+      }
+
+      handleInputChange('bedBreakfastRoomBathroomDetails', updatedForm);
+      return updatedForm;
+    });
+  };
+
+  return (
+    <div className="p-4 bg-gray-100 rounded-lg">
+      <h2 className="text-lg font-semibold mb-3">Room & Bathroom Details</h2>
+
+      {/* Room Details */}
+      {['numberOfBeds', 'numberOfRooms', 'numberOfEnSuiteRooms', 'numberOfSharedBathrooms'].map((field) => (
+        <div key={field} className="mb-4">
+          <label className="block text-sm font-medium">{field.replace(/([A-Z])/g, ' $1')}</label>
+          <input
+            type="text"
+            name={field}
+            value={formData[field as keyof typeof formData] as string}
+            onChange={handleChange}
+            placeholder={`Enter ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      ))}
+
+      {/* Room Amenities */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Room Amenities</h3>
+        {Object.keys(formData.roomAmenities).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`roomAmenities.${key}`}
+                checked={formData.roomAmenities[key as keyof typeof formData.roomAmenities]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1')}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="roomAmenities.other"
+          value={formData.roomAmenities.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+
+      {/* Bathroom Amenities */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Bathroom Amenities</h3>
+        {Object.keys(formData.bathroomAmenities).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`bathroomAmenities.${key}`}
+                checked={formData.bathroomAmenities[key as keyof typeof formData.bathroomAmenities]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1')}
+            </label>
+          ) : null
+        )}
+        <input
+          type="text"
+          name="bathroomAmenities.other"
+          value={formData.bathroomAmenities.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+    </div>
+  );
+};
+
+const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsProps> = ({
+  formType,
+  handleInputChange,
+}) => {
+  if (formType !== 'hotel' && formType !== 'resort') return null;
+
+  const [formData, setFormData] = useState({
+    numberOfBeds: '',
+    numberOfRooms: '',
+    numberOfSuites: '',
+    roomAmenities: {
+      tv: false,
+      kitchen: false,
+      coffeeTeaMaker: false,
+      coffeeMachine: false,
+      electricKettle: false,
+      miniBar: false,
+      hairdryer: false,
+      safe: false,
+      balcony: false,
+      familyRooms: false,
+      other: '',
+    },
+    bathroomAmenities: {
+      privateBathroom: false,
+      sharedBathroom: false,
+      bathtub: false,
+      shower: false,
+      walkInShower: false,
+      showerChair: false,
+      showerWithGrabRail: false,
+      toiletWithGrabRail: false,
+      towelsProvided: false,
+      toiletriesProvided: false,
+      other: '',
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prev) => {
+      const updatedForm = { ...prev };
+      const keys = name.split('.'); // Handle nested fields
+
+      if (keys.length === 2) {
+        const [category, key] = keys;
+        updatedForm[category] = {
+          ...prev[category as keyof typeof prev],
+          [key]: type === 'checkbox' ? checked : value,
+        };
+      } else {
+        updatedForm[name] = value;
+      }
+
+      console.log(updatedForm);
+      handleInputChange('hotelResortsbathroomDetails', updatedForm);
+      return updatedForm;
+    });
+  };
+
+  return (
+    <div className="p-4 bg-gray-100 rounded-lg my-4">
+      <h2 className="text-lg font-semibold mb-3">Room & Bathroom Details</h2>
+
+      {/* Room Details */}
+      {[
+        { label: 'Total Number of Beds', name: 'numberOfBeds' },
+        { label: 'Number of Rooms', name: 'numberOfRooms' },
+        { label: 'Number of Suites', name: 'numberOfSuites' },
+      ].map(({ label, name }) => (
+        <div key={name} className="mb-4">
+          <label className="block text-sm font-medium">{label}</label>
+          <input
+            type="text"
+            name={name}
+            value={formData[name as keyof typeof formData] as string}
+            onChange={handleChange}
+            placeholder={`Enter ${label.toLowerCase()}`}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+      ))}
+
+      {/* Room Amenities */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Room Amenities</h3>
+        {Object.keys(formData.roomAmenities).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`roomAmenities.${key}`}
+                checked={formData.roomAmenities[key as keyof typeof formData.roomAmenities]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1')}
+            </label>
+          ) : null
+        )}
+        {/* Other Specify */}
+        <input
+          type="text"
+          name="roomAmenities.other"
+          value={formData.roomAmenities.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+
+      {/* Bathroom Amenities */}
+      <div className="mb-4">
+        <h3 className="text-md font-semibold">Bathroom Amenities</h3>
+        {Object.keys(formData.bathroomAmenities).map((key) =>
+          key !== 'other' ? (
+            <label key={key} className="flex items-center">
+              <input
+                type="checkbox"
+                name={`bathroomAmenities.${key}`}
+                checked={formData.bathroomAmenities[key as keyof typeof formData.bathroomAmenities]}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              {key.replace(/([A-Z])/g, ' $1')}
+            </label>
+          ) : null
+        )}
+        {/* Other Specify */}
+        <input
+          type="text"
+          name="bathroomAmenities.other"
+          value={formData.bathroomAmenities.other}
+          onChange={handleChange}
+          placeholder="Other (Specify)"
+          className="w-full p-2 border rounded mt-2"
+        />
+      </div>
+    </div>
+  );
+};
+
+const NearbyAttractionsForm = ({ handleInputChange }) => {
+  const [attractions, setAttractions] = useState<
+    {
+      _key: string;
+      name: string;
+      distance: string;
+      beach: boolean;
+      desert: boolean;
+      parkReserve: boolean;
+      lake: boolean;
+      river: boolean;
+      kayakingCanoeing: boolean;
+      hikingTrails: boolean;
+      bikingTrails: boolean;
+    }[]
+  >([]);
+
+  const defaultAttraction = {
+    _key: generateId(),
+    name: '',
+    distance: '',
+    beach: false,
+    desert: false,
+    parkReserve: false,
+    lake: false,
+    river: false,
+    kayakingCanoeing: false,
+    hikingTrails: false,
+    bikingTrails: false,
+  };
+
+  const addAttraction = () => {
+    if (attractions.length < 10) {
+      setAttractions([...attractions, { ...defaultAttraction }]);
+    }
+  };
+
+  const removeAttraction = (index: number) => {
+    const updatedAttractions = attractions.filter((_, i) => i !== index);
+    setAttractions(updatedAttractions);
+    handleInputChange('nearbyAttraction', updatedAttractions);
+  };
+
+  const handleChange = useCallback(
+    (index: number, field: string, value: any) => {
+      setAttractions((prevAttractions) => {
+        const updatedAttractions = [...prevAttractions];
+        updatedAttractions[index] = { ...updatedAttractions[index], [field]: value };
+        handleInputChange('nearbyAttraction', updatedAttractions);
+        return updatedAttractions;
+      });
+    },
+    [handleInputChange]
+  );
+
+  return (
+    <div className="p-4 border rounded-lg bg-white shadow-md my-4">
+      <h2 className="font-semibold mb-4">Nearby Attractions (optional)</h2>
+
+      {attractions.map((attraction, index) => (
+        <div key={index} className="border p-4 mb-4 rounded-lg bg-gray-100">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium">Attraction {index + 1}</h3>
+            <button type="button" onClick={() => removeAttraction(index)} className="text-red-500 hover:text-red-700">
+              Remove
+            </button>
+          </div>
+
+          <input
+            type="text"
+            placeholder="Name"
+            value={attraction.name}
+            onChange={(e) => handleChange(index, 'name', e.target.value)}
+            className="w-full mt-2 p-2 border rounded"
+          />
+
+          <input
+            type="text"
+            placeholder="Distance (e.g., 5 km)"
+            value={attraction.distance}
+            onChange={(e) => handleChange(index, 'distance', e.target.value)}
+            className="w-full mt-2 p-2 border rounded"
+          />
+
+          {/* Checkbox Options */}
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            {Object.keys(defaultAttraction)
+              .filter((key) => key !== 'name' && key !== 'distance')
+              .map((option) => (
+                <label key={option} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={attraction[option as keyof typeof defaultAttraction] || false}
+                    onChange={(e) => handleChange(index, option, e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  <span>{option.replace(/([A-Z])/g, ' $1')}</span>
+                </label>
+              ))}
+          </div>
+        </div>
+      ))}
+
+      {/* Add More Button */}
+      {attractions.length < 10 && (
+        <button
+          type="button"
+          onClick={addAttraction}
+          className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Add Attraction
+        </button>
+      )}
     </div>
   );
 };

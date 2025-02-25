@@ -1,97 +1,60 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { InputProps } from '../../types/index';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Input from './input';
 import Button from '@atoms/custom-button/button';
 import Close from '@atoms/custom-button/close-button';
 
-interface ExtendedInputProps extends InputProps {
-  setId: string; // Add the setId property to the existing InputProps
-}
-
 interface DynamicFormProps {
-  fields: InputProps[];
-  setValue: (value: Array<object>) => void;
+  setValue: (value: string[]) => void;
   max?: number;
 }
 
-const FieldSet = ({
-  fields,
-  remove,
-}: {
-  fields: ExtendedInputProps[];
-  remove: () => void;
-  action: (fieldName: string, value: string | number) => void;
-}) => {
-  return (
-    <div className="flex gap-1">
-      {fields.map((field) => (
-        <Input
-          key={field.name}
-          type={field.type}
-          name={field.name}
-          placeholder={field.placeholder}
-          className="flex-1"
-          // onInput={(e) => action(field.name.split('~')[0], e.currentTarget.value)}
-          options={field.options}
-        />
-      ))}
-      <Close onClick={remove} className="h-fit m-auto" />
-    </div>
-  );
-};
+const DynamicFields: React.FC<DynamicFormProps> = ({ setValue, max = 6 }) => {
+  const [fields, setFields] = useState<string[]>([]);
+  const prevFieldsRef = useRef<string[]>([]);
 
-const DynamicFields: React.FC<DynamicFormProps> = ({ fields, setValue, max = null }) => {
-  const [fieldSet, setFieldSet] = useState<{ id: string; fields: InputProps[] }[]>([]);
-  const [valueSet, setValueSet] = useState([]);
-  const fieldObject = useRef({});
+  // Function to add a new field
+  const addField = useCallback(() => {
+    setFields((prevFields) => (prevFields.length >= max ? prevFields : [...prevFields, '']));
+  }, [max]);
 
-  const addField = () => {
-    const newId = `${Date.now()}`;
-    setFieldSet((prevSets) => [...prevSets, { id: newId, fields }]);
-    setValueSet([...valueSet, fieldObject.current]);
-  };
+  // Function to remove a field
+  const removeField = useCallback((index: number) => {
+    setFields((prevFields) => prevFields.filter((_, i) => i !== index));
+  }, []);
 
-  const removeFieldSet = (id: string, index: number) => {
-    setFieldSet((prevSets) => prevSets.filter((set) => set.id !== id));
-    setValueSet(valueSet.slice(0, index).concat(valueSet.slice(index + 1)));
-  };
+  // Function to update a field value
+  const updateField = useCallback((index: number, value: string) => {
+    setFields((prevFields) => prevFields.map((item, i) => (i === index ? value : item)));
+  }, []);
 
-  const updateValueSet = (fieldName: string, value: string | number, index: number) => {
-    setValueSet((prevValueSet) =>
-      prevValueSet.map((item, idx) => (idx === index ? { ...item, [fieldName]: value } : item))
-    );
-  };
-
-  useEffect(() => setValue(valueSet), [valueSet]);
-
+  // Update parent state only when fields change
   useEffect(() => {
-    let obj = {};
-    fields.forEach((field) => {
-      obj[field.name] = null;
-    });
-    fieldObject.current = obj;
-  }, [fields]);
+    if (JSON.stringify(fields) !== JSON.stringify(prevFieldsRef.current)) {
+      setValue(fields);
+      prevFieldsRef.current = fields;
+    }
+  }, [fields, setValue]);
 
   return (
-    <div className="p-2 border">
-      <div>
-        {fieldSet.map((fieldSet, index) => (
-          <FieldSet
-            key={fieldSet.id}
-            fields={fieldSet.fields.map((field, idx) => ({
-              ...field,
-              name: `${field.name}~${fieldSet.id}~${idx}`,
-              placeholder: `${field.placeholder}`,
-              setId: fieldSet.id,
-            }))}
-            remove={() => removeFieldSet(fieldSet.id, index)}
-            action={(field, value) => updateValueSet(field, value, index)}
-          />
+    <div className="p-2 border mt-2 mb-6 rounded-md">
+      <div className="space-y-2">
+        {fields.map((value, index) => (
+          <div key={index} className="flex gap-2">
+            <Input
+              type="text"
+              value={value}
+              placeholder={`Highlight ${index + 1}`}
+              onChange={(e) => updateField(index, e.target.value)}
+            />
+            <Close onClick={() => removeField(index)} className="h-fit m-auto cursor-pointer text-red-500" />
+          </div>
         ))}
       </div>
-      <Button className="w-full" onClick={addField} disabled={max && fieldSet.length == max}>
-        Add Field
-      </Button>
+      {fields.length < max && (
+        <Button className="w-full mt-2" onClick={addField}>
+          Add Highlight
+        </Button>
+      )}
     </div>
   );
 };

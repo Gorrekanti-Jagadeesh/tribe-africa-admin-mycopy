@@ -11,17 +11,16 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       action,
       required = false,
       className,
-      value,
+      value, // Controlled value from the parent
       regex,
       error = null,
       patternMessage,
+      onChange, // Added onChange handler
       ...props
     },
     ref
   ) => {
-    const [val, setValue] = useState(defaultValue || '');
     const [touched, setTouched] = useState(false);
-
     const [validationError, setValidationError] = useState<string | null>(error);
 
     const handleFocus = () => {
@@ -29,7 +28,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const handleBlur = () => {
-      if (regex && !regex.test(val)) {
+      if (regex && value && !regex.test(value)) {
         setValidationError(patternMessage || 'Invalid input');
       } else {
         setValidationError(null);
@@ -38,10 +37,13 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
-      setValue(newValue);
 
       if (action) {
         action(newValue); // Trigger the action function
+      }
+
+      if (onChange) {
+        onChange(e); // Propagate the change to the parent
       }
 
       if (regex && validationError) {
@@ -52,7 +54,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={`${className} relative group my-3`}>
+      <div className={`${className} relative group mt-2 my-4`}>
         <label
           className={`absolute top-3 left-2.5 origin-0 bg-white cursor-text transition-all
           ${
@@ -69,9 +71,9 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           type={type}
           name={name}
-          defaultValue={defaultValue}
+          value={value || defaultValue} // Controlled value
           placeholder={placeholder}
-          onChange={handleChange}
+          onChange={handleChange} // Call the new handleChange
           onBlur={handleBlur}
           onFocus={handleFocus}
           className={`p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-500

@@ -81,7 +81,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`flex flex-col gap-2 ${className} mt-2 mb-4`}>
       {label && (
         <label className="font-semibold">
           {label}
