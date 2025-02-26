@@ -21,789 +21,11 @@ import {
   categoryLabels,
   policyLabels,
   priceRangeOptions,
+  formCategories,
+  locationTypes,
+  propertyTypes,
+  AccommodationFormInputs,
 } from '@/data/amanitieConfig';
-
-export interface AccommodationFormInputs {
-  accommodation_type: string;
-  name: string;
-  brand?: string;
-  star_rating?: string;
-  property_type?: string;
-  priceRange: {
-    budget: boolean;
-    midRange: boolean;
-    upScale: boolean;
-    luxury: boolean;
-  };
-  category: string;
-  locationType: {
-    beach: string;
-    mountain: string;
-    river: string;
-    lakeside: string;
-    desert: string;
-    island: string;
-    urban: string;
-    other: string;
-  };
-  address: {
-    street: string;
-    city: string;
-    region: string;
-    postalCode?: string;
-    country: string;
-  };
-  contact: {
-    website: string;
-    phoneNumber: string;
-    email: string;
-    socialMedia?: string;
-  };
-  description: {
-    tagline: string;
-    description: string;
-    highlights: string[];
-  };
-  languages: {
-    arabic: boolean;
-    english: boolean;
-    french: boolean;
-    spanish: boolean;
-    portuguese: boolean;
-    german: boolean;
-    mandarin: boolean;
-    bahasa: boolean;
-    other?: string;
-  };
-  establishedIn: string;
-  policy: {
-    cancellation: {
-      freeCancellation: boolean;
-      nonRefundable: boolean;
-      description?: string;
-    };
-    securityDeposit: {
-      hasDeposit: boolean;
-      amount?: string;
-      conditions?: string;
-    };
-    rules?: string;
-    checkInTime?: string;
-    checkOutTime?: string;
-  };
-  paymentMethods: {
-    card: boolean;
-    cash: boolean;
-    online: boolean;
-  };
-  acceptedCards: {
-    masterCard: boolean;
-    visaCard: boolean;
-    americanExpress: boolean;
-    discover: boolean;
-    jcb: boolean;
-    other: string;
-  };
-  operatingSeason: {
-    isYearRound: boolean; // true if open year-round, false if seasonal
-    seasonalMonths?: string; // Specify seasonal months
-    lowSeason?: string; // Specify low season months
-    highSeason?: string; //
-  }[];
-  location: {
-    latitude: string;
-    longitude: string;
-  };
-  amenities: {
-    generalAmenities: {
-      security24h: boolean;
-      cctvCameras: boolean;
-      freeParking: boolean;
-      paidParking: boolean;
-      valetParking: boolean;
-      electricVehicleChargingStation: boolean;
-      conciergeService: boolean;
-      frontDesk24h: boolean;
-      freeWiFi: boolean;
-      airportShuttleService: boolean;
-      luggageStorage: boolean;
-      wheelchairAccessibleFacilities: boolean;
-      upperFloorsAccessibleByElevator: boolean;
-      roomService: boolean;
-      laundryService: boolean;
-      airConditioning: boolean;
-      heating: boolean;
-      breakfastIncluded: boolean;
-      breakfastAvailableForPurchase: boolean;
-      salahRoom: boolean;
-      chapel: boolean;
-      garden: boolean;
-      terrace: boolean;
-      otherSpecify: string;
-    };
-    barDining: {
-      barLounge: boolean;
-      poolBar: boolean;
-      otherSpecify: string;
-    };
-    specialMenus: {
-      dairyFree: boolean;
-      glutenFree: boolean;
-      vegetarian: boolean;
-      vegan: boolean;
-      halal: boolean;
-      kosher: boolean;
-      otherSpecify: string;
-    };
-    recreational: {
-      indoorSwimmingPool: boolean;
-      outdoorSwimmingPool: boolean;
-      spaServices: boolean;
-      fitnessCenterGym: boolean;
-      tennisCourt: boolean;
-      golfCourse: boolean;
-      kidsClub: boolean;
-      kidsPlayArea: boolean;
-      otherSpecify: string;
-      culturalEvents: boolean;
-      notApplicable: boolean;
-    };
-    travelAdventureSupport: {
-      tourDesk: boolean;
-      guidedTours: boolean;
-      privateTourGuides: boolean;
-      transportServices: boolean; // Courtesy Bus/Car Service
-      vehiclesForRent: boolean;
-      bicyclesForRent: boolean;
-      storageForOutdoorGear: boolean; // Surfboards, Bicycles, etc.
-      otherSpecify?: string; // Optional string input for additional options
-    };
-    workConnectivity: {
-      coWorkingSpaces: boolean;
-      businessCenter: boolean;
-      networkingOpportunities: boolean;
-      printingScanningServices: boolean;
-      powerOutletsUSBPorts: boolean;
-      highSpeedWiFi: boolean;
-      translators: boolean;
-      otherSpecify?: string; // Optional string input for additional options
-    };
-
-    meetingRooms: {
-      numberOfRooms?: string; // Number of meeting rooms (input field)
-      maxCapacity?: string; // Maximum capacity (input field)
-    };
-
-    eventServices: {
-      weddings?: boolean;
-      corporateEvents?: boolean;
-      banquets?: boolean;
-      otherSpecify?: string; // Input field for specifying other event services
-    };
-    ecoFriendlyPractices: {
-      greenCertification: boolean;
-      energyUsageTransparency: boolean;
-      natureInspiredDesign: boolean;
-      greenSpacesForRelaxation: boolean;
-      energyConservation: boolean;
-      waterConservationMeasures: boolean;
-      recyclingBinsWasteManagement: boolean;
-      ecoFriendlyToiletries: boolean;
-      ecoFriendlyLaundryOptions: boolean;
-      carbonOffsetPrograms: boolean;
-      veganVegetarianOptions: boolean;
-      ecoConsciousTransportation: boolean;
-      plasticFreePractices: boolean;
-      waterBottleRefillStations: boolean;
-      useOfLocalProducts: boolean;
-      useOfOrganicProducts: boolean;
-      communityInitiatives: boolean;
-    };
-  };
-  amenitiesForHostel: {
-    generalAmenities: {
-      frontDesk: boolean;
-      security: boolean;
-      keyAccess: boolean;
-      cctv: boolean;
-      freeParking: boolean;
-      paidParking: boolean;
-      evCharging: boolean;
-      wheelchairAccess: boolean;
-      elevator: boolean;
-      freeWiFi: boolean;
-      luggageStorage: boolean;
-      lockers: boolean;
-      safetyDepositBox: boolean;
-      laundryFacilities: boolean;
-      cleaningServices: boolean;
-      sharedKitchen: boolean;
-      smokingAllowed: boolean;
-      alcoholAllowed: boolean;
-      petsAllowed: boolean;
-      linenProvided: boolean;
-      towelsProvided: boolean;
-      airConditioning: boolean;
-      heating: boolean;
-      freeBreakfast: boolean;
-      breakfastAvailable: boolean;
-      salahRoom: boolean;
-      chapel: boolean;
-      other?: string; // For specifying other amenities
-    };
-    recreational: {
-      onSiteCafe: boolean;
-      onSiteBar: boolean;
-      sharedLounge: boolean;
-      gameEntertainment: boolean;
-      poolTable: boolean;
-      tableTennis: boolean;
-      library: boolean;
-      rooftopTerrace: boolean;
-      kidsPlayArea: boolean;
-      bbqArea: boolean;
-      weeklyEvents: boolean;
-      culturalEvents: boolean;
-      otherSpecify: string; // User can input custom text for "Other (Specify)"
-    };
-    workConnectivity: {
-      coWorkingSpaces: boolean;
-      networkingOpportunities: boolean;
-      powerOutletsUsbPorts: boolean;
-      printingScanningServices: boolean;
-      highSpeedWiFi: boolean;
-      otherSpecify: string; // User can input custom text for "Other (Specify)"
-    };
-    wellness: {
-      gymFitnessArea: boolean;
-      swimmingPool: boolean;
-      massageWellnessServices: boolean;
-      otherSpecify?: string;
-    };
-    specialMenus: {
-      dairyFree: boolean;
-      glutenFree: boolean;
-      vegetarian: boolean;
-      vegan: boolean;
-      halal: boolean;
-      kosher: boolean;
-      otherSpecify: string;
-    };
-    travelAdventureSupport: {
-      tourDesk: boolean;
-      transportServices: boolean;
-      travelGuides: boolean;
-      outdoorGearStorage: boolean;
-      bicyclesForRent: boolean;
-      otherSpecify?: string;
-    };
-    ecoFriendlyPractices: {
-      greenCertification: boolean;
-      energyUsageTransparency: boolean;
-      natureInspiredDesign: boolean;
-      greenSpacesForRelaxation: boolean;
-      energyConservation: boolean;
-      waterConservationMeasures: boolean;
-      recyclingBinsWasteManagement: boolean;
-      ecoFriendlyToiletries: boolean;
-      ecoFriendlyLaundryOptions: boolean;
-      carbonOffsetPrograms: boolean;
-      veganVegetarianOptions: boolean;
-      ecoConsciousTransportation: boolean;
-      plasticFreePractices: boolean;
-      waterBottleRefillStations: boolean;
-      useOfLocalProducts: boolean;
-      useOfOrganicProducts: boolean;
-      communityInitiatives: boolean;
-    };
-  };
-  amenitiesForCoLiving: {
-    generalAmenities: {
-      frontDesk: boolean;
-      security: boolean;
-      keyAccess: boolean;
-      cctv: boolean;
-      freeParking: boolean;
-      paidParking: boolean;
-      evCharging: boolean;
-      wheelchairAccess: boolean;
-      elevator: boolean;
-      freeWiFi: boolean;
-      luggageStorage: boolean;
-      lockers: boolean;
-      safetyDepositBox: boolean;
-      laundryFacilities: boolean;
-      cleaningServices: boolean;
-      sharedKitchen: boolean;
-      smokingAllowed: boolean;
-      alcoholAllowed: boolean;
-      petsAllowed: boolean;
-      linenProvided: boolean;
-      towelsProvided: boolean;
-      airConditioning: boolean;
-      heating: boolean;
-      freeBreakfast: boolean;
-      breakfastAvailable: boolean;
-      salahRoom: boolean;
-      chapel: boolean;
-      other?: string; // For specifying other amenities
-    };
-    recreational: {
-      onSiteCafe: boolean;
-      onSiteBar: boolean;
-      sharedLounge: boolean;
-      gameEntertainment: boolean;
-      poolTable: boolean;
-      tableTennis: boolean;
-      library: boolean;
-      rooftopTerrace: boolean;
-      kidsPlayArea: boolean;
-      bbqArea: boolean;
-      weeklyEvents: boolean;
-      culturalEvents: boolean;
-      otherSpecify: string; // User can input custom text for "Other (Specify)"
-    };
-    workConnectivity: {
-      coWorkingSpaces: boolean;
-      networkingOpportunities: boolean;
-      powerOutletsUsbPorts: boolean;
-      printingScanningServices: boolean;
-      highSpeedWiFi: boolean;
-      otherSpecify: string; // User can input custom text for "Other (Specify)"
-    };
-    wellness: {
-      gymFitnessArea: boolean;
-      swimmingPool: boolean;
-      massageWellnessServices: boolean;
-      otherSpecify?: string;
-    };
-    specialMenus: {
-      dairyFree: boolean;
-      glutenFree: boolean;
-      vegetarian: boolean;
-      vegan: boolean;
-      halal: boolean;
-      kosher: boolean;
-      otherSpecify: string;
-    };
-    travelAdventureSupport: {
-      transportServices: boolean;
-      outdoorGearStorage: boolean;
-      otherSpecify?: string;
-    };
-    ecoFriendlyPractices: {
-      greenCertification: boolean;
-      energyUsageTransparency: boolean;
-      natureInspiredDesign: boolean;
-      greenSpacesForRelaxation: boolean;
-      energyConservation: boolean;
-      waterConservationMeasures: boolean;
-      recyclingBinsWasteManagement: boolean;
-      ecoFriendlyToiletries: boolean;
-      ecoFriendlyLaundryOptions: boolean;
-      carbonOffsetPrograms: boolean;
-      veganVegetarianOptions: boolean;
-      ecoConsciousTransportation: boolean;
-      plasticFreePractices: boolean;
-      waterBottleRefillStations: boolean;
-      useOfLocalProducts: boolean;
-      useOfOrganicProducts: boolean;
-      communityInitiatives: boolean;
-    };
-  };
-
-  amenitiesForCampground: {
-    generalAmenities: {
-      security: boolean; // 24/7 Security
-      cctv: boolean; // CCTV Cameras
-      freeParking: boolean; // Free Parking
-      paidParking: boolean; // Paid Parking
-      evCharging: boolean; // Electric Vehicle Charging Station
-      freeWiFi: boolean; // Free Wi-Fi
-      wheelchairAccess: boolean; // Wheelchair-Accessible Facilities
-      restrooms: boolean; // Restrooms
-      showers: boolean; // Showers
-      laundryFacilities: boolean; // Laundry Facilities
-      sharedKitchen: boolean; // Shared Kitchen Facilities
-      smokingAllowed: boolean; // Smoking Allowed
-      alcoholAllowed: boolean; // Alcohol Allowed
-      playground: boolean; // Playground
-      petFriendly: boolean; // Pet-Friendly Spaces
-      breakfastAvailable: boolean; // Breakfast Available for Purchase
-      salahRoom: boolean; // Salah Room (Muslim Prayer Room)
-      chapel: boolean; // Chapel
-      other?: string; // Optional field for custom input
-    };
-
-    utilities: {
-      electricity: boolean;
-      water: boolean;
-      sewer: boolean;
-      dumpStation: boolean;
-      wifi: boolean;
-    };
-    recreational: {
-      onSiteCafe: boolean;
-      onSiteBar: boolean;
-      sharedLounge: boolean;
-      gameEntertainment: boolean;
-      poolTable: boolean;
-      tableTennis: boolean;
-      library: boolean;
-      rooftopTerrace: boolean;
-      kidsPlayArea: boolean;
-      bbqArea: boolean;
-      weeklyEvents: boolean;
-      culturalEvents: boolean;
-      otherSpecify: string; // User can input custom text for "Other (Specify)"
-    };
-    workConnectivity: {
-      coWorkingSpaces: boolean;
-      networkingOpportunities: boolean;
-      powerOutletsUsbPorts: boolean;
-      printingScanningServices: boolean;
-      highSpeedWiFi: boolean;
-      otherSpecify: string; // User can input custom text for "Other (Specify)"
-    };
-    specialMenus: {
-      dairyFree: boolean;
-      glutenFree: boolean;
-      vegetarian: boolean;
-      vegan: boolean;
-      halal: boolean;
-      kosher: boolean;
-      otherSpecify: string;
-    };
-    travelAdventureSupport: {
-      tourDesk: boolean;
-      transportServices: boolean;
-      travelGuides: boolean;
-      outdoorGearStorage: boolean;
-      bicyclesForRent: boolean;
-      otherSpecify?: string;
-    };
-    ecoFriendlyPractices: {
-      greenCertification: boolean;
-      energyUsageTransparency: boolean;
-      natureInspiredDesign: boolean;
-      greenSpacesForRelaxation: boolean;
-      energyConservation: boolean;
-      waterConservationMeasures: boolean;
-      recyclingBinsWasteManagement: boolean;
-      ecoFriendlyToiletries: boolean;
-      ecoFriendlyLaundryOptions: boolean;
-      carbonOffsetPrograms: boolean;
-      veganVegetarianOptions: boolean;
-      ecoConsciousTransportation: boolean;
-      plasticFreePractices: boolean;
-      waterBottleRefillStations: boolean;
-      useOfLocalProducts: boolean;
-      useOfOrganicProducts: boolean;
-      communityInitiatives: boolean;
-    };
-  };
-  aminitiesForRental: {
-    generalAmenities: {
-      frontDesk: boolean;
-      security: boolean;
-      keyAccess: boolean;
-      cctv: boolean;
-      freeParking: boolean;
-      paidParking: boolean;
-      streetParking: boolean;
-      noParking: boolean;
-      garageParking: boolean;
-      valetParking: boolean;
-      evCharging: boolean;
-      wheelchairAccess: boolean;
-      elevator: boolean;
-      freeWiFi: boolean;
-      wifi: boolean;
-      airConditioning: boolean;
-      heating: boolean;
-      petsAllowed: boolean;
-      fireplace: boolean;
-      cableSatelliteTV: boolean;
-      gymFitness: boolean;
-      other?: string; // Optional field for custom input
-    };
-    recreational: {
-      poolTable: boolean;
-      gameConsole: boolean;
-      boardGames: boolean;
-    };
-    livingAreas: {
-      livingRoom: boolean;
-      diningArea: boolean;
-      workspaceOffice: boolean;
-      familyTvRoom: boolean;
-      other?: string;
-    };
-    kitchen: {
-      fullyEquippedKitchen: boolean;
-      refrigerator: boolean;
-      stoveOven: boolean;
-      microwave: boolean;
-      dishwasher: boolean;
-      coffeeMaker: boolean;
-      toaster: boolean;
-      washingMachine: boolean;
-      dryer: boolean;
-      other?: string;
-    };
-    outdoorFacilities: {
-      privatePool: boolean;
-      sharedPool: boolean;
-      hotTubJacuzzi: boolean;
-      bbqGrillArea: boolean;
-      gardenLawn: boolean;
-      patioTerrace: boolean;
-      outdoorDiningArea: boolean;
-      other?: string;
-    };
-    ecoFriendlyPractices: {
-      greenCertification: boolean;
-      energyUsageTransparency: boolean;
-      natureInspiredDesign: boolean;
-      greenSpacesForRelaxation: boolean;
-      energyConservation: boolean;
-      waterConservationMeasures: boolean;
-      recyclingBinsWasteManagement: boolean;
-      communityInitiatives: boolean;
-      otherSpecify: string;
-    };
-  };
-  nearbyAttraction: {
-    name: string;
-    distance: string;
-    beach?: boolean;
-    desert?: boolean;
-    parkReserve?: boolean;
-    lake?: boolean;
-    river?: boolean;
-    kayakingCanoeing?: boolean;
-    hikingTrails?: boolean;
-    bikingTrails?: boolean;
-  }[];
-  hotelResortsbathroomDetails: {
-    numberOfBeds: string;
-    numberOfRooms: string;
-    numberOfSuites: string;
-    roomAmenities: {
-      tv: boolean;
-      kitchen: boolean;
-      coffeeTeaMaker: boolean;
-      coffeeMachine: boolean;
-      electricKettle: boolean;
-      miniBar: boolean;
-      hairdryer: boolean;
-      safe: boolean;
-      balcony: boolean;
-      familyRooms: boolean;
-      other: string;
-    };
-    bathroomAmenities: {
-      privateBathroom: boolean;
-      sharedBathroom: boolean;
-      bathtub: boolean;
-      shower: boolean;
-      walkInShower: boolean;
-      showerChair: boolean;
-      showerWithGrabRail: boolean;
-      toiletWithGrabRail: boolean;
-      towelsProvided: boolean;
-      toiletriesProvided: boolean;
-      other: string;
-    };
-  };
-  bedBreakfastRoomBathroomDetails: {
-    numberOfBeds: string;
-    numberOfRooms: string;
-    numberOfEnSuiteRooms: string;
-    numberOfSharedBathrooms: string;
-    roomAmenities: {
-      tv: boolean;
-      kitchen: boolean;
-      coffeeTeaMaker: boolean;
-      coffeeMachine: boolean;
-      electricKettle: boolean;
-      miniBar: boolean;
-      hairdryer: boolean;
-      safe: boolean;
-      balcony: boolean;
-      familyRooms: boolean;
-      other: string;
-    };
-    bathroomAmenities: {
-      privateBathroom: boolean;
-      sharedBathroom: boolean;
-      bathtub: boolean;
-      shower: boolean;
-      walkInShower: boolean;
-      showerChair: boolean;
-      showerWithGrabRail: boolean;
-      toiletWithGrabRail: boolean;
-      towelsProvided: boolean;
-      toiletriesProvided: boolean;
-      other: string;
-    };
-  };
-  hostelRoomBathroomDetails: {
-    totalBeds: string;
-    dormitoryRooms: string;
-    dormRoomType: {
-      mixedDorm: boolean;
-      femaleDorm: boolean;
-      maleDorm: boolean;
-      other: string;
-    };
-    dormRoomFeatures: {
-      lockers: boolean;
-      readingLights: boolean;
-      chargingPorts: boolean;
-      curtainsForPrivacy: boolean;
-      other: string;
-    };
-    sharedBathrooms: string;
-    privateRooms: string;
-    enSuitePrivateRooms: string;
-    privateRoomFeatures: {
-      enSuiteBathroom: boolean;
-      balconyTerrace: boolean;
-      closetStorageSpace: boolean;
-      tv: boolean;
-      other: string;
-    };
-  };
-  coLivingRoomBathroomDetails: {
-    sharedBedrooms: string;
-    sharedBedroomFeatures: {
-      balconyTerrace: boolean;
-      closetStorageSpace: boolean;
-      readingLights: boolean;
-      chargingPorts: boolean;
-      tv: boolean;
-      wifi: boolean;
-      airConditioningHeating: boolean;
-      workspace: boolean;
-      other: string;
-    };
-    sharedBathrooms: string;
-    enSuiteBedrooms: string;
-    enSuiteBedroomFeatures: {
-      balconyTerrace: boolean;
-      closetStorageSpace: boolean;
-      readingLights: boolean;
-      chargingPorts: boolean;
-      tv: boolean;
-      wifi: boolean;
-      airConditioningHeating: boolean;
-      workspace: boolean;
-      other: string;
-    };
-    commonAreas: string;
-  };
-  vacationRentalRoomBathroomDetails: {
-    maxOccupancy: string;
-    bedrooms: {
-      count: string;
-      bedTypes: string;
-    };
-    enSuiteBedrooms: {
-      count: string;
-      bedTypes: string;
-    };
-    separateBathrooms: string;
-    propertySize: string;
-    outdoorTerraceSize: string;
-    gardenSize: string;
-    bedroomFeatures: {
-      enSuiteBathroom: boolean;
-      balcony: boolean;
-      closetStorageSpace: boolean;
-      airConditioning: boolean;
-    };
-    bathroomFeatures: {
-      bathtub: boolean;
-      shower: boolean;
-      doubleSink: boolean;
-      towelsToiletries: boolean;
-    };
-  };
-  distanceToKeyLocations: {
-    nearestAirport: string;
-    trainBusStation: string;
-    taxiStands: string;
-    cityCenter: string;
-    localMarkets: string;
-    popularRestaurants: string;
-  };
-  uploadedPhotoshotel: {
-    exterior?: string[];
-    lobby?: string[];
-    commonAreas?: string[];
-    rooms?: string[];
-    amenities?: string[];
-  };
-  uploadedPhotosresort: {
-    exterior?: string[];
-    lobby?: string[];
-    commonAreas?: string[];
-    rooms?: string[];
-    amenities?: string[];
-  };
-  uploadedPhotosbedAndBreakfast: {
-    exterior?: string[];
-    lobby?: string[];
-    commonAreas?: string[];
-    rooms?: string[];
-    amenities?: string[];
-  };
-  uploadedPhotoshostel: {
-    exterior?: string[];
-    commonAreas?: string[];
-    dormitories?: string[];
-    privateRooms?: string[];
-    socialSpaces?: string[];
-    diningAreas?: string[];
-  };
-  uploadedPhotoscoLiving: {
-    exterior?: string[];
-    commonAreas?: string[];
-    bedrooms?: string[];
-    bathrooms?: string[];
-    enSuiteBedrooms?: string[];
-    socialSpaces?: string[];
-    diningRoom?: string[];
-  };
-  uploadedPhotosvacationRental: {
-    exterior?: string[];
-    bedrooms?: string[];
-    livingRoom?: string[];
-    kitchen?: string[];
-    bathrooms?: string[];
-    outdoorSpaces?: string[];
-  };
-  uploadedPhotoscampground: {
-    campground?: string[];
-    restrooms?: string[];
-    showers?: string[];
-    socialSpaces?: string[];
-    coWorkingSpace?: string[];
-  };
-  manager: {
-    name: string;
-    role: string;
-    phoneNumber: string;
-    email: string;
-    emergencyContact?: string;
-    idPhoto?: File;
-  };
-  dateOfSubmit: string;
-  signature: string;
-  consent: boolean;
-  confirmation: boolean;
-}
 
 const FormContext = createContext(null);
 
@@ -818,133 +40,9 @@ const AccommodationForm: React.FC = () => {
 
   const [formType, setFormType] = useState(null);
   const [formData, setFormData] = useState({});
-  // const amenities = getAmenitiesConfig(formType, 'generalAmenities');
-  // Property types
-
-  const locationTypes = {
-    hotel: {
-      options: [
-        { label: 'Beach', value: 'beach' },
-        { label: 'Mountain', value: 'mountain' },
-        { label: 'River', value: 'river' },
-        { label: 'Lakeside', value: 'lakeside' },
-        { label: 'Desert', value: 'desert' },
-        { label: 'Island', value: 'island' },
-        { label: 'Urban', value: 'urban' },
-        { label: 'Other (Specify)', value: 'other' },
-      ],
-    },
-    resort: {
-      options: [
-        { label: 'Beach', value: 'beach' },
-        { label: 'Mountain', value: 'mountain' },
-        { label: 'River', value: 'river' },
-        { label: 'Lakeside', value: 'lakeside' },
-        { label: 'Desert', value: 'desert' },
-        { label: 'Island', value: 'island' },
-        { label: 'Urban', value: 'urban' },
-        { label: 'Other (Specify)', value: 'other' },
-      ],
-    },
-    'bed-and-breakfast': {
-      options: [
-        { label: 'Beach', value: 'beach' },
-        { label: 'Mountain', value: 'mountain' },
-        { label: 'River', value: 'river' },
-        { label: 'Lakeside', value: 'lakeside' },
-        { label: 'Desert', value: 'desert' },
-        { label: 'Island', value: 'island' },
-        { label: 'Urban', value: 'urban' },
-        { label: 'Other (Specify)', value: 'other' },
-      ],
-    },
-  };
-  const propertyTypes = {
-    hotel: {
-      options: [
-        { label: 'Budget', value: 'budget', checked: false },
-        { label: 'Luxury', value: 'luxury', checked: false },
-        { label: 'Boutique', value: 'boutique', checked: false },
-        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
-        { label: 'Business Friendly', value: 'businessFriendly', checked: false },
-      ],
-    },
-    resort: {
-      options: [
-        { label: 'Budget', value: 'budget', checked: false },
-        { label: 'Luxury', value: 'luxury', checked: false },
-        { label: 'Boutique', value: 'boutique', checked: false },
-        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
-        { label: 'Business Friendly', value: 'businessFriendly', checked: false },
-      ],
-    },
-    'bed-and-breakfast': {
-      options: [
-        { label: 'Budget', value: 'budget', checked: false },
-        { label: 'Luxury', value: 'luxury', checked: false },
-        { label: 'Boutique', value: 'boutique', checked: false },
-        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
-        { label: 'Business Friendly', value: 'businessFriendly', checked: false },
-      ],
-    },
-    hostel: {
-      options: [
-        { label: 'Backpacker', value: 'backpacker', checked: false },
-        { label: 'Party', value: 'party', checked: false },
-        { label: 'Eco Friendly', value: 'ecoFriendly', checked: false },
-        { label: 'Boutique', value: 'boutique', checked: false },
-        { label: 'LGBTQ', value: 'lgbtq', checked: false },
-        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
-        { label: 'Other (specify)', value: 'other', checked: false },
-      ],
-    },
-    campground: {
-      options: [
-        { label: 'Tent Sites', value: 'tentSites', checked: false },
-        { label: 'RV Sites', value: 'rvSites', checked: false },
-        { label: 'Eco Friendly', value: 'ecoFriendly', checked: false },
-        { label: 'Family Friendly', value: 'familyFriendly', checked: false },
-        { label: 'Other (specify)', value: 'other', checked: false },
-      ],
-    },
-    'co-living': {
-      options: [
-        { label: 'Urban Co-Living', value: 'urbanCoLiving', checked: false },
-        { label: 'Rural Co-Living', value: 'ruralCoLiving', checked: false },
-        { label: 'Surf/Seaside Co-Living', value: 'surfSeasideCoLiving', checked: false },
-        { label: 'Co-Living with Workspaces', value: 'coLivingWithWorkspaces', checked: false },
-        { label: 'Apartment', value: 'apartment', checked: false },
-        { label: 'House', value: 'house', checked: false },
-        { label: 'Other (specify)', value: 'other', checked: false },
-      ],
-    },
-    'vacation-rental': {
-      options: [
-        // Apartments
-        { label: 'Beachfront Apartment', value: 'beachfrontApartment', checked: false },
-        { label: 'Mountain Apartment', value: 'mountainApartment', checked: false },
-        { label: 'Countryside Apartment', value: 'countrysideApartment', checked: false },
-        { label: 'City Apartment', value: 'cityApartment', checked: false },
-        { label: 'Luxury Apartment', value: 'luxuryApartment', checked: false },
-        { label: 'Eco-Friendly Apartment', value: 'ecoFriendlyApartment', checked: false },
-        { label: 'Family-Friendly Apartment', value: 'familyFriendlyApartment', checked: false },
-        { label: 'Other (specify)', value: 'otherApartment', checked: false },
-
-        // Villas
-        { label: 'Beachfront Villa', value: 'beachfrontVilla', checked: false },
-        { label: 'Mountain Villa', value: 'mountainVilla', checked: false },
-        { label: 'Countryside Villa', value: 'countrysideVilla', checked: false },
-        { label: 'City Villa', value: 'cityVilla', checked: false },
-        { label: 'Luxury Villa', value: 'luxuryVilla', checked: false },
-        { label: 'Eco-Friendly Villa', value: 'ecoFriendlyVilla', checked: false },
-        { label: 'Family-Friendly Villa', value: 'familyFriendlyVilla', checked: false },
-        { label: 'Other (specify)', value: 'otherVilla', checked: false },
-      ],
-    },
-  };
 
   const handleInputChange = (field, value) => {
-    console.log('------- handleInputChange', field, value);
+    // console.log('------- handleInputChange', field, value);
 
     setFormData((prev) => {
       const newData = JSON.parse(JSON.stringify(prev)); // Deep clone
@@ -966,17 +64,13 @@ const AccommodationForm: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<AccommodationFormInputs> = async (data) => {
-    console.log(data);
-
     var newData = deepMerge(data, formData);
-
     var newData1 = {
       _type: 'accommodation',
       _id: `drafts.${generateId()}`,
       ...newData,
     };
-
-    console.log('-------Final Data', newData1);
+    // console.log('-------Final Data', newData1);
 
     await sanityClient.create(newData1);
   };
@@ -1377,41 +471,6 @@ Found."
             </div>
           </div>
 
-          {/* Location on map */}
-          {/* <GetCoordinateOnMap setCoordinates={(coordinates) => handleInputChange('location', coordinates)} /> */}
-
-          {/* Payment Methods */}
-          {/* <div>
-            <label className="block text-sm font-medium mb-1">Payment Accepted</label>
-            <div className="flex space-x-4">
-              <label className="flex items-center">
-                <input type="checkbox" {...register('paymentMethods.card')} className="mr-2" />
-                Card
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" {...register('paymentMethods.cash')} className="mr-2" />
-                Cash
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" {...register('paymentMethods.online')} className="mr-2" />
-                Online
-              </label>
-            </div>
-          </div> */}
-
-          {/* Accepted Cards Dropdown */}
-          {/* <div>
-            <label className="block text-sm font-medium mb-1">Accepted Cards</label>
-            <Dropdown
-              iconVisible={true}
-              placeholderText="Master Card"
-              searchable={false}
-              options={atmCards}
-              action={() => {}}
-              buttonStyles={'md:w-24 py-1 px-2 border'}
-            />
-          </div> */}
-
           {/* General Amenities */}
           <div>
             <label className="font-semibold">Amenities</label>
@@ -1583,8 +642,7 @@ Found."
               required={false}
             />
 
-            <label>Upload passport / ID</label>
-            <input type="file" {...register('manager.idPhoto')} />
+            <SingleImageUpload handleInputChange={handleInputChange} />
           </div>
 
           {/* Consent and verification section */}
@@ -1623,6 +681,38 @@ Found."
   );
 };
 
+const SingleImageUpload = ({ handleInputChange }) => {
+  const [image, setImage] = useState<{ preview: string; _id: string } | null>(null);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    const file = e.target.files[0];
+    const previewURL = URL.createObjectURL(file); // Temporary preview
+
+    const uploadedImage = await uploadImage(file); // Upload function
+
+    const imageData = {
+      preview: previewURL,
+      _id: uploadedImage._id, // Sanity Image _id
+    };
+
+    setImage(imageData);
+
+    handleInputChange('manager.idPhoto', {
+      _type: 'image',
+      asset: { _ref: uploadedImage._id },
+    });
+  };
+
+  return (
+    <div>
+      <label>Upload passport / ID</label>
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      {image && <img src={image.preview} alt="Preview" className="w-20 h-20 object-cover mt-2" />}
+    </div>
+  );
+};
 interface PriceRangeProps {
   formType: string;
   handleInputChange: (field: string, value: any) => void;
@@ -1635,7 +725,6 @@ const PriceRange: React.FC<PriceRangeProps> = ({ formType, handleInputChange }) 
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<Record<string, boolean>>({});
 
   const handleCheckboxChange = (key: string, checked: boolean) => {
-    console.log('--------key', key);
     const updatedSelections = { ...selectedPriceRanges, [key]: checked };
     setSelectedPriceRanges(updatedSelections);
     handleInputChange('priceRange', updatedSelections); // Update parent state
@@ -1661,6 +750,36 @@ const PriceRange: React.FC<PriceRangeProps> = ({ formType, handleInputChange }) 
 };
 
 interface SecurityDepositProps {
+  handleInputChange: (field: string, value: any) => void;
+}
+interface UploadPhotosProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+interface DistanceToKeyLocationsDetailsProps {
+  handleInputChange: (field: string, value: any) => void;
+}
+interface HotelResortRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+interface BedBreakfastRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+interface HostelRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+interface CoLivingRoomBathroomDetailsProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+interface VacationRentalGeneralInfoProps {
+  formType: string;
   handleInputChange: (field: string, value: any) => void;
 }
 
@@ -1738,68 +857,6 @@ const SecurityDeposit: React.FC<SecurityDepositProps> = ({ handleInputChange }) 
   );
 };
 
-interface UploadPhotosProps {
-  formType: string;
-  handleInputChange: (field: string, value: any) => void;
-}
-
-// Form categories based on form type
-const formCategories: { [key: string]: { label: string; value: string }[] } = {
-  hotel: [
-    { label: 'Exterior', value: 'exterior' },
-    { label: 'Lobby', value: 'lobby' },
-    { label: 'Common Areas', value: 'commonAreas' },
-    { label: 'Rooms', value: 'rooms' },
-    { label: 'Amenities', value: 'amenities' },
-  ],
-  resort: [
-    { label: 'Exterior', value: 'exterior' },
-    { label: 'Lobby', value: 'lobby' },
-    { label: 'Common Areas', value: 'commonAreas' },
-    { label: 'Rooms', value: 'rooms' },
-    { label: 'Amenities', value: 'amenities' },
-  ],
-  'bed-and-breakfast': [
-    { label: 'Exterior', value: 'exterior' },
-    { label: 'Lobby', value: 'lobby' },
-    { label: 'Common Areas', value: 'commonAreas' },
-    { label: 'Rooms', value: 'rooms' },
-    { label: 'Amenities', value: 'amenities' },
-  ],
-  hostel: [
-    { label: 'Exterior', value: 'exterior' },
-    { label: 'Common Areas', value: 'commonAreas' },
-    { label: 'Dormitories', value: 'dormitories' },
-    { label: 'Private Rooms', value: 'privateRooms' },
-    { label: 'Social Spaces (Rooftop, Garden, etc.)', value: 'socialSpaces' },
-    { label: 'Dining Areas', value: 'diningAreas' },
-  ],
-  'co-living': [
-    { label: 'Exterior of Apartment/House', value: 'exterior' },
-    { label: 'Common Areas', value: 'commonAreas' },
-    { label: 'Bedrooms', value: 'bedrooms' },
-    { label: 'Bathrooms', value: 'bathrooms' },
-    { label: 'En-Suite Bedrooms', value: 'enSuiteBedrooms' },
-    { label: 'Social Spaces (Rooftop, Garden, Lounge, etc.)', value: 'socialSpaces' },
-    { label: 'Dining Room', value: 'diningRoom' },
-  ],
-  'vacation-rental': [
-    { label: 'Exterior', value: 'exterior' },
-    { label: 'Bedrooms', value: 'bedrooms' },
-    { label: 'Living Room', value: 'livingRoom' },
-    { label: 'Kitchen', value: 'kitchen' },
-    { label: 'Bathrooms', value: 'bathrooms' },
-    { label: 'Outdoor Spaces', value: 'outdoorSpaces' },
-  ],
-  campground: [
-    { label: 'Campground', value: 'campground' },
-    { label: 'Restrooms', value: 'restrooms' },
-    { label: 'Showers', value: 'showers' },
-    { label: 'Social Spaces', value: 'socialSpaces' },
-    { label: 'Co-Working Space', value: 'coWorkingSpace' },
-  ],
-};
-
 const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange }) => {
   const initialState =
     formCategories[formType]?.reduce(
@@ -1807,20 +864,34 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
         acc[category.value] = [];
         return acc;
       },
-      {} as { [key: string]: string[] }
+      {} as { [key: string]: { _key: string; _type: 'image'; asset: { _ref: string }; preview?: string }[] }
     ) || {};
 
   const [photos, setPhotos] = useState(initialState);
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, category: string) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, category: string) => {
     if (!e.target.files) return;
 
-    const uploadedFiles = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+    const uploadedFiles = Array.from(e.target.files);
+    const uploadedPhotoRefs = await Promise.all(
+      uploadedFiles.map(async (file) => {
+        const previewURL = URL.createObjectURL(file); // Local preview
+
+        const coverPhotoUrl = await uploadImage(file); // Upload to server
+
+        return {
+          _key: generateId(), // Generate unique key
+          _type: 'image',
+          asset: { _ref: coverPhotoUrl._id }, // Use Sanity reference
+          preview: previewURL, // Temporary local preview
+        };
+      })
+    );
 
     setPhotos((prev) => {
       const updatedPhotos = {
         ...prev,
-        [category]: [...(prev[category] || []), ...uploadedFiles], // Ensure prev[category] is an array
+        [category]: [...(prev[category] || []), ...uploadedPhotoRefs],
       };
 
       handleInputChange(
@@ -1848,8 +919,13 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
           />
 
           <div className="flex flex-wrap gap-2 mt-2">
-            {photos[value]?.map((photo, index) => (
-              <img key={index} src={photo} alt="Preview" className="w-20 h-20 object-cover rounded-md border" />
+            {photos[value]?.map((photo) => (
+              <img
+                key={photo._key}
+                src={photo.preview || `https://cdn.sanity.io/images/projectId/dataset/${photo.asset._ref}`}
+                alt="Preview"
+                className="w-20 h-20 object-cover rounded-md border"
+              />
             ))}
           </div>
         </div>
@@ -1857,9 +933,6 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
     </div>
   );
 };
-interface DistanceToKeyLocationsDetailsProps {
-  handleInputChange: (field: string, value: any) => void;
-}
 
 const DistanceToKeyLocations: React.FC<DistanceToKeyLocationsDetailsProps> = ({ handleInputChange }) => {
   const [locations, setLocations] = useState({
@@ -1985,30 +1058,6 @@ const AccordionSection: React.FC<{
     </div>
   );
 };
-
-interface HotelResortRoomBathroomDetailsProps {
-  formType: string;
-  handleInputChange: (field: string, value: any) => void;
-}
-interface BedBreakfastRoomBathroomDetailsProps {
-  formType: string;
-  handleInputChange: (field: string, value: any) => void;
-}
-
-interface HostelRoomBathroomDetailsProps {
-  formType: string;
-  handleInputChange: (field: string, value: any) => void;
-}
-
-interface CoLivingRoomBathroomDetailsProps {
-  formType: string;
-  handleInputChange: (field: string, value: any) => void;
-}
-
-interface VacationRentalGeneralInfoProps {
-  formType: string;
-  handleInputChange: (field: string, value: any) => void;
-}
 
 const VacationRentalRoomBathroomDetails: React.FC<VacationRentalGeneralInfoProps> = ({
   formType,
@@ -2907,86 +1956,6 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
           Add Attraction
         </button>
       )}
-    </div>
-  );
-};
-
-const VacationRentalsSection: React.FC = () => {
-  // Arrays for bedroom and bathroom features
-  const bedroomFeaturesList = [
-    { label: 'En-Suite Bathroom', value: 'enSuiteBathroom' },
-    { label: 'Balcony', value: 'balcony' },
-    { label: 'Closet/Storage Space', value: 'closetStorageSpace' },
-    { label: 'Air Conditioning', value: 'airConditioning' },
-  ];
-
-  const bathroomFeaturesList = [
-    { label: 'Bathtub', value: 'bathtub' },
-    { label: 'Shower', value: 'shower' },
-    { label: 'Double Sink', value: 'doubleSink' },
-    { label: 'Towels and Toiletries', value: 'towelsAndToiletries' },
-  ];
-
-  const register = useContext(FormContext);
-
-  return (
-    <div>
-      <h2 className="text-2xl font-semibold my-4">Vacation Rental Details</h2>
-
-      {/* Max Occupancy */}
-      <Input type="number" placeholder="Max Occupancy" {...register('dorm.maxOccupancy')} />
-
-      {/* Number of Bedrooms (with Bed Type) */}
-      <Input type="text" placeholder="Number of Bedrooms" {...register('dorm.numberOfRooms')} />
-
-      {/* Number of En-suite Bedrooms (with Bed Type) */}
-      <Input type="text" placeholder="Number of En-Suite Bedrooms" {...register('dorm.ensuite.numberOfRooms')} />
-
-      {/* Number of Separate Bathrooms */}
-      <Input type="number" placeholder="Number of Separate Bathrooms" {...register('dorm.private.numberOfRooms')} />
-
-      {/* Property Size */}
-      <Input
-        type="text"
-        placeholder="Property Size (In sq. meters or feet)"
-        className="text-sm"
-        {...register('dorm.propertySize')}
-      />
-
-      {/* Outdoor Terrace Size */}
-      <Input
-        type="text"
-        placeholder="Outdoor Terrace Size (In sq. meters or feet)"
-        className="text-sm overflow-hidden"
-        {...register('dorm.terraceSize')}
-      />
-
-      {/* Garden Size */}
-      <Input type="text" placeholder="Garden Size (In sq. meters or feet)" {...register('dorm.gardenSize')} />
-
-      {/* Bedroom Features */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Bedroom Features</h3>
-        <div>
-          {bedroomFeaturesList.map((feature) => (
-            <Checkbox key={feature.value} {...register('dorm.room.features.' + feature.value)} label={feature.label} />
-          ))}
-        </div>
-      </div>
-
-      {/* Bathroom Features */}
-      <div className="my-4">
-        <h3 className="text-xl font-semibold">Bathroom Features</h3>
-        <div>
-          {bathroomFeaturesList.map((feature) => (
-            <Checkbox
-              key={feature.value}
-              {...register('dorm.bathroom.features.' + feature.value)}
-              label={feature.label}
-            />
-          ))}
-        </div>
-      </div>
     </div>
   );
 };

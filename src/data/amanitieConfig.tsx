@@ -1,6 +1,962 @@
-import { t } from 'i18next';
-import { title } from 'process';
+export interface AccommodationFormInputs {
+  accommodation_type: string;
+  name: string;
+  brand?: string;
+  star_rating?: string;
+  property_type?: string;
+  priceRange: {
+    budget: boolean;
+    midRange: boolean;
+    upScale: boolean;
+    luxury: boolean;
+  };
+  category: string;
+  locationType: {
+    beach: string;
+    mountain: string;
+    river: string;
+    lakeside: string;
+    desert: string;
+    island: string;
+    urban: string;
+    other: string;
+  };
+  address: {
+    street: string;
+    city: string;
+    region: string;
+    postalCode?: string;
+    country: string;
+  };
+  contact: {
+    website: string;
+    phoneNumber: string;
+    email: string;
+    socialMedia?: string;
+  };
+  description: {
+    tagline: string;
+    description: string;
+    highlights: string[];
+  };
+  languages: {
+    arabic: boolean;
+    english: boolean;
+    french: boolean;
+    spanish: boolean;
+    portuguese: boolean;
+    german: boolean;
+    mandarin: boolean;
+    bahasa: boolean;
+    other?: string;
+  };
+  establishedIn: string;
+  policy: {
+    cancellation: {
+      freeCancellation: boolean;
+      nonRefundable: boolean;
+      description?: string;
+    };
+    securityDeposit: {
+      hasDeposit: boolean;
+      amount?: string;
+      conditions?: string;
+    };
+    rules?: string;
+    checkInTime?: string;
+    checkOutTime?: string;
+  };
+  paymentMethods: {
+    card: boolean;
+    cash: boolean;
+    online: boolean;
+  };
+  acceptedCards: {
+    masterCard: boolean;
+    visaCard: boolean;
+    americanExpress: boolean;
+    discover: boolean;
+    jcb: boolean;
+    other: string;
+  };
+  operatingSeason: {
+    isYearRound: boolean; // true if open year-round, false if seasonal
+    seasonalMonths?: string; // Specify seasonal months
+    lowSeason?: string; // Specify low season months
+    highSeason?: string; //
+  }[];
+  location: {
+    latitude: string;
+    longitude: string;
+  };
+  amenities: {
+    generalAmenities: {
+      security24h: boolean;
+      cctvCameras: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      valetParking: boolean;
+      electricVehicleChargingStation: boolean;
+      conciergeService: boolean;
+      frontDesk24h: boolean;
+      freeWiFi: boolean;
+      airportShuttleService: boolean;
+      luggageStorage: boolean;
+      wheelchairAccessibleFacilities: boolean;
+      upperFloorsAccessibleByElevator: boolean;
+      roomService: boolean;
+      laundryService: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      breakfastIncluded: boolean;
+      breakfastAvailableForPurchase: boolean;
+      salahRoom: boolean;
+      chapel: boolean;
+      garden: boolean;
+      terrace: boolean;
+      otherSpecify: string;
+    };
+    barDining: {
+      barLounge: boolean;
+      poolBar: boolean;
+      otherSpecify: string;
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    recreational: {
+      indoorSwimmingPool: boolean;
+      outdoorSwimmingPool: boolean;
+      spaServices: boolean;
+      fitnessCenterGym: boolean;
+      tennisCourt: boolean;
+      golfCourse: boolean;
+      kidsClub: boolean;
+      kidsPlayArea: boolean;
+      otherSpecify: string;
+      culturalEvents: boolean;
+      notApplicable: boolean;
+    };
+    travelAdventureSupport: {
+      tourDesk: boolean;
+      guidedTours: boolean;
+      privateTourGuides: boolean;
+      transportServices: boolean; // Courtesy Bus/Car Service
+      vehiclesForRent: boolean;
+      bicyclesForRent: boolean;
+      storageForOutdoorGear: boolean; // Surfboards, Bicycles, etc.
+      otherSpecify?: string; // Optional string input for additional options
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      businessCenter: boolean;
+      networkingOpportunities: boolean;
+      printingScanningServices: boolean;
+      powerOutletsUSBPorts: boolean;
+      highSpeedWiFi: boolean;
+      translators: boolean;
+      otherSpecify?: string; // Optional string input for additional options
+    };
 
+    meetingRooms: {
+      numberOfRooms?: string; // Number of meeting rooms (input field)
+      maxCapacity?: string; // Maximum capacity (input field)
+    };
+
+    eventServices: {
+      weddings?: boolean;
+      corporateEvents?: boolean;
+      banquets?: boolean;
+      otherSpecify?: string; // Input field for specifying other event services
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+  amenitiesForHostel: {
+    generalAmenities: {
+      frontDesk: boolean;
+      security: boolean;
+      keyAccess: boolean;
+      cctv: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      evCharging: boolean;
+      wheelchairAccess: boolean;
+      elevator: boolean;
+      freeWiFi: boolean;
+      luggageStorage: boolean;
+      lockers: boolean;
+      safetyDepositBox: boolean;
+      laundryFacilities: boolean;
+      cleaningServices: boolean;
+      sharedKitchen: boolean;
+      smokingAllowed: boolean;
+      alcoholAllowed: boolean;
+      petsAllowed: boolean;
+      linenProvided: boolean;
+      towelsProvided: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      freeBreakfast: boolean;
+      breakfastAvailable: boolean;
+      salahRoom: boolean;
+      chapel: boolean;
+      other?: string; // For specifying other amenities
+    };
+    recreational: {
+      onSiteCafe: boolean;
+      onSiteBar: boolean;
+      sharedLounge: boolean;
+      gameEntertainment: boolean;
+      poolTable: boolean;
+      tableTennis: boolean;
+      library: boolean;
+      rooftopTerrace: boolean;
+      kidsPlayArea: boolean;
+      bbqArea: boolean;
+      weeklyEvents: boolean;
+      culturalEvents: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      networkingOpportunities: boolean;
+      powerOutletsUsbPorts: boolean;
+      printingScanningServices: boolean;
+      highSpeedWiFi: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    wellness: {
+      gymFitnessArea: boolean;
+      swimmingPool: boolean;
+      massageWellnessServices: boolean;
+      otherSpecify?: string;
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    travelAdventureSupport: {
+      tourDesk: boolean;
+      transportServices: boolean;
+      travelGuides: boolean;
+      outdoorGearStorage: boolean;
+      bicyclesForRent: boolean;
+      otherSpecify?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+  amenitiesForCoLiving: {
+    generalAmenities: {
+      frontDesk: boolean;
+      security: boolean;
+      keyAccess: boolean;
+      cctv: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      evCharging: boolean;
+      wheelchairAccess: boolean;
+      elevator: boolean;
+      freeWiFi: boolean;
+      luggageStorage: boolean;
+      lockers: boolean;
+      safetyDepositBox: boolean;
+      laundryFacilities: boolean;
+      cleaningServices: boolean;
+      sharedKitchen: boolean;
+      smokingAllowed: boolean;
+      alcoholAllowed: boolean;
+      petsAllowed: boolean;
+      linenProvided: boolean;
+      towelsProvided: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      freeBreakfast: boolean;
+      breakfastAvailable: boolean;
+      salahRoom: boolean;
+      chapel: boolean;
+      other?: string; // For specifying other amenities
+    };
+    recreational: {
+      onSiteCafe: boolean;
+      onSiteBar: boolean;
+      sharedLounge: boolean;
+      gameEntertainment: boolean;
+      poolTable: boolean;
+      tableTennis: boolean;
+      library: boolean;
+      rooftopTerrace: boolean;
+      kidsPlayArea: boolean;
+      bbqArea: boolean;
+      weeklyEvents: boolean;
+      culturalEvents: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      networkingOpportunities: boolean;
+      powerOutletsUsbPorts: boolean;
+      printingScanningServices: boolean;
+      highSpeedWiFi: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    wellness: {
+      gymFitnessArea: boolean;
+      swimmingPool: boolean;
+      massageWellnessServices: boolean;
+      otherSpecify?: string;
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    travelAdventureSupport: {
+      transportServices: boolean;
+      outdoorGearStorage: boolean;
+      otherSpecify?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+
+  amenitiesForCampground: {
+    generalAmenities: {
+      security: boolean; // 24/7 Security
+      cctv: boolean; // CCTV Cameras
+      freeParking: boolean; // Free Parking
+      paidParking: boolean; // Paid Parking
+      evCharging: boolean; // Electric Vehicle Charging Station
+      freeWiFi: boolean; // Free Wi-Fi
+      wheelchairAccess: boolean; // Wheelchair-Accessible Facilities
+      restrooms: boolean; // Restrooms
+      showers: boolean; // Showers
+      laundryFacilities: boolean; // Laundry Facilities
+      sharedKitchen: boolean; // Shared Kitchen Facilities
+      smokingAllowed: boolean; // Smoking Allowed
+      alcoholAllowed: boolean; // Alcohol Allowed
+      playground: boolean; // Playground
+      petFriendly: boolean; // Pet-Friendly Spaces
+      breakfastAvailable: boolean; // Breakfast Available for Purchase
+      salahRoom: boolean; // Salah Room (Muslim Prayer Room)
+      chapel: boolean; // Chapel
+      other?: string; // Optional field for custom input
+    };
+
+    utilities: {
+      electricity: boolean;
+      water: boolean;
+      sewer: boolean;
+      dumpStation: boolean;
+      wifi: boolean;
+    };
+    recreational: {
+      onSiteCafe: boolean;
+      onSiteBar: boolean;
+      sharedLounge: boolean;
+      gameEntertainment: boolean;
+      poolTable: boolean;
+      tableTennis: boolean;
+      library: boolean;
+      rooftopTerrace: boolean;
+      kidsPlayArea: boolean;
+      bbqArea: boolean;
+      weeklyEvents: boolean;
+      culturalEvents: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    workConnectivity: {
+      coWorkingSpaces: boolean;
+      networkingOpportunities: boolean;
+      powerOutletsUsbPorts: boolean;
+      printingScanningServices: boolean;
+      highSpeedWiFi: boolean;
+      otherSpecify: string; // User can input custom text for "Other (Specify)"
+    };
+    specialMenus: {
+      dairyFree: boolean;
+      glutenFree: boolean;
+      vegetarian: boolean;
+      vegan: boolean;
+      halal: boolean;
+      kosher: boolean;
+      otherSpecify: string;
+    };
+    travelAdventureSupport: {
+      tourDesk: boolean;
+      transportServices: boolean;
+      travelGuides: boolean;
+      outdoorGearStorage: boolean;
+      bicyclesForRent: boolean;
+      otherSpecify?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      ecoFriendlyToiletries: boolean;
+      ecoFriendlyLaundryOptions: boolean;
+      carbonOffsetPrograms: boolean;
+      veganVegetarianOptions: boolean;
+      ecoConsciousTransportation: boolean;
+      plasticFreePractices: boolean;
+      waterBottleRefillStations: boolean;
+      useOfLocalProducts: boolean;
+      useOfOrganicProducts: boolean;
+      communityInitiatives: boolean;
+    };
+  };
+  aminitiesForRental: {
+    generalAmenities: {
+      frontDesk: boolean;
+      security: boolean;
+      keyAccess: boolean;
+      cctv: boolean;
+      freeParking: boolean;
+      paidParking: boolean;
+      streetParking: boolean;
+      noParking: boolean;
+      garageParking: boolean;
+      valetParking: boolean;
+      evCharging: boolean;
+      wheelchairAccess: boolean;
+      elevator: boolean;
+      freeWiFi: boolean;
+      wifi: boolean;
+      airConditioning: boolean;
+      heating: boolean;
+      petsAllowed: boolean;
+      fireplace: boolean;
+      cableSatelliteTV: boolean;
+      gymFitness: boolean;
+      other?: string; // Optional field for custom input
+    };
+    recreational: {
+      poolTable: boolean;
+      gameConsole: boolean;
+      boardGames: boolean;
+    };
+    livingAreas: {
+      livingRoom: boolean;
+      diningArea: boolean;
+      workspaceOffice: boolean;
+      familyTvRoom: boolean;
+      other?: string;
+    };
+    kitchen: {
+      fullyEquippedKitchen: boolean;
+      refrigerator: boolean;
+      stoveOven: boolean;
+      microwave: boolean;
+      dishwasher: boolean;
+      coffeeMaker: boolean;
+      toaster: boolean;
+      washingMachine: boolean;
+      dryer: boolean;
+      other?: string;
+    };
+    outdoorFacilities: {
+      privatePool: boolean;
+      sharedPool: boolean;
+      hotTubJacuzzi: boolean;
+      bbqGrillArea: boolean;
+      gardenLawn: boolean;
+      patioTerrace: boolean;
+      outdoorDiningArea: boolean;
+      other?: string;
+    };
+    ecoFriendlyPractices: {
+      greenCertification: boolean;
+      energyUsageTransparency: boolean;
+      natureInspiredDesign: boolean;
+      greenSpacesForRelaxation: boolean;
+      energyConservation: boolean;
+      waterConservationMeasures: boolean;
+      recyclingBinsWasteManagement: boolean;
+      communityInitiatives: boolean;
+      otherSpecify: string;
+    };
+  };
+  nearbyAttraction: {
+    name: string;
+    distance: string;
+    beach?: boolean;
+    desert?: boolean;
+    parkReserve?: boolean;
+    lake?: boolean;
+    river?: boolean;
+    kayakingCanoeing?: boolean;
+    hikingTrails?: boolean;
+    bikingTrails?: boolean;
+  }[];
+  hotelResortsbathroomDetails: {
+    numberOfBeds: string;
+    numberOfRooms: string;
+    numberOfSuites: string;
+    roomAmenities: {
+      tv: boolean;
+      kitchen: boolean;
+      coffeeTeaMaker: boolean;
+      coffeeMachine: boolean;
+      electricKettle: boolean;
+      miniBar: boolean;
+      hairdryer: boolean;
+      safe: boolean;
+      balcony: boolean;
+      familyRooms: boolean;
+      other: string;
+    };
+    bathroomAmenities: {
+      privateBathroom: boolean;
+      sharedBathroom: boolean;
+      bathtub: boolean;
+      shower: boolean;
+      walkInShower: boolean;
+      showerChair: boolean;
+      showerWithGrabRail: boolean;
+      toiletWithGrabRail: boolean;
+      towelsProvided: boolean;
+      toiletriesProvided: boolean;
+      other: string;
+    };
+  };
+  bedBreakfastRoomBathroomDetails: {
+    numberOfBeds: string;
+    numberOfRooms: string;
+    numberOfEnSuiteRooms: string;
+    numberOfSharedBathrooms: string;
+    roomAmenities: {
+      tv: boolean;
+      kitchen: boolean;
+      coffeeTeaMaker: boolean;
+      coffeeMachine: boolean;
+      electricKettle: boolean;
+      miniBar: boolean;
+      hairdryer: boolean;
+      safe: boolean;
+      balcony: boolean;
+      familyRooms: boolean;
+      other: string;
+    };
+    bathroomAmenities: {
+      privateBathroom: boolean;
+      sharedBathroom: boolean;
+      bathtub: boolean;
+      shower: boolean;
+      walkInShower: boolean;
+      showerChair: boolean;
+      showerWithGrabRail: boolean;
+      toiletWithGrabRail: boolean;
+      towelsProvided: boolean;
+      toiletriesProvided: boolean;
+      other: string;
+    };
+  };
+  hostelRoomBathroomDetails: {
+    totalBeds: string;
+    dormitoryRooms: string;
+    dormRoomType: {
+      mixedDorm: boolean;
+      femaleDorm: boolean;
+      maleDorm: boolean;
+      other: string;
+    };
+    dormRoomFeatures: {
+      lockers: boolean;
+      readingLights: boolean;
+      chargingPorts: boolean;
+      curtainsForPrivacy: boolean;
+      other: string;
+    };
+    sharedBathrooms: string;
+    privateRooms: string;
+    enSuitePrivateRooms: string;
+    privateRoomFeatures: {
+      enSuiteBathroom: boolean;
+      balconyTerrace: boolean;
+      closetStorageSpace: boolean;
+      tv: boolean;
+      other: string;
+    };
+  };
+  coLivingRoomBathroomDetails: {
+    sharedBedrooms: string;
+    sharedBedroomFeatures: {
+      balconyTerrace: boolean;
+      closetStorageSpace: boolean;
+      readingLights: boolean;
+      chargingPorts: boolean;
+      tv: boolean;
+      wifi: boolean;
+      airConditioningHeating: boolean;
+      workspace: boolean;
+      other: string;
+    };
+    sharedBathrooms: string;
+    enSuiteBedrooms: string;
+    enSuiteBedroomFeatures: {
+      balconyTerrace: boolean;
+      closetStorageSpace: boolean;
+      readingLights: boolean;
+      chargingPorts: boolean;
+      tv: boolean;
+      wifi: boolean;
+      airConditioningHeating: boolean;
+      workspace: boolean;
+      other: string;
+    };
+    commonAreas: string;
+  };
+  vacationRentalRoomBathroomDetails: {
+    maxOccupancy: string;
+    bedrooms: {
+      count: string;
+      bedTypes: string;
+    };
+    enSuiteBedrooms: {
+      count: string;
+      bedTypes: string;
+    };
+    separateBathrooms: string;
+    propertySize: string;
+    outdoorTerraceSize: string;
+    gardenSize: string;
+    bedroomFeatures: {
+      enSuiteBathroom: boolean;
+      balcony: boolean;
+      closetStorageSpace: boolean;
+      airConditioning: boolean;
+    };
+    bathroomFeatures: {
+      bathtub: boolean;
+      shower: boolean;
+      doubleSink: boolean;
+      towelsToiletries: boolean;
+    };
+  };
+  distanceToKeyLocations: {
+    nearestAirport: string;
+    trainBusStation: string;
+    taxiStands: string;
+    cityCenter: string;
+    localMarkets: string;
+    popularRestaurants: string;
+  };
+  uploadedPhotoshotel: {
+    exterior?: string[];
+    lobby?: string[];
+    commonAreas?: string[];
+    rooms?: string[];
+    amenities?: string[];
+  };
+  uploadedPhotosresort: {
+    exterior?: string[];
+    lobby?: string[];
+    commonAreas?: string[];
+    rooms?: string[];
+    amenities?: string[];
+  };
+  uploadedPhotosbedAndBreakfast: {
+    exterior?: string[];
+    lobby?: string[];
+    commonAreas?: string[];
+    rooms?: string[];
+    amenities?: string[];
+  };
+  uploadedPhotoshostel: {
+    exterior?: string[];
+    commonAreas?: string[];
+    dormitories?: string[];
+    privateRooms?: string[];
+    socialSpaces?: string[];
+    diningAreas?: string[];
+  };
+  uploadedPhotoscoLiving: {
+    exterior?: string[];
+    commonAreas?: string[];
+    bedrooms?: string[];
+    bathrooms?: string[];
+    enSuiteBedrooms?: string[];
+    socialSpaces?: string[];
+    diningRoom?: string[];
+  };
+  uploadedPhotosvacationRental: {
+    exterior?: string[];
+    bedrooms?: string[];
+    livingRoom?: string[];
+    kitchen?: string[];
+    bathrooms?: string[];
+    outdoorSpaces?: string[];
+  };
+  uploadedPhotoscampground: {
+    campground?: string[];
+    restrooms?: string[];
+    showers?: string[];
+    socialSpaces?: string[];
+    coWorkingSpace?: string[];
+  };
+  manager: {
+    name: string;
+    role: string;
+    phoneNumber: string;
+    email: string;
+    emergencyContact?: string;
+    idPhoto?: File;
+  };
+  dateOfSubmit: string;
+  signature: string;
+  consent: boolean;
+  confirmation: boolean;
+}
+
+export const locationTypes = {
+  hotel: {
+    options: [
+      { label: 'Beach', value: 'beach' },
+      { label: 'Mountain', value: 'mountain' },
+      { label: 'River', value: 'river' },
+      { label: 'Lakeside', value: 'lakeside' },
+      { label: 'Desert', value: 'desert' },
+      { label: 'Island', value: 'island' },
+      { label: 'Urban', value: 'urban' },
+      { label: 'Other (Specify)', value: 'other' },
+    ],
+  },
+  resort: {
+    options: [
+      { label: 'Beach', value: 'beach' },
+      { label: 'Mountain', value: 'mountain' },
+      { label: 'River', value: 'river' },
+      { label: 'Lakeside', value: 'lakeside' },
+      { label: 'Desert', value: 'desert' },
+      { label: 'Island', value: 'island' },
+      { label: 'Urban', value: 'urban' },
+      { label: 'Other (Specify)', value: 'other' },
+    ],
+  },
+  'bed-and-breakfast': {
+    options: [
+      { label: 'Beach', value: 'beach' },
+      { label: 'Mountain', value: 'mountain' },
+      { label: 'River', value: 'river' },
+      { label: 'Lakeside', value: 'lakeside' },
+      { label: 'Desert', value: 'desert' },
+      { label: 'Island', value: 'island' },
+      { label: 'Urban', value: 'urban' },
+      { label: 'Other (Specify)', value: 'other' },
+    ],
+  },
+};
+export const propertyTypes = {
+  hotel: {
+    options: [
+      { label: 'Budget', value: 'budget', checked: false },
+      { label: 'Luxury', value: 'luxury', checked: false },
+      { label: 'Boutique', value: 'boutique', checked: false },
+      { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+      { label: 'Business Friendly', value: 'businessFriendly', checked: false },
+    ],
+  },
+  resort: {
+    options: [
+      { label: 'Budget', value: 'budget', checked: false },
+      { label: 'Luxury', value: 'luxury', checked: false },
+      { label: 'Boutique', value: 'boutique', checked: false },
+      { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+      { label: 'Business Friendly', value: 'businessFriendly', checked: false },
+    ],
+  },
+  'bed-and-breakfast': {
+    options: [
+      { label: 'Budget', value: 'budget', checked: false },
+      { label: 'Luxury', value: 'luxury', checked: false },
+      { label: 'Boutique', value: 'boutique', checked: false },
+      { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+      { label: 'Business Friendly', value: 'businessFriendly', checked: false },
+    ],
+  },
+  hostel: {
+    options: [
+      { label: 'Backpacker', value: 'backpacker', checked: false },
+      { label: 'Party', value: 'party', checked: false },
+      { label: 'Eco Friendly', value: 'ecoFriendly', checked: false },
+      { label: 'Boutique', value: 'boutique', checked: false },
+      { label: 'LGBTQ', value: 'lgbtq', checked: false },
+      { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+      { label: 'Other (specify)', value: 'other', checked: false },
+    ],
+  },
+  campground: {
+    options: [
+      { label: 'Tent Sites', value: 'tentSites', checked: false },
+      { label: 'RV Sites', value: 'rvSites', checked: false },
+      { label: 'Eco Friendly', value: 'ecoFriendly', checked: false },
+      { label: 'Family Friendly', value: 'familyFriendly', checked: false },
+      { label: 'Other (specify)', value: 'other', checked: false },
+    ],
+  },
+  'co-living': {
+    options: [
+      { label: 'Urban Co-Living', value: 'urbanCoLiving', checked: false },
+      { label: 'Rural Co-Living', value: 'ruralCoLiving', checked: false },
+      { label: 'Surf/Seaside Co-Living', value: 'surfSeasideCoLiving', checked: false },
+      { label: 'Co-Living with Workspaces', value: 'coLivingWithWorkspaces', checked: false },
+      { label: 'Apartment', value: 'apartment', checked: false },
+      { label: 'House', value: 'house', checked: false },
+      { label: 'Other (specify)', value: 'other', checked: false },
+    ],
+  },
+  'vacation-rental': {
+    options: [
+      // Apartments
+      { label: 'Beachfront Apartment', value: 'beachfrontApartment', checked: false },
+      { label: 'Mountain Apartment', value: 'mountainApartment', checked: false },
+      { label: 'Countryside Apartment', value: 'countrysideApartment', checked: false },
+      { label: 'City Apartment', value: 'cityApartment', checked: false },
+      { label: 'Luxury Apartment', value: 'luxuryApartment', checked: false },
+      { label: 'Eco-Friendly Apartment', value: 'ecoFriendlyApartment', checked: false },
+      { label: 'Family-Friendly Apartment', value: 'familyFriendlyApartment', checked: false },
+      { label: 'Other (specify)', value: 'otherApartment', checked: false },
+
+      // Villas
+      { label: 'Beachfront Villa', value: 'beachfrontVilla', checked: false },
+      { label: 'Mountain Villa', value: 'mountainVilla', checked: false },
+      { label: 'Countryside Villa', value: 'countrysideVilla', checked: false },
+      { label: 'City Villa', value: 'cityVilla', checked: false },
+      { label: 'Luxury Villa', value: 'luxuryVilla', checked: false },
+      { label: 'Eco-Friendly Villa', value: 'ecoFriendlyVilla', checked: false },
+      { label: 'Family-Friendly Villa', value: 'familyFriendlyVilla', checked: false },
+      { label: 'Other (specify)', value: 'otherVilla', checked: false },
+    ],
+  },
+};
+
+export const formCategories: { [key: string]: { label: string; value: string }[] } = {
+  hotel: [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Lobby', value: 'lobby' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Rooms', value: 'rooms' },
+    { label: 'Amenities', value: 'amenities' },
+  ],
+  resort: [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Lobby', value: 'lobby' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Rooms', value: 'rooms' },
+    { label: 'Amenities', value: 'amenities' },
+  ],
+  'bed-and-breakfast': [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Lobby', value: 'lobby' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Rooms', value: 'rooms' },
+    { label: 'Amenities', value: 'amenities' },
+  ],
+  hostel: [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Dormitories', value: 'dormitories' },
+    { label: 'Private Rooms', value: 'privateRooms' },
+    { label: 'Social Spaces (Rooftop, Garden, etc.)', value: 'socialSpaces' },
+    { label: 'Dining Areas', value: 'diningAreas' },
+  ],
+  'co-living': [
+    { label: 'Exterior of Apartment/House', value: 'exterior' },
+    { label: 'Common Areas', value: 'commonAreas' },
+    { label: 'Bedrooms', value: 'bedrooms' },
+    { label: 'Bathrooms', value: 'bathrooms' },
+    { label: 'En-Suite Bedrooms', value: 'enSuiteBedrooms' },
+    { label: 'Social Spaces (Rooftop, Garden, Lounge, etc.)', value: 'socialSpaces' },
+    { label: 'Dining Room', value: 'diningRoom' },
+  ],
+  'vacation-rental': [
+    { label: 'Exterior', value: 'exterior' },
+    { label: 'Bedrooms', value: 'bedrooms' },
+    { label: 'Living Room', value: 'livingRoom' },
+    { label: 'Kitchen', value: 'kitchen' },
+    { label: 'Bathrooms', value: 'bathrooms' },
+    { label: 'Outdoor Spaces', value: 'outdoorSpaces' },
+  ],
+  campground: [
+    { label: 'Campground', value: 'campground' },
+    { label: 'Restrooms', value: 'restrooms' },
+    { label: 'Showers', value: 'showers' },
+    { label: 'Social Spaces', value: 'socialSpaces' },
+    { label: 'Co-Working Space', value: 'coWorkingSpace' },
+  ],
+};
 export const generalAmenities = [
   { label: '24/7 Security', value: 'security24h' },
   { label: 'CCTV Cameras', value: 'cctvCameras' },
