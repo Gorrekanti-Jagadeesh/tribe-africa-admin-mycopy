@@ -42,11 +42,12 @@ export interface AfterWorkFormInputs {
   };
   businessContact: {
     phoneNumber: string;
+    countryCode: string;
     email: string;
     website?: string;
   };
   businessLogo: File;
-  businessPhotos: File;
+  businessPhotos: FileList;
   businessName: string;
   businessType: string;
   confirmation: boolean;
@@ -92,23 +93,25 @@ export interface AfterWorkFormInputs {
   otherKeyFeature?: string; // If "other" is selected, specify
   menuServicesAtmosphereHighlights: string;
   operatingHours: {
-    monday?: { open: string; close: string };
-    tuesday?: { open: string; close: string };
-    wednesday?: { open: string; close: string };
-    thursday?: { open: string; close: string };
-    friday?: { open: string; close: string };
-    saturday?: { open: string; close: string };
-    sunday?: { open: string; close: string };
+    monday?: { start: string; end: string };
+    tuesday?: { start: string; end: string };
+    wednesday?: { start: string; end: string };
+    thursday?: { start: string; end: string };
+    friday?: { start: string; end: string };
+    saturday?: { start: string; end: string };
+    sunday?: { start: string; end: string };
   };
   outdoorSeatingCapacity: string;
   ownerContactDetails: {
     name: string;
     role?: string;
     phoneNumber: string;
+    countryCode: string;
     email: string;
     emergencyContact?: string;
-    idPhoto?: File;
+    emergencyContactCountryCode?: string;
   };
+  ownerIdPhoto?: File;
   restaurantCategory: string;
   signature: string;
   socialMedia?: {
@@ -117,92 +120,8 @@ export interface AfterWorkFormInputs {
     instagram?: string;
     twitter?: string;
   };
-  uploadMenu: FileList;
+  uploadMenu: File;
 }
-
-// export interface AfterWorkFormInputs {
-//   businessName: string;
-//   businessAddress: {
-//     street: string;
-//     city: string;
-//     region: string;
-//     postalCode?: string;
-//     country: string;
-//   };
-//   businessContact: {
-//     phoneNumber: string;
-//     email: string;
-//     website: string;
-//   };
-//   socialmediaLinks: string[];
-//   businessType: string;
-//   restaurantSubCategory: string;
-//   // clubsAndSpecialGroups?: ClubsAndSpecialGroupsTypes;
-//   cuisineType: {
-//     African: boolean;
-//     Italian: boolean;
-//     Chinese: boolean;
-//     Indian: boolean;
-//     Mexican: boolean;
-//     Vegan_vegetarian: boolean;
-//     Seafood: boolean;
-//     other: string;
-//   };
-//   keyFeatures: {
-//     Halal: boolean;
-//     Kosher: boolean;
-//     NoAlcoholServed: boolean;
-//     PetFriendly: boolean;
-//     DanceFloors: boolean;
-//     LiveMusic: boolean;
-//     Karaoke: boolean;
-//     TriviaNights: boolean;
-//     ComedyShows: boolean;
-//     DJNightlife: boolean;
-//     OutdoorSeating: boolean;
-//     HappyHourSpecials: boolean;
-//     AvailableForPrivateEvents: boolean;
-//     AvailableForCorporateEvents: boolean;
-//     FamilyFriendly: boolean;
-//     ThemedNights: boolean;
-//     SeasonalOrHolidaySpecials: boolean;
-//     WeeklySpecials: boolean;
-//     BirthdayEventPackages: boolean;
-//     LiveStreamingOnlineEvents: boolean;
-//     SportsViewing: boolean;
-//     SalahRoomArea: boolean;
-//     Other: string;
-//   };
-//   indoorSeatingCapacity: string;
-//   outdoorSeatingCapacity: string;
-//   menuServicesAtmosphereHighlights: string;
-//   fullDescription: string;
-//   uploadMenu: FileList;
-//   operatingHours: {
-//     monday: weekTimes;
-//     tuesday: weekTimes;
-//     wednesday: weekTimes;
-//     thursday: weekTimes;
-//     friday: weekTimes;
-//     saturday: weekTimes;
-//     sunday: weekTimes;
-//   };
-//   ageRestriction: string;
-//   businessLogo: FileList;
-//   businessPhotos: FileList;
-//   ownerContactDetails: {
-//     name: string;
-//     role: string;
-//     phoneNumber: string;
-//     email: string;
-//     emergencyContact?: string;
-//     idPhoto?: File;
-//   };
-//   signature: string;
-//   consent: boolean;
-//   confirmation: boolean;
-//   date: string;
-// }
 
 const AfterWorkFrom: React.FC = () => {
   const {
@@ -211,22 +130,13 @@ const AfterWorkFrom: React.FC = () => {
     setValue,
     watch,
     formState: { errors },
+    control,
   } = useForm<AfterWorkFormInputs>({
-    defaultValues: {
-      operatingHours: {
-        monday: { open: '', close: '' },
-        tuesday: { open: '', close: '' },
-        wednesday: { open: '', close: '' },
-        thursday: { open: '', close: '' },
-        friday: { open: '', close: '' },
-        saturday: { open: '', close: '' },
-        sunday: { open: '', close: '' },
-      },
-    },
+    defaultValues: {},
   });
 
   // const [formType, setFormType] = useState(null);
-  const { control } = useForm();
+  // const { control } = useForm();
 
   const typeOfBusiness = watch('businessType');
 
@@ -235,12 +145,9 @@ const AfterWorkFrom: React.FC = () => {
     queryFn: () => sanity.GET(`*[_type == "afterWorkListing"]`),
   });
 
-  // console.log('nikhil-------', data);
-
   const onAfterFormSubmit: SubmitHandler<AfterWorkFormInputs> = async (data) => {
     try {
       // Display loader
-      console.log('request-------', data);
 
       // Convert RichText fields to Portable Text format
       const fullDescription = data.fullDescription;
@@ -248,56 +155,64 @@ const AfterWorkFrom: React.FC = () => {
 
       // Handle image uploads
       const businessLogo = await uploadImage(data.businessLogo);
+      const businessMenu = await uploadImage(data.uploadMenu);
+      const ownerIdPhoto = await uploadImage(data.ownerIdPhoto);
       // const businessPhotos = await uploadImage(data.businessPhotos);
 
-      // Submit to Sanity
-      await sanityClient.create({
-        _type: 'afterWorkListing', // Sanity schema type
-        _id: `drafts.${generateId()}`, // Unique ID for draft
-        ageRestriction: data.ageRestriction,
-        businessAddress: {
-          street: data.businessAddress.street,
-          city: data.businessAddress.city,
-          region: data.businessAddress.region,
-          postalCode: data.businessAddress.postalCode,
-          country: data.businessAddress.country,
-        },
-        businessContact: {
-          phoneNumber: data.businessContact.phoneNumber,
-          email: data.businessContact.email,
-          website: data.businessContact.website,
-        },
-        businessLogo: {
+      const ownerDetails = {
+        ...data.ownerContactDetails,
+        ownerIdPhoto: {
           _type: 'image',
-          asset: { _ref: businessLogo._id },
+          asset: { _ref: ownerIdPhoto._id },
         },
-        businessName: data.businessName,
-        businessType: data.businessType,
-        confirmation: data.confirmation,
-        consent: data.consent,
-        cuisineType: data.cuisineType,
-        fullDescription: fullDescription,
-        indoorSeatingCapacity: data.indoorSeatingCapacity,
-        keyFeatures: data.keyFeatures,
-        menuServicesAtmosphereHighlights: menuServicesAtmosphereHighlights,
-        operatingHours: data.operatingHours,
-        otherCuisineType: data.otherCuisineType,
-        otherKeyFeature: data.otherKeyFeature,
-        outdoorSeatingCapacity: data.outdoorSeatingCapacity,
-        ownerContactDetails: data.ownerContactDetails,
-        restaurantCategory: data.restaurantCategory,
-        signature: data.signature,
-        socialMedia: data.socialMedia,
-        // uploadMenu: {
-        //   _type: 'file',
-        //   asset: { _ref: data.uploadMenu[0].name },
-        // },
+      };
 
-        // businessPhoto: {
-        //   _type: 'image',
-        //   asset: { _ref: businessPhotoUrl._id },
-        // },
-      });
+      console.log(data);
+
+      // Submit to Sanity
+      // await sanityClient.create({
+      //   _type: 'afterWorkListing', // Sanity schema type
+      //   _id: `drafts.${generateId()}`, // Unique ID for draft
+      //   ageRestriction: data.ageRestriction,
+      //   businessAddress: {
+      //     street: data.businessAddress.street,
+      //     city: data.businessAddress.city,
+      //     region: data.businessAddress.region,
+      //     postalCode: data.businessAddress.postalCode,
+      //     country: data.businessAddress.country,
+      //   },
+      //   businessContact: {
+      //     phoneNumber: data.businessContact.phoneNumber,
+      //     countryCode: data.businessContact.countryCode,
+      //     email: data.businessContact.email,
+      //     website: data.businessContact.website,
+      //   },
+      //   businessLogo: {
+      //     _type: 'image',
+      //     asset: { _ref: businessLogo._id },
+      //   },
+      //   businessName: data.businessName,
+      //   businessType: data.businessType,
+      //   confirmation: data.confirmation,
+      //   consent: data.consent,
+      //   cuisineType: data.cuisineType,
+      //   fullDescription: fullDescription,
+      //   indoorSeatingCapacity: data.indoorSeatingCapacity,
+      //   keyFeatures: data.keyFeatures,
+      //   menuServicesAtmosphereHighlights: menuServicesAtmosphereHighlights,
+      //   operatingHours: data.operatingHours,
+      //   otherCuisineType: data.otherCuisineType,
+      //   otherKeyFeature: data.otherKeyFeature,
+      //   outdoorSeatingCapacity: data.outdoorSeatingCapacity,
+      //   ownerContactDetails: ownerDetails,
+      //   restaurantCategory: data.restaurantCategory,
+      //   signature: data.signature,
+      //   socialMedia: data.socialMedia,
+      //   uploadMenu: {
+      //     _type: 'image',
+      //     asset: { _ref: businessMenu._id },
+      //   },
+      // });
 
       // Notify success
       alert('Event submitted successfully!');
@@ -376,6 +291,8 @@ const AfterWorkFrom: React.FC = () => {
           <MobileNumberInput
             register={register}
             errors={[errors.businessContact?.phoneNumber, errors.businessContact?.phoneNumber]}
+            phoneName={'businessContact.phoneNumber'}
+            countryCodeName="businessContact.countryCode"
             countryCodes={africanCountriesPhoneCodes}
             label="Contact Number for Enquiries:"
           />
@@ -398,15 +315,33 @@ const AfterWorkFrom: React.FC = () => {
         {/* Business Social Media Links */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold">Social Media Links</label>
-          <DynamicFields
-            fields={[
-              {
-                type: 'text',
-                name: 'Social Media Links',
-                placeholder: 'Social Media Links',
-              },
-            ]}
-            setValue={() => {}}
+          <CustomInput
+            {...register('socialMedia.facebook')}
+            placeholder="Facebook Profile"
+            error={errors?.socialMedia?.facebook}
+            required={false}
+            type="url"
+          />
+          <CustomInput
+            {...register('socialMedia.instagram')}
+            placeholder="Instagram Profile"
+            error={errors?.socialMedia?.instagram}
+            required={false}
+            type="url"
+          />
+          <CustomInput
+            {...register('socialMedia.linkedin')}
+            placeholder="Linkedin Profile"
+            error={errors?.socialMedia?.linkedin}
+            required={false}
+            type="url"
+          />
+          <CustomInput
+            {...register('socialMedia.twitter')}
+            placeholder="Twitter Profile"
+            error={errors?.socialMedia?.twitter}
+            required={false}
+            type="url"
           />
         </div>
         {/* Business Type */}
@@ -582,7 +517,7 @@ const AfterWorkFrom: React.FC = () => {
                 control={control}
                 maxFilesLength={1}
                 setValue={setValue}
-                fieldName="businessLogo123"
+                fieldName="uploadMenu"
               />
             )}
           />
@@ -634,7 +569,16 @@ const AfterWorkFrom: React.FC = () => {
         {/* Business Photos */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold">Upload Photos of Business and Offerings:</label>
-          <FileUploadWithPreview control={control} maxFilesLength={5} setValue={setValue} fieldName="businessLogo123" />
+          <FileUploadWithPreview
+            control={control}
+            maxFilesLength={5}
+            // setValue={setValue}
+            fieldName="businessPhotos"
+            onChange={(files) => {
+              // Ensure the files are being handled correctly
+              setValue('businessPhotos', files); // Ensure files are passed correctly as File objects
+            }}
+          />
         </div>
         {/* Business Owner Contact Details */}
         <div className="flex flex-col gap-2">
@@ -653,6 +597,8 @@ const AfterWorkFrom: React.FC = () => {
           <MobileNumberInput
             register={register}
             errors={[errors.ownerContactDetails?.phoneNumber, errors.ownerContactDetails?.phoneNumber]}
+            phoneName={'ownerContactDetails.phoneNumber'}
+            countryCodeName="ownerContactDetails.countryCode"
             countryCodes={africanCountriesPhoneCodes}
             label=""
           />
@@ -667,9 +613,11 @@ const AfterWorkFrom: React.FC = () => {
             register={register}
             errors={[errors.ownerContactDetails?.emergencyContact, errors.ownerContactDetails?.emergencyContact]}
             countryCodes={africanCountriesPhoneCodes}
+            phoneName={'ownerContactDetails.emergencyContact'}
+            countryCodeName="ownerContactDetails.emergencyContactCountryCode"
             label=""
           />
-          <FileUploadWithPreview control={control} maxFilesLength={1} setValue={setValue} fieldName="businessLogo123" />
+          <FileUploadWithPreview control={control} maxFilesLength={1} setValue={setValue} fieldName="ownerIdPhoto" />
         </div>
         {/* Business Details Confirmation checkboxes */}
         <div className="flex flex-col gap-2">

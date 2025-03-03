@@ -27,6 +27,70 @@ interface AccomodationDetailsScreenProps {
   setIsModalOpen: (isOpen: boolean) => void;
 }
 
+const amenitiesData = [
+  {
+    category: 'General Amenities & Facilities',
+    amenities: [
+      '24/7 Front Desk',
+      'Key Car or Code Access to Rooms',
+      'CCTV Cameras',
+      'Parking',
+      'Free Wi-Fi',
+      'Luggage Storage',
+      'Lockers',
+      'Safety deposit box',
+      'Laundry facilities',
+      'Cleaning Services',
+      'Shared Kitchen',
+      'Linen Provided',
+      'Towels Provided',
+      'Air Conditioning',
+      'Breakfast Available for Purchase',
+      'Salah Room (Muslim Prayer Room)',
+    ],
+  },
+  {
+    category: 'Recreational Facilities',
+    amenities: [
+      'On-Site Café',
+      'Shared Lounge/TV Area',
+      'Game & Entertainment',
+      'Outdoor Terrace',
+      'BBQ Area',
+      'Social Events',
+    ],
+  },
+  {
+    category: 'Work & Connectivity Features',
+    amenities: ['Power Outlets & USB Ports', 'Printing & Scanning Services', 'High-Speed Wi-Fi', 'Co-Working Spaces'],
+  },
+  {
+    category: 'Wellness & Comfort Amenities',
+    amenities: ['Gym / Fitness Area', 'Swimming Pool'],
+  },
+  {
+    category: 'Travel & Adventure Support',
+    amenities: ['Transport Services', 'Travel Guides', 'Storage for Outdoor Gear (e.g., Surfboards, Bicycles etc)'],
+  },
+  {
+    category: 'Eco-Friendly Practices',
+    amenities: [
+      'Energy Usage Transparency',
+      'Nature Inspired Design',
+      'Green Spaces for Relaxation',
+      'Energy Conservation',
+      'Water Conservation Measures',
+      'Recycling & Waste Management',
+      'Vegan & Vegetarian Options',
+      'Plastic-Free Practices',
+      'Water Bottle Refill Stations',
+      'Use of Local Products',
+      'Community Initiatives',
+      'Bicycles for rent',
+    ],
+  },
+];
+
 const AccommodationImage = ({ source }: { source: string }) => {
   return <img src={source} alt="hotel image" className="w-full h-full object-cover rounded-lg max-h-96" />;
 };
@@ -46,213 +110,243 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
 
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">{data.name}</h1>
-          {/* Rating */}
-          {data.reviews && (
-            <div className="flex mt-2">
-              <StarRating rating={getAverageOfObjectValues(data?.reviews.fields)} />
-              <p className="ml-2 m-auto text-gray-600 text-sm">{data?.reviews.count} reviews</p>
+      <div className="flex h-full scroll">
+        <div className="px-2">
+          {amenitiesData.map((category, index) => (
+            <div key={index} className="category">
+              <h2 className="font-bold">{category.category}</h2>
+              <ul>
+                {category.amenities.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
             </div>
-          )}
-          {/* Address and Contact */}
-          <div className="text-gray-600 mt-2">
-            <p className="flex items-center">
-              <span className="mr-1">
-                <FontAwesomeIcon icon={faLocationPin} />
-              </span>
-              {data.address}
-            </p>
-            <span className="flex gap-4">
-              <p className="flex items-center">
-                <span className="mr-1">
-                  <FontAwesomeIcon icon={faPhone} />
-                </span>
-                {data?.phone_no}
-              </p>
-              <p className="flex items-center">
-                <span className="mr-1">
-                  <FontAwesomeIcon icon={faGlobe} />
-                </span>
-                {data?.website}
-              </p>
-            </span>
-          </div>
-        </div>
-        <div className="mb-auto flex gap-8">
-          <button>
-            <img src={shareIcon} className="w-6" />
-          </button>
-          <button className="bg-white border border-black px-8 py-2 rounded-md shadow-sm hover:bg-gray-100">
-            Book
-          </button>
-        </div>
-      </div>
-
-      {/* Image Section */}
-      <div className="mt-6 flex flex-col lg:flex-row gap-4 lg:max-h-96 overflow-auto">
-        {/* Main Image */}
-        <div className="flex-1">
-          {/* Ensure data.images is an array and has at least one element */}
-          {Array.isArray(data.images) && data.images[0] && (
-            <AccommodationImage source={sanityImageUrlBuilder(data.images[0]).url()} />
-          )}
-        </div>
-        {/* Side Images */}
-        <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-4 lg:w-1/3">
-          {Array.isArray(data.images) && data.images[1] && (
-            <AccommodationImage source={sanityImageUrlBuilder(data.images[1]).url()} />
-          )}
-          {Array.isArray(data.images) && data.images[2] && (
-            <AccommodationImage source={sanityImageUrlBuilder(data.images[2]).url()} />
-          )}
-        </div>
-      </div>
-
-      {/* About Section */}
-      <div className="my-6">
-        <UnderlineHeading className="text-lg font-semibold">{data.about.title}</UnderlineHeading>
-        <PortableText value={data.about.description} />
-      </div>
-
-      {/* Information grid */}
-      <div className="md:grid grid-cols-2 gap-2">
-        <div className="col-span-1 space-y-2">
-          {/* Policies and payments */}
-          <div>
-            {/* Policy container */}
-            <div>
-              <UnderlineHeading className="text-lg font-semibold">Policies</UnderlineHeading>
-              <PortableText value={data.policy} />
-            </div>
-
-            {/* Payment methods */}
-            <div>
-              <p>
-                <span className="font-semibold">Payment methods accepted:</span>
-                {Object.keys(data.paymentMethods)
-                  .filter((method) => data.paymentMethods[method])
-                  .join(', ')}
-              </p>
-            </div>
-
-            {/* Accepted cards */}
-            <div>
-              <p>
-                <span className="font-semibold">Cards accepted:</span>
-                {Object.keys(data.acceptedCards)
-                  .filter((card) => data.acceptedCards[card])
-                  .join(', ')}
-              </p>
-            </div>
-          </div>
-
-          {/* Distance to key locations */}
-          <div>
-            <UnderlineHeading className="text-lg font-semibold">Distance to key locations</UnderlineHeading>
-            <div>
-              {data.landmarks.map((item) => (
-                <div key={item.title}>
-                  <p>
-                    <span className="font-semibold mr-1">{item.title}:</span>
-                    {item.distance}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="col-span-1 space-y-2">
-          {/* Operating seasons of the accommodation */}
-          <div>
-            <UnderlineHeading className="text-lg font-semibold">Operating Season</UnderlineHeading>
-            <div>
-              {data.operating_season.map((item) => (
-                <div key={item.title}>
-                  <p>
-                    <span className="font-semibold mr-1">{item.title}:</span>
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Distance to nearby attractions */}
-          <div>
-            <UnderlineHeading className="text-lg font-semibold">Nearby Attractions</UnderlineHeading>
-            <div>
-              {data.attractions.map((item) => (
-                <div key={item.title}>
-                  <p>
-                    <span className="font-semibold mr-1">{item.title}:</span>
-                    {item.distance}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Map */}
-          <LeafletMap mark={data.name} latitude={data.location.latitude} longitude={data.location.longitude} />
-        </div>
-      </div>
-
-      {/* Amenities Section */}
-      <div className="my-6">
-        <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
-          {data.amenities.title}
-        </UnderlineHeading>
-        <div className="md:flex justify-between">
-          {data.amenities.list.map((amenity) => (
-            <p className="text-wrap md:w-[45%]" key={amenity.title}>
-              <span className="font-semibold">{amenity.title}</span>
-              {' - '}
-              {amenity.description}
-            </p>
           ))}
         </div>
-      </div>
-
-      {/* Guest Reviews Breakdown */}
-      <div>
-        <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
-          Guest Reviews
-        </UnderlineHeading>
-        <div className="flex flex-wrap justify-between">
-          {data.reviews && (
-            <>
-              {Object.keys(data.reviews.fields).map((field) => (
-                <div className="flex justify-between w-full sm:w-[45%]" key={field}>
-                  <p>{fromSnakeCase(field)}</p>
-                  <StarRating rating={data.reviews.fields[field]} />
+        <div>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold">{data.name}</h1>
+              {/* Address and Contact */}
+              <div className="text-gray-600 mt-2">
+                <p className="flex items-center">
+                  <span className="mr-1">
+                    <FontAwesomeIcon icon={faLocationPin} />
+                  </span>
+                  {data.address}
+                </p>
+                <span className="flex gap-4">
+                  <p className="flex items-center">
+                    <span className="mr-1">
+                      <FontAwesomeIcon icon={faPhone} />
+                    </span>
+                    {data?.phone_no}
+                  </p>
+                  <p className="flex items-center">
+                    <span className="mr-1">
+                      <FontAwesomeIcon icon={faGlobe} />
+                    </span>
+                    {data?.website}
+                  </p>
+                </span>
+              </div>
+              {/* Rating */}
+              {data.reviews && (
+                <div className="flex mt-2">
+                  <StarRating rating={getAverageOfObjectValues(data?.reviews.fields)} />
+                  <p className="ml-2 m-auto text-gray-600 text-sm">{data?.reviews.count} reviews</p>
                 </div>
-              ))}
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Reviews */}
-      <div className="my-4">
-        <div className="flex my-4">
-          <h2 className="text-3xl font-semibold">Reviews</h2>
-          <button
-            className="border-b border-b-black ms-auto flex justify-center items-center gap-2"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <FontAwesomeIcon icon={faPencil} /> write a review
-          </button>
-        </div>
-        {reviews && (
-          <div id="reviews" className="flex flex-col gap-4">
-            {reviews.map((item, index) => (
-              <ReviewCard key={index} data={item} />
-            ))}
+              )}
+            </div>
+            <div className="mb-auto flex gap-8">
+              <button>
+                <img src={shareIcon} className="w-6" />
+              </button>
+              <button className="bg-white border border-black px-8 py-2 rounded-md shadow-sm hover:bg-gray-100">
+                Book
+              </button>
+            </div>
           </div>
-        )}
+          {/* Image Section */}
+          <div className="mt-6 flex flex-col lg:flex-row gap-4 lg:max-h-96 overflow-auto">
+            {/* Main Image */}
+            <div className="flex-1">
+              {/* Ensure data.images is an array and has at least one element */}
+              {Array.isArray(data.images) && data.images[0] && (
+                <AccommodationImage source={sanityImageUrlBuilder(data.images[0]).url()} />
+              )}
+            </div>
+            {/* Side Images */}
+            <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-4 lg:w-1/3">
+              {Array.isArray(data.images) && data.images[1] && (
+                <AccommodationImage source={sanityImageUrlBuilder(data.images[1]).url()} />
+              )}
+              {Array.isArray(data.images) && data.images[2] && (
+                <AccommodationImage source={sanityImageUrlBuilder(data.images[2]).url()} />
+              )}
+            </div>
+          </div>
+
+          {/* About Section */}
+          <div className="my-6">
+            {/* <UnderlineHeading className="text-lg font-semibold">{data.about.title}</UnderlineHeading>
+            <PortableText value={data.about.description} /> */}
+            <h2 className="text-lg font-semibold">The Place where a better world Begins!</h2>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+              industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+              scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
+              of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+              like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing
+              and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+              when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into electronic typesetting, remaining essentially
+              unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+              passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </p>
+          </div>
+
+          {/* Information grid */}
+          <div className="md:grid grid-cols-2 gap-2">
+            <div className="col-span-1 space-y-2">
+              {/* Policies and payments */}
+              <div>
+                {/* Policy container */}
+                <div>
+                  <UnderlineHeading className="text-lg font-semibold">Policies</UnderlineHeading>
+                  <PortableText value={data.policy} />
+                </div>
+
+                {/* Payment methods */}
+                <div>
+                  <p>
+                    <span className="font-semibold">Payment methods accepted:</span>
+                    {Object.keys(data.paymentMethods)
+                      .filter((method) => data.paymentMethods[method])
+                      .join(', ')}
+                  </p>
+                </div>
+
+                {/* Accepted cards */}
+                <div>
+                  <p>
+                    <span className="font-semibold">Cards accepted:</span>
+                    {Object.keys(data.acceptedCards)
+                      .filter((card) => data.acceptedCards[card])
+                      .join(', ')}
+                  </p>
+                </div>
+              </div>
+
+              {/* Distance to key locations */}
+              <div>
+                <UnderlineHeading className="text-lg font-semibold">Distance to key locations</UnderlineHeading>
+                <div>
+                  {data.landmarks.map((item) => (
+                    <div key={item.title}>
+                      <p>
+                        <span className="font-semibold mr-1">{item.title}:</span>
+                        {item.distance}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-span-1 space-y-2">
+              {/* Operating seasons of the accommodation */}
+              <div>
+                <UnderlineHeading className="text-lg font-semibold">Operating Season</UnderlineHeading>
+                <div>
+                  {data.operating_season.map((item) => (
+                    <div key={item.title}>
+                      <p>
+                        <span className="font-semibold mr-1">{item.title}:</span>
+                        {item.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Distance to nearby attractions */}
+              <div>
+                <UnderlineHeading className="text-lg font-semibold">Nearby Attractions</UnderlineHeading>
+                <div>
+                  {data.attractions.map((item) => (
+                    <div key={item.title}>
+                      <p>
+                        <span className="font-semibold mr-1">{item.title}:</span>
+                        {item.distance}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Map */}
+              <LeafletMap mark={data.name} latitude={data.location.latitude} longitude={data.location.longitude} />
+            </div>
+          </div>
+
+          {/* Amenities Section */}
+          <div className="my-6">
+            <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
+              {data.amenities.title}
+            </UnderlineHeading>
+            <div className="md:flex justify-between">
+              {data.amenities.list.map((amenity) => (
+                <p className="text-wrap md:w-[45%]" key={amenity.title}>
+                  <span className="font-semibold">{amenity.title}</span>
+                  {' - '}
+                  {amenity.description}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* Guest Reviews Breakdown */}
+          <div>
+            <UnderlineHeading className="text-lg font-semibold" borderWidth="w-full">
+              Guest Reviews
+            </UnderlineHeading>
+            <div className="flex flex-wrap justify-between">
+              {data.reviews && (
+                <>
+                  {Object.keys(data.reviews.fields).map((field) => (
+                    <div className="flex justify-between w-full sm:w-[45%]" key={field}>
+                      <p>{fromSnakeCase(field)}</p>
+                      <StarRating rating={data.reviews.fields[field]} />
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Reviews */}
+          <div className="my-4">
+            <div className="flex my-4">
+              <h2 className="text-3xl font-semibold">Reviews</h2>
+              <button
+                className="border-b border-b-black ms-auto flex justify-center items-center gap-2"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <FontAwesomeIcon icon={faPencil} /> write a review
+              </button>
+            </div>
+            {reviews && (
+              <div id="reviews" className="flex flex-col gap-4">
+                {reviews.map((item, index) => (
+                  <ReviewCard key={index} data={item} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Modal for writing a review */}
