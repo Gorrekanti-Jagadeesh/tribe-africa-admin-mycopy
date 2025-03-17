@@ -14,7 +14,7 @@ interface AccomodationScreenProps {
   subCategory: string;
 }
 
-const AccomodationScreen: React.FC<AccomodationScreenProps> = ({
+const AfterWorkScreen: React.FC<AccomodationScreenProps> = ({
   data,
   error,
   isLoading,
@@ -30,7 +30,7 @@ const AccomodationScreen: React.FC<AccomodationScreenProps> = ({
 
   const handleNavigation = () => {
     console.log('Navigating to /form'); // Debug log
-    navigate('/form');
+    navigate('/after-work-form');
   };
 
   return (
@@ -39,7 +39,7 @@ const AccomodationScreen: React.FC<AccomodationScreenProps> = ({
         <div className="flex mb-4">
           <h1 className="text-4xl font-bold">{fromKebabCase(subCategory)}</h1>
           <Button className="ms-auto" onClick={handleNavigation}>
-            List your accommodation
+            List your work
           </Button>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
@@ -58,4 +58,4 @@ const AccomodationScreen: React.FC<AccomodationScreenProps> = ({
   );
 };
 
-export default AccomodationScreen;
+export default AfterWorkScreen;

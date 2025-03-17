@@ -22,7 +22,7 @@ import SectionTitle from './SectionTitle';
 import { sanityImageUrlBuilder } from '@api/index';
 import { getAmenitiesConfig, getAccommodationLabel, getAccommodationRoomType } from '@/data/amanitieConfig';
 
-interface AccomodationDetailsScreenProps {
+interface AfterWorkDetailsScreenProps {
   reviews: ReviewProps[];
   data: accomodationProps;
   onSubmit: (FieldValues) => void;
@@ -32,7 +32,7 @@ interface AccomodationDetailsScreenProps {
   setIsModalOpen: (isOpen: boolean) => void;
 }
 
-const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
+const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
   reviews,
   hostel,
   onSubmit,
@@ -625,7 +625,7 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
   );
 };
 
-export default AccomodationDetailsScreen;
+export default AfterWorkDetailsScreen;
 
 const LocationDetails = ({ distanceToKeyLocations, location }) => {
   const mapUrl = `https://www.google.com/maps?q=${location?.latitude},${location?.longitude}&output=embed`;

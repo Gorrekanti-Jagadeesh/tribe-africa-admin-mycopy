@@ -4,7 +4,7 @@ interface CheckboxProps {
   label: string;
   onChange: (checked: boolean) => void;
   props?: React.HTMLAttributes<HTMLInputElement>;
-  require: boolean;
+  require?: boolean;
 }
 
 // Use React.forwardRef to forward the ref to the input element

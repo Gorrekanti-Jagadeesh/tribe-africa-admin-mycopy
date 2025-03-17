@@ -27,12 +27,12 @@ const AccommodationCard: React.FC<{
       <div className="p-4">
         <h3 className="text-lg font-semibold">{name}</h3>
         <div className="flex items-center text-orange-500 mt-1">
-          <StarRating rating={getAverageOfObjectValues(data.reviews.fields)} type="brief" />
-          <span className="text-gray-500 ml-2 text-sm">{data.reviews.count} reviews</span>
+          {/* <StarRating rating={getAverageOfObjectValues(data?.reviews?.fields)} type="brief" />
+          <span className="text-gray-500 ml-2 text-sm">{data?.reviews?.count} reviews</span> */}
         </div>
         <div className="flex items-center text-gray-500 text-sm mt-2">
           <FontAwesomeIcon icon={faMap} />
-          <span>{'5 km'}</span>
+          <span className="ml-2">{'5 km'}</span>
         </div>
         <hr className="my-2" />
         <div className="flex">
@@ -41,7 +41,7 @@ const AccommodationCard: React.FC<{
             <span className="font-bold text-lg mx-2">{data.amount}</span>
           </div>
           <button
-            className="w-fit ms-auto bg-gray-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
+            className="w-fit ms-auto bg-orange-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
             onClick={() => {
               navigate(
                 `/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/${toKebabCase(subCategory)}/${_id}`,

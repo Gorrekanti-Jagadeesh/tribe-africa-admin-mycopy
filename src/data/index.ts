@@ -483,10 +483,10 @@ export const msadCategories = [
 ];
 
 export const afterWorkBusinessType = [
-  { value: 'restaurants', label: 'restaurant_eateries' },
-  { value: 'nightclub', label: 'Nightclubs' },
-  { value: 'bars_pubs', label: 'Bars & Pubs' },
-  { value: 'event_venue', label: 'Event Venue' },
+  { value: 'restaurantseateries', label: 'Restaurant and Eateries' },
+  { value: 'nightclubs', label: 'Nightclubs' },
+  { value: 'barspubs', label: 'Bars/Pubs' },
+  { value: 'eventvenue', label: 'Event Venue' },
 ];
 
 export const afterWorkRestaurantsType = [

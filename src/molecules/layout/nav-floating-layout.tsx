@@ -16,6 +16,7 @@ const NavFloatingLayout: React.FC<{
   country: string;
   pageType: string;
 }> = ({ categories, heading, country, pageType }) => {
+  console.log('------------', categories, heading, country, pageType);
   const navigation = useNavigate();
   return (
     <div className="p-2 md:p-3">
@@ -41,11 +42,17 @@ const NavFloatingLayout: React.FC<{
                   each.subcategories.map((item, index) => (
                     <p
                       key={index}
-                      onClick={() =>
-                        navigation(`/${country}/${pageType}/${toKebabCase(each.category)}/${toKebabCase(item)}`)
-                      }
+                      onClick={() => {
+                        console.log('-------clicked', item);
+                        const afterWorkPath = heading === 'After Work' ? '/afterwork' : '';
+                        const subcategory = typeof item === 'object' ? item?.value : toKebabCase(item); // Handle both object and string cases
+                        navigation(
+                          `/${country}/${pageType}/${toKebabCase(each.category)}${afterWorkPath}/${subcategory}`
+                        );
+                      }}
                     >
-                      {item}
+                      {typeof item === 'object' ? item?.title : item}{' '}
+                      {/* Print title if object, otherwise print string */}
                     </p>
                   ))}
               </div>

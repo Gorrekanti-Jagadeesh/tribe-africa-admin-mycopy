@@ -903,6 +903,59 @@ export const propertyTypes = {
   },
 };
 
+export const accommodationTypes = [
+  {
+    label: 'Select Accommodation Type', // Default option
+    value: '',
+  },
+  {
+    label: 'Hotel',
+    value: 'hotel',
+  },
+  {
+    label: 'Hostel',
+    value: 'hostel',
+  },
+  {
+    label: 'Bed & Breakfast',
+    value: 'bed-and-breakfast',
+  },
+  {
+    label: 'Co-Living',
+    value: 'co-living',
+  },
+  {
+    label: 'Resort',
+    value: 'resort',
+  },
+  {
+    label: 'Campground',
+    value: 'campground',
+  },
+  {
+    label: 'Vacation Rental',
+    value: 'vacation-rental',
+  },
+];
+
+export const getAccommodationLabel = (value: string): string => {
+  const accommodation = accommodationTypes.find((type) => type.value === value);
+  return accommodation ? accommodation.label : 'Unknown'; // Default to "Unknown" if not found
+};
+
+export const accommodationRoomTypes = [
+  { value: 'hotelResortsbathroomDetails', key: 'hotel' },
+  { value: 'hotelResortsbathroomDetails', key: 'resort' }, // Mapping "resort" to the same value as "hotel"
+  { value: 'bedBreakfastRoomBathroomDetails', key: 'bed-and-breakfast' },
+  { value: 'hostelRoomBathroomDetails', key: 'hostel' },
+  { value: 'coLivingRoomBathroomDetails', key: 'co-living' },
+  { value: 'vacationRentalRoomBathroomDetails', key: 'vacation-rental' },
+];
+
+export const getAccommodationRoomType = (key: string): string | undefined => {
+  return accommodationRoomTypes.find((item) => item.key === key)?.value;
+};
+
 export const formCategories: { [key: string]: { label: string; value: string }[] } = {
   hotel: [
     { label: 'Exterior', value: 'exterior' },
@@ -1497,7 +1550,15 @@ export const amenitiesMapping: Record<string, Record<string, any>> = {
   },
 };
 
-export const getAmenitiesConfig = (formType: string, amenityType: string) => {
+export const getAmenitiesConfig = (formType: string, amenityType?: string) => {
   const key = formType;
-  return amenitiesMapping[key]?.[amenityType];
+  const config = amenitiesMapping[key]?.[amenityType];
+
+  if (!config) {
+    // If amenityType is not found, return the 'zero' field from the first available amenity
+    const firstAmenity = Object.values(amenitiesMapping[key] || {})[0];
+    return firstAmenity ? firstAmenity.zero : null;
+  }
+
+  return config;
 };

@@ -13,8 +13,6 @@ import { deepMerge } from '@/utils/common';
 import { generateId } from '@utils/common';
 import { GetCoordinateOnMap } from '../maps/leaflet-map';
 import { uploadImage } from '@api/index';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import {
   amenitiesMapping,
@@ -27,6 +25,7 @@ import {
   locationTypes,
   propertyTypes,
   AccommodationFormInputs,
+  accommodationTypes,
 } from '@/data/amanitieConfig';
 
 const FormContext = createContext(null);
@@ -76,7 +75,7 @@ const AccommodationForm: React.FC = () => {
     try {
       var newData = deepMerge(data, formData);
       var newData1 = {
-        _type: 'accommodation',
+        _type: 'accomodationList',
         _id: `drafts.${generateId()}`,
         ...newData,
       };
@@ -116,40 +115,7 @@ const AccommodationForm: React.FC = () => {
               className="mt-2 mb-4"
               name="accommodation_type"
               placeholder="Accommodation type"
-              options={[
-                {
-                  label: 'Select Accommodation Type', // Default option
-                  value: '',
-                },
-                {
-                  label: 'Hotel',
-                  value: 'hotel',
-                },
-                {
-                  label: 'Hostel',
-                  value: 'hostel',
-                },
-                {
-                  label: 'Bed & Breakfast',
-                  value: 'bed-and-breakfast',
-                },
-                {
-                  label: 'Co-Living',
-                  value: 'co-living',
-                },
-                {
-                  label: 'Resort',
-                  value: 'resort',
-                },
-                {
-                  label: 'Campground',
-                  value: 'campground',
-                },
-                {
-                  label: 'Vacation Rental',
-                  value: 'vacation-rental',
-                },
-              ]}
+              options={accommodationTypes}
               value={formType || ''}
               onChange={(value) => {
                 reset(); // Reset form fields

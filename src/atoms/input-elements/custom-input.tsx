@@ -24,7 +24,7 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
       setTouched(true);
     };
     return (
-      <div className={`${className} relative group`}>
+      <div className={`${className} relative group mt-2 my-4`}>
         {label && (
           <label className="block mb-2 font-semibold">
             {label}
@@ -48,7 +48,7 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
           defaultValue={defaultValue}
           placeholder={!error || touched ? placeholder : ''}
           onFocus={handleFocus}
-          className={`p-2 h-10 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400
+          className={`p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-500
           ${error ? 'border-red-500 ' : 'border-gray-400 '} ${customInputClassNames}`}
           {...props}
         />

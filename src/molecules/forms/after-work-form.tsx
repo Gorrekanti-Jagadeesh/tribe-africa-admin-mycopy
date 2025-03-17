@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
@@ -20,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import { uploadImage } from '@api/index';
 import sanityClient from '@/sanityClient';
 import { generateId } from '@utils/common';
+import { deepMerge } from '@/utils/common';
 
 type BusinessType = 'night_club' | 'bar_pub' | 'clubs_special_groups' | 'restaurants';
 type RestaurantSubCategoryTypes = 'traditional' | 'casual_dining' | 'beach_bar' | 'fine_dining' | 'street_food';
@@ -31,27 +32,30 @@ export interface weekTimes {
 }
 
 export interface AfterWorkFormInputs {
-  restaurantSubCategory: string;
-  ageRestriction: string;
-  businessAddress: {
-    region: string;
-    country: string;
-    city: string;
-    street: string;
-    postalCode: string;
+  businessDetails: {
+    businessName: string;
+    address: {
+      street: string;
+      city: string;
+      region: string;
+      postalCode: string;
+      country: string;
+    };
   };
   businessContact: {
     phoneNumber: string;
-    countryCode: string;
     email: string;
     website?: string;
+    socialMedia?: {
+      linkedin?: string;
+      facebook?: string;
+      instagram?: string;
+      twitter?: string;
+      tiktok: string;
+    };
   };
-  businessLogo: File;
-  businessPhotos: FileList;
-  businessName: string;
   businessType: string;
-  confirmation: boolean;
-  consent: boolean;
+  restaurantSubCategory: string;
   cuisineType: {
     african: boolean;
     italian: boolean;
@@ -63,8 +67,6 @@ export interface AfterWorkFormInputs {
     other: string;
   };
   otherCuisineType?: string; // Optional field if "other" is selected
-  fullDescription: string;
-  indoorSeatingCapacity: string;
   keyFeatures: {
     halal?: boolean;
     kosher?: boolean;
@@ -91,7 +93,11 @@ export interface AfterWorkFormInputs {
     other?: boolean;
   };
   otherKeyFeature?: string; // If "other" is selected, specify
+  indoorSeatingCapacity: string;
+  outdoorSeatingCapacity: string;
   menuServicesAtmosphereHighlights: string;
+  fullDescription: string;
+  uploadMenu: string[];
   operatingHours: {
     monday?: { start: string; end: string };
     tuesday?: { start: string; end: string };
@@ -101,26 +107,22 @@ export interface AfterWorkFormInputs {
     saturday?: { start: string; end: string };
     sunday?: { start: string; end: string };
   };
-  outdoorSeatingCapacity: string;
+  ageRestriction: string;
+  businessLogo: File;
+  businessPhotos: string[];
   ownerContactDetails: {
     name: string;
     role?: string;
     phoneNumber: string;
-    countryCode: string;
     email: string;
     emergencyContact?: string;
     emergencyContactCountryCode?: string;
+    ownerIdPhoto?: File;
   };
-  ownerIdPhoto?: File;
-  restaurantCategory: string;
+
+  confirmation: boolean;
+  consent: boolean;
   signature: string;
-  socialMedia?: {
-    linkedin?: string;
-    facebook?: string;
-    instagram?: string;
-    twitter?: string;
-  };
-  uploadMenu: File;
 }
 
 const AfterWorkFrom: React.FC = () => {
@@ -135,8 +137,35 @@ const AfterWorkFrom: React.FC = () => {
     defaultValues: {},
   });
 
-  // const [formType, setFormType] = useState(null);
-  // const { control } = useForm();
+  const [formData, setFormData] = useState({});
+  const [showModal, setShowModal] = useState(false);
+
+  // useEffect(() => {
+  //   reset();
+  //   setFormData({});
+  // }, [formType]);
+
+  const handleInputChange = (field, value) => {
+    // console.log('------- handleInputChange', field, value);
+
+    setFormData((prev) => {
+      const newData = JSON.parse(JSON.stringify(prev)); // Deep clone
+      const keys = field.split('.'); // e.g. "priceRange.budget" -> ["priceRange", "budget"]
+      let current = newData;
+
+      keys.forEach((key, index) => {
+        if (index === keys.length - 1) {
+          current[key] = value; // Set value at the final key
+        } else {
+          if (!current[key] || typeof current[key] !== 'object') {
+            current[key] = {}; // Ensure nested object exists
+          }
+          current = current[key]; // Move deeper
+        }
+      });
+      return newData; // Return a new object to trigger React re-render
+    });
+  };
 
   const typeOfBusiness = watch('businessType');
 
@@ -149,73 +178,25 @@ const AfterWorkFrom: React.FC = () => {
     try {
       // Display loader
 
-      // Convert RichText fields to Portable Text format
-      const fullDescription = data.fullDescription;
-      const menuServicesAtmosphereHighlights = data.menuServicesAtmosphereHighlights;
-
-      // Handle image uploads
-      const businessLogo = await uploadImage(data.businessLogo);
-      const businessMenu = await uploadImage(data.uploadMenu);
-      const ownerIdPhoto = await uploadImage(data.ownerIdPhoto);
-      // const businessPhotos = await uploadImage(data.businessPhotos);
-
-      const ownerDetails = {
-        ...data.ownerContactDetails,
-        ownerIdPhoto: {
-          _type: 'image',
-          asset: { _ref: ownerIdPhoto._id },
-        },
+      var newData = deepMerge(data, formData);
+      var newData1 = {
+        _type: 'afterWorkListing',
+        _id: `drafts.${generateId()}`,
+        ...newData,
       };
 
-      console.log(data);
+      await sanityClient.create(newData1);
 
-      // Submit to Sanity
-      // await sanityClient.create({
-      //   _type: 'afterWorkListing', // Sanity schema type
-      //   _id: `drafts.${generateId()}`, // Unique ID for draft
-      //   ageRestriction: data.ageRestriction,
-      //   businessAddress: {
-      //     street: data.businessAddress.street,
-      //     city: data.businessAddress.city,
-      //     region: data.businessAddress.region,
-      //     postalCode: data.businessAddress.postalCode,
-      //     country: data.businessAddress.country,
-      //   },
-      //   businessContact: {
-      //     phoneNumber: data.businessContact.phoneNumber,
-      //     countryCode: data.businessContact.countryCode,
-      //     email: data.businessContact.email,
-      //     website: data.businessContact.website,
-      //   },
-      //   businessLogo: {
-      //     _type: 'image',
-      //     asset: { _ref: businessLogo._id },
-      //   },
-      //   businessName: data.businessName,
-      //   businessType: data.businessType,
-      //   confirmation: data.confirmation,
-      //   consent: data.consent,
-      //   cuisineType: data.cuisineType,
-      //   fullDescription: fullDescription,
-      //   indoorSeatingCapacity: data.indoorSeatingCapacity,
-      //   keyFeatures: data.keyFeatures,
-      //   menuServicesAtmosphereHighlights: menuServicesAtmosphereHighlights,
-      //   operatingHours: data.operatingHours,
-      //   otherCuisineType: data.otherCuisineType,
-      //   otherKeyFeature: data.otherKeyFeature,
-      //   outdoorSeatingCapacity: data.outdoorSeatingCapacity,
-      //   ownerContactDetails: ownerDetails,
-      //   restaurantCategory: data.restaurantCategory,
-      //   signature: data.signature,
-      //   socialMedia: data.socialMedia,
-      //   uploadMenu: {
-      //     _type: 'image',
-      //     asset: { _ref: businessMenu._id },
-      //   },
-      // });
+      console.log('-------Final Data', newData);
+
+      document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        setShowModal(true);
+      }, 300); // Delay to allow scrolling to complete
+
+      setFormData({});
 
       // Notify success
-      alert('Event submitted successfully!');
     } catch (error) {
       // Handle errors
       console.error('Error submitting event:', error);
@@ -230,75 +211,64 @@ const AfterWorkFrom: React.FC = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">After Work Registration Form</h2>
       <form onSubmit={handleSubmit(onAfterFormSubmit)}>
         {/* Business Name */}
-        <div className="flex flex-col gap-2">
+        <div>
           <CustomInput
-            {...register('businessName')}
+            {...register('businessDetails.businessName')}
             label={'Business Name'}
             placeholder="Business Name"
-            error={errors.businessName}
+            // error={errors.businessDetails.businessName}
           />
         </div>
         {/* Business Address */}
         <div className="flex flex-col gap-2">
+          <label className="font-semibold mt-6">{'Business Address'}</label>
+
           <CustomInput
-            {...register(`businessAddress.street`)}
-            label={'Business Address'}
+            {...register(`businessDetails.address.street`)}
+            // label={'Street Address'}
             placeholder="street"
-            error={errors.businessAddress?.street}
+            // error={errors.businessAddress?.street}
           />
           <CustomInput
-            {...register(`businessAddress.city`)}
-            //   label={'Business Address'}
-            placeholder="City"
-            error={errors.businessAddress?.city}
+            {...register(`businessDetails.address.city`)}
+            // label={'Town/City'}
+            placeholder="Town/City"
+            // error={errors.businessAddress?.city}
           />
           <CustomInput
-            {...register(`businessAddress.region`)}
+            {...register(`businessDetails.address.region`)}
             //   label={'Business Address'}
             placeholder="State/Region"
-            error={errors.businessAddress?.region}
+            // error={errors.businessAddress?.region}
           />
           <CustomInput
-            {...register(`businessAddress.postalCode`)}
+            {...register(`businessDetails.address.postalCode`)}
             //   label={'Business Address'}
-            placeholder="Postal Code"
-            error={errors.businessAddress?.postalCode}
+            placeholder="Postal Code (Optional)"
+            // error={errors.businessAddress?.postalCode}
             required={false}
           />
           <CustomInput
-            {...register(`businessAddress.country`)}
+            {...register(`businessDetails.address.country`)}
             //   label={'Business Address'}
             placeholder="Country"
-            error={errors.businessAddress?.country}
+            // error={errors.businessAddress?.postalCode}
             required={false}
           />
-          <select
-            {...register('businessAddress.country', { required: 'Please provide Country' })}
-            className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
-                  ${errors.businessAddress?.country ? 'border-red-500' : 'border-gray-400'}`}
-          >
-            <option value="">Select Country</option>
-            {Countries.map((country) => (
-              <option key={country.label} value={country.value}>
-                {country.label}
-              </option>
-            ))}
-          </select>
-          {errors.businessAddress?.country && <span className="text-red-500 text-xs">Please Select the country</span>}
         </div>
         {/* Business Contact Details */}
         <div className="flex flex-col gap-2">
-          <MobileNumberInput
-            register={register}
-            errors={[errors.businessContact?.phoneNumber, errors.businessContact?.phoneNumber]}
-            phoneName={'businessContact.phoneNumber'}
-            countryCodeName="businessContact.countryCode"
-            countryCodes={africanCountriesPhoneCodes}
-            label="Contact Number for Enquiries:"
+          <label className="font-semibold mt-6">{'Contact Information'}</label>
+
+          <CustomInput
+            {...register('businessContact.phoneNumber', { required: 'Phone number is required' })}
+            placeholder="Phone Number (Primary contact number)"
+            error={errors.businessContact?.phoneNumber}
+            type="number"
           />
           <CustomInput
             {...register('businessContact.email', { required: 'Email is required' })}
-            placeholder="Email"
+            placeholder="Email Address (For inquires and official correspondence)"
             error={errors.businessContact?.email}
             type="email"
           />
@@ -306,7 +276,7 @@ const AfterWorkFrom: React.FC = () => {
           <CustomInput
             {...register('businessContact.website')}
             //   label={'Website (if applicable)'}
-            placeholder="Website URL"
+            placeholder="Website URL (Provide a link of your official website) Optional"
             error={errors.businessContact?.website}
             type="url"
             required={false}
@@ -314,38 +284,45 @@ const AfterWorkFrom: React.FC = () => {
         </div>
         {/* Business Social Media Links */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold">Social Media Links</label>
+          <label className="font-semibold">Social Media Links(Add links to your social media profiles)</label>
           <CustomInput
-            {...register('socialMedia.facebook')}
+            {...register('businessContact.socialMedia.facebook')}
             placeholder="Facebook Profile"
-            error={errors?.socialMedia?.facebook}
+            // error={errors?.socialMedia?.facebook}
             required={false}
             type="url"
           />
           <CustomInput
-            {...register('socialMedia.instagram')}
+            {...register('businessContact.socialMedia.instagram')}
             placeholder="Instagram Profile"
-            error={errors?.socialMedia?.instagram}
+            // error={errors?.socialMedia?.instagram}
             required={false}
             type="url"
           />
           <CustomInput
-            {...register('socialMedia.linkedin')}
+            {...register('businessContact.socialMedia.linkedin')}
             placeholder="Linkedin Profile"
-            error={errors?.socialMedia?.linkedin}
+            // error={errors?.socialMedia?.linkedin}
             required={false}
             type="url"
           />
           <CustomInput
-            {...register('socialMedia.twitter')}
+            {...register('businessContact.socialMedia.twitter')}
             placeholder="Twitter Profile"
-            error={errors?.socialMedia?.twitter}
+            // error={errors?.socialMedia?.twitter}
+            required={false}
+            type="url"
+          />
+          <CustomInput
+            {...register('businessContact.socialMedia.twitter')}
+            placeholder="Tiktok Profile"
+            // error={errors?.socialMedia?.twitter}
             required={false}
             type="url"
           />
         </div>
         {/* Business Type */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-6 mb-6">
           <CustomSelect
             {...register('businessType', { required: 'Business Type is required' })}
             placeholder="Business Type"
@@ -355,8 +332,8 @@ const AfterWorkFrom: React.FC = () => {
             // onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
           />
         </div>
-        {typeOfBusiness === 'restaurants' && (
-          <div className="flex flex-col gap-2">
+        {typeOfBusiness === 'restaurantseateries' && (
+          <div className="flex flex-col gap-2 mb-6">
             <CustomSelect
               {...register('restaurantSubCategory', { required: 'Restaurants Sub Category is required' })}
               placeholder="Restaurants Sub Category"
@@ -379,69 +356,63 @@ const AfterWorkFrom: React.FC = () => {
         )} */}
         {/* Business Cuisine Type */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold">Cuisine Type</label>
-          <Checkbox {...register(`cuisineType.african`)} label={'African (Specify type/Region'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.italian`)} label={'Italian'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.chinese`)} label={'Chinese'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.indian`)} label={'Indian'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.mexican`)} label={'Mexican'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.vegan_vegetarian`)} label={'Vegan/Vegetarian'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.seafood`)} label={'Seafood'} onChange={() => {}} />
-          <Checkbox {...register(`cuisineType.other`)} label={'Other'} onChange={() => {}} />
+          <label className="font-semibold">Cuisine Type (For venues that serve food)</label>
+          {[
+            { key: 'african', label: 'African (Specify type/Region)' },
+            { key: 'italian', label: 'Italian' },
+            { key: 'chinese', label: 'Chinese' },
+            { key: 'indian', label: 'Indian' },
+            { key: 'mexican', label: 'Mexican' },
+            { key: 'vegan_vegetarian', label: 'Vegan/Vegetarian' },
+            { key: 'seafood', label: 'Seafood' },
+            { key: 'other', label: 'Other' },
+          ].map(({ key, label }) => (
+            <Checkbox
+              key={key}
+              {...register(`cuisineType.${key}`)}
+              label={label}
+              onChange={(e) => handleInputChange(`cuisineType.${key}`, e)}
+            />
+          ))}
         </div>
         {/* Business Key Features */}
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold">Key Features</label>
-          <Checkbox {...register(`keyFeatures.halal`)} label={'Halal'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.kosher`)} label={'Kosher'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.noAlcoholServed`)} label={'No Alcohol Served'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.petFriendly`)} label={'Pet Friendly'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.danceFloors`)} label={'Dance Floors'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.liveMusic`)} label={'Live Music'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.karaoke`)} label={'Karaoke'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.triviaNights`)} label={'Trivia Nights'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.comedyShows`)} label={'Comedy Shows'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.djNightlife`)} label={'DJ Nightlife'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.outdoorSeating`)} label={'Outdoor Seating'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.happyHourSpecials`)} label={'Happy Hour Specials'} onChange={() => {}} />
-          <Checkbox
-            {...register(`keyFeatures.privateEvents`)}
-            label={'Available For Private Events'}
-            onChange={() => {}}
-          />
-          <Checkbox
-            {...register(`keyFeatures.corporateEvents`)}
-            label={'Available For Corporate Events'}
-            onChange={() => {}}
-          />
-          <Checkbox {...register(`keyFeatures.familyFriendly`)} label={'Family Friendly'} onChange={() => {}} />
-          <Checkbox {...register(`keyFeatures.themedNights`)} label={'Themed Nights'} onChange={() => {}} />
-          <Checkbox
-            {...register(`keyFeatures.seasonalHolidaySpecials`)}
-            label={'Seasonal or Holiday Specials'}
-            onChange={() => {}}
-          />
-          <Checkbox {...register(`keyFeatures.weeklySpecials`)} label={'Weekly Specials'} onChange={() => {}} />
-          <Checkbox
-            {...register(`keyFeatures.birthdayEventPackages`)}
-            label={'Birthday/Event Packages'}
-            onChange={() => {}}
-          />
-          <Checkbox
-            {...register(`keyFeatures.liveStreamingOnline`)}
-            label={'Live Streaming/Online Events'}
-            onChange={() => {}}
-          />
-          <Checkbox {...register(`keyFeatures.sportsViewing`)} label={'Sports Viewing'} onChange={() => {}} />
-          <Checkbox
-            {...register(`keyFeatures.salahRoomArea`)}
-            label={'Salah Room/area ( Muslim prayer area'}
-            onChange={() => {}}
-          />
-          <Checkbox {...register(`keyFeatures.other`)} label={'Other'} onChange={() => {}} />
+        <div className="flex flex-col gap-2 mt-6">
+          <label className="font-semibold">Key Features (Select all that apply)</label>
+          {[
+            { key: 'halal', label: 'Halal' },
+            { key: 'kosher', label: 'Kosher' },
+            { key: 'noAlcoholServed', label: 'No Alcohol Served' },
+            { key: 'petFriendly', label: 'Pet Friendly' },
+            { key: 'danceFloors', label: 'Dance Floors' },
+            { key: 'liveMusic', label: 'Live Music' },
+            { key: 'karaoke', label: 'Karaoke' },
+            { key: 'triviaNights', label: 'Trivia Nights' },
+            { key: 'comedyShows', label: 'Comedy Shows' },
+            { key: 'djNightlife', label: 'DJ Nightlife' },
+            { key: 'outdoorSeating', label: 'Outdoor Seating' },
+            { key: 'happyHourSpecials', label: 'Happy Hour Specials' },
+            { key: 'privateEvents', label: 'Available For Private Events' },
+            { key: 'corporateEvents', label: 'Available For Corporate Events' },
+            { key: 'familyFriendly', label: 'Family Friendly' },
+            { key: 'themedNights', label: 'Themed Nights' },
+            { key: 'seasonalHolidaySpecials', label: 'Seasonal or Holiday Specials' },
+            { key: 'weeklySpecials', label: 'Weekly Specials' },
+            { key: 'birthdayEventPackages', label: 'Birthday/Event Packages' },
+            { key: 'liveStreamingOnline', label: 'Live Streaming/Online Events' },
+            { key: 'sportsViewing', label: 'Sports Viewing' },
+            { key: 'salahRoomArea', label: 'Salah Room/area (Muslim prayer area)' },
+            { key: 'other', label: 'Other' },
+          ].map(({ key, label }) => (
+            <Checkbox
+              key={key}
+              {...register(`keyFeatures.${key}`)}
+              label={label}
+              onChange={(e) => handleInputChange(`keyFeatures.${key}`, e)}
+            />
+          ))}
         </div>
         {/* Business Indoor Seatting Capacity */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-6">
           <CustomInput
             {...register('indoorSeatingCapacity')}
             label={'Indoor Seating Capacity: (Fill in Details)'}
@@ -461,7 +432,7 @@ const AfterWorkFrom: React.FC = () => {
         {/*Business Menu/Services/Atmosphere Highlights */}
         {/* Menu/Services/Atmosphere Highlights */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Menu/Services/Atmosphere Highlights:</label>
+          <label className="font-semibold mt-6">Menu/Services/Atmosphere Highlights:</label>
           <textarea
             placeholder="30 words max. Highlight your signature dishes, cocktails, views, or services"
             {...register('menuServicesAtmosphereHighlights', {
@@ -485,7 +456,7 @@ const AfterWorkFrom: React.FC = () => {
 
         {/* Business Full Description */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Full Description:</label>
+          <label className="font-semibold mt-6">Full Description:</label>
           <textarea
             placeholder="100 - 500 words – detailed description including ambiance, offerings, and specialties"
             {...register('fullDescription', {
@@ -506,25 +477,10 @@ const AfterWorkFrom: React.FC = () => {
           {errors.fullDescription && <p className="text-red-500 text-sm">{errors.fullDescription.message}</p>}
         </div>
         {/* Business Menu Photo */}
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold">Upload Menu</label>
-          <Controller
-            name="uploadMenu"
-            control={control}
-            render={({ field }) => (
-              <FileUploadWithPreview
-                {...field}
-                control={control}
-                maxFilesLength={1}
-                setValue={setValue}
-                fieldName="uploadMenu"
-              />
-            )}
-          />
-          {/* <FileUploadWithPreview control={control} maxFilesLength={1} /> */}
-        </div>
+        <SingleImageUpload fieldName="uploadMenu" title="Upload Menu" handleInputChange={handleInputChange} />
+
         {/* Business Operating Hours */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-6">
           <label className="font-semibold">Operating Hours</label>
           {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
             <div key={day} className="flex flex-col gap-2">
@@ -551,7 +507,7 @@ const AfterWorkFrom: React.FC = () => {
           ))}
         </div>
         {/* Business Age Restrictions */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-6">
           <CustomInput
             {...register('ageRestriction')}
             label={'Age Restrictions(if any):'}
@@ -560,26 +516,19 @@ const AfterWorkFrom: React.FC = () => {
           />
         </div>
         {/* Business Logo */}
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-2">
-            <label className="font-semibold">Upload Business Logo:</label>
-            <FileUploadWithPreview control={control} maxFilesLength={1} setValue={setValue} fieldName="businessLogo" />
-          </div>
-        </div>
+        <SingleImageUpload
+          fieldName="businessLogo"
+          title="Upload Business Logo:"
+          handleInputChange={handleInputChange}
+        />
+
         {/* Business Photos */}
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold">Upload Photos of Business and Offerings:</label>
-          <FileUploadWithPreview
-            control={control}
-            maxFilesLength={5}
-            // setValue={setValue}
-            fieldName="businessPhotos"
-            onChange={(files) => {
-              // Ensure the files are being handled correctly
-              setValue('businessPhotos', files); // Ensure files are passed correctly as File objects
-            }}
-          />
-        </div>
+        <MultipleImageUpload
+          fieldName="businessPhotos"
+          title="Upload Photos of Business and Offerings:"
+          handleInputChange={handleInputChange}
+        />
+
         {/* Business Owner Contact Details */}
         <div className="flex flex-col gap-2">
           <CustomInput
@@ -591,33 +540,33 @@ const AfterWorkFrom: React.FC = () => {
           <CustomInput
             {...register(`ownerContactDetails.role`)}
             //   label={'Business Address'}
-            placeholder="Role"
+            placeholder="Role (Owner/ Manager)"
             error={errors.ownerContactDetails?.role}
           />
-          <MobileNumberInput
-            register={register}
-            errors={[errors.ownerContactDetails?.phoneNumber, errors.ownerContactDetails?.phoneNumber]}
-            phoneName={'ownerContactDetails.phoneNumber'}
-            countryCodeName="ownerContactDetails.countryCode"
-            countryCodes={africanCountriesPhoneCodes}
-            label=""
+          <CustomInput
+            {...register(`ownerContactDetails.phoneNumber`)}
+            //   label={'Business Address'}
+            placeholder="Phone Number"
+            error={errors.ownerContactDetails?.phoneNumber}
           />
           <CustomInput
             {...register(`ownerContactDetails.email`)}
             //   label={'Business Address'}
-            placeholder="Email"
+            placeholder="Email Address"
             error={errors.ownerContactDetails?.email}
             required={false}
           />
-          <MobileNumberInput
-            register={register}
-            errors={[errors.ownerContactDetails?.emergencyContact, errors.ownerContactDetails?.emergencyContact]}
-            countryCodes={africanCountriesPhoneCodes}
-            phoneName={'ownerContactDetails.emergencyContact'}
-            countryCodeName="ownerContactDetails.emergencyContactCountryCode"
-            label=""
+          <CustomInput
+            {...register(`ownerContactDetails.emergencyContact`)}
+            //   label={'Business Address'}
+            placeholder="Emergency Contact (Optional):"
+            error={errors.ownerContactDetails?.emergencyContact}
           />
-          <FileUploadWithPreview control={control} maxFilesLength={1} setValue={setValue} fieldName="ownerIdPhoto" />
+          <SingleImageUpload
+            fieldName="ownerContactDetails.ownerIdPhoto"
+            title="Upload Passport/ID:"
+            handleInputChange={handleInputChange}
+          />
         </div>
         {/* Business Details Confirmation checkboxes */}
         <div className="flex flex-col gap-2">
@@ -648,10 +597,194 @@ const AfterWorkFrom: React.FC = () => {
           </label>
           {errors.confirmation && <span className="text-red-500 text-xs">{errors.confirmation?.message}</span>}
         </div>
-        <Button className="float-right my-4 px-4" type="submit">
+        <Button className="my-14 px-4" type="submit">
           Submit
         </Button>
       </form>
+      {showModal && <SubmissionModal onClose={() => setShowModal(false)} />}{' '}
+    </div>
+  );
+};
+
+interface ModalProps {
+  onClose: () => void;
+}
+
+const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
+  // useEffect(() => {
+  //   document.body.style.overflow = 'hidden'; // Disable scrolling
+
+  //   return () => {
+  //     document.body.style.overflow = 'auto'; // Restore scrolling on unmount
+  //   };
+  // }, []);
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-lg p-6 w-4/5 max-w-lg relative" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+          ✖
+        </button>
+
+        <h2 className="text-xl font-semibold mb-3">Thank You for Joining the Tribe Africa Community!</h2>
+        <hr className="border-orange-500 mb-3" />
+
+        <p className="text-gray-700">
+          Your business listing has been successfully submitted. We’re thrilled to have you as part of our growing
+          network of incredible venues and experiences across Africa.
+          <br />
+          <br />
+          Our team will review your business’s details within <b>3–5 business days</b>. Once approved, your Business
+          will be listed on the <b>Tribe Africa Pages directory</b>. You will receive a confirmation email with a link
+          to your live listing.
+          <br />
+          <br />
+          If you have any questions or need assistance, feel free to reach out to us at <b>support@tribeafrica.org</b>.
+          <br />
+          <br />
+          Thank you for choosing Tribe Africa to showcase your business. Together, let’s make Africa a go-to destination
+          for memorable experiences!
+        </p>
+
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MultipleImageUpload: React.FC<SingleImageUploadProps> = ({ handleInputChange, fieldName, title }) => {
+  const [images, setImages] = useState<{ preview: string; _id: string; _key: string }[]>([]);
+
+  useEffect(() => {
+    // Reset images when formType changes
+    setImages([]);
+    handleInputChange(fieldName, []);
+  }, []);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+
+    try {
+      const uploadedImages = await Promise.all(files.map((file) => uploadImage(file))); // Upload all images
+
+      const validImages = uploadedImages
+        .filter((img) => img?._id)
+        .map((img, index) => ({
+          preview: previews[index],
+          _id: img._id, // Sanity Image _id
+          _key: generateId(), // Unique key for Sanity
+        }));
+
+      setImages((prev) => [...prev, ...validImages]);
+
+      handleInputChange(
+        fieldName,
+        validImages.map((img) => ({
+          _key: img._key, // Unique key for Sanity
+          _type: 'image',
+          asset: { _ref: img._id },
+        }))
+      );
+    } catch (error) {
+      console.error('Image upload error:', error);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+
+    handleInputChange(
+      fieldName,
+      updatedImages.map((img) => ({
+        _key: img._key, // Retain the unique key
+        _type: 'image',
+        asset: { _ref: img._id },
+      }))
+    );
+  };
+
+  return (
+    <div className="mt-6 mb-6">
+      <label className="font-semibold mr-4">{title}</label>
+      <input type="file" accept="image/*" multiple onChange={handleFileChange} />
+
+      <div className="mt-2 flex gap-2 flex-wrap">
+        {images.map((image, index) => (
+          <div key={image._key} className="relative">
+            <img src={image.preview} alt="Preview" className="w-20 h-20 object-cover rounded" />
+            <button
+              type="button"
+              className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1"
+              onClick={() => removeImage(index)}
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+interface SingleImageUploadProps {
+  handleInputChange: (field: string, value: any) => void;
+  fieldName: string;
+  title: string;
+}
+
+const SingleImageUpload: React.FC<SingleImageUploadProps> = ({ handleInputChange, fieldName, title }) => {
+  const [image, setImage] = useState<{ preview: string; _id: string } | null>(null);
+
+  useEffect(() => {
+    // Reset image state when formType changes
+    setImage(null);
+    handleInputChange(fieldName, null);
+  }, []);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    const file = e.target.files[0];
+    const previewURL = URL.createObjectURL(file); // Temporary preview
+
+    try {
+      const uploadedImage = await uploadImage(file); // Upload function
+      if (!uploadedImage?._id) throw new Error('Upload failed');
+
+      const imageData = {
+        preview: previewURL,
+        _id: uploadedImage._id, // Sanity Image _id
+      };
+
+      setImage(imageData);
+
+      handleInputChange(fieldName, {
+        _type: 'image',
+        asset: { _ref: uploadedImage._id },
+      });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      setImage(null);
+      handleInputChange(fieldName, null);
+    }
+  };
+
+  return (
+    <div className="mt-6 mb-6">
+      <label className="font-semibold mr-4">{title}</label>
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      {image && <img src={image.preview} alt="Preview" className="w-20 h-20 object-cover mt-2" />}
     </div>
   );
 };
