@@ -22,10 +22,6 @@ import sanityClient from '@/sanityClient';
 import { generateId } from '@utils/common';
 import { deepMerge } from '@/utils/common';
 
-type BusinessType = 'night_club' | 'bar_pub' | 'clubs_special_groups' | 'restaurants';
-type RestaurantSubCategoryTypes = 'traditional' | 'casual_dining' | 'beach_bar' | 'fine_dining' | 'street_food';
-type ClubsAndSpecialGroupsTypes = 'rotary_club' | 'lions_club' | 'toastmasters' | 'masonic_lodges';
-
 export interface weekTimes {
   start: string;
   end: string;

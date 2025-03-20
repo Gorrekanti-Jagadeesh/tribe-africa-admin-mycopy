@@ -50,31 +50,25 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [allImage, setAllImage] = useState([]);
-  const keyType = getAmenitiesConfig(hostel?.accommodation_type);
-  const accomodationLabel = getAccommodationLabel(hostel?.accommodation_type);
-  const accomodationRoomKey = getAccommodationRoomType(hostel?.accommodation_type);
 
-  const amenitiesData = hostel?.[keyType];
-  const roomBathRoomData = hostel?.[accomodationRoomKey];
+  // const toggleExpanded = () => setExpanded(!expanded);
+  // const selectedPriceRange =
+  //   Object.keys(hostel.priceRange)
+  //     .filter((key) => hostel.priceRange[key]) // Get selected price range keys
+  //     .map((key) => {
+  //       const options = priceRangeOptions[hostel.accommodation_type] || [];
+  //       const selectedOption = options.find((option) => option.key === key);
+  //       return selectedOption ? selectedOption.label : null;
+  //     })
+  //     .filter(Boolean)
+  //     .join(', ') || 'N/A';
 
-  const toggleExpanded = () => setExpanded(!expanded);
-  const selectedPriceRange =
-    Object.keys(hostel.priceRange)
-      .filter((key) => hostel.priceRange[key]) // Get selected price range keys
-      .map((key) => {
-        const options = priceRangeOptions[hostel.accommodation_type] || [];
-        const selectedOption = options.find((option) => option.key === key);
-        return selectedOption ? selectedOption.label : null;
-      })
-      .filter(Boolean)
-      .join(', ') || 'N/A';
-
-  const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
+  // const toggleSection = (section: string) => {
+  //   setOpenSections((prev) => ({
+  //     ...prev,
+  //     [section]: !prev[section],
+  //   }));
+  // };
 
   const openImageModal = (image: string, index: number, allImages: []) => {
     setSelectedImage(image);
@@ -115,145 +109,7 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
       .filter(Boolean) // Removes empty values
       .join(', ');
   };
-  console.log('---- final data', accomodationRoomKey, accomodationLabel, keyType, amenitiesData, hostel);
-  // const hostel = {
-  //   id: '17347128981391246',
-  //   name: 'Seaside Hostel',
-  //   type: 'Boutique - LGBTQ',
-  //   priceRange: 'Mid-Range – Between $20 - $50 Per Night',
-  //   address: '16 Lumley Road, Aberdeen, Sierra Leone',
-  //   phone: '+223 777 7777',
-  //   rating: 3.5,
-  //   reviews: 120,
-  //   description: {
-  //     tagline: 'The place where a better world Begins!',
-  //     description:
-  //       "Located 7 minutes' walk from Central Park, this Manhattan hotel features an on-site fitness centre and rooms with city views. Times Square is just 1 km away.",
-  //     highlights: [
-  //       'Best Co-working Space in Sierra Leone',
-  //       'Fastest Internet Speed',
-  //       'Multi-lingual staff',
-  //       'Near to the best surf beach',
-  //       'Family owned',
-  //     ],
-  //   },
-  //   amenities: {
-  //     generalAmenities: {
-  //       frontDesk24h: true,
-  //       cctvCameras: true,
-  //       security24h: true,
-  //       freeWiFi: true,
-  //       freeParking: true,
-  //       paidParking: true,
-  //       valetParking: true,
-  //       luggageStorage: true,
-  //       laundryService: true,
-  //       airportShuttleService: true,
-  //       airConditioning: true,
-  //       roomService: true,
-  //       breakfastIncluded: true,
-  //       breakfastAvailableForPurchase: true,
-  //       salahRoom: true,
-  //       wheelchairAccessibleFacilities: true,
-  //     },
-  //     recreational: {
-  //       outdoorSwimmingPool: true,
-  //       indoorSwimmingPool: true,
-  //       fitnessCenterGym: true,
-  //       spaServices: true,
-  //       kidsClub: true,
-  //       kidsPlayArea: true,
-  //       tennisCourt: true,
-  //       golfCourse: true,
-  //       culturalEvents: true,
-  //     },
-  //     workConnectivity: {
-  //       highSpeedWiFi: true,
-  //       businessCenter: true,
-  //       coWorkingSpaces: true,
-  //       printingScanningServices: true,
-  //       powerOutletsUSBPorts: true,
-  //       networkingOpportunities: true,
-  //       translators: true,
-  //     },
-  //   },
-  //   images: [
-  //     'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-  //     'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-  //     'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
-  //   ],
-  //   languages: {
-  //     english: true,
-  //     french: true,
-  //     arabic: true,
-  //     portuguese: true,
-  //     german: true,
-  //   },
-  //   policy: {
-  //     checkInTime: '2 pm',
-  //     checkOutTime: '12 noon',
-  //     cancellation: {
-  //       freeCancellation: true,
-  //       nonRefundable: true,
-  //     },
-  //     rules: 'Visitors are not allowed in rooms, Quiet hours between midnight – 7 am',
-  //   },
-  //   distanceToKeyLocations: {
-  //     nearestAirport: 'Freetown International Airport, 70 km away',
-  //     taxiStands: '2 minutes walk away',
-  //     cityCenter: 'Freetown, 12 km away',
-  //     localMarkets: 'Wilkinson Road, 5 km away',
-  //     popularRestaurants: 'Lumley Road, 10 mins walking distance',
-  //   },
-  //   operatingSeason: {
-  //     isYearRound: true,
-  //     lowSeason: 'June - October',
-  //     highSeason: 'November - May',
-  //   },
-  //   paymentMethods: {
-  //     acceptedCards: {
-  //       visa: true,
-  //       mastercard: true,
-  //       amex: true,
-  //       discover: false,
-  //       jcb: false,
-  //     },
-  //     cash: true,
-  //     onlinePayment: true,
-  //   },
-  //   nearbyAttractions: [
-  //     {
-  //       name: 'Tacugama Chimpanzee Rehabilitation center',
-  //       distance: '7 km away',
-  //       type: 'Nature Reserve',
-  //     },
-  //     {
-  //       name: 'Beach',
-  //       description: 'Across the road',
-  //       type: 'Beach',
-  //     },
-  //     {
-  //       name: 'Trekking Trail - Guma Valley',
-  //       distance: '15 km',
-  //       type: 'Outdoor Activity',
-  //     },
-  //   ],
-  //   rooms: {
-  //     totalBeds: 40,
-  //     dormitoryRooms: 20,
-  //     sharedBathrooms: 4,
-  //     privateRooms: 6,
-  //     amenities: {
-  //       airConditioning: true,
-  //       privateBalcony: true,
-  //       ensuiteBathroom: true,
-  //       minibar: true,
-  //       tv: true,
-  //       wifi: true,
-  //       workDesk: true,
-  //     },
-  //   },
-  // };
+  console.log('---- final data', hostel);
 
   return (
     <div className="min-h-screen">
@@ -281,69 +137,10 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
         <div className="flex border-t border-gray-300 w-full">
           <div className="w-64 bg-white border-r-4 border-orange-400 min-h-screen">
             <div className="divide-y mt-5">
-              {amenitiesData?.generalAmenities && (
-                <CollapsibleSection
-                  area={'generalAmenities'}
-                  title="General Amenities & Facilities"
-                  items={amenitiesData?.generalAmenities}
-                />
-              )}
-              {amenitiesData?.recreational && (
-                <CollapsibleSection
-                  area={'recreational'}
-                  title="Recreational Facilities"
-                  items={amenitiesData?.recreational}
-                />
-              )}
-
-              {amenitiesData?.workConnectivity && (
-                <CollapsibleSection
-                  area={'workConnectivity'}
-                  title="Work & Connectivity Features"
-                  items={amenitiesData?.workConnectivity}
-                />
-              )}
-              {amenitiesData?.barDining && (
-                <CollapsibleSection area={'barDining'} title="Bar & Dining Options" items={amenitiesData?.barDining} />
-              )}
-              {amenitiesData?.ecoFriendlyPractices && (
-                <CollapsibleSection
-                  area={'ecoFriendlyPractices'}
-                  title="Eco-Friendly Practices"
-                  items={amenitiesData?.ecoFriendlyPractices}
-                />
-              )}
-              {amenitiesData?.eventServices && (
-                <CollapsibleSection
-                  area={'eventServices'}
-                  title="Event Services Offered"
-                  items={amenitiesData?.eventServices}
-                />
-              )}
-              {amenitiesData?.meetingRooms && (
-                <CollapsibleSection
-                  area={'meetingRooms'}
-                  title="Meeting Conference Hall"
-                  items={amenitiesData?.meetingRooms}
-                />
-              )}
-              {amenitiesData?.specialMenus && (
-                <CollapsibleSection
-                  area={'specialMenus'}
-                  title="Special Menus Available"
-                  items={amenitiesData?.specialMenus}
-                />
-              )}
-              {amenitiesData?.travelAdventureSupport && (
-                <CollapsibleSection
-                  area={'travelAdventureSupport'}
-                  title="Travel & Adventure Support"
-                  items={amenitiesData?.travelAdventureSupport}
-                />
-              )}
-              {amenitiesData?.wellness && (
-                <CollapsibleSection area={'wellness'} title="Wellness Amenities" items={amenitiesData?.wellness} />
-              )}
+              {hostel?.keyFeatures && <CollapsibleSection title="Key Features" items={hostel?.keyFeatures} />}
+            </div>
+            <div className="divide-y mt-5">
+              {hostel?.cuisineType && <CollapsibleSection title="Cuisine Type" items={hostel?.cuisineType} />}
             </div>
           </div>
 
@@ -354,39 +151,23 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
                 <SectionTitle className="sm:flex-1 w-full">
                   <div className="inline-flex items-center gap-1">
                     <span className="text-lg sm:text-xl md:text-2xl font-bold max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg block truncate">
-                      {hostel.name}
+                      {hostel?.businessDetails?.businessName}
                     </span>{' '}
                   </div>
                 </SectionTitle>
-
-                {/* Price Range Section */}
-                <div className="w-full sm:w-55 text-left sm:text-right">
-                  <div className="text-base font-medium text-gray-800 mt-1 space-y-1">
-                    {selectedPriceRange
-                      .split(', ')
-                      .slice(0, expanded ? selectedPriceRange.length : 1) // Show first 2 items if collapsed
-                      .map((item, index) => (
-                        <div key={index}>{item}</div>
-                      ))}
-                  </div>
-
-                  {selectedPriceRange.split(', ').length > 2 && (
-                    <button onClick={toggleExpanded} className="text-blue-500 text-sm mt-1 hover:underline">
-                      {expanded ? 'View Less' : 'View More'}
-                    </button>
-                  )}
-                </div>
               </div>
 
               <div className="mt-1 flex items-center">
                 <MapPin size={28} className="text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-base font-medium text-gray-800">{formatAddress(hostel?.address)}</span>
+                <span className="text-base font-medium text-gray-800">
+                  {formatAddress(hostel?.businessDetails?.address)}
+                </span>
               </div>
 
               <div className="mt-4 ml-1 flex flex-wrap items-center gap-4">
-                {hostel?.contact?.website && (
+                {hostel?.businessContact?.website && (
                   <a
-                    href={hostel.contact.website}
+                    href={hostel?.businessContact?.website}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center text-blue-600 font-semibold"
@@ -397,11 +178,11 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
                 )}
                 <div className="flex items-center">
                   <Phone size={24} className="text-gray-500 mr-2" />
-                  <span className="text-base font-medium text-gray-800">{hostel?.contact.phoneNumber}</span>
+                  <span className="text-base font-medium text-gray-800">{hostel?.businessContact?.phoneNumber}</span>
                 </div>
                 <div className="flex items-center">
                   <Mail size={24} className="text-gray-500 mr-2" />
-                  <span className="text-base font-medium text-gray-800">{hostel?.contact.email}</span>
+                  <span className="text-base font-medium text-gray-800">{hostel?.businessContact?.email}</span>
                 </div>
               </div>
 
@@ -436,14 +217,22 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
               </div>
             </div>
 
-            <PhotoGallery uploadedPhotoshotel={hostel?.uploadedPhotoshotel} openImageModal={openImageModal} />
+            <PhotoGallery uploadedPhotoshotel={hostel?.businessPhotos} openImageModal={openImageModal} />
 
+            <HotelDescription title={'Full Description'} description={hostel?.fullDescription} />
             <HotelDescription
-              title={hostel?.description?.tagline}
-              description={hostel?.description?.description}
-              highlights={hostel?.description?.highlights}
-              languages={hostel?.languages}
+              title={'Menu Services and Atmosphere Highlights'}
+              description={hostel?.menuServicesAtmosphereHighlights}
             />
+
+            <SeatingInfo
+              indoorSeatingCapacity={hostel?.indoorSeatingCapacity}
+              outdoorSeatingCapacity={hostel?.outdoorSeatingCapacity}
+            />
+            <OperatingHours operatingHours={hostel?.operatingHours} />
+            <OwnerContactDetails ownerContactDetails={hostel?.ownerContactDetails} />
+
+            {/* 
 
             <OtherPolicyDetails
               accomodationLabel={accomodationLabel}
@@ -453,7 +242,7 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
               paymentMethods={hostel?.paymentMethods}
             />
             <LocationDetails distanceToKeyLocations={hostel?.distanceToKeyLocations} location={hostel?.location} />
-            <RoomBathroomDetails accomodationLabel={accomodationLabel} data={roomBathRoomData} />
+            <RoomBathroomDetails accomodationLabel={accomodationLabel} data={roomBathRoomData} /> */}
             {/* <div className="p-6 border-t bg-white">
               <SectionTitle>
                 Distance to Key Locations
@@ -736,103 +525,63 @@ const RoomBathroomDetails = ({ accomodationLabel, data }) => {
   );
 };
 
-const OtherPolicyDetails = ({ accomodationLabel, nearbyAttractions, operatingSeason, policy, paymentMethods }) => {
+const OwnerContactDetails = ({ ownerContactDetails }) => {
   return (
-    <div className="mt-6 p-4 bg-white">
-      {/* Grid Layout for Side-by-Side Sections */}
-      <div className="grid grid-cols-2 gap-40">
-        {/* Hostel Policies */}
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
-            {accomodationLabel} Policies
-          </h2>
+    <div className="p-4 mt-0 bg-white shadow rounded-lg w-96">
+      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Owner Contact Details</h2>
+      <div className="mt-3">
+        <p className="text-gray-700">
+          <span className="font-semibold">Name:</span> {ownerContactDetails.name}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Role:</span> {ownerContactDetails.role}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Email:</span> {ownerContactDetails.email}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Phone:</span> {ownerContactDetails.phoneNumber}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">Emergency Contact:</span> {ownerContactDetails.emergencyContact}
+        </p>
+        {ownerContactDetails.ownerIdPhoto && (
           <div className="mt-3">
-            <p className="text-base font-semibold text-gray-800">
-              Cancellation Policy:{' '}
-              <span className="text-gray-600">
-                {policy?.cancellation?.freeCancellation ? 'Free Cancellation' : 'Non-Refundable'}
-              </span>
-            </p>
-
-            <p className="text-base text-gray-800 mt-4">
-              <span className="font-semibold">House Rules:</span> {policy?.rules}
-            </p>
-
-            <p className="text-base text-gray-800 mt-4">
-              <span className="font-semibold">Check-In Time:</span> {policy?.checkInTime}
-            </p>
-            <p className="text-base text-gray-800">
-              <span className="font-semibold">Check-Out Time:</span> {policy?.checkOutTime}
-            </p>
-
-            {/* Payment Methods */}
-            <div className="mt-4">
-              <p className="text-base font-semibold text-gray-800">Payment Methods Accepted:</p>
-              <div className="mt-1 text-gray-800">
-                {[
-                  paymentMethods?.card && 'Credit/Debit Card',
-                  paymentMethods?.cash && 'Cash on Arrival',
-                  paymentMethods?.online && 'Online Payment',
-                ]
-                  .filter(Boolean) // Removes undefined values
-                  .join(', ')}
-              </div>
-            </div>
+            <span className="font-semibold text-gray-700">Owner ID Photo:</span>
+            <img
+              src={`https://cdn.sanity.io/images/yourProjectId/yourDataset/${ownerContactDetails.ownerIdPhoto.asset._ref.split('-')[1]}.${ownerContactDetails.ownerIdPhoto.asset._ref.split('-')[3]}`}
+              alt="Owner ID"
+              className="mt-2 w-full h-32 object-cover rounded-lg border"
+            />
           </div>
-        </div>
-
-        {/* Operating Season */}
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
-            Operating Season
-          </h2>
-          <div className="mt-3">
-            <p className="text-base font-semibold text-gray-800">
-              Open Year-Round:{' '}
-              <span className={operatingSeason?.isYearRound ? 'text-green-600' : 'text-red-500'}>
-                {operatingSeason?.isYearRound ? 'Yes' : 'No'}
-              </span>
-            </p>
-
-            {!operatingSeason?.isYearRound && (
-              <p className="text-base text-gray-800">Seasonal Months: {operatingSeason?.seasonalMonths}</p>
-            )}
-
-            <p className="text-base text-gray-800 mt-1">
-              <span className="font-semibold">High Season Months:</span> {operatingSeason?.highSeason}
-            </p>
-
-            <p className="text-base text-gray-800">
-              <span className="font-semibold">Low Season Months:</span> {operatingSeason?.lowSeason}
-            </p>
-          </div>
-          {/* Nearby Attractions */}
-          <div className="mt-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
-              Nearby Attractions
-            </h2>
-            <div className="mt-3">
-              {nearbyAttractions?.map((attraction) => (
-                <div key={attraction._key} className="mb-3">
-                  <p className="text-sm font-semibold text-gray-800">{attraction.name}</p>
-                  <p className="text-sm text-gray-600">Distance: {attraction.distance} km away</p>
-
-                  <div className="flex flex-wrap mt-1">
-                    {attraction.beach && <span className="badge">Beach</span>}
-                    {attraction.bikingTrails && <span className="badge">Biking Trails</span>}
-                    {attraction.desert && <span className="badge">Desert</span>}
-                    {attraction.hikingTrails && <span className="badge">Hiking Trails</span>}
-                    {attraction.kayakingCanoeing && <span className="badge">Kayaking & Canoeing</span>}
-                    {attraction.lake && <span className="badge">Lake</span>}
-                    {attraction.parkReserve && <span className="badge">Park/Reserve</span>}
-                    {attraction.river && <span className="badge">River</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
+    </div>
+  );
+};
+
+const OperatingHours = ({ operatingHours }) => {
+  return (
+    <div className="p-4 mt-0 bg-white shadow rounded-lg">
+      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Operating Hours</h2>
+      <ul className="mt-2">
+        {Object.entries(operatingHours).map(([day, hours]) => (
+          <li key={day} className="text-gray-700 capitalize">
+            <span className="font-semibold mr-5">{day}: </span>
+            {hours.start} - {hours.end}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const SeatingInfo = ({ indoorSeatingCapacity, outdoorSeatingCapacity }) => {
+  return (
+    <div className="p-4 mt-0 bg-white shadow rounded-lg">
+      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Seating Capacity</h2>
+      <p className="text-gray-800 mt-2 font-semibold">Indoor: {'   ' + indoorSeatingCapacity}</p>
+      <p className="text-gray-800 font-semibold">Outdoor : {'    ' + outdoorSeatingCapacity}</p>
     </div>
   );
 };
@@ -848,27 +597,14 @@ const formatLanguages = (languages: Record<string, boolean | string>) => {
 
 // Tailwind Badge Style
 const badgeStyle = 'bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-2 mb-1';
-const HotelDescription = ({ title, description, highlights, languages }) => {
+const HotelDescription = ({ title, description }) => {
   return (
-    <div className="mx-auto p-4 m-20">
+    <div className="mx-auto p-4 m-10">
       {/* Title */}
       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{title}</h2>
       <div className="border-t-4 border-orange-400 mb-6" />
       {/* Description */}
       <p className="text-gray-700 text-xs sm:text-sm leading-relaxed mt-4">{description}</p>
-      {/* Highlights */}
-      <div className="mt-4">
-        {highlights?.map((highlight, index) => (
-          <p key={index} className="text-black font-semibold text-base sm:text-lg">
-            * {highlight}
-          </p>
-        ))}
-      </div>
-
-      {/* Languages */}
-      <p className="mt-4 text-gray-700 text-base sm:text-lg">
-        <span className="font-semibold">Languages Spoken by Staff –</span> {formatLanguages(languages)}{' '}
-      </p>
     </div>
   );
 };
@@ -923,10 +659,9 @@ const PhotoGallery = ({ uploadedPhotoshotel, openImageModal }) => {
 interface CollapsibleSectionProps {
   title: string;
   items: Record<string, boolean>;
-  area: string;
 }
 
-const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ area, title, items }) => {
+const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, items }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -939,20 +674,15 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ area, title, it
         <ChevronDown size={16} className={`text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {isOpen && items && (
+      {isOpen && (
         <div className="bg-gray-50 px-3 py-2">
-          {Object.entries(items).map(([key, value]) => (
-            <div key={key} className="py-1.5 px-2 text-sm text-gray-600">
-              <span className="font-medium">
+          {Object.entries(items)
+            .filter(([_, value]) => value === true) // Only include `true` values
+            .map(([key]) => (
+              <div key={key} className="py-1.5 px-2 text-sm text-gray-600">
                 {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
-              </span>
-              {area === 'meetingRooms' && value && (
-                <>
-                  : <span className="text-gray-700">{value}</span>
-                </>
-              )}
-            </div>
-          ))}
+              </div>
+            ))}
         </div>
       )}
     </div>

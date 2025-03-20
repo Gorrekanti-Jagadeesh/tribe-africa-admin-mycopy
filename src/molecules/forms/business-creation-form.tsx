@@ -1,39 +1,71 @@
-import Button from '@/atoms/custom-button/button';
+import { strict } from 'assert';
 import { useState } from 'react';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
+import DynamicFields from '@atoms/input-elements/dynamic-fields';
+import Checkbox from '@/atoms/input-elements/checkbox';
+import Button from '@/atoms/custom-button/button';
+import { RichTextEditor } from '@/atoms/input-elements/rich-text-editor';
+import CustomInput from '@/atoms/input-elements/custom-input';
+
+import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
+import { CustomSelect } from '@/atoms/input-elements/cutom-select';
+import { sanity, processContent, splitRichText } from '@/utils/sanity';
+import { useQuery } from '@tanstack/react-query';
+import { uploadImage } from '@api/index';
+import sanityClient from '@/sanityClient';
+import { generateId } from '@utils/common';
+import { deepMerge } from '@/utils/common';
 
 type BusinessForm = {
   businessName: string;
   businessMotive: string;
-  image: File | null;
-  country: string;
+  businessLogo: File;
+  businessAddress: {
+    street?: string;
+    city?: string;
+    region?: string;
+    postalCode?: string;
+    country?: string;
+  };
+
   businessContactInformation: {
     phoneNumber?: string;
     email?: string;
     website?: string;
+    socialMedia: {
+      facebook: string;
+      instagram: string;
+      twitter: string;
+      linkedin: string;
+    };
   };
+  businessCategory: string;
+  businessmoreDetails: string;
+  businessDescription: string;
+
+  operatingHours: {
+    monday?: { start: string; end: string };
+    tuesday?: { start: string; end: string };
+    wednesday?: { start: string; end: string };
+    thursday?: { start: string; end: string };
+    friday?: { start: string; end: string };
+    saturday?: { start: string; end: string };
+    sunday?: { start: string; end: string };
+  };
+  paymentMethods: string[];
+
   ownerContactInformation: {
     fullName?: string;
     role?: string;
     phoneNumber?: string;
     email?: string;
+    idPhoto: File;
   };
-  description: string;
-  address: {
-    street?: string;
-    town?: string;
-    state?: string;
-    postalCode?: string;
-    country?: string;
-  };
-  openingHours: {
-    day: string;
-    openingTime: string;
-    closingTime: string;
-  }[];
-  socialMediaLinks: string[];
-  paymentMethods: string[];
-  mainCategory: string;
-  subCategory: string;
+  consent: boolean;
+  accuracy: boolean;
+  signature: string;
+  date: string;
 };
 
 // type openingHours = {
@@ -43,17 +75,35 @@ const BusinessFormComponent = () => {
   const [formData, setFormData] = useState<BusinessForm>({
     businessName: '',
     businessMotive: '',
-    image: null,
-    country: 'Algeria',
-    businessContactInformation: {},
-    ownerContactInformation: {},
-    description: '',
-    address: {},
-    openingHours: [],
-    socialMediaLinks: [],
+    businessLogo: null,
+    businessAddress: {},
+    businessContactInformation: {
+      phoneNumber: '',
+      email: '',
+      website: '',
+      socialMedia: { facebook: '', instagram: '', twitter: '', linkedin: '' },
+    },
+    businessCategory: '',
+    businessmoreDetails: '',
+    businessDescription: '',
+    operatingHours: {},
     paymentMethods: [],
-    mainCategory: '',
-    subCategory: '',
+    ownerContactInformation: { fullName: '', role: '', phoneNumber: '', email: '', idPhoto: null },
+    consent: false,
+    accuracy: false,
+    signature: '',
+    date: '',
+  });
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<BusinessForm>({
+    defaultValues: {},
   });
 
   const handleChange = (field: string, value: string | number | boolean | File) => {
@@ -63,360 +113,210 @@ const BusinessFormComponent = () => {
     }));
   };
 
-  const handleNestedChange = (field: string, subField: string, value: string | number | boolean | File) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        [subField]: value,
-      },
-    }));
-  };
-
-  const handleArrayChange = (
-    field: string,
-    index: number,
-    subField: string,
-    value: string | number | boolean | File
-  ) => {
-    setFormData((prev) => {
-      const updatedArray = [...prev[field]];
-      updatedArray[index] = {
-        ...updatedArray[index],
-        [subField]: value,
-      };
-      return {
-        ...prev,
-        [field]: updatedArray,
-      };
-    });
-  };
-
-  const addArrayItem = (
-    field: string,
-    newItem: string | number | boolean | { day: string; openingTime: string; closingTime: string }
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: [...prev[field], newItem],
-    }));
-  };
-
-  const removeArrayItem = (field: string, index: number) => {
-    setFormData((prev) => {
-      const updatedArray = [...prev[field]];
-      updatedArray.splice(index, 1);
-      return {
-        ...prev,
-        [field]: updatedArray,
-      };
-    });
-  };
-
-  const handleCheckboxChange = (method: string) => {
-    setFormData((prev) => {
-      const paymentMethods = prev.paymentMethods.includes(method)
-        ? prev.paymentMethods.filter((m) => m !== method)
-        : [...prev.paymentMethods, method];
-      return { ...prev, paymentMethods };
-    });
+  const onBusinessFormSubmit: SubmitHandler<BusinessForm> = async (data) => {
+    // try {
+    //   // Display loader
+    //   var newData = deepMerge(data, formData);
+    //   var newData1 = {
+    //     _type: 'afterWorkListing',
+    //     _id: `drafts.${generateId()}`,
+    //     ...newData,
+    //   };
+    //   await sanityClient.create(newData1);
+    //   console.log('-------Final Data', newData);
+    //   document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
+    //   setTimeout(() => {
+    //     setShowModal(true);
+    //   }, 300); // Delay to allow scrolling to complete
+    //   setFormData({});
+    //   // Notify success
+    // } catch (error) {
+    //   // Handle errors
+    //   console.error('Error submitting event:', error);
+    //   alert('Failed to submit event. Please try again.');
+    // } finally {
+    //   // Hide loader
+    //   // setLoader(false);
+    // }
   };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Create a Business</h1>
-      <form>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4 text-center">Create a Business</h2>
+
+      <form onSubmit={handleSubmit(onBusinessFormSubmit)}>
         {/* Business Name */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="businessName">
-            Business Name
-          </label>
-          <input
-            type="text"
-            id="businessName"
-            value={formData.businessName}
-            onChange={(e) => handleChange('businessName', e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
+        <div>
+          <CustomInput
+            {...register('businessName')}
+            label={'Business Name'}
+            placeholder="Business Name"
+            error={errors.businessName}
           />
         </div>
+
         {/* Business Motive */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="businessMotive">
-            Business Motive
-          </label>
-          <input
-            type="text"
-            id="businessMotive"
-            value={formData.businessMotive}
-            onChange={(e) => handleChange('businessMotive', e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
+        <div>
+          <CustomInput
+            {...register('businessName')}
+            label={'Business Motive'}
+            placeholder="Business Motive"
+            error={errors.businessMotive}
           />
         </div>
-        {/* Business Image */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="image">
-            Business Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            onChange={(e) => handleChange('image', e.target.files ? e.target.files[0] : null)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
+
+        {/* Business Address */}
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold mt-6">{'Business Address'}</label>
+
+          <CustomInput
+            {...register(`businessAddress.street`)}
+            // label={'Street Address'}
+            placeholder="street"
+            error={errors.businessAddress?.street}
+          />
+          <CustomInput
+            {...register(`businessAddress.city`)}
+            // label={'Town/City'}
+            placeholder="Town/City"
+            error={errors.businessAddress?.city}
+          />
+          <CustomInput
+            {...register(`businessAddress.region`)}
+            //   label={'Business Address'}
+            placeholder="State/Region"
+            error={errors.businessAddress?.region}
+          />
+          <CustomInput
+            {...register(`businessAddress.postalCode`)}
+            //   label={'Business Address'}
+            placeholder="Postal Code (Optional)"
+            error={errors.businessAddress?.postalCode}
+            required={false}
+          />
+          <CustomInput
+            {...register(`businessAddress.country`)}
+            //   label={'Business Address'}
+            placeholder="Country"
+            error={errors.businessAddress?.country}
+            required={false}
           />
         </div>
-        {/* Business Country */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="country">
-            Country
-          </label>
-          <select
-            id="country"
-            value={formData.country}
-            onChange={(e) => handleChange('country', e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
-          >
-            <option value="Algeria">Algeria</option>
-            {/* Add other countries here */}
-          </select>
-        </div>
-        {/* Business Contact Information */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Business Contact Information</label>
-          <div className="flex flex-wrap gap-4">
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={formData.businessContactInformation.phoneNumber || ''}
-              onChange={(e) => handleNestedChange('businessContactInformation', 'phoneNumber', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={formData.businessContactInformation.email || ''}
-              onChange={(e) => handleNestedChange('businessContactInformation', 'email', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-            <input
+
+        {/* Business Contact Details */}
+
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold mt-6">{'Contact Information'}</label>
+
+          <CustomInput
+            {...register('businessContactInformation.phoneNumber', { required: 'Phone number is required' })}
+            placeholder="Phone Number (Primary contact number)"
+            error={errors.businessContactInformation?.phoneNumber}
+            type="number"
+          />
+          <CustomInput
+            {...register('businessContactInformation.email', { required: 'Email is required' })}
+            placeholder="Email Address (For inquires and official correspondence)"
+            error={errors.businessContactInformation?.email}
+            type="email"
+          />
+
+          <CustomInput
+            {...register('businessContactInformation.website')}
+            //   label={'Website (if applicable)'}
+            placeholder="Website URL (Provide a link of your official website) Optional"
+            error={errors.businessContactInformation?.website}
+            type="url"
+            required={false}
+          />
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold">Social Media Links(Add links to your social media profiles)</label>
+            <CustomInput
+              {...register('businessContactInformation.socialMedia.facebook')}
+              placeholder="Facebook Profile"
+              error={errors?.businessContactInformation?.socialMedia?.facebook}
+              required={false}
               type="url"
-              placeholder="Website"
-              value={formData.businessContactInformation.website || ''}
-              onChange={(e) => handleNestedChange('businessContactInformation', 'website', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
             />
-          </div>
-        </div>
-        {/* Owner Contact Information */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Owner Contact Information</label>
-          <div className="flex flex-wrap gap-4">
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={formData.ownerContactInformation.fullName || ''}
-              onChange={(e) => handleNestedChange('ownerContactInformation', 'fullName', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md mb-2"
+            <CustomInput
+              {...register('businessContactInformation.socialMedia.instagram')}
+              placeholder="Instagram Profile"
+              error={errors?.businessContactInformation?.socialMedia?.instagram}
+              required={false}
+              type="url"
             />
-            <input
-              type="text"
-              placeholder="Role"
-              value={formData.ownerContactInformation.role || ''}
-              onChange={(e) => handleNestedChange('ownerContactInformation', 'role', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md mb-2"
+            <CustomInput
+              {...register('businessContactInformation.socialMedia.linkedin')}
+              placeholder="Linkedin Profile"
+              // error={errors?.socialMedia?.linkedin}
+              required={false}
+              type="url"
             />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={formData.ownerContactInformation.phoneNumber || ''}
-              onChange={(e) => handleNestedChange('ownerContactInformation', 'phoneNumber', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md mb-2"
+            <CustomInput
+              {...register('businessContactInformation.socialMedia.twitter')}
+              placeholder="Twitter Profile"
+              error={errors?.businessContactInformation?.socialMedia?.twitter}
+              required={false}
+              type="url"
             />
-            <input
-              type="email"
-              placeholder="Email"
-              value={formData.ownerContactInformation.email || ''}
-              onChange={(e) => handleNestedChange('ownerContactInformation', 'email', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
+            <CustomInput
+              {...register('businessContactInformation.socialMedia.twitter')}
+              placeholder="Tiktok Profile"
+              error={errors?.businessContactInformation?.socialMedia?.twitter}
+              required={false}
+              type="url"
             />
-          </div>
-        </div>
-        {/* Description */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => handleChange('description', e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
-          ></textarea>
-        </div>
-        {/* Address */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Address</label>
-          <div className="flex flex-wrap gap-4">
-            <input
-              type="text"
-              placeholder="Street"
-              value={formData.address.street || ''}
-              onChange={(e) => handleNestedChange('address', 'street', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="Town"
-              value={formData.address.town || ''}
-              onChange={(e) => handleNestedChange('address', 'town', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-          </div>
-          <div className="flex flex-wrap gap-4 mt-2">
-            <input
-              type="text"
-              placeholder="State"
-              value={formData.address.state || ''}
-              onChange={(e) => handleNestedChange('address', 'state', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="Postal Code"
-              value={formData.address.postalCode || ''}
-              onChange={(e) => handleNestedChange('address', 'postalCode', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-            <input
-              type="text"
-              placeholder="Country"
-              value={formData.address.country || ''}
-              onChange={(e) => handleNestedChange('address', 'country', e.target.value)}
-              className="flex-1 border border-gray-300 p-2 rounded-md"
-            />
-          </div>
-          <div className="mt-2"></div>
-        </div>
-        {/* Opening Hours */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Opening Hours</label>
-          {formData.openingHours.map((item, index) => (
-            <div key={index} className="mb-2 flex space-x-2">
-              <select
-                value={item.day}
-                onChange={(e) => handleArrayChange('openingHours', index, 'day', e.target.value)}
-                className="flex-1 border border-gray-300 p-2 rounded-md"
-              >
-                <option value="">Select Day</option>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-              </select>
-              <input
-                type="time"
-                placeholder="Opening Time"
-                value={item.openingTime}
-                onChange={(e) => handleArrayChange('openingHours', index, 'openingTime', e.target.value)}
-                className="flex-1 border border-gray-300 p-2 rounded-md"
+            {/* Business Type */}
+            <div className="flex flex-col gap-2 mt-6 mb-6">
+              <CustomSelect
+                {...register('businessCategory', { required: 'Business Type is required' })}
+                placeholder="Business Type"
+                options={businessCategories}
+                label="Business Type"
+                error={errors.businessCategory}
+                // onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
               />
-              <input
-                type="time"
-                placeholder="Closing Time"
-                value={item.closingTime}
-                onChange={(e) => handleArrayChange('openingHours', index, 'closingTime', e.target.value)}
-                className="flex-1 border border-gray-300 p-2 rounded-md"
-              />
-              <button
-                type="button"
-                onClick={() => removeArrayItem('openingHours', index)}
-                className="bg-red-500 text-white px-2 rounded-md"
-              >
-                Remove
-              </button>
             </div>
-          ))}
-          <Button
-            type="button"
-            onClick={() => addArrayItem('openingHours', { day: '', openingTime: '', closingTime: '' })}
-          >
-            Add Opening Hours
-          </Button>
-        </div>
-        {/* Social Media Links */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Social Media Links</label>
-          {formData.socialMediaLinks.map((link, index) => (
-            <div key={index} className="flex space-x-2 mb-2">
-              <input
-                type="url"
-                value={link}
-                onChange={(e) => handleArrayChange('socialMediaLinks', index, '', e.target.value)}
-                className="flex-1 border border-gray-300 p-2 rounded-md"
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold mt-6">Full Description:</label>
+              <textarea
+                placeholder="100 - 500 words – detailed description including ambiance, offerings, and specialties"
+                {...register('businessDescription', {
+                  required: 'Full Description is required',
+                  minLength: {
+                    value: 500,
+                    message: 'Full Description must be at least 500 characters',
+                  },
+                  maxLength: {
+                    value: 1000,
+                    message: 'Full Description must not exceed 1000 characters',
+                  },
+                })}
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={10} // Bigger area
+                onChange={(e) => setValue('businessDescription', e.target.value)}
               />
-              <button
-                type="button"
-                onClick={() => removeArrayItem('socialMediaLinks', index)}
-                className="bg-red-500 text-white px-2 rounded-md"
-              >
-                Remove
-              </button>
+              {errors.businessDescription && (
+                <p className="text-red-500 text-sm">{errors.businessDescription.message}</p>
+              )}
             </div>
-          ))}
-          <Button type="button" onClick={() => addArrayItem('socialMediaLinks', '')}>
-            Add Social Media Link
-          </Button>
-        </div>
-        {/* Payment Methods */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium">Payment Methods</label>
-          <div className="flex flex-wrap gap-4">
-            {['Credit Card', 'Cash', 'PayPal', 'Bank Transfer'].map((method) => (
-              <label key={method} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.paymentMethods.includes(method)}
-                  onChange={() => handleCheckboxChange(method)}
-                  className="rounded border-gray-300 focus:ring focus:ring-blue-200"
-                />
-                {method}
-              </label>
-            ))}
           </div>
         </div>
-        {/* Main Category */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="mainCategory">
-            Main Category
-          </label>
-          <input
-            type="text"
-            id="mainCategory"
-            value={formData.mainCategory}
-            onChange={(e) => handleChange('mainCategory', e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
-          />
-        </div>
-        {/* Sub Category */}
-        <div className="mb-4">
-          <label className="block mb-1 font-medium" htmlFor="subCategory">
-            Sub Category
-          </label>
-          <input
-            type="text"
-            id="subCategory"
-            value={formData.subCategory}
-            onChange={(e) => handleChange('subCategory', e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded-md focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <Button type="submit">Submit</Button>
-        {/* <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button> */}
       </form>
     </div>
   );
 };
 
 export default BusinessFormComponent;
+
+const businessCategories = [
+  { value: 'accommodations', label: 'Accommodations' },
+  { value: 'agriculture_industry', label: 'Agriculture & Industry' },
+  { value: 'business_centers', label: 'Business Centers' },
+  { value: 'food_drink_entertainment', label: 'Food, Drink & Entertainment' },
+  { value: 'media_performing_arts', label: 'Media & Performing Arts' },
+  { value: 'retail_wholesale_trade', label: 'Retail & Wholesale Trade' },
+  { value: 'services', label: 'Services' },
+  { value: 'talent_agency_services', label: 'Talent & Agency Services' },
+  { value: 'wellness_beauty', label: 'Wellness & Beauty' },
+];

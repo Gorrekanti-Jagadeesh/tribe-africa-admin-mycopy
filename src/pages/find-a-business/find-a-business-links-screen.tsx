@@ -8,14 +8,14 @@ const data = [
     mainCat: 'Accommodation',
     hasSubCategory: true,
     subItems: [
-      'Hotels',
-      'Resorts',
-      'Bed & Breakfast',
-      'Apartment',
-      'Vacation Rental/Villa',
-      'Camp Ground',
-      'Hostel',
-      'Co-living spaces',
+      { name: 'Hotels', id: 'hotel' },
+      { name: 'Resorts', id: 'resort' },
+      { name: 'Bed & Breakfast', id: 'bed-breakfast' },
+      { name: 'Apartment', id: 'apartment' },
+      { name: 'Vacation Rental/Villa', id: 'vacation-rental' },
+      { name: 'Camp Ground', id: 'campground' },
+      { name: 'Hostel', id: 'hostel' },
+      { name: 'Co-living spaces', id: 'co-living' },
     ],
   },
   {
@@ -30,12 +30,19 @@ const data = [
   },
   {
     mainCat: 'Bars & Pubs',
+    id: 'barspubs',
     hasSubCategory: false,
   },
   {
     mainCat: 'Clubs & Special Groups',
+    id: 'clubsspecialgroups',
     hasSubCategory: true,
-    subItems: ['Rotary Club', 'Lion’s Club', 'Sports', 'Toastmasters', 'Masonic Lodges', 'Other'],
+    subItems: [
+      { name: 'Rotary Club', id: 'rotaryclubs' },
+      { name: 'Lion’s Club', id: 'lionsclub' },
+      { name: 'Toastmasters', id: 'toastmasters' },
+      { name: 'Masonic Lodges', id: 'masonicloges' },
+    ],
   },
   {
     mainCat: 'Construction',
@@ -127,6 +134,7 @@ const data = [
   },
   {
     mainCat: 'Nightclubs',
+    id: 'nightclubs',
     hasSubCategory: false,
   },
   {
@@ -142,10 +150,19 @@ const data = [
     hasSubCategory: true,
     subItems: ['Churches', 'Mosques', 'Synagogues', 'Bahai Temples', 'Hindu Temples', 'Other'],
   },
+
   {
     mainCat: 'Restaurant & Eateries',
+    id: 'restaurantseateries',
     hasSubCategory: true,
-    subItems: ['Traditional', 'Fine dining', 'Casual dining', 'Beach bars', 'Street food', 'Vegetarian & vegan'],
+    subItems: [
+      { name: 'Traditional', id: 'traditional' },
+      { name: 'Fine dining', id: 'fine_dining' },
+      { name: 'Casual dining', id: 'casual_dining' },
+      { name: 'Beach bars', id: 'beach_bars' },
+      { name: 'Street food', id: 'street_food' },
+      { name: 'Vegetarian & vegan', id: 'vegan_vegetarian' },
+    ],
   },
   {
     mainCat: 'Shopping',
@@ -170,6 +187,7 @@ const data = [
 
 const FindABusinessLinksScreen: React.FC<{ country: string }> = ({ country }) => {
   const navigation = useNavigate();
+
   return (
     <div className="p-2 md:p-4 m-auto">
       <div className="flex mb-4">
@@ -180,32 +198,55 @@ const FindABusinessLinksScreen: React.FC<{ country: string }> = ({ country }) =>
         <div className="md:columns-5">
           {data.map((category, index) => (
             <div className="mb-3" key={index}>
-              <h1
-                className="text-xl font-bold w-3/4"
-                onClick={() => {
-                  if (!category.hasSubCategory) {
-                    navigation(`/${country}/business/find-a-business/${toKebabCase(category.mainCat)}`);
-                  }
-                }}
-              >
-                {category.mainCat}
-              </h1>
-              {category.hasSubCategory && (
+              <h1 className="text-xl font-bold w-3/4 cursor-pointer">{category.mainCat}</h1>
+              {category.hasSubCategory ? (
                 <ul>
-                  {category.subItems.map((subCategory, subIndex) => (
+                  {category.subItems.map((sub, subIndex) => (
                     <li
-                      className="mb-1"
+                      className="mb-1 cursor-pointer text-black-600 hover:underline"
                       key={subIndex}
                       onClick={() => {
-                        navigation(
-                          `/${country}/business/find-a-business/${toKebabCase(category.mainCat)}/${toKebabCase(subCategory)}`
-                        );
+                        if (category.mainCat === 'Accommodation') {
+                          navigation(`/${toKebabCase(country)}/business/${toKebabCase('Accommodation')}/${sub.id}`);
+                        } else if (category.mainCat == 'Restaurant & Eateries') {
+                          navigation(
+                            `/${toKebabCase(country)}/business/${toKebabCase(category.id)}/afterwork/${sub.id}`
+                          );
+                        } else if (category.mainCat == 'Clubs & Special Groups') {
+                          console.log(
+                            '---nikhil clicked',
+                            `/${toKebabCase(country)}/business/find-a-business/${toKebabCase(category.id)}/${sub.id}`
+                          );
+                          navigation(
+                            `/${toKebabCase(country)}/business/find-a-business/${toKebabCase(category.id)}/${sub.id}`
+                          );
+                        } else {
+                          navigation(
+                            `/${country}/business/find-a-business/${toKebabCase(category.mainCat)}/${toKebabCase(sub)}`
+                          );
+                        }
                       }}
                     >
-                      {subCategory}
+                      {typeof sub === 'object' ? sub.name : sub}
                     </li>
                   ))}
                 </ul>
+              ) : (
+                <h1
+                  className="text-xl font-bold w-3/4 cursor-pointer"
+                  onClick={() => {
+                    if (category.mainCat == 'Nightclubs' || category.mainCat == 'Bars & Pubs') {
+                      // "/algeria/business/restaurantseateries/afterwork/traditional"
+                      navigation(
+                        `/${country}/business/${toKebabCase(category.id)}/afterwork/${toKebabCase(category.id)}`
+                      );
+                    } else {
+                      navigation(`/${country}/business/find-a-business/${toKebabCase(category.mainCat)}`);
+                    }
+                  }}
+                >
+                  {category.mainCat}
+                </h1>
               )}
             </div>
           ))}

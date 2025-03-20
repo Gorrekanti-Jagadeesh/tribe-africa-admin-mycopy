@@ -11,6 +11,7 @@ const NavFloatingLayout: React.FC<{
     icon: [];
     hasSubcategories: boolean;
     subcategories: string[];
+    formType?: number;
   }>;
   heading: string;
   country: string;
@@ -43,12 +44,26 @@ const NavFloatingLayout: React.FC<{
                     <p
                       key={index}
                       onClick={() => {
-                        console.log('-------clicked', item);
-                        const afterWorkPath = heading === 'After Work' ? '/afterwork' : '';
-                        const subcategory = typeof item === 'object' ? item?.value : toKebabCase(item); // Handle both object and string cases
-                        navigation(
-                          `/${country}/${pageType}/${toKebabCase(each.category)}${afterWorkPath}/${subcategory}`
+                        const subcategory = typeof item === 'object' ? item?.value : toKebabCase(item);
+                        console.log(
+                          'After work route',
+                          `/${country}/${pageType}/${toKebabCase(each.category)}/afterwork/${subcategory}`
                         );
+                        // Handle both object and string cases
+
+                        if (heading === 'After Work') {
+                          if (each?.formType == 1) {
+                            navigation(
+                              `/${country}/${pageType}/${toKebabCase(each.category)}/afterwork/${subcategory}`
+                            );
+                          } else {
+                            navigation(
+                              `/${country}/${pageType}/find-a-business/${toKebabCase(each.category)}/${subcategory}`
+                            );
+                          }
+                        } else {
+                          navigation(`/${country}/${pageType}/${toKebabCase(each.category)}/${subcategory}`);
+                        }
                       }}
                     >
                       {typeof item === 'object' ? item?.title : item}{' '}
@@ -61,6 +76,8 @@ const NavFloatingLayout: React.FC<{
             mainCategory={each.category}
             country={country}
             pageType={pageType}
+            heading={heading}
+            formType={each?.formType}
             // offset="parent"
           />
         ))}

@@ -22,8 +22,8 @@ const AfterWorkDetailsContainer = () => {
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['accommodation_details'],
-    queryFn: () => sanity.GET(query.ACCOMMODATION.DETAILS(categoryInfoId)),
+    queryKey: ['after_work_details'],
+    queryFn: () => sanity.GET(`*[_type == "afterWorkListing" && _id == "${categoryInfoId}"][0]`),
   });
 
   const { data: reviews } = useQuery({
@@ -33,7 +33,7 @@ const AfterWorkDetailsContainer = () => {
 
   const { control, handleSubmit } = useForm();
 
-  console.log('------ details', data);
+  console.log('------ after work details', categoryInfoId, data);
   const onSubmit = async (formData: Record<string, number>) => {
     if (
       !formData.quality_of_service ||

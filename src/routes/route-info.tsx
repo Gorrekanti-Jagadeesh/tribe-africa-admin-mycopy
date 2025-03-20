@@ -31,6 +31,7 @@ import UserDashboardContainer from '@/pages/user-dashboard/user-dashboard-contai
 import AfterWorkFrom from '@/molecules/forms/after-work-form';
 import AfterWorkContainer from '@/pages/afterWork/afterwork-container';
 import AfterWorkDetailsContainer from '@/pages/afterWork/afterwork-details-container';
+import BusinessFormComponent from '@/molecules/forms/business-creation-form';
 
 export interface RouteConfig {
   name: string;
@@ -71,7 +72,7 @@ const appRoutes: RouteConfig[] = [
   },
   {
     name: 'AfterWork',
-    path: '/:country/:pageType/:category/:sub_category/:categoryInfoId/',
+    path: '/:country/:pageType/:category/afterwork/:sub_category/:categoryInfoId/',
     element: <AfterWorkDetailsContainer />,
   },
   {
@@ -183,6 +184,11 @@ const appRoutes: RouteConfig[] = [
     name: 'hotel form',
     path: '/form',
     element: <AccommodationForm />,
+  },
+  {
+    name: 'Business form',
+    path: '/business-form',
+    element: <BusinessFormComponent />,
   },
   {
     name: 'find a business screen',

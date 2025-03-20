@@ -10,6 +10,8 @@ interface FloatingSiblingProps {
   mainCategory?: string;
   country?: string;
   pageType?: string;
+  heading?: string;
+  formType?: number;
 }
 
 export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
@@ -19,6 +21,8 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
   mainCategory,
   country,
   pageType,
+  heading,
+  formType,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [positionStyle, setPositionStyle] = useState({});
@@ -27,9 +31,21 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
   const navigation = useNavigate();
 
   const handleClick = () => {
-    if (!hasSubcategories) {
-      navigation(`/${country}/${pageType}/details/${toKebabCase(mainCategory)}`);
-      return;
+    if (heading === 'After Work') {
+      const afterWorkPath = heading === 'After Work' ? '/afterwork' : '';
+      if (!hasSubcategories) {
+        if (formType == 1) {
+          navigation(`/${country}/${pageType}/${toKebabCase(mainCategory)}${afterWorkPath}/${mainCategory}`);
+        } else {
+          navigation(`/${country}/${pageType}/find-a-business/${toKebabCase(mainCategory)}/${mainCategory}`);
+        }
+        return;
+      }
+    } else {
+      if (!hasSubcategories) {
+        navigation(`/${country}/${pageType}/details/${toKebabCase(mainCategory)}`);
+        return;
+      }
     }
 
     if (!isClicked && cardRef.current && cardRef.current.offsetParent) {
