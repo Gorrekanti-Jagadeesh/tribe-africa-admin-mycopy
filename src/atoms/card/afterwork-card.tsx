@@ -14,18 +14,18 @@ const AfterWorkCard: React.FC<{
   category: string;
   subCategory: string;
 }> = ({ data, country, category, subCategory }) => {
-  const { images, name, _id } = data;
+  const { images, title, _id } = data;
   const { pageType } = useParams();
   const navigate = useNavigate();
   return (
     <div className="border rounded-lg shadow-sm overflow-hidden">
       <img
         src={sanityImageUrlBuilder(images).url()}
-        alt={name}
+        alt={title}
         className="w-full aspect-video rounded-lg h-48 object-cover"
       />
       <div className="p-4">
-        <h3 className="text-lg font-semibold">{name}</h3>
+        <h3 className="text-lg font-semibold">{title}</h3>
         <div className="flex items-center text-orange-500 mt-1">
           {/* <StarRating rating={getAverageOfObjectValues(data?.reviews?.fields)} type="brief" />
           <span className="text-gray-500 ml-2 text-sm">{data?.reviews?.count} reviews</span> */}

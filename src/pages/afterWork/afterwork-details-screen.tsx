@@ -16,23 +16,71 @@ import {
   MoreVertical,
   CreditCard,
 } from 'lucide-react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, FieldValues } from 'react-hook-form';
 import { priceRangeOptions } from '@/data/amanitieConfig';
 import SectionTitle from './SectionTitle';
 import { sanityImageUrlBuilder } from '@api/index';
 import { getAmenitiesConfig, getAccommodationLabel, getAccommodationRoomType } from '@/data/amanitieConfig';
 
+// Define missing types
+interface ReviewProps {
+  // Add necessary properties
+  id: string;
+  // Add other properties as needed
+}
+
+interface accomodationProps {
+  // Add necessary properties
+  _id: string;
+  images: any;
+  title: string;
+  amount: string;
+  reviews: any;
+  businessDetails?: {
+    businessName: string;
+    address?: {
+      street?: string;
+      city?: string;
+      region?: string;
+      country?: string;
+      postalCode?: string;
+    };
+  };
+  businessContact?: {
+    phoneNumber?: string;
+    email?: string;
+    website?: string;
+  };
+  keyFeatures?: Record<string, boolean>;
+  cuisineType?: Record<string, boolean>;
+  indoorSeatingCapacity?: string;
+  outdoorSeatingCapacity?: string;
+  fullDescription?: string;
+  menuServicesAtmosphereHighlights?: string;
+  businessPhotos?: any;
+  operatingHours?: Record<string, { start: string; end: string }>;
+  ownerContactDetails?: {
+    name: string;
+    role?: string;
+    email?: string;
+    phoneNumber?: string;
+    emergencyContact?: string;
+    ownerIdPhoto?: any;
+  };
+}
+
 interface AfterWorkDetailsScreenProps {
   reviews: ReviewProps[];
   data: accomodationProps;
-  onSubmit: (FieldValues) => void;
-  control: Control;
+  hostel: accomodationProps;
+  onSubmit: (values: FieldValues) => void;
+  control: any;
   isSubmitting: boolean;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
 }
 
-const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
+const AfterWorkDetailsScreen: React.FC<AfterWorkDetailsScreenProps> = ({
   reviews,
   hostel,
   onSubmit,
@@ -49,7 +97,7 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
   const [selectedImage, setSelectedImage] = useState('');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
-  const [allImage, setAllImage] = useState([]);
+  const [allImage, setAllImage] = useState<string[]>([]);
 
   // const toggleExpanded = () => setExpanded(!expanded);
   // const selectedPriceRange =
@@ -70,7 +118,7 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
   //   }));
   // };
 
-  const openImageModal = (image: string, index: number, allImages: []) => {
+  const openImageModal = (image: string, index: number, allImages: string[]) => {
     setSelectedImage(image);
     setCurrentImageIndex(index);
     setModalOpen(true);
@@ -416,7 +464,23 @@ const AfterWorkDetailsScreen: FC<AfterWorkDetailsScreenProps> = ({
 
 export default AfterWorkDetailsScreen;
 
-const LocationDetails = ({ distanceToKeyLocations, location }) => {
+const LocationDetails = ({
+  distanceToKeyLocations,
+  location,
+}: {
+  distanceToKeyLocations?: {
+    nearestAirport?: string;
+    taxiStands?: string;
+    cityCenter?: string;
+    localMarkets?: string;
+    popularRestaurants?: string;
+    trainBusStation?: string;
+  };
+  location?: {
+    latitude?: string;
+    longitude?: string;
+  };
+}) => {
   const mapUrl = `https://www.google.com/maps?q=${location?.latitude},${location?.longitude}&output=embed`;
 
   return (
@@ -464,23 +528,24 @@ const LocationDetails = ({ distanceToKeyLocations, location }) => {
     </div>
   );
 };
-const RoomBathroomDetails = ({ accomodationLabel, data }) => {
-  const toTitleCase = (str) => {
+
+const RoomBathroomDetails = ({ accomodationLabel, data }: { accomodationLabel: string; data: any }) => {
+  const toTitleCase = (str: string) => {
     return str
       .replace(/([A-Z])/g, ' $1') // Add space before capital letters
       .trim()
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Convert first letter to uppercase
   };
 
-  const formatBooleanFields = (fields) => {
-    return Object.entries(fields || {})
+  const formatBooleanFields = (fields: Record<string, boolean>) => {
+    return Object.entries(fields)
       .filter(([_, value]) => value === true)
       .map(([key]) => toTitleCase(key))
       .join(', ');
   };
 
-  const formatTextFields = (fields, excludedKeys = []) => {
-    return Object.entries(fields || {})
+  const formatTextFields = (fields: Record<string, any>, excludedKeys: string[] = []) => {
+    return Object.entries(fields)
       .filter(([key, value]) => value && typeof value !== 'object' && !excludedKeys.includes(key))
       .map(([key, value]) => ({
         key: toTitleCase(key),
@@ -488,8 +553,8 @@ const RoomBathroomDetails = ({ accomodationLabel, data }) => {
       }));
   };
 
-  const formatObjectFields = (fields) => {
-    return Object.entries(fields || {})
+  const formatObjectFields = (fields: Record<string, any>) => {
+    return Object.entries(fields)
       .map(([key, value]) => {
         if (typeof value === 'object' && value !== null) {
           const booleanFields = formatBooleanFields(value);
@@ -525,7 +590,18 @@ const RoomBathroomDetails = ({ accomodationLabel, data }) => {
   );
 };
 
-const OwnerContactDetails = ({ ownerContactDetails }) => {
+const OwnerContactDetails = ({
+  ownerContactDetails,
+}: {
+  ownerContactDetails: {
+    name: string;
+    role?: string;
+    email?: string;
+    phoneNumber?: string;
+    emergencyContact?: string;
+    ownerIdPhoto?: any;
+  };
+}) => {
   return (
     <div className="p-4 mt-0 bg-white shadow rounded-lg w-96">
       <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Owner Contact Details</h2>
@@ -560,12 +636,12 @@ const OwnerContactDetails = ({ ownerContactDetails }) => {
   );
 };
 
-const OperatingHours = ({ operatingHours }) => {
+const OperatingHours = ({ operatingHours }: { operatingHours: Record<string, { start: string; end: string }> }) => {
   return (
     <div className="p-4 mt-0 bg-white shadow rounded-lg">
       <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Operating Hours</h2>
       <ul className="mt-2">
-        {Object.entries(operatingHours).map(([day, hours]) => (
+        {Object.entries(operatingHours || {}).map(([day, hours]) => (
           <li key={day} className="text-gray-700 capitalize">
             <span className="font-semibold mr-5">{day}: </span>
             {hours.start} - {hours.end}
@@ -576,7 +652,13 @@ const OperatingHours = ({ operatingHours }) => {
   );
 };
 
-const SeatingInfo = ({ indoorSeatingCapacity, outdoorSeatingCapacity }) => {
+const SeatingInfo = ({
+  indoorSeatingCapacity,
+  outdoorSeatingCapacity,
+}: {
+  indoorSeatingCapacity?: string;
+  outdoorSeatingCapacity?: string;
+}) => {
   return (
     <div className="p-4 mt-0 bg-white shadow rounded-lg">
       <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Seating Capacity</h2>
@@ -597,7 +679,7 @@ const formatLanguages = (languages: Record<string, boolean | string>) => {
 
 // Tailwind Badge Style
 const badgeStyle = 'bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-2 mb-1';
-const HotelDescription = ({ title, description }) => {
+const HotelDescription = ({ title, description }: { title: string; description?: string }) => {
   return (
     <div className="mx-auto p-4 m-10">
       {/* Title */}
@@ -609,15 +691,20 @@ const HotelDescription = ({ title, description }) => {
   );
 };
 
-const PhotoGallery = ({ uploadedPhotoshotel, openImageModal }) => {
+const PhotoGallery = ({
+  uploadedPhotoshotel,
+  openImageModal,
+}: {
+  uploadedPhotoshotel: any;
+  openImageModal: (image: string, index: number, allImages: string[]) => void;
+}) => {
   // Gather all images dynamically
-  // console.log('uploadedPhotoshotel:', uploadedPhotoshotel);
   const allImages = Object.values(uploadedPhotoshotel || {})
     .flat() // Flatten arrays
     .map((photo) => {
-      return sanityImageUrlBuilder(photo).url();
+      return sanityImageUrlBuilder(photo as any).url();
     }) // Convert Sanity ref to URL
-    .filter(Boolean); // Remove undefined/null values
+    .filter(Boolean) as string[]; // Remove undefined/null values
 
   // If no images, return null
   if (!allImages.length) return null;
@@ -644,7 +731,7 @@ const PhotoGallery = ({ uploadedPhotoshotel, openImageModal }) => {
       {allImages.length > 3 && (
         <div
           className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded cursor-pointer"
-          onClick={() => openImageModal(allImages[0], 0)}
+          onClick={() => openImageModal(allImages[0], 0, allImages)}
         >
           +{allImages.length - 3} photos
         </div>

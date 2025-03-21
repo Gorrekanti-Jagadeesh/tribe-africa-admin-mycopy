@@ -165,7 +165,13 @@ export const uploadImage = async (file: UploadBody | string) => {
         imageFile = base64ToBlob(file);
       }
     } else {
-      imageFile = file;
+      // Convert UploadBody to Blob if it's a Buffer
+      if (Buffer.isBuffer(file)) {
+        imageFile = new Blob([file]);
+      } else {
+        // Assume it's already a File or Blob
+        imageFile = file as File | Blob;
+      }
     }
 
     const imageAsset = await sanityClient.assets.upload('image', imageFile);

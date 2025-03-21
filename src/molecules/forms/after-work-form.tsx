@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller, Path } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
 import Checkbox from '@/atoms/input-elements/checkbox';
@@ -220,32 +220,32 @@ const AfterWorkFrom: React.FC = () => {
           <label className="font-semibold mt-6">{'Business Address'}</label>
 
           <CustomInput
-            {...register(`businessDetails.address.street`)}
+            {...register(`businessDetails.address.street` as const)}
             // label={'Street Address'}
             placeholder="street"
             // error={errors.businessAddress?.street}
           />
           <CustomInput
-            {...register(`businessDetails.address.city`)}
+            {...register(`businessDetails.address.city` as const)}
             // label={'Town/City'}
             placeholder="Town/City"
             // error={errors.businessAddress?.city}
           />
           <CustomInput
-            {...register(`businessDetails.address.region`)}
+            {...register(`businessDetails.address.region` as const)}
             //   label={'Business Address'}
             placeholder="State/Region"
             // error={errors.businessAddress?.region}
           />
           <CustomInput
-            {...register(`businessDetails.address.postalCode`)}
+            {...register(`businessDetails.address.postalCode` as const)}
             //   label={'Business Address'}
             placeholder="Postal Code (Optional)"
             // error={errors.businessAddress?.postalCode}
             required={false}
           />
           <CustomInput
-            {...register(`businessDetails.address.country`)}
+            {...register(`businessDetails.address.country` as const)}
             //   label={'Business Address'}
             placeholder="Country"
             // error={errors.businessAddress?.postalCode}
@@ -365,7 +365,7 @@ const AfterWorkFrom: React.FC = () => {
           ].map(({ key, label }) => (
             <Checkbox
               key={key}
-              {...register(`cuisineType.${key}`)}
+              {...register(`cuisineType.${key}` as any)}
               label={label}
               onChange={(e) => handleInputChange(`cuisineType.${key}`, e)}
             />
@@ -401,7 +401,7 @@ const AfterWorkFrom: React.FC = () => {
           ].map(({ key, label }) => (
             <Checkbox
               key={key}
-              {...register(`keyFeatures.${key}`)}
+              {...register(`keyFeatures.${key}` as Path<AfterWorkFormInputs>)}
               label={label}
               onChange={(e) => handleInputChange(`keyFeatures.${key}`, e)}
             />
@@ -483,18 +483,30 @@ const AfterWorkFrom: React.FC = () => {
               <label className="font-medium">{day.charAt(0).toUpperCase() + day.slice(1)}</label>
               <div className="flex space-x-4">
                 <Controller
-                  name={`operatingHours.${day}.start`}
+                  name={`operatingHours.${day}.start` as Path<AfterWorkFormInputs>}
                   control={control}
-                  render={({ field }) => (
-                    <input type="time" {...field} className="w-1/2 p-2 border rounded-md" required />
+                  render={({ field: { onChange, value } }) => (
+                    <input
+                      type="time"
+                      value={(value as string) || ''}
+                      onChange={onChange}
+                      className="w-1/2 p-2 border rounded-md"
+                      required
+                    />
                   )}
                 />
                 <span className="text-xl">to</span>
                 <Controller
-                  name={`operatingHours.${day}.end`}
+                  name={`operatingHours.${day}.end` as Path<AfterWorkFormInputs>}
                   control={control}
-                  render={({ field }) => (
-                    <input type="time" {...field} className="w-1/2 p-2 border rounded-md" required />
+                  render={({ field: { onChange, value } }) => (
+                    <input
+                      type="time"
+                      value={(value as string) || ''}
+                      onChange={onChange}
+                      className="w-1/2 p-2 border rounded-md"
+                      required
+                    />
                   )}
                 />
               </div>
@@ -534,26 +546,26 @@ const AfterWorkFrom: React.FC = () => {
             error={errors.ownerContactDetails?.name}
           />
           <CustomInput
-            {...register(`ownerContactDetails.role`)}
+            {...register(`ownerContactDetails.role` as const)}
             //   label={'Business Address'}
             placeholder="Role (Owner/ Manager)"
             error={errors.ownerContactDetails?.role}
           />
           <CustomInput
-            {...register(`ownerContactDetails.phoneNumber`)}
+            {...register(`ownerContactDetails.phoneNumber` as const)}
             //   label={'Business Address'}
             placeholder="Phone Number"
             error={errors.ownerContactDetails?.phoneNumber}
           />
           <CustomInput
-            {...register(`ownerContactDetails.email`)}
+            {...register(`ownerContactDetails.email` as const)}
             //   label={'Business Address'}
             placeholder="Email Address"
             error={errors.ownerContactDetails?.email}
             required={false}
           />
           <CustomInput
-            {...register(`ownerContactDetails.emergencyContact`)}
+            {...register(`ownerContactDetails.emergencyContact` as const)}
             //   label={'Business Address'}
             placeholder="Emergency Contact (Optional):"
             error={errors.ownerContactDetails?.emergencyContact}
@@ -626,11 +638,11 @@ const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
         <hr className="border-orange-500 mb-3" />
 
         <p className="text-gray-700">
-          Your business listing has been successfully submitted. We’re thrilled to have you as part of our growing
+          Your business listing has been successfully submitted. We're thrilled to have you as part of our growing
           network of incredible venues and experiences across Africa.
           <br />
           <br />
-          Our team will review your business’s details within <b>3–5 business days</b>. Once approved, your Business
+          Our team will review your business's details within <b>3–5 business days</b>. Once approved, your Business
           will be listed on the <b>Tribe Africa Pages directory</b>. You will receive a confirmation email with a link
           to your live listing.
           <br />
@@ -638,7 +650,7 @@ const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
           If you have any questions or need assistance, feel free to reach out to us at <b>support@tribeafrica.org</b>.
           <br />
           <br />
-          Thank you for choosing Tribe Africa to showcase your business. Together, let’s make Africa a go-to destination
+          Thank you for choosing Tribe Africa to showcase your business. Together, let's make Africa a go-to destination
           for memorable experiences!
         </p>
 
