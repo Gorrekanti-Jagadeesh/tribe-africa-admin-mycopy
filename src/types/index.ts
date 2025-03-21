@@ -33,6 +33,7 @@ export interface customHeadingProps {
 export interface Option {
   value: string;
   label: string;
+  input?: boolean;
 }
 
 export interface InputProps {

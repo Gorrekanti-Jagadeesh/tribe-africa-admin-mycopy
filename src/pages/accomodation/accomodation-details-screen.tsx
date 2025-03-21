@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
   MapPin,
   Globe,
@@ -16,16 +16,91 @@ import {
   MoreVertical,
   CreditCard,
 } from 'lucide-react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, Control, FieldValues } from 'react-hook-form';
 import { priceRangeOptions } from '@/data/amanitieConfig';
 import SectionTitle from './SectionTitle';
 import { sanityImageUrlBuilder } from '@api/index';
 import { getAmenitiesConfig, getAccommodationLabel, getAccommodationRoomType } from '@/data/amanitieConfig';
 
+// Define missing types
+interface ReviewProps {
+  id: string;
+  // Add other properties as needed
+}
+
+interface accomodationProps {
+  _id: string;
+  name: string;
+  images: any;
+  title?: string;
+  amount?: string;
+  reviews?: any;
+  priceRange?: Record<string, boolean>;
+  accommodation_type?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    region?: string;
+    country?: string;
+    postalCode?: string;
+  };
+  contact?: {
+    phoneNumber?: string;
+    email?: string;
+    website?: string;
+  };
+  description?: {
+    tagline?: string;
+    description?: string;
+    highlights?: string[];
+  };
+  languages?: Record<string, boolean>;
+  businessDetails?: {
+    businessName?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      region?: string;
+      country?: string;
+      postalCode?: string;
+    };
+  };
+  businessContact?: {
+    phoneNumber?: string;
+    email?: string;
+    website?: string;
+  };
+  keyFeatures?: Record<string, boolean>;
+  cuisineType?: Record<string, boolean>;
+  indoorSeatingCapacity?: string;
+  outdoorSeatingCapacity?: string;
+  fullDescription?: string;
+  menuServicesAtmosphereHighlights?: string;
+  businessPhotos?: any;
+  operatingHours?: Record<string, { start: string; end: string }>;
+  ownerContactDetails?: {
+    name?: string;
+    role?: string;
+    email?: string;
+    phoneNumber?: string;
+    emergencyContact?: string;
+    ownerIdPhoto?: any;
+  };
+  distanceToKeyLocations?: any;
+  location?: any;
+  nearbyAttraction?: any[];
+  operatingSeason?: any;
+  policy?: any;
+  paymentMethods?: any;
+  rooms?: any;
+  uploadedPhotoshotel?: any;
+}
+
 interface AccomodationDetailsScreenProps {
   reviews: ReviewProps[];
   data: accomodationProps;
-  onSubmit: (FieldValues) => void;
+  hostel: accomodationProps;
+  onSubmit: (values: FieldValues) => void;
   control: Control;
   isSubmitting: boolean;
   isModalOpen: boolean;
@@ -879,9 +954,9 @@ const PhotoGallery = ({ uploadedPhotoshotel, openImageModal }) => {
   const allImages = Object.values(uploadedPhotoshotel || {})
     .flat() // Flatten arrays
     .map((photo) => {
-      return sanityImageUrlBuilder(photo).url();
+      return sanityImageUrlBuilder(photo as any).url();
     }) // Convert Sanity ref to URL
-    .filter(Boolean); // Remove undefined/null values
+    .filter(Boolean) as string[]; // Remove undefined/null values
 
   // If no images, return null
   if (!allImages.length) return null;

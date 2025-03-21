@@ -154,6 +154,7 @@ const AfterWorkDetailsContainer = () => {
         isSubmitting={isSubmitting}
         setIsModalOpen={(isOpen: boolean) => setIsModalOpen(isOpen)}
         isModalOpen={isModalOpen}
+        data={data}
       />
     </div>
   );

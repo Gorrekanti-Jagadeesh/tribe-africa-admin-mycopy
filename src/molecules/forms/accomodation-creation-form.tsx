@@ -41,7 +41,7 @@ const AccommodationForm: React.FC = () => {
   });
 
   const [formType, setFormType] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<Partial<AccommodationFormInputs>>({});
   const [showModal, setShowModal] = useState(false);
 
   // useEffect(() => {
@@ -334,7 +334,7 @@ Found."
               <Checkbox
                 key={lang}
                 require={formData?.languages ? (Object.keys(formData?.languages)?.length ? false : true) : true}
-                {...register(`languages.${lang}`)}
+                {...register(`languages.${lang}` as keyof AccommodationFormInputs)}
                 label={lang.charAt(0).toUpperCase() + lang.slice(1)}
                 onChange={(e) => handleInputChange(`languages.${lang}`, e)}
               />
@@ -956,7 +956,7 @@ const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
           <b> support@tribeafrica.org</b>.
           <br />
           <br />
-          We’re excited to help promote your accommodation to our growing audience!
+          We're excited to help promote your accommodation to our growing audience!
         </p>
 
         <div className="mt-4 flex justify-end">
@@ -1076,7 +1076,7 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
 
         return {
           _key: generateId(), // Generate unique key
-          _type: 'image',
+          _type: 'image' as const, // Ensure this is typed as literal "image"
           asset: { _ref: coverPhotoUrl._id }, // Use Sanity reference
           preview: previewURL, // Temporary local preview
         };
@@ -1302,8 +1302,9 @@ const VacationRentalRoomBathroomDetails: React.FC<VacationRentalGeneralInfoProps
     },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prevState) => {
       const updatedForm = { ...prevState };
@@ -1312,7 +1313,7 @@ const VacationRentalRoomBathroomDetails: React.FC<VacationRentalGeneralInfoProps
       if (keys.length === 2) {
         const [category, key] = keys;
         updatedForm[category] = {
-          ...prevState[category as keyof typeof prevState],
+          ...(prevState[category as keyof typeof prevState] as Record<string, any>),
           [key]: type === 'checkbox' ? checked : value,
         };
       } else {
@@ -1407,7 +1408,7 @@ const VacationRentalRoomBathroomDetails: React.FC<VacationRentalGeneralInfoProps
           <input
             type="text"
             name={name}
-            value={formData[name as keyof typeof formData]}
+            value={formData[name as keyof typeof formData] as string}
             onChange={handleChange}
             placeholder={`Enter ${label.toLowerCase()}`}
             className="w-full p-2 border rounded"
@@ -1485,7 +1486,8 @@ const CoLivingRoomBathroomDetails: React.FC<CoLivingRoomBathroomDetailsProps> = 
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prevState) => {
       const updatedForm = { ...prevState };
@@ -1494,7 +1496,7 @@ const CoLivingRoomBathroomDetails: React.FC<CoLivingRoomBathroomDetailsProps> = 
       if (keys.length === 2) {
         const [category, key] = keys;
         updatedForm[category] = {
-          ...prevState[category as keyof typeof prevState],
+          ...(prevState[category as keyof typeof prevState] as Record<string, any>),
           [key]: type === 'checkbox' ? checked : value,
         };
       } else {
@@ -1532,7 +1534,7 @@ const CoLivingRoomBathroomDetails: React.FC<CoLivingRoomBathroomDetailsProps> = 
               <input
                 type="checkbox"
                 name={`sharedBedroomFeatures.${key}`}
-                checked={formData.sharedBedroomFeatures[key as keyof typeof formData.sharedBedroomFeatures]}
+                checked={formData.sharedBedroomFeatures[key as keyof typeof formData.sharedBedroomFeatures] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1585,7 +1587,9 @@ const CoLivingRoomBathroomDetails: React.FC<CoLivingRoomBathroomDetailsProps> = 
               <input
                 type="checkbox"
                 name={`enSuiteBedroomFeatures.${key}`}
-                checked={formData.enSuiteBedroomFeatures[key as keyof typeof formData.enSuiteBedroomFeatures]}
+                checked={
+                  formData.enSuiteBedroomFeatures[key as keyof typeof formData.enSuiteBedroomFeatures] as boolean
+                }
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1649,7 +1653,8 @@ const HostelRoomBathroomDetails: React.FC<HostelRoomBathroomDetailsProps> = ({ f
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prevState) => {
       const updatedForm = { ...prevState };
@@ -1658,7 +1663,7 @@ const HostelRoomBathroomDetails: React.FC<HostelRoomBathroomDetailsProps> = ({ f
       if (keys.length === 2) {
         const [category, key] = keys;
         updatedForm[category] = {
-          ...prevState[category as keyof typeof prevState],
+          ...(prevState[category as keyof typeof prevState] as Record<string, any>),
           [key]: type === 'checkbox' ? checked : value,
         };
       } else {
@@ -1703,7 +1708,7 @@ const HostelRoomBathroomDetails: React.FC<HostelRoomBathroomDetailsProps> = ({ f
               <input
                 type="checkbox"
                 name={`dormRoomType.${key}`}
-                checked={formData.dormRoomType[key as keyof typeof formData.dormRoomType]}
+                checked={formData.dormRoomType[key as keyof typeof formData.dormRoomType] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1730,7 +1735,7 @@ const HostelRoomBathroomDetails: React.FC<HostelRoomBathroomDetailsProps> = ({ f
               <input
                 type="checkbox"
                 name={`dormRoomFeatures.${key}`}
-                checked={formData.dormRoomFeatures[key as keyof typeof formData.dormRoomFeatures]}
+                checked={formData.dormRoomFeatures[key as keyof typeof formData.dormRoomFeatures] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1757,7 +1762,7 @@ const HostelRoomBathroomDetails: React.FC<HostelRoomBathroomDetailsProps> = ({ f
               <input
                 type="checkbox"
                 name={`privateRoomFeatures.${key}`}
-                checked={formData.privateRoomFeatures[key as keyof typeof formData.privateRoomFeatures]}
+                checked={formData.privateRoomFeatures[key as keyof typeof formData.privateRoomFeatures] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1818,7 +1823,8 @@ const BedBreakfastRoomBathroomDetails: React.FC<BedBreakfastRoomBathroomDetailsP
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prev) => {
       const updatedForm = { ...prev };
@@ -1827,7 +1833,7 @@ const BedBreakfastRoomBathroomDetails: React.FC<BedBreakfastRoomBathroomDetailsP
       if (keys.length === 2) {
         const [category, key] = keys;
         updatedForm[category] = {
-          ...prev[category as keyof typeof prev],
+          ...(prev[category as keyof typeof prev] as Record<string, any>),
           [key]: type === 'checkbox' ? checked : value,
         };
       } else {
@@ -1867,7 +1873,7 @@ const BedBreakfastRoomBathroomDetails: React.FC<BedBreakfastRoomBathroomDetailsP
               <input
                 type="checkbox"
                 name={`roomAmenities.${key}`}
-                checked={formData.roomAmenities[key as keyof typeof formData.roomAmenities]}
+                checked={formData.roomAmenities[key as keyof typeof formData.roomAmenities] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1894,7 +1900,7 @@ const BedBreakfastRoomBathroomDetails: React.FC<BedBreakfastRoomBathroomDetailsP
               <input
                 type="checkbox"
                 name={`bathroomAmenities.${key}`}
-                checked={formData.bathroomAmenities[key as keyof typeof formData.bathroomAmenities]}
+                checked={formData.bathroomAmenities[key as keyof typeof formData.bathroomAmenities] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -1963,7 +1969,7 @@ const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsPro
       if (keys.length === 2) {
         const [category, key] = keys;
         updatedForm[category] = {
-          ...prev[category as keyof typeof prev],
+          ...(prev[category as keyof typeof prev] as Record<string, any>),
           [key]: type === 'checkbox' ? checked : value,
         };
       } else {
@@ -2008,7 +2014,7 @@ const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsPro
               <input
                 type="checkbox"
                 name={`roomAmenities.${key}`}
-                checked={formData.roomAmenities[key as keyof typeof formData.roomAmenities]}
+                checked={formData.roomAmenities[key as keyof typeof formData.roomAmenities] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -2036,7 +2042,7 @@ const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsPro
               <input
                 type="checkbox"
                 name={`bathroomAmenities.${key}`}
-                checked={formData.bathroomAmenities[key as keyof typeof formData.bathroomAmenities]}
+                checked={formData.bathroomAmenities[key as keyof typeof formData.bathroomAmenities] as boolean}
                 onChange={handleChange}
                 className="mr-2"
               />
@@ -2156,7 +2162,7 @@ const NearbyAttractionsForm = ({ formType, handleInputChange }) => {
                 <label key={option} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    checked={attraction[option as keyof typeof defaultAttraction] || false}
+                    checked={attraction[option as keyof typeof defaultAttraction] as boolean}
                     onChange={(e) => handleChange(index, option, e.target.checked)}
                     className="w-4 h-4"
                   />

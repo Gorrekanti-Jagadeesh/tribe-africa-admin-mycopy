@@ -76,7 +76,23 @@ type BusinessForm = {
 };
 
 const BusinessFormComponent = () => {
-  const [formData, setFormData] = useState<BusinessForm>({});
+  const [formData, setFormData] = useState<BusinessForm>({
+    businessName: '',
+    businessMotive: '',
+    businessLogo: null as unknown as File,
+    businessAddress: {},
+    businessContactInformation: { socialMedia: { facebook: '', instagram: '', twitter: '', linkedin: '' } },
+    businessCategory: '',
+    businessmoreDetails: '',
+    businessDescription: '',
+    operatingHours: {},
+    paymentMethods: { cash: false, credit_debit_cards: false, digital_wallets: false, bank_transfers: false },
+    ownerContactInformation: { idPhoto: null as unknown as File },
+    consent: false,
+    confirmation: false,
+    signature: '',
+    dateOfSubmit: '',
+  });
   const [showModal, setShowModal] = useState(false);
 
   const {
@@ -88,7 +104,13 @@ const BusinessFormComponent = () => {
     control,
   } = useForm<BusinessForm>({
     defaultValues: {},
+    mode: 'onBlur',
   });
+
+  // Helper function to fix TypeScript errors with dynamic field names
+  const registerDynamicField = (fieldName: string, options?: any) => {
+    return register(fieldName as any, options);
+  };
 
   const onBusinessFormSubmit: SubmitHandler<BusinessForm> = async (data) => {
     try {
@@ -105,7 +127,23 @@ const BusinessFormComponent = () => {
       setTimeout(() => {
         setShowModal(true);
       }, 300); // Delay to allow scrolling to complete
-      setFormData({});
+      setFormData({
+        businessName: '',
+        businessMotive: '',
+        businessLogo: null as unknown as File,
+        businessAddress: {},
+        businessContactInformation: { socialMedia: { facebook: '', instagram: '', twitter: '', linkedin: '' } },
+        businessCategory: '',
+        businessmoreDetails: '',
+        businessDescription: '',
+        operatingHours: {},
+        paymentMethods: { cash: false, credit_debit_cards: false, digital_wallets: false, bank_transfers: false },
+        ownerContactInformation: { idPhoto: null as unknown as File },
+        consent: false,
+        confirmation: false,
+        signature: '',
+        dateOfSubmit: '',
+      });
       // Notify success
     } catch (error) {
       // Handle errors
@@ -146,7 +184,7 @@ const BusinessFormComponent = () => {
         {/* Business Name */}
         <div>
           <CustomInput
-            {...register('businessName')}
+            {...registerDynamicField('businessName')}
             label={'Business Name'}
             placeholder="Business Name"
             error={errors.businessName}
@@ -156,7 +194,7 @@ const BusinessFormComponent = () => {
         {/* Business Motive */}
         <div>
           <CustomInput
-            {...register('businessMotive')}
+            {...registerDynamicField('businessMotive')}
             label={'Business Motive'}
             placeholder="Business Motive"
             error={errors.businessMotive}
@@ -168,32 +206,32 @@ const BusinessFormComponent = () => {
           <label className="font-semibold mt-6">{'Business Address'}</label>
 
           <CustomInput
-            {...register(`businessAddress.street`)}
+            {...registerDynamicField(`businessAddress.street`)}
             // label={'Street Address'}
             placeholder="street"
             error={errors.businessAddress?.street}
           />
           <CustomInput
-            {...register(`businessAddress.city`)}
+            {...registerDynamicField(`businessAddress.city`)}
             // label={'Town/City'}
             placeholder="Town/City"
             error={errors.businessAddress?.city}
           />
           <CustomInput
-            {...register(`businessAddress.region`)}
+            {...registerDynamicField(`businessAddress.region`)}
             //   label={'Business Address'}
             placeholder="State/Region"
             error={errors.businessAddress?.region}
           />
           <CustomInput
-            {...register(`businessAddress.postalCode`)}
+            {...registerDynamicField(`businessAddress.postalCode`)}
             //   label={'Business Address'}
             placeholder="Postal Code (Optional)"
             error={errors.businessAddress?.postalCode}
             required={false}
           />
           <CustomInput
-            {...register(`businessAddress.country`)}
+            {...registerDynamicField(`businessAddress.country`)}
             //   label={'Business Address'}
             placeholder="Country"
             error={errors.businessAddress?.country}
@@ -207,20 +245,22 @@ const BusinessFormComponent = () => {
           <label className="font-semibold mt-6">{'Contact Information'}</label>
 
           <CustomInput
-            {...register('businessContactInformation.phoneNumber', { required: 'Phone number is required' })}
+            {...registerDynamicField('businessContactInformation.phoneNumber', {
+              required: 'Phone number is required',
+            })}
             placeholder="Phone Number (Primary contact number)"
             error={errors.businessContactInformation?.phoneNumber}
             type="number"
           />
           <CustomInput
-            {...register('businessContactInformation.email', { required: 'Email is required' })}
+            {...registerDynamicField('businessContactInformation.email', { required: 'Email is required' })}
             placeholder="Email Address (For inquires and official correspondence)"
             error={errors.businessContactInformation?.email}
             type="email"
           />
 
           <CustomInput
-            {...register('businessContactInformation.website')}
+            {...registerDynamicField('businessContactInformation.website')}
             //   label={'Website (if applicable)'}
             placeholder="Website URL (Provide a link of your official website) Optional"
             error={errors.businessContactInformation?.website}
@@ -230,35 +270,35 @@ const BusinessFormComponent = () => {
           <div className="flex flex-col gap-2">
             <label className="font-semibold">Social Media Links(Add links to your social media profiles)</label>
             <CustomInput
-              {...register('businessContactInformation.socialMedia.facebook')}
+              {...registerDynamicField('businessContactInformation.socialMedia.facebook')}
               placeholder="Facebook Profile"
               error={errors?.businessContactInformation?.socialMedia?.facebook}
               required={false}
               type="url"
             />
             <CustomInput
-              {...register('businessContactInformation.socialMedia.instagram')}
+              {...registerDynamicField('businessContactInformation.socialMedia.instagram')}
               placeholder="Instagram Profile"
               error={errors?.businessContactInformation?.socialMedia?.instagram}
               required={false}
               type="url"
             />
             <CustomInput
-              {...register('businessContactInformation.socialMedia.linkedin')}
+              {...registerDynamicField('businessContactInformation.socialMedia.linkedin')}
               placeholder="Linkedin Profile"
               // error={errors?.socialMedia?.linkedin}
               required={false}
               type="url"
             />
             <CustomInput
-              {...register('businessContactInformation.socialMedia.twitter')}
+              {...registerDynamicField('businessContactInformation.socialMedia.twitter')}
               placeholder="Twitter Profile"
               error={errors?.businessContactInformation?.socialMedia?.twitter}
               required={false}
               type="url"
             />
             <CustomInput
-              {...register('businessContactInformation.socialMedia.twitter')}
+              {...registerDynamicField('businessContactInformation.socialMedia.twitter')}
               placeholder="Tiktok Profile"
               error={errors?.businessContactInformation?.socialMedia?.twitter}
               required={false}
@@ -267,7 +307,7 @@ const BusinessFormComponent = () => {
             {/* Business Type */}
             <div className="flex flex-col gap-2 mt-6 mb-6">
               <CustomSelect
-                {...register('businessCategory', { required: 'Business Type is required' })}
+                {...registerDynamicField('businessCategory', { required: 'Business Type is required' })}
                 placeholder="Business Type"
                 options={businessCategories}
                 label="Business Type"
@@ -279,7 +319,7 @@ const BusinessFormComponent = () => {
               <label className="font-semibold mt-6">Some More Details About The Type of Business:</label>
               <textarea
                 placeholder="(E.g. Cosmetic Store, Juice Factory, Adventure Tour Company)"
-                {...register('businessmoreDetails', {
+                {...registerDynamicField('businessmoreDetails', {
                   required: 'Full Description is required',
                   minLength: {
                     value: 30,
@@ -302,7 +342,7 @@ const BusinessFormComponent = () => {
               <label className="font-semibold mt-6">Describe your Business:</label>
               <textarea
                 placeholder="50 – 500 words detailed description, including services, products, or specialties"
-                {...register('businessDescription', {
+                {...registerDynamicField('businessDescription', {
                   required: 'Full Description is required',
                   minLength: {
                     value: 50,
@@ -329,7 +369,7 @@ const BusinessFormComponent = () => {
                   <label className="font-medium">{day.charAt(0).toUpperCase() + day.slice(1)}</label>
                   <div className="flex space-x-4">
                     <Controller
-                      name={`operatingHours.${day}.start`}
+                      name={`operatingHours.${day}.start` as any}
                       control={control}
                       render={({ field }) => (
                         <input type="time" {...field} className="w-1/2 p-2 border rounded-md" required />
@@ -337,7 +377,7 @@ const BusinessFormComponent = () => {
                     />
                     <span className="text-xl">to</span>
                     <Controller
-                      name={`operatingHours.${day}.end`}
+                      name={`operatingHours.${day}.end` as any}
                       control={control}
                       render={({ field }) => (
                         <input type="time" {...field} className="w-1/2 p-2 border rounded-md" required />
@@ -362,7 +402,7 @@ const BusinessFormComponent = () => {
               ].map(({ key, label }) => (
                 <Checkbox
                   key={key}
-                  {...register(`paymentMethods.${key}`)}
+                  {...registerDynamicField(`paymentMethods.${key}` as any)}
                   label={label}
                   onChange={(e) => handleInputChange(`paymentMethods.${key}`, e)}
                 />
@@ -377,25 +417,25 @@ const BusinessFormComponent = () => {
             {/* Business Owner Contact Details */}
             <div className="flex flex-col gap-2">
               <CustomInput
-                {...register('ownerContactInformation.name')}
+                {...registerDynamicField('ownerContactInformation.name')}
                 label={'Owner/Manager Details (Fill in Details)'}
                 placeholder="Full Name"
                 error={errors.ownerContactInformation?.name}
               />
               <CustomInput
-                {...register(`ownerContactInformation.role`)}
+                {...registerDynamicField(`ownerContactInformation.role`)}
                 //   label={'Business Address'}
                 placeholder="Role (Owner/ Manager)"
                 error={errors.ownerContactInformation?.role}
               />
               <CustomInput
-                {...register(`ownerContactInformation.phoneNumber`)}
+                {...registerDynamicField(`ownerContactInformation.phoneNumber`)}
                 //   label={'Business Address'}
                 placeholder="Phone Number"
                 error={errors.ownerContactInformation?.phoneNumber}
               />
               <CustomInput
-                {...register(`ownerContactInformation.email`)}
+                {...registerDynamicField(`ownerContactInformation.email`)}
                 //   label={'Business Address'}
                 placeholder="Email Address"
                 error={errors.ownerContactInformation?.email}
@@ -415,7 +455,7 @@ const BusinessFormComponent = () => {
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  {...register('consent', {
+                  {...registerDynamicField('consent', {
                     required: 'You must consent that all business details are accurate.',
                   })}
                   className="h-4 w-4 rounded border-gray-400"
@@ -429,7 +469,7 @@ const BusinessFormComponent = () => {
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  {...register('confirmation', {
+                  {...registerDynamicField('confirmation', {
                     required: 'You must confirmation that all business details are accurate.',
                   })}
                   className="h-4 w-4 rounded border-gray-400"
@@ -443,14 +483,17 @@ const BusinessFormComponent = () => {
               <Input
                 type="text"
                 name="signature"
-                {...register('signature')}
+                {...registerDynamicField('signature')}
                 placeholder="Type your full name for electronic signature"
               />
             </div>
 
             <label className="font-semibold">Date (DD/MM/YYYY)</label>
             <div className="mt-4">
-              <DateInput {...register('dateOfSubmit')} onChange={(e) => handleInputChange('dateOfSubmit', e)} />
+              <DateInput
+                {...registerDynamicField('dateOfSubmit')}
+                onChange={(e) => handleInputChange('dateOfSubmit', e)}
+              />
             </div>
             <Button className="my-14 px-4" type="submit">
               Submit
@@ -492,7 +535,7 @@ const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
           Your information has been successfully submitted.
           <br />
           <br />
-          Our team will review your business’s details within <b>3–5 business days</b>. Once approved, your Business
+          Our team will review your business's details within <b>3–5 business days</b>. Once approved, your Business
           will be listed on the <b>Tribe Africa Pages directory</b>. You will receive a confirmation email with a link
           to your live listing.
           <br />
