@@ -1,5 +1,5 @@
 import { strict } from 'assert';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
 import DynamicFields from '@atoms/input-elements/dynamic-fields';
@@ -16,6 +16,8 @@ import { uploadImage } from '@api/index';
 import sanityClient from '@/sanityClient';
 import { generateId } from '@utils/common';
 import { deepMerge } from '@/utils/common';
+import Input from '@/atoms/input-elements/input';
+import DateInput from '@/atoms/input-elements/date-input';
 
 type BusinessForm = {
   businessName: string;
@@ -53,47 +55,29 @@ type BusinessForm = {
     saturday?: { start: string; end: string };
     sunday?: { start: string; end: string };
   };
-  paymentMethods: string[];
-
+  paymentMethods: {
+    cash: boolean;
+    credit_debit_cards: boolean;
+    digital_wallets: boolean;
+    bank_transfers: boolean;
+    other?: string; // If "Other" is selected, specify the method
+  };
   ownerContactInformation: {
-    fullName?: string;
+    name?: string;
     role?: string;
     phoneNumber?: string;
     email?: string;
     idPhoto: File;
   };
   consent: boolean;
-  accuracy: boolean;
+  confirmation: boolean;
   signature: string;
-  date: string;
+  dateOfSubmit: string;
 };
 
-// type openingHours = {
-//   { day: string, openingTime: , closingTime: '' }
-// }
 const BusinessFormComponent = () => {
-  const [formData, setFormData] = useState<BusinessForm>({
-    businessName: '',
-    businessMotive: '',
-    businessLogo: null,
-    businessAddress: {},
-    businessContactInformation: {
-      phoneNumber: '',
-      email: '',
-      website: '',
-      socialMedia: { facebook: '', instagram: '', twitter: '', linkedin: '' },
-    },
-    businessCategory: '',
-    businessmoreDetails: '',
-    businessDescription: '',
-    operatingHours: {},
-    paymentMethods: [],
-    ownerContactInformation: { fullName: '', role: '', phoneNumber: '', email: '', idPhoto: null },
-    consent: false,
-    accuracy: false,
-    signature: '',
-    date: '',
-  });
+  const [formData, setFormData] = useState<BusinessForm>({});
+  const [showModal, setShowModal] = useState(false);
 
   const {
     register,
@@ -106,44 +90,58 @@ const BusinessFormComponent = () => {
     defaultValues: {},
   });
 
-  const handleChange = (field: string, value: string | number | boolean | File) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const onBusinessFormSubmit: SubmitHandler<BusinessForm> = async (data) => {
+    try {
+      // Display loader
+      var newData = deepMerge(formData, data);
+      var newData1 = {
+        _type: 'businessType',
+        _id: `drafts.${generateId()}`,
+        ...newData,
+      };
+      await sanityClient.create(newData1);
+      console.log('-------Final Data', newData);
+      // document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        setShowModal(true);
+      }, 300); // Delay to allow scrolling to complete
+      setFormData({});
+      // Notify success
+    } catch (error) {
+      // Handle errors
+      console.error('Error submitting event:', error);
+      alert('Failed to submit event. Please try again.');
+    } finally {
+      // Hide loader
+      // setLoader(false);
+    }
   };
 
-  const onBusinessFormSubmit: SubmitHandler<BusinessForm> = async (data) => {
-    // try {
-    //   // Display loader
-    //   var newData = deepMerge(data, formData);
-    //   var newData1 = {
-    //     _type: 'afterWorkListing',
-    //     _id: `drafts.${generateId()}`,
-    //     ...newData,
-    //   };
-    //   await sanityClient.create(newData1);
-    //   console.log('-------Final Data', newData);
-    //   document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
-    //   setTimeout(() => {
-    //     setShowModal(true);
-    //   }, 300); // Delay to allow scrolling to complete
-    //   setFormData({});
-    //   // Notify success
-    // } catch (error) {
-    //   // Handle errors
-    //   console.error('Error submitting event:', error);
-    //   alert('Failed to submit event. Please try again.');
-    // } finally {
-    //   // Hide loader
-    //   // setLoader(false);
-    // }
+  const handleInputChange = (field, value) => {
+    // console.log('------- handleInputChange', field, value);
+
+    setFormData((prev) => {
+      const newData = JSON.parse(JSON.stringify(prev)); // Deep clone
+      const keys = field.split('.'); // e.g. "priceRange.budget" -> ["priceRange", "budget"]
+      let current = newData;
+
+      keys.forEach((key, index) => {
+        if (index === keys.length - 1) {
+          current[key] = value; // Set value at the final key
+        } else {
+          if (!current[key] || typeof current[key] !== 'object') {
+            current[key] = {}; // Ensure nested object exists
+          }
+          current = current[key]; // Move deeper
+        }
+      });
+      return newData; // Return a new object to trigger React re-render
+    });
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">Create a Business</h2>
-
       <form onSubmit={handleSubmit(onBusinessFormSubmit)}>
         {/* Business Name */}
         <div>
@@ -158,7 +156,7 @@ const BusinessFormComponent = () => {
         {/* Business Motive */}
         <div>
           <CustomInput
-            {...register('businessName')}
+            {...register('businessMotive')}
             label={'Business Motive'}
             placeholder="Business Motive"
             error={errors.businessMotive}
@@ -278,17 +276,40 @@ const BusinessFormComponent = () => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="font-semibold mt-6">Full Description:</label>
+              <label className="font-semibold mt-6">Some More Details About The Type of Business:</label>
               <textarea
-                placeholder="100 - 500 words – detailed description including ambiance, offerings, and specialties"
+                placeholder="(E.g. Cosmetic Store, Juice Factory, Adventure Tour Company)"
+                {...register('businessmoreDetails', {
+                  required: 'Full Description is required',
+                  minLength: {
+                    value: 30,
+                    message: 'Details must be at least 100 characters',
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: 'Full Description must not exceed 1000 characters',
+                  },
+                })}
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={5} // Bigger area
+                onChange={(e) => setValue('businessmoreDetails', e.target.value)}
+              />
+              {errors.businessmoreDetails && (
+                <p className="text-red-500 text-sm">{errors.businessmoreDetails.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold mt-6">Describe your Business:</label>
+              <textarea
+                placeholder="50 – 500 words detailed description, including services, products, or specialties"
                 {...register('businessDescription', {
                   required: 'Full Description is required',
                   minLength: {
-                    value: 500,
+                    value: 50,
                     message: 'Full Description must be at least 500 characters',
                   },
                   maxLength: {
-                    value: 1000,
+                    value: 500,
                     message: 'Full Description must not exceed 1000 characters',
                   },
                 })}
@@ -300,14 +321,251 @@ const BusinessFormComponent = () => {
                 <p className="text-red-500 text-sm">{errors.businessDescription.message}</p>
               )}
             </div>
+
+            <div className="flex flex-col gap-2 mt-6">
+              <label className="font-semibold">Operating Hours</label>
+              {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
+                <div key={day} className="flex flex-col gap-2">
+                  <label className="font-medium">{day.charAt(0).toUpperCase() + day.slice(1)}</label>
+                  <div className="flex space-x-4">
+                    <Controller
+                      name={`operatingHours.${day}.start`}
+                      control={control}
+                      render={({ field }) => (
+                        <input type="time" {...field} className="w-1/2 p-2 border rounded-md" required />
+                      )}
+                    />
+                    <span className="text-xl">to</span>
+                    <Controller
+                      name={`operatingHours.${day}.end`}
+                      control={control}
+                      render={({ field }) => (
+                        <input type="time" {...field} className="w-1/2 p-2 border rounded-md" required />
+                      )}
+                    />
+                  </div>
+                  {errors.operatingHours?.[day] && (
+                    <span className="text-red-500 text-xs">Please provide valid times</span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-2 mt-6">
+              <label className="font-semibold">Payment Methods (Select all that apply)</label>
+              {[
+                { key: 'cash', label: 'Cash' },
+                { key: 'credit_debit_cards', label: 'Credit/Debit Cards' },
+                { key: 'digital_wallets', label: 'Digital Wallets (e.g., PayPal, Apple Pay)' },
+                { key: 'bank_transfers', label: 'Bank Transfers' },
+                { key: 'other', label: 'Other' },
+              ].map(({ key, label }) => (
+                <Checkbox
+                  key={key}
+                  {...register(`paymentMethods.${key}`)}
+                  label={label}
+                  onChange={(e) => handleInputChange(`paymentMethods.${key}`, e)}
+                />
+              ))}
+            </div>
+
+            <SingleImageUpload
+              fieldName="businessLogo"
+              title="Upload Your Business Logo (JPEG, PNG, or SVG files only)"
+              handleInputChange={handleInputChange}
+            />
+            {/* Business Owner Contact Details */}
+            <div className="flex flex-col gap-2">
+              <CustomInput
+                {...register('ownerContactInformation.name')}
+                label={'Owner/Manager Details (Fill in Details)'}
+                placeholder="Full Name"
+                error={errors.ownerContactInformation?.name}
+              />
+              <CustomInput
+                {...register(`ownerContactInformation.role`)}
+                //   label={'Business Address'}
+                placeholder="Role (Owner/ Manager)"
+                error={errors.ownerContactInformation?.role}
+              />
+              <CustomInput
+                {...register(`ownerContactInformation.phoneNumber`)}
+                //   label={'Business Address'}
+                placeholder="Phone Number"
+                error={errors.ownerContactInformation?.phoneNumber}
+              />
+              <CustomInput
+                {...register(`ownerContactInformation.email`)}
+                //   label={'Business Address'}
+                placeholder="Email Address"
+                error={errors.ownerContactInformation?.email}
+                required={false}
+              />
+
+              <SingleImageUpload
+                fieldName="ownerContactInformation.idPhoto"
+                title="Upload Passport/ID:"
+                handleInputChange={handleInputChange}
+              />
+            </div>
+
+            {/* Business Details Confirmation checkboxes */}
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Consent to Listing:</label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  {...register('consent', {
+                    required: 'You must consent that all business details are accurate.',
+                  })}
+                  className="h-4 w-4 rounded border-gray-400"
+                />
+                I consent to my business information being listed in the Yellow Pages Directory.
+              </label>
+              {errors.consent && <span className="text-red-500 text-xs">{errors.consent?.message}</span>}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Accuracy Verification:</label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  {...register('confirmation', {
+                    required: 'You must confirmation that all business details are accurate.',
+                  })}
+                  className="h-4 w-4 rounded border-gray-400"
+                />
+                I confirm that the information provided is accurate to the best of my knowledge.
+              </label>
+              {errors.confirmation && <span className="text-red-500 text-xs">{errors.confirmation?.message}</span>}
+            </div>
+            <label className="font-semibold mt-4">Signature</label>
+            <div className="mb-4">
+              <Input
+                type="text"
+                name="signature"
+                {...register('signature')}
+                placeholder="Type your full name for electronic signature"
+              />
+            </div>
+
+            <label className="font-semibold">Date (DD/MM/YYYY)</label>
+            <div className="mt-4">
+              <DateInput {...register('dateOfSubmit')} onChange={(e) => handleInputChange('dateOfSubmit', e)} />
+            </div>
+            <Button className="my-14 px-4" type="submit">
+              Submit
+            </Button>
           </div>
         </div>
       </form>
+      {showModal && <SubmissionModal onClose={() => setShowModal(false)} />}{' '}
     </div>
   );
 };
 
 export default BusinessFormComponent;
+
+interface ModalProps {
+  onClose: () => void;
+}
+
+const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
+  // useEffect(() => {
+  //   document.body.style.overflow = 'hidden'; // Disable scrolling
+
+  //   return () => {
+  //     document.body.style.overflow = 'auto'; // Restore scrolling on unmount
+  //   };
+  // }, []);
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-lg p-6 w-4/5 max-w-lg relative" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+          ✖
+        </button>
+
+        <h2 className="text-xl font-semibold mb-3">Thank You for Your Submission!</h2>
+        <hr className="border-orange-500 mb-3" />
+
+        <p className="text-gray-700">
+          Your information has been successfully submitted.
+          <br />
+          <br />
+          Our team will review your business’s details within <b>3–5 business days</b>. Once approved, your Business
+          will be listed on the <b>Tribe Africa Pages directory</b>. You will receive a confirmation email with a link
+          to your live listing.
+          <br />
+          <br />
+          If you have any questions or need assistance, feel free to reach out to us at <b>support@tribeafrica.org</b>.
+          <br />
+          <br />
+          Thank you for choosing the Tribe Africa Pages to promote your business!
+        </p>
+
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+interface SingleImageUploadProps {
+  handleInputChange: (field: string, value: any) => void;
+  fieldName: string;
+  title: string;
+}
+
+const SingleImageUpload: React.FC<SingleImageUploadProps> = ({ handleInputChange, fieldName, title }) => {
+  const [image, setImage] = useState<{ preview: string; _id: string } | null>(null);
+
+  useEffect(() => {
+    // Reset image state when formType changes
+    setImage(null);
+    handleInputChange(fieldName, null);
+  }, []);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    const file = e.target.files[0];
+    const previewURL = URL.createObjectURL(file); // Temporary preview
+
+    try {
+      const uploadedImage = await uploadImage(file); // Upload function
+      if (!uploadedImage?._id) throw new Error('Upload failed');
+
+      const imageData = {
+        preview: previewURL,
+        _id: uploadedImage._id, // Sanity Image _id
+      };
+
+      setImage(imageData);
+
+      handleInputChange(fieldName, {
+        _type: 'image',
+        asset: { _ref: uploadedImage._id },
+      });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      setImage(null);
+      handleInputChange(fieldName, null);
+    }
+  };
+
+  return (
+    <div className="mt-6 mb-6">
+      <label className="font-semibold mr-4">{title}</label>
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      {image && <img src={image.preview} alt="Preview" className="w-20 h-20 object-cover mt-2" />}
+    </div>
+  );
+};
 
 const businessCategories = [
   { value: 'accommodations', label: 'Accommodations' },
