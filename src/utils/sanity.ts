@@ -39,7 +39,7 @@ export const query = {
           return `*[_type == "findABusiness" && country == "${country}" && mainCategory == "${mainCategory}"]`;
         }
       },
-      FIND_A_BUSINESS_DETAILS: (id) => `*[_type == "findABusiness" && _id == "${id}"]`,
+      FIND_A_BUSINESS_DETAILS: (id) => `*[_type == "findABusiness" && _id == "${id}"][0]`,
     },
   },
   COUNTRY: {
