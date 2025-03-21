@@ -173,7 +173,7 @@ export const CountriesGeoData: Record<string, CountryDataType> = {
   'south-africa': {
     center: [24.9916, -30.5595],
     markers: [
-      { name: 'Johannesburg', coordinates: [28.0473, -26.2041], category: 'Cities' },
+      { name: 'Johannesburg', coordinates: [28.0473, -26.20410], category: 'Cities' },
       { name: 'Cape Town', coordinates: [18.4241, -33.9249], category: 'Cities' },
       { name: 'Durban', coordinates: [31.0218, -29.8587], category: 'Cities' },
       { name: 'Kruger National Park', coordinates: [31.4857, -23.9884], category: 'Nature' },
