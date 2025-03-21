@@ -6,11 +6,17 @@ import Close from '@atoms/custom-button/close-button';
 interface DynamicFormProps {
   setValue: (value: string[]) => void;
   max?: number;
+  formType?: string; // Accept formType as a prop
 }
 
-const DynamicFields: React.FC<DynamicFormProps> = ({ setValue, max = 6 }) => {
+const DynamicFields: React.FC<DynamicFormProps> = ({ setValue, max = 6, formType }) => {
   const [fields, setFields] = useState<string[]>([]);
   const prevFieldsRef = useRef<string[]>([]);
+
+  // Reset fields when formType changes
+  useEffect(() => {
+    setFields([]);
+  }, [formType]);
 
   // Function to add a new field
   const addField = useCallback(() => {
@@ -41,6 +47,7 @@ const DynamicFields: React.FC<DynamicFormProps> = ({ setValue, max = 6 }) => {
         {fields.map((value, index) => (
           <div key={index} className="flex gap-2">
             <Input
+              required={true}
               type="text"
               value={value}
               placeholder={`Highlight ${index + 1}`}

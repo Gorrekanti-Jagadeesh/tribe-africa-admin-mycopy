@@ -41,9 +41,13 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
                             <li
                               key={index}
                               onClick={() => {
+                                console.log(
+                                  '------',
+                                  `/${toKebabCase(country)}/business/${toKebabCase(eachCategory.label)}/${item.title}`
+                                );
                                 if (toKebabCase(eachCategory.label) === 'accommodation') {
                                   return navigation(
-                                    `/${toKebabCase(country)}/business/${toKebabCase(eachCategory.label)}/${toKebabCase(item.title)}`
+                                    `/${toKebabCase(country)}/business/${toKebabCase(eachCategory.label)}/${item.title}`
                                   );
                                   // return navigation(`/${country}/business/details/${toKebabCase(item.title)}`);
                                 }
@@ -148,6 +152,7 @@ const Network: React.FC<{ country: string }> = ({ country }) => {
   if (eventsDataLoading || networkDataLoading) return <Loading />;
   if (eventsDataError || networkDataError) return <div>Error Loading Data</div>;
 
+  // console.log('-----networkData', networkData)
   return (
     <div>
       <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState, useEffect } from 'react';
 
 export const Select = forwardRef<
   HTMLSelectElement,
@@ -10,28 +10,28 @@ export const Select = forwardRef<
     error?: string;
     className?: string;
     required?: boolean;
+    formType?: string; // Accept formType as a prop
+    value?: string | number; // Accept value as a prop
     props?: React.HTMLAttributes<HTMLSelectElement>;
   }
->(({ options, name, onChange, placeholder, error, className, required, ...props }, ref) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [selected, setSelected] = useState(false);
+>(({ options, name, onChange, placeholder, error, className, required, formType, value, ...props }, ref) => {
+  const [selectedValue, setSelectedValue] = useState<string | number | ''>('');
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => {
-    if (!selected) setIsFocused(true);
-  };
+  // Reset selected value when formType changes
+  useEffect(() => {
+    setSelectedValue('');
+  }, [formType]);
 
   return (
     <div className={`relative ${className}`}>
       <select
         ref={ref}
         name={name}
+        value={selectedValue}
         onChange={(e) => {
-          setSelected(true);
+          setSelectedValue(e.target.value);
           if (onChange) onChange(e.target.value);
         }}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
         required={required}
         {...props}
         className={`p-2 block w-full bg-transparent border outline-none rounded-md focus:border-orange-500 
@@ -49,7 +49,7 @@ export const Select = forwardRef<
       <label
         htmlFor={name}
         className={`absolute duration-300 top-3 left-2.5 origin-0 z-10 bg-white transition-all cursor-text
-          ${isFocused || selected ? '-translate-y-5 scale-75 text-sm text-orange-500 px-2 left-0' : ''}`}
+          ${selectedValue ? '-translate-y-5 scale-75 text-sm text-orange-500 px-2 left-0' : ''}`}
       >
         {placeholder}
       </label>

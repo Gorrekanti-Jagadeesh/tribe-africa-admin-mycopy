@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { uploadImage } from '../../api';
 import { useParams } from 'react-router-dom';
-import AccomodationDetailsScreen from './accomodation-details-screen';
+import AfterWorkDetailsScreen from './afterwork-details-screen';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { UploadBody } from '@sanity/client';
@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { query, sanity } from '@utils/sanity';
 import { appendToAverage } from '@utils/common';
 
-const AccommodationDetailsContainer = () => {
+const AfterWorkDetailsContainer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -22,8 +22,8 @@ const AccommodationDetailsContainer = () => {
   };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['accommodation_details'],
-    queryFn: () => sanity.GET(query.ACCOMMODATION.DETAILS(categoryInfoId)),
+    queryKey: ['after_work_details'],
+    queryFn: () => sanity.GET(`*[_type == "afterWorkListing" && _id == "${categoryInfoId}"][0]`),
   });
 
   const { data: reviews } = useQuery({
@@ -33,7 +33,7 @@ const AccommodationDetailsContainer = () => {
 
   const { control, handleSubmit } = useForm();
 
-  console.log('------ details', data);
+  console.log('------ after work details', categoryInfoId, data);
   const onSubmit = async (formData: Record<string, number>) => {
     if (
       !formData.quality_of_service ||
@@ -146,7 +146,7 @@ const AccommodationDetailsContainer = () => {
 
   return (
     <div>
-      <AccomodationDetailsScreen
+      <AfterWorkDetailsScreen
         hostel={data}
         reviews={reviews}
         onSubmit={handleSubmit(onSubmit)}
@@ -159,4 +159,4 @@ const AccommodationDetailsContainer = () => {
   );
 };
 
-export default AccommodationDetailsContainer;
+export default AfterWorkDetailsContainer;

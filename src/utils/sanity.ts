@@ -55,10 +55,10 @@ export const query = {
     },
   },
   ACCOMMODATION: {
-    LIST: `*[_type == "accommodation"]{
+    LIST: `*[_type == "accomodationList"]{
       _id, name, phone_no, website, amount, images[0], reviews
     }`,
-    DETAILS: (id: string) => `*[_type == "accommodation" && _id == "${id}"][0]`,
+    DETAILS: (id: string) => `*[_type == "accomodationList" && _id == "${id}"][0]`,
   },
   REVIEWS: {
     ACCOMMODATION: (id: string) => `*[_type == "review" && key == "review:accommodation:${id}"]`,

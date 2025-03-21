@@ -55,7 +55,8 @@ export interface AccommodationFormInputs {
     cancellation: {
       freeCancellation: boolean;
       nonRefundable: boolean;
-      description?: string;
+      customPolicyEnabled: boolean;
+      customPolicyText?: string;
     };
     securityDeposit: {
       hasDeposit: boolean;
@@ -902,27 +903,80 @@ export const propertyTypes = {
   },
 };
 
+export const accommodationTypes = [
+  {
+    label: 'Select Accommodation Type', // Default option
+    value: '',
+  },
+  {
+    label: 'Hotel',
+    value: 'hotel',
+  },
+  {
+    label: 'Hostel',
+    value: 'hostel',
+  },
+  {
+    label: 'Bed & Breakfast',
+    value: 'bed-and-breakfast',
+  },
+  {
+    label: 'Co-Living',
+    value: 'co-living',
+  },
+  {
+    label: 'Resort',
+    value: 'resort',
+  },
+  {
+    label: 'Campground',
+    value: 'campground',
+  },
+  {
+    label: 'Vacation Rental',
+    value: 'vacation-rental',
+  },
+];
+
+export const getAccommodationLabel = (value: string): string => {
+  const accommodation = accommodationTypes.find((type) => type.value === value);
+  return accommodation ? accommodation.label : 'Unknown'; // Default to "Unknown" if not found
+};
+
+export const accommodationRoomTypes = [
+  { value: 'hotelResortsbathroomDetails', key: 'hotel' },
+  { value: 'hotelResortsbathroomDetails', key: 'resort' }, // Mapping "resort" to the same value as "hotel"
+  { value: 'bedBreakfastRoomBathroomDetails', key: 'bed-and-breakfast' },
+  { value: 'hostelRoomBathroomDetails', key: 'hostel' },
+  { value: 'coLivingRoomBathroomDetails', key: 'co-living' },
+  { value: 'vacationRentalRoomBathroomDetails', key: 'vacation-rental' },
+];
+
+export const getAccommodationRoomType = (key: string): string | undefined => {
+  return accommodationRoomTypes.find((item) => item.key === key)?.value;
+};
+
 export const formCategories: { [key: string]: { label: string; value: string }[] } = {
   hotel: [
     { label: 'Exterior', value: 'exterior' },
     { label: 'Lobby', value: 'lobby' },
     { label: 'Common Areas', value: 'commonAreas' },
     { label: 'Rooms', value: 'rooms' },
-    { label: 'Amenities', value: 'amenities' },
+    { label: 'Amenities (Pool, spa, gym, restaurants, etc.)', value: 'amenities' },
   ],
   resort: [
     { label: 'Exterior', value: 'exterior' },
     { label: 'Lobby', value: 'lobby' },
     { label: 'Common Areas', value: 'commonAreas' },
     { label: 'Rooms', value: 'rooms' },
-    { label: 'Amenities', value: 'amenities' },
+    { label: 'Amenities (Pool, spa, gym, restaurants, etc.)', value: 'amenities' },
   ],
   'bed-and-breakfast': [
     { label: 'Exterior', value: 'exterior' },
     { label: 'Lobby', value: 'lobby' },
     { label: 'Common Areas', value: 'commonAreas' },
     { label: 'Rooms', value: 'rooms' },
-    { label: 'Amenities', value: 'amenities' },
+    { label: 'Amenities (Pool, spa, gym, restaurants, etc.)', value: 'amenities' },
   ],
   hostel: [
     { label: 'Exterior', value: 'exterior' },
@@ -981,7 +1035,7 @@ export const generalAmenities = [
   { label: 'Chapel', value: 'chapel' },
   { label: 'Garden', value: 'garden' },
   { label: 'Terrace', value: 'terrace' },
-  { label: 'Other (Specify)', value: 'otherSpecify' },
+  { label: 'Other (Add additional amenities if not listed)', value: 'otherSpecify' },
 ];
 
 export const generalAmenitiesOptionsForHostelnCoLiving = [
@@ -1112,7 +1166,7 @@ export const specialMenusOptions = [
   { label: 'Vegan', value: 'vegan' },
   { label: 'Halal', value: 'halal' },
   { label: 'Kosher', value: 'kosher' },
-  { label: 'Other (Specify)', value: 'otherSpecify' },
+  // { label: 'Other (Specify)', value: 'otherSpecify' },
 ];
 export const wellnessRecreationalOptions = [
   { label: 'Indoor Swimming Pool', value: 'indoorSwimmingPool' },
@@ -1286,46 +1340,46 @@ export const policyLabels: Record<string, string> = {
 
 export const priceRangeOptions: Record<string, { key: string; label: string }[]> = {
   hotel: [
-    { key: 'budget', label: 'Budget (e.g.: $20 - $50 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g.: $50 - $150 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g.: $150 - $300 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g.: $300+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g.: $20 - $50 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g.: $50 - $150 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g.: $150 - $300 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g.: $300+ per night)' },
   ],
   resort: [
-    { key: 'budget', label: 'Budget (e.g.: $20 - $50 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g.: $50 - $150 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g.: $150 - $300 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g.: $300+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g.: $20 - $50 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g.: $50 - $150 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g.: $150 - $300 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g.: $300+ per night)' },
   ],
   'bed-and-breakfast': [
-    { key: 'budget', label: 'Budget (e.g.: $20 - $50 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g.: $50 - $150 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g.: $150 - $300 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g.: $300+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g.: $20 - $50 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g.: $50 - $150 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g.: $150 - $300 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g.: $300+ per night)' },
   ],
   hostel: [
-    { key: 'budget', label: 'Budget (e.g., $10 - $20 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g., $20 - $50 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g., $50 - $100 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g., $100+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g., $10 - $20 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g., $20 - $50 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g., $50 - $100 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g., $100+ per night)' },
   ],
   'co-living': [
-    { key: 'budget', label: 'Budget (e.g., $10 - $30 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g., $30 - $70 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g., $70 - $150 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g., $150+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g., $10 - $30 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g., $30 - $70 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g., $70 - $150 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g., $150+ per night)' },
   ],
   campground: [
-    { key: 'budget', label: 'Budget (e.g., $10 - $25 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g., $25 - $50 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g., $50 - $100 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g., $100+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g., $10 - $25 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g., $25 - $50 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g., $50 - $100 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g., $100+ per night)' },
   ],
   'vacation-rental': [
-    { key: 'budget', label: 'Budget (e.g., $30 - $70 per night)' },
-    { key: 'midRange', label: 'Mid-range (e.g., $70 - $150 per night)' },
-    { key: 'upScale', label: 'Upscale (e.g., $150 - $300 per night)' },
-    { key: 'luxury', label: 'Luxury (e.g., $300+ per night)' },
+    { key: 'budget', label: '$: Budget (e.g., $30 - $70 per night)' },
+    { key: 'midRange', label: '$$: Mid-range (e.g., $70 - $150 per night)' },
+    { key: 'upScale', label: '$$$: Upscale (e.g., $150 - $300 per night)' },
+    { key: 'luxury', label: '$$$$: Luxury (e.g., $300+ per night)' },
   ],
 };
 
@@ -1496,7 +1550,15 @@ export const amenitiesMapping: Record<string, Record<string, any>> = {
   },
 };
 
-export const getAmenitiesConfig = (formType: string, amenityType: string) => {
+export const getAmenitiesConfig = (formType: string, amenityType?: string) => {
   const key = formType;
-  return amenitiesMapping[key]?.[amenityType];
+  const config = amenitiesMapping[key]?.[amenityType];
+
+  if (!config) {
+    // If amenityType is not found, return the 'zero' field from the first available amenity
+    const firstAmenity = Object.values(amenitiesMapping[key] || {})[0];
+    return firstAmenity ? firstAmenity.zero : null;
+  }
+
+  return config;
 };

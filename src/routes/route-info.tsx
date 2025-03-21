@@ -29,6 +29,9 @@ import CreateBusinessForm from '@/molecules/forms/business-creation-form';
 import ProfessionalDataForm from '@/molecules/forms/proffessional-form';
 import UserDashboardContainer from '@/pages/user-dashboard/user-dashboard-container';
 import AfterWorkFrom from '@/molecules/forms/after-work-form';
+import AfterWorkContainer from '@/pages/afterWork/afterwork-container';
+import AfterWorkDetailsContainer from '@/pages/afterWork/afterwork-details-container';
+import BusinessFormComponent from '@/molecules/forms/business-creation-form';
 
 export interface RouteConfig {
   name: string;
@@ -66,6 +69,16 @@ const appRoutes: RouteConfig[] = [
     name: 'Accommodations List',
     path: ':country/:pageType/:category/:sub_category',
     element: <AccomodationContainer />,
+  },
+  {
+    name: 'AfterWork',
+    path: '/:country/:pageType/:category/afterwork/:sub_category/:categoryInfoId/',
+    element: <AfterWorkDetailsContainer />,
+  },
+  {
+    name: 'AfterWork List',
+    path: ':country/:pageType/:category/afterwork/:sub_category',
+    element: <AfterWorkContainer />,
   },
   {
     name: 'events',
@@ -171,6 +184,11 @@ const appRoutes: RouteConfig[] = [
     name: 'hotel form',
     path: '/form',
     element: <AccommodationForm />,
+  },
+  {
+    name: 'Business form',
+    path: '/business-form',
+    element: <BusinessFormComponent />,
   },
   {
     name: 'find a business screen',

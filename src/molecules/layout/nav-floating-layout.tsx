@@ -11,11 +11,13 @@ const NavFloatingLayout: React.FC<{
     icon: [];
     hasSubcategories: boolean;
     subcategories: string[];
+    formType?: number;
   }>;
   heading: string;
   country: string;
   pageType: string;
 }> = ({ categories, heading, country, pageType }) => {
+  console.log('------------', categories, heading, country, pageType);
   const navigation = useNavigate();
   return (
     <div className="p-2 md:p-3">
@@ -41,11 +43,31 @@ const NavFloatingLayout: React.FC<{
                   each.subcategories.map((item, index) => (
                     <p
                       key={index}
-                      onClick={() =>
-                        navigation(`/${country}/${pageType}/${toKebabCase(each.category)}/${toKebabCase(item)}`)
-                      }
+                      onClick={() => {
+                        const subcategory = typeof item === 'object' ? item?.value : toKebabCase(item);
+                        console.log(
+                          'After work route',
+                          `/${country}/${pageType}/${toKebabCase(each.category)}/afterwork/${subcategory}`
+                        );
+                        // Handle both object and string cases
+
+                        if (heading === 'After Work') {
+                          if (each?.formType == 1) {
+                            navigation(
+                              `/${country}/${pageType}/${toKebabCase(each.category)}/afterwork/${subcategory}`
+                            );
+                          } else {
+                            navigation(
+                              `/${country}/${pageType}/find-a-business/${toKebabCase(each.category)}/${subcategory}`
+                            );
+                          }
+                        } else {
+                          navigation(`/${country}/${pageType}/${toKebabCase(each.category)}/${subcategory}`);
+                        }
+                      }}
                     >
-                      {item}
+                      {typeof item === 'object' ? item?.title : item}{' '}
+                      {/* Print title if object, otherwise print string */}
                     </p>
                   ))}
               </div>
@@ -54,6 +76,8 @@ const NavFloatingLayout: React.FC<{
             mainCategory={each.category}
             country={country}
             pageType={pageType}
+            heading={heading}
+            formType={each?.formType}
             // offset="parent"
           />
         ))}

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import sanityClient from '../../sanityClient';
 import Input from '@atoms/input-elements/input';
@@ -25,6 +25,7 @@ import {
   locationTypes,
   propertyTypes,
   AccommodationFormInputs,
+  accommodationTypes,
 } from '@/data/amanitieConfig';
 
 const FormContext = createContext(null);
@@ -33,6 +34,7 @@ const AccommodationForm: React.FC = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<AccommodationFormInputs>({
     defaultValues: {},
@@ -40,6 +42,12 @@ const AccommodationForm: React.FC = () => {
 
   const [formType, setFormType] = useState(null);
   const [formData, setFormData] = useState({});
+  const [showModal, setShowModal] = useState(false);
+
+  // useEffect(() => {
+  //   reset();
+  //   setFormData({});
+  // }, [formType]);
 
   const handleInputChange = (field, value) => {
     // console.log('------- handleInputChange', field, value);
@@ -64,16 +72,33 @@ const AccommodationForm: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<AccommodationFormInputs> = async (data) => {
-    var newData = deepMerge(data, formData);
-    var newData1 = {
-      _type: 'accommodation',
-      _id: `drafts.${generateId()}`,
-      ...newData,
-    };
-    // console.log('-------Final Data', newData1);
+    try {
+      var newData = deepMerge(data, formData);
+      var newData1 = {
+        _type: 'accomodationList',
+        _id: `drafts.${generateId()}`,
+        ...newData,
+      };
 
-    await sanityClient.create(newData1);
+      console.log('-------Final Data', newData1);
+      await sanityClient.create(newData1);
+
+      // Delay modal slightly to ensure scroll happens first
+      document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        setShowModal(true);
+      }, 300); // Delay to allow scrolling to complete
+
+      reset();
+      setFormData({});
+      setFormType('');
+    } catch (error) {
+      console.error('Submission failed:', error);
+      alert('An error occurred while submitting. Please try again.');
+    }
   };
+
+  console.log('-------new Data', formData);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -86,46 +111,17 @@ const AccommodationForm: React.FC = () => {
               {formType === 'vacation-rental' ? 'Accommodation Type' : 'Property Type'}
             </label>{' '}
             <Select
+              required={true}
               className="mt-2 mb-4"
               name="accommodation_type"
               placeholder="Accommodation type"
-              options={[
-                {
-                  label: 'Select Accommodation Type', // Default option
-                  value: '',
-                },
-                {
-                  label: 'Hotel',
-                  value: 'hotel',
-                },
-                {
-                  label: 'Hostel',
-                  value: 'hostel',
-                },
-                {
-                  label: 'Bed & Breakfast',
-                  value: 'bed-and-breakfast',
-                },
-                {
-                  label: 'Co-Living',
-                  value: 'co-living',
-                },
-                {
-                  label: 'Resort',
-                  value: 'resort',
-                },
-                {
-                  label: 'Campground',
-                  value: 'campground',
-                },
-                {
-                  label: 'Vacation Rental',
-                  value: 'vacation-rental',
-                },
-              ]}
+              options={accommodationTypes}
               value={formType || ''}
               onChange={(value) => {
+                reset(); // Reset form fields
+
                 setFormData({});
+
                 setFormType(value);
                 handleInputChange('accommodation_type', value || '');
               }}
@@ -135,22 +131,24 @@ const AccommodationForm: React.FC = () => {
           {/* Name */}
           <div>
             <label className="font-semibold">{nameLabels[formType] || 'Property Name'}</label>
-            <Input type="text" {...register('name')} placeholder="Enter Name" />
+            <Input required={true} type="text" {...register('name')} placeholder="Enter Name" />
             {errors.name && <span className="text-red-500">{errors.name.message}</span>}
           </div>
           {/* Brand */}
           {(formType == 'hotel' || formType == 'resort' || formType == 'bed-and-breakfast') && (
             <div>
-              <label className="font-semibold">{'Brand'}</label>
-              <Input type="text" {...register('brand')} name="brand" placeholder="Brand name" />
+              <label className="font-semibold">{'Brand (Optional)'}</label>
+              <Input required={false} type="text" {...register('brand')} name="brand" placeholder="Brand name" />
             </div>
           )}
 
           {/* Star Rating */}
           {formType && ['hotel', 'resort', 'bed-and-breakfast'].includes(formType) && (
             <div>
-              <label className="font-semibold mb-2">Star Rating</label>
+              <label className="font-semibold mb-2">Star Rating (Optional)</label>
               <Select
+                required={false}
+                formType={formType}
                 name="star_rating"
                 placeholder="Select Star Rating"
                 options={[
@@ -184,6 +182,8 @@ const AccommodationForm: React.FC = () => {
               <label className="font-semibold">{categoryLabels[formType] || categoryLabels.default}</label>
               <div className="mt-2">
                 <Select
+                  required={true}
+                  formType={formType}
                   name="category"
                   placeholder="Select Category"
                   options={propertyTypes[formType].options.map((type) => ({
@@ -201,6 +201,8 @@ const AccommodationForm: React.FC = () => {
             <div>
               <label className="font-semibold">Location Type</label>
               <Select
+                required={true}
+                formType={formType}
                 name="location"
                 placeholder="Select Location type"
                 options={locationTypes[formType].options.map((type) => ({
@@ -220,6 +222,7 @@ const AccommodationForm: React.FC = () => {
 
             {/* Street address */}
             <Input
+              required={true}
               type="text"
               {...register('address.street')} // Bind to form data
               placeholder="Street address"
@@ -227,6 +230,7 @@ const AccommodationForm: React.FC = () => {
 
             {/* Town / City */}
             <Input
+              required={true}
               type="text"
               {...register('address.city')} // Bind to form data
               placeholder="Town / City"
@@ -234,6 +238,7 @@ const AccommodationForm: React.FC = () => {
 
             {/* State / Region */}
             <Input
+              required={true}
               type="text"
               {...register('address.region')} // Bind to form data
               placeholder="State / Region"
@@ -248,6 +253,7 @@ const AccommodationForm: React.FC = () => {
 
             {/* Country */}
             <Input
+              required={true}
               type="text"
               {...register('address.country')} // Bind to form data
               placeholder="Country"
@@ -260,6 +266,7 @@ const AccommodationForm: React.FC = () => {
 
             {/* Phone Number */}
             <Input
+              required={true}
               type="number"
               {...register('contact.phoneNumber')} // Binds phone number to form data
               placeholder="Phone Number"
@@ -267,6 +274,7 @@ const AccommodationForm: React.FC = () => {
 
             {/* Email */}
             <Input
+              required={true}
               type="email"
               {...register('contact.email')} // Binds email to form data
               placeholder="Enter email"
@@ -280,9 +288,10 @@ const AccommodationForm: React.FC = () => {
             />
             {/* Social Media */}
             <Input
+              required={true}
               type="text"
               {...register('contact.socialMedia')} // This binds the input to the form data
-              placeholder="Social media link (Optional)"
+              placeholder="Social media link"
             />
           </div>
 
@@ -290,6 +299,7 @@ const AccommodationForm: React.FC = () => {
           <div>
             <label className="font-semibold">Description</label>
             <Input
+              required={true}
               type="text"
               {...register('description.tagline')}
               name="description.tagline"
@@ -300,11 +310,20 @@ Found."
             <label className="font-semibold">Describe about the accommodation</label>
 
             <RichTextEditor
+              formType={formType}
+              {...register('description.description')}
               placeholder="Describe your accomodation in 100-500 words."
               onContentChange={(value) => handleInputChange('description.description', value)}
             />
-            <label className="font-semibold">Highlights (Add up to 6 key highlights)</label>
-            <DynamicFields setValue={(value) => handleInputChange('description.highlights', value)} max={6} />
+            <label className="font-semibold">
+              Highlights (Add up to 6 key highlights: e.g., High-speed Wi-Fi, Weekly Community Events.)
+            </label>
+            <DynamicFields
+              formType={formType}
+              {...register('description.highlights')}
+              setValue={(value) => handleInputChange('description.highlights', value)}
+              max={6}
+            />
           </div>
 
           {/* Languages spoken */}
@@ -314,6 +333,7 @@ Found."
             {['arabic', 'english', 'french', 'spanish', 'portuguese', 'german', 'bahasa', 'mandarin'].map((lang) => (
               <Checkbox
                 key={lang}
+                require={formData?.languages ? (Object.keys(formData?.languages)?.length ? false : true) : true}
                 {...register(`languages.${lang}`)}
                 label={lang.charAt(0).toUpperCase() + lang.slice(1)}
                 onChange={(e) => handleInputChange(`languages.${lang}`, e)}
@@ -329,36 +349,22 @@ Found."
           <DateInput onChange={(value) => handleInputChange('establishedIn', value)} />
 
           {/* Accommodation Policies */}
-          <div className="mb-4">
-            <label className="font-semibold block">{policyLabels[formType] || 'Policies'}</label>
-
-            <label className="block mt-2">Cancellation Policy</label>
-            <Checkbox
-              {...register('policy.cancellation.freeCancellation')}
-              label="Free cancellation"
-              onChange={(e) => handleInputChange('policy.cancellation.freeCancellation', e)}
-            />
-
-            <Checkbox
-              {...register('policy.cancellation.nonRefundable')}
-              label="Non-refundable"
-              onChange={(e) => handleInputChange('policy.cancellation.nonRefundable', e)}
-            />
-            <Input type="text" {...register('policy.cancellation.description')} placeholder="Policy description" />
+          <div>
+            <CancellationPolicy handleInputChange={handleInputChange} formType={formType} formData={formData} />
+            {/* <Input type="text" {...register('policy.cancellation.description')} placeholder="Policy description" /> */}
 
             <label className="font-semibold">House Rules</label>
-            <RichTextEditor onContentChange={(value) => handleInputChange('policy.rules', value)} />
+            <RichTextEditor formType={formType} onContentChange={(value) => handleInputChange('policy.rules', value)} />
             {formType === 'vacation-rental' && <SecurityDeposit handleInputChange={handleInputChange} />}
-            <label>Check-In Time</label>
-            <input type="time" {...register('policy.checkInTime')} />
+            <label className="font-semibold mb-4 mr-4">Check-In Time</label>
+            <input type="time" className="mr-4" {...register('policy.checkInTime')} />
 
-            <label>Check-Out Time</label>
+            <label className="font-semibold mb-4 mr-4">Check-Out Time</label>
             <input type="time" {...register('policy.checkOutTime')} />
           </div>
 
           <div>
             <label className="font-semibold">Payment Methods Accepted</label>
-
             <Checkbox
               {...register('paymentMethods.card')}
               label="Credit/Debit Card"
@@ -367,7 +373,7 @@ Found."
 
             <Checkbox
               {...register('paymentMethods.online')}
-              label="Online"
+              label="PayPal"
               onChange={(e) => handleInputChange('paymentMethods.online', e)}
             />
 
@@ -405,7 +411,6 @@ Found."
                 onChange={(e) => handleInputChange('acceptedCards.jcb', e)}
               />
             </div>
-            {/* Input field for 'Other' card types */}
             <div className="mt-2">
               <Input
                 type="text"
@@ -476,6 +481,7 @@ Found."
             <label className="font-semibold">Amenities</label>
             {formType && amenitiesMapping[formType].generalAmenities && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'generalAmenities').zero}
                 pre={'generalAmenities'}
@@ -485,6 +491,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].utilities && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'utilities').zero}
                 pre={'utilities'}
@@ -494,6 +501,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].livingArea && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'livingArea').zero}
                 pre={'livingArea'}
@@ -503,6 +511,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].kitchen && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'kitchen').zero}
                 pre={'kitchen'}
@@ -512,6 +521,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].outdoorFacilities && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'outdoorFacilities').zero}
                 pre={'outdoorFacilities'}
@@ -521,6 +531,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].barDining && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'barDining').zero}
                 pre={'barDining'}
@@ -530,6 +541,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].specialMenus && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'specialMenus').zero}
                 pre={'specialMenus'}
@@ -540,6 +552,7 @@ Found."
 
             {formType && amenitiesMapping[formType].recreational && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'recreational').zero}
                 pre={'recreational'}
@@ -550,6 +563,7 @@ Found."
 
             {formType && amenitiesMapping[formType].wellness && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'wellness').zero}
                 pre={'wellness'}
@@ -560,6 +574,7 @@ Found."
 
             {formType && amenitiesMapping[formType].travelAdventureSupport && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'travelAdventureSupport').zero}
                 pre={'travelAdventureSupport'}
@@ -569,6 +584,7 @@ Found."
             )}
             {formType && amenitiesMapping[formType].workConnectivity && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'workConnectivity').zero}
                 pre={'workConnectivity'}
@@ -579,6 +595,7 @@ Found."
 
             {formType && amenitiesMapping[formType].meetingRooms && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'meetingRooms').zero}
                 pre={'meetingRooms'}
@@ -589,6 +606,7 @@ Found."
 
             {formType && amenitiesMapping[formType].eventServices && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'eventServices').zero}
                 pre={'eventServices'}
@@ -599,6 +617,7 @@ Found."
 
             {formType && amenitiesMapping[formType].ecoFriendlyPractices && (
               <AccordionSection
+                formType={formType}
                 handleInputChange={handleInputChange}
                 zero={getAmenitiesConfig(formType, 'ecoFriendlyPractices').zero}
                 pre={'ecoFriendlyPractices'}
@@ -607,68 +626,93 @@ Found."
               />
             )}
 
-            <NearbyAttractionsForm handleInputChange={handleInputChange} />
+            <NearbyAttractionsForm formType={formType} handleInputChange={handleInputChange} />
             <div className="p-4 border rounded-lg bg-white shadow-md">
-              <h2 className="font-semibold mb-4">Map Location (optional)</h2>
+              <h2 className="font-semibold mb-4">Map Location (Optional)</h2>
               <GetCoordinateOnMap setCoordinates={(coordinates) => handleInputChange('location', coordinates)} />
             </div>
-            <DistanceToKeyLocations handleInputChange={handleInputChange} />
-            <UploadPhotos formType={formType} handleInputChange={handleInputChange} />
 
+            <DistanceToKeyLocations formType={formType} handleInputChange={handleInputChange} />
             <HotelResortRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
             <BedBreakfastRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
             <HostelRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
             <CoLivingRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
             <VacationRentalRoomBathroomDetails formType={formType} handleInputChange={handleInputChange} />
+            <UploadPhotos formType={formType} handleInputChange={handleInputChange} />
           </div>
 
           {/* owner / manager Details */}
           <div>
-            <label className="font-semibold">Owner / manager Details</label>
-            <Input type="text" {...register('manager.name')} name="manager.name" placeholder="Full Name" />
-            <Input type="text" {...register('manager.role')} name="manager.role" placeholder="Role(Owner / manager)" />
+            <label className="font-semibold">Owner/Manager Details</label>
+
+            <label className="block text-sm font-medium capitalize mt-4">{'Full Name'}</label>
+            <Input type="text" {...register('manager.name')} name="manager.name" placeholder="Enter full name" />
+
+            <label className="block text-sm font-medium capitalize mt-4">{'Role (Owner/Manager)'}</label>
+            <Input
+              type="text"
+              {...register('manager.role')}
+              name="manager.role"
+              placeholder="Enter role (Owner/Manager)"
+            />
+
+            <label className="block text-sm font-medium capitalize mt-4">{'Phone Number'}</label>
             <Input
               type="number"
               {...register('manager.phoneNumber')}
               name="manager.phoneNumber"
-              placeholder="Phone Number"
+              placeholder="Enter phone number"
             />
-            <Input type="email" {...register('manager.email')} name="manager.email" placeholder="Email Address" />
+
+            <label className="block text-sm font-medium capitalize mt-4">{'Email Address'}</label>
+            <Input type="email" {...register('manager.email')} name="manager.email" placeholder="Enter email address" />
+
+            <label className="block text-sm font-medium capitalize mt-4">{'Emergency Contact (Optional)'}</label>
             <Input
               type="text"
               name="manager.emergencyContact"
               {...register('manager.emergencyContact')}
-              placeholder="Emergency Contact(optional)"
+              placeholder="Enter emergency contact"
               required={false}
             />
 
-            <SingleImageUpload handleInputChange={handleInputChange} />
+            <SingleImageUpload formType={formType} handleInputChange={handleInputChange} />
           </div>
 
           {/* Consent and verification section */}
           <div>
-            <Checkbox
-              label="I consent to my business information being listed in the Tribe Africa Pages Directory."
-              {...register('consent')}
-              onChange={(e) => handleInputChange('consent', e)}
-            />
-            <Checkbox
-              label="I confirm that the information provided is accurate to the best of my knowledge."
-              {...register('confirmation')}
-              onChange={(e) => handleInputChange('confirmation', e)}
-            />
-            <Input
-              type="text"
-              name="signature"
-              {...register('signature')}
-              placeholder="Full Name (for electronic signature)"
-            />
-            <DateInput
-              {...register('dateOfSubmit')}
-              onChange={(e) => {
-                handleInputChange('dateOfSubmit', e);
-              }}
-            />
+            <label className="font-semibold">Consent to Listing</label>
+            <div className="mb-4">
+              <Checkbox
+                label="I consent to my business information being listed in the Tribe Africa Pages Directory."
+                {...register('consent')}
+                onChange={(e) => handleInputChange('consent', e)}
+              />
+            </div>
+
+            <label className="font-semibold">Accuracy Verification</label>
+            <div className="mb-4">
+              <Checkbox
+                label="I confirm that the information provided is accurate to the best of my knowledge."
+                {...register('confirmation')}
+                onChange={(e) => handleInputChange('confirmation', e)}
+              />
+            </div>
+
+            <label className="font-semibold">Signature</label>
+            <div className="mb-4">
+              <Input
+                type="text"
+                name="signature"
+                {...register('signature')}
+                placeholder="Type your full name for electronic signature"
+              />
+            </div>
+
+            <label className="font-semibold">Date (DD/MM/YYYY)</label>
+            <div className="mt-4">
+              <DateInput {...register('dateOfSubmit')} onChange={(e) => handleInputChange('dateOfSubmit', e)} />
+            </div>
           </div>
 
           {/* Submit Button */}
@@ -677,12 +721,84 @@ Found."
           </div>
         </form>
       </FormContext.Provider>
+      {showModal && <SubmissionModal onClose={() => setShowModal(false)} />}{' '}
     </div>
   );
 };
 
-const SingleImageUpload = ({ handleInputChange }) => {
+const CancellationPolicy = ({ handleInputChange, formType, formData }) => {
+  const [isCustomPolicy, setIsCustomPolicy] = useState(false);
+  const [customPolicyText, setCustomPolicyText] = useState('');
+
+  useEffect(() => {
+    setCustomPolicyText('');
+  }, [formType]);
+
+  const handleCheckboxChange = (field: string, value: boolean) => {
+    if (field === 'policy.cancellation.customPolicyEnabled') {
+      setIsCustomPolicy(value);
+      if (!value) {
+        setCustomPolicyText(''); // Clear text when unchecked
+        handleInputChange('policy.cancellation.customPolicyText', ''); // Clear from parent state
+      }
+    }
+    handleInputChange(field, value);
+  };
+
+  return (
+    <div className="mb-4">
+      <label className="font-semibold block">{policyLabels[formType] || 'Policies'}</label>
+
+      <label className="font-semibold block mt-2">Cancellation Policy</label>
+
+      <Checkbox
+        require={formData?.policy ? (Object.keys(formData?.policy)?.length ? false : true) : true}
+        label="Free cancellation"
+        onChange={(e) => handleCheckboxChange('policy.cancellation.freeCancellation', e)}
+      />
+
+      <Checkbox label="Non-refundable" onChange={(e) => handleCheckboxChange('policy.cancellation.nonRefundable', e)} />
+
+      {/* Custom Policy Checkbox */}
+      <Checkbox
+        label="Custom Policy (Specify)"
+        onChange={(e) => handleCheckboxChange('policy.cancellation.customPolicyEnabled', e)}
+      />
+
+      {/* Show Textbox if Custom Policy is Checked */}
+      {isCustomPolicy && (
+        <div>
+          <label className="font-semibold block mt-2">Specify Custom Policy</label>
+
+          <input
+            type="text"
+            placeholder="Enter custom cancellation policy"
+            className="w-full mt-2 p-2 border rounded"
+            value={customPolicyText}
+            onChange={(e) => {
+              setCustomPolicyText(e.target.value);
+              handleInputChange('policy.cancellation.customPolicyText', e.target.value);
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface SingleImageUploadProps {
+  formType: string;
+  handleInputChange: (field: string, value: any) => void;
+}
+
+const SingleImageUpload: React.FC<SingleImageUploadProps> = ({ formType, handleInputChange }) => {
   const [image, setImage] = useState<{ preview: string; _id: string } | null>(null);
+
+  useEffect(() => {
+    // Reset image state when formType changes
+    setImage(null);
+    handleInputChange('manager.idPhoto', null);
+  }, [formType]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -690,29 +806,39 @@ const SingleImageUpload = ({ handleInputChange }) => {
     const file = e.target.files[0];
     const previewURL = URL.createObjectURL(file); // Temporary preview
 
-    const uploadedImage = await uploadImage(file); // Upload function
+    try {
+      const uploadedImage = await uploadImage(file); // Upload function
+      if (!uploadedImage?._id) throw new Error('Upload failed');
 
-    const imageData = {
-      preview: previewURL,
-      _id: uploadedImage._id, // Sanity Image _id
-    };
+      const imageData = {
+        preview: previewURL,
+        _id: uploadedImage._id, // Sanity Image _id
+      };
 
-    setImage(imageData);
+      setImage(imageData);
 
-    handleInputChange('manager.idPhoto', {
-      _type: 'image',
-      asset: { _ref: uploadedImage._id },
-    });
+      handleInputChange('manager.idPhoto', {
+        _type: 'image',
+        asset: { _ref: uploadedImage._id },
+      });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      setImage(null);
+      handleInputChange('manager.idPhoto', null);
+    }
   };
+
+  if (!formType) return null; // Return null if formType is empty
 
   return (
     <div>
-      <label>Upload passport / ID</label>
+      <label className="text-sm font-medium capitalize mr-4">Upload Passport/ID</label>
       <input type="file" accept="image/*" onChange={handleFileChange} />
       {image && <img src={image.preview} alt="Preview" className="w-20 h-20 object-cover mt-2" />}
     </div>
   );
 };
+
 interface PriceRangeProps {
   formType: string;
   handleInputChange: (field: string, value: any) => void;
@@ -720,22 +846,25 @@ interface PriceRangeProps {
 
 const PriceRange: React.FC<PriceRangeProps> = ({ formType, handleInputChange }) => {
   const options = priceRangeOptions[formType] || [];
-
-  // State to track selected checkboxes
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    setSelectedPriceRanges({});
+  }, [formType]);
 
   const handleCheckboxChange = (key: string, checked: boolean) => {
     const updatedSelections = { ...selectedPriceRanges, [key]: checked };
     setSelectedPriceRanges(updatedSelections);
     handleInputChange('priceRange', updatedSelections); // Update parent state
   };
-
+  console.log('--------', Object.keys(selectedPriceRanges).length);
   return (
     <div className="mb-4">
       <label className="font-semibold block mb-2">Price Range</label>
       {options.map(({ key, label }) => (
         <label key={key} className="flex items-center mb-1">
           <input
+            required={Object.keys(selectedPriceRanges).length ? false : true}
             type="checkbox"
             name={`priceRange.${key}`}
             checked={selectedPriceRanges[key] || false}
@@ -757,6 +886,7 @@ interface UploadPhotosProps {
   handleInputChange: (field: string, value: any) => void;
 }
 interface DistanceToKeyLocationsDetailsProps {
+  formType: string;
   handleInputChange: (field: string, value: any) => void;
 }
 interface HotelResortRoomBathroomDetailsProps {
@@ -783,6 +913,64 @@ interface VacationRentalGeneralInfoProps {
   handleInputChange: (field: string, value: any) => void;
 }
 
+interface ModalProps {
+  onClose: () => void;
+}
+
+const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
+  // useEffect(() => {
+  //   document.body.style.overflow = 'hidden'; // Disable scrolling
+
+  //   return () => {
+  //     document.body.style.overflow = 'auto'; // Restore scrolling on unmount
+  //   };
+  // }, []);
+
+  return (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+      onClick={onClose} // Close when clicking outside
+    >
+      <div
+        className="bg-white rounded-lg shadow-lg p-6 w-4/5 max-w-lg relative"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+          ✖
+        </button>
+
+        <h2 className="text-xl font-semibold mb-3">Successfully uploded!</h2>
+        <hr className="border-orange-500 mb-3" />
+
+        <p className="text-gray-700">
+          Thank you for submitting your accommodation details to the <b>Tribe Africa Pages Directory!</b>
+          <br />
+          <br />
+          Our team will review your listing within <b>3–5 business days</b> to ensure all information meets our quality
+          standards. Once approved, your accommodation will be featured on our directory, making it visible to potential
+          guests and travelers.
+          <br />
+          <br />
+          You will receive a confirmation email with a link to your live listing. If you have any questions or need
+          assistance, please feel free to reach out to us at
+          <b> support@tribeafrica.org</b>.
+          <br />
+          <br />
+          We’re excited to help promote your accommodation to our growing audience!
+        </p>
+
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 const SecurityDeposit: React.FC<SecurityDepositProps> = ({ handleInputChange }) => {
   const [securityDeposit, setSecurityDeposit] = useState({
     hasDeposit: false,
@@ -858,7 +1046,9 @@ const SecurityDeposit: React.FC<SecurityDepositProps> = ({ handleInputChange }) 
 };
 
 const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange }) => {
-  const initialState =
+  if (!formType || !formCategories[formType]) return null; // Return null if formType is missing
+
+  const getInitialState = () =>
     formCategories[formType]?.reduce(
       (acc, category) => {
         acc[category.value] = [];
@@ -867,7 +1057,12 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
       {} as { [key: string]: { _key: string; _type: 'image'; asset: { _ref: string }; preview?: string }[] }
     ) || {};
 
-  const [photos, setPhotos] = useState(initialState);
+  const [photos, setPhotos] = useState(getInitialState);
+
+  // Reset state when formType changes
+  useEffect(() => {
+    setPhotos(getInitialState());
+  }, [formType]);
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, category: string) => {
     if (!e.target.files) return;
@@ -905,7 +1100,6 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
   return (
     <div className="my-4 p-4 border rounded-lg bg-white shadow-md">
       <h2 className="text-lg font-semibold mb-3">Upload Photos</h2>
-      <p className="text-sm text-gray-600 mb-4">Upload photos of the property for each category.</p>
 
       {formCategories[formType]?.map(({ label, value }) => (
         <div key={value} className="mb-6">
@@ -934,15 +1128,31 @@ const UploadPhotos: React.FC<UploadPhotosProps> = ({ formType, handleInputChange
   );
 };
 
-const DistanceToKeyLocations: React.FC<DistanceToKeyLocationsDetailsProps> = ({ handleInputChange }) => {
-  const [locations, setLocations] = useState({
-    nearestAirport: '',
-    trainBusStation: '',
-    taxiStands: '',
-    cityCenter: '',
-    localMarkets: '',
-    popularRestaurants: '',
-  });
+const DistanceToKeyLocations: React.FC<DistanceToKeyLocationsDetailsProps> = ({ formType, handleInputChange }) => {
+  const locationOptions = {
+    nearestAirport: 'Nearest Airport',
+    trainBusStation: 'Train/Bus Station',
+    taxiStands: 'Taxi Stands',
+    cityCenter: 'City/Town Center',
+    localMarkets: 'Local Markets/Shopping Areas',
+    popularRestaurants: 'Popular Restaurants/Bars',
+  };
+
+  const getDefaultState = () =>
+    Object.keys(locationOptions).reduce(
+      (acc, key) => {
+        acc[key as keyof typeof locationOptions] = '';
+        return acc;
+      },
+      {} as Record<keyof typeof locationOptions, string>
+    );
+
+  const [locations, setLocations] = useState(getDefaultState);
+
+  // Reset state when formType changes
+  useEffect(() => {
+    setLocations(getDefaultState());
+  }, [formType]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -959,11 +1169,11 @@ const DistanceToKeyLocations: React.FC<DistanceToKeyLocationsDetailsProps> = ({ 
 
   return (
     <div className="my-4 p-4 border rounded-lg bg-white shadow-md">
-      <h2 className="text-lg font-semibold mb-3">Distance to Key Locations (optional)</h2>
+      <h2 className="text-lg font-semibold mb-3">Distance to Key Locations (Optional)</h2>
 
-      {Object.keys(locations).map((key) => (
+      {Object.entries(locationOptions).map(([key, label]) => (
         <div key={key} className="mb-4">
-          <label className="block text-sm font-medium capitalize">{key.replace(/([A-Z])/g, ' $1')}</label>
+          <label className="block text-sm font-medium">{label}</label>
           <input
             type="text"
             name={key}
@@ -979,18 +1189,23 @@ const DistanceToKeyLocations: React.FC<DistanceToKeyLocationsDetailsProps> = ({ 
 };
 
 const AccordionSection: React.FC<{
+  formType: string;
   title: string;
   options: Option[];
   pre: string;
   zero: string;
   handleInputChange: (field: string, value: any) => void;
-}> = ({ title, options, pre, zero, handleInputChange }) => {
+}> = ({ formType, title, options, pre, zero, handleInputChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<boolean[]>(new Array(options.length).fill(false));
   const [otherSpecify, setOtherSpecify] = useState('');
   const [otherSpecifyValues, setOtherSpecifyValues] = useState<{ [key: string]: string }>({}); // Stores "Other (Specify)" values
 
   const register = useContext(FormContext);
+
+  useEffect(() => {
+    setOtherSpecify('');
+  }, [formType]);
 
   const handleChange = useCallback(
     (e, value: string, index: number, input: boolean) => {
@@ -1040,7 +1255,7 @@ const AccordionSection: React.FC<{
               <Input
                 key={option.value}
                 {...register(`${zero}.${pre}.${option.value}`)}
-                placeholder="Other (Specify)"
+                placeholder={option.label}
                 value={otherSpecify}
                 onChange={(e) => handleChange(e, option.value, index, option?.input || false)}
               />
@@ -1797,7 +2012,7 @@ const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsPro
                 onChange={handleChange}
                 className="mr-2"
               />
-              {key.replace(/([A-Z])/g, ' $1')}
+              {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
             </label>
           ) : null
         )}
@@ -1825,7 +2040,7 @@ const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsPro
                 onChange={handleChange}
                 className="mr-2"
               />
-              {key.replace(/([A-Z])/g, ' $1')}
+              {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
             </label>
           ) : null
         )}
@@ -1843,7 +2058,7 @@ const HotelResortRoomBathroomDetails: React.FC<HotelResortRoomBathroomDetailsPro
   );
 };
 
-const NearbyAttractionsForm = ({ handleInputChange }) => {
+const NearbyAttractionsForm = ({ formType, handleInputChange }) => {
   const [attractions, setAttractions] = useState<
     {
       _key: string;
@@ -1860,8 +2075,10 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
     }[]
   >([]);
 
+  const generateId = () => Math.random().toString(36).substr(2, 9);
+
   const defaultAttraction = {
-    _key: generateId(),
+    _key: generateId(), // _key is used for backend purposes only
     name: '',
     distance: '',
     beach: false,
@@ -1874,9 +2091,13 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
     bikingTrails: false,
   };
 
+  useEffect(() => {
+    setAttractions([{ ...defaultAttraction }]);
+  }, [formType]);
+
   const addAttraction = () => {
     if (attractions.length < 10) {
-      setAttractions([...attractions, { ...defaultAttraction }]);
+      setAttractions([...attractions, { ...defaultAttraction, _key: generateId() }]);
     }
   };
 
@@ -1900,10 +2121,10 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
 
   return (
     <div className="p-4 border rounded-lg bg-white shadow-md my-4">
-      <h2 className="font-semibold mb-4">Nearby Attractions (optional)</h2>
+      <h2 className="font-semibold mb-4">Nearby Attractions (Optional)</h2>
 
       {attractions.map((attraction, index) => (
-        <div key={index} className="border p-4 mb-4 rounded-lg bg-gray-100">
+        <div key={attraction._key} className="border p-4 mb-4 rounded-lg bg-gray-100">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-medium">Attraction {index + 1}</h3>
             <button type="button" onClick={() => removeAttraction(index)} className="text-red-500 hover:text-red-700">
@@ -1913,7 +2134,7 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
 
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Enter name of the tourist attraction"
             value={attraction.name}
             onChange={(e) => handleChange(index, 'name', e.target.value)}
             className="w-full mt-2 p-2 border rounded"
@@ -1930,7 +2151,7 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
           {/* Checkbox Options */}
           <div className="mt-2 grid grid-cols-2 gap-2">
             {Object.keys(defaultAttraction)
-              .filter((key) => key !== 'name' && key !== 'distance')
+              .filter((key) => key !== '_key' && key !== 'name' && key !== 'distance')
               .map((option) => (
                 <label key={option} className="flex items-center space-x-2">
                   <input
@@ -1939,7 +2160,12 @@ const NearbyAttractionsForm = ({ handleInputChange }) => {
                     onChange={(e) => handleChange(index, option, e.target.checked)}
                     className="w-4 h-4"
                   />
-                  <span>{option.replace(/([A-Z])/g, ' $1')}</span>
+                  <span>
+                    {option
+                      .replace(/([A-Z])/g, ' $1') // Add spaces before capital letters
+                      .replace(/^./, (str) => str.toUpperCase())}{' '}
+                    {/* Capitalize first letter */}
+                  </span>
                 </label>
               ))}
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Editor, EditorTextChangeEvent } from 'primereact/editor';
 
 interface RichTextEditorProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -9,6 +9,7 @@ interface RichTextEditorProps extends React.HTMLAttributes<HTMLDivElement> {
   remove?: string[];
   height?: number;
   required?: boolean;
+  formType?: string; // Accept formType as a prop
   onContentChange?: (content: string) => void;
   props?: React.HTMLAttributes<HTMLSelectElement>;
 }
@@ -20,16 +21,22 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   error,
   remove = ['color', 'font', 'background', 'code-block'],
   onContentChange,
+  formType, // Receive formType as a prop
   height = 250,
   required = true,
   ...props
 }) => {
   const [text, setText] = useState<string>('');
 
+  // Reset editor content when formType changes
+  useEffect(() => {
+    setText('');
+  }, [formType]);
+
   const handleChange = (content: string) => {
     const cleanContent = content.replace(/<p>/g, '').replace(/<\/p>/g, ''); // Example cleaning
     setText(cleanContent);
-    onContentChange(cleanContent);
+    if (onContentChange) onContentChange(cleanContent);
   };
 
   const customToolbar = (
