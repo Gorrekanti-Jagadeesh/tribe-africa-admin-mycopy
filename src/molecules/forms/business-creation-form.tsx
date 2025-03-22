@@ -1,23 +1,16 @@
-import { strict } from 'assert';
-import { useEffect, useState } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
-import DynamicFields from '@atoms/input-elements/dynamic-fields';
-import Checkbox from '@/atoms/input-elements/checkbox';
 import Button from '@/atoms/custom-button/button';
-import { RichTextEditor } from '@/atoms/input-elements/rich-text-editor';
+import Checkbox from '@/atoms/input-elements/checkbox';
 import CustomInput from '@/atoms/input-elements/custom-input';
+import { useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
-import { sanity, processContent, splitRichText } from '@/utils/sanity';
-import { useQuery } from '@tanstack/react-query';
-import { uploadImage } from '@api/index';
-import sanityClient from '@/sanityClient';
-import { generateId } from '@utils/common';
-import { deepMerge } from '@/utils/common';
-import Input from '@/atoms/input-elements/input';
 import DateInput from '@/atoms/input-elements/date-input';
+import Input from '@/atoms/input-elements/input';
+import sanityClient from '@/sanityClient';
+import { deepMerge } from '@/utils/common';
+import { uploadImage } from '@api/index';
+import { generateId } from '@utils/common';
 
 type BusinessForm = {
   businessName: string;
@@ -76,7 +69,7 @@ type BusinessForm = {
 };
 
 const BusinessFormComponent = () => {
-  const [formData, setFormData] = useState<BusinessForm>({});
+  const [formData, setFormData] = useState<BusinessForm>(null);
   const [showModal, setShowModal] = useState(false);
 
   const {
@@ -100,12 +93,11 @@ const BusinessFormComponent = () => {
         ...newData,
       };
       await sanityClient.create(newData1);
-      console.log('-------Final Data', newData);
       // document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => {
         setShowModal(true);
       }, 300); // Delay to allow scrolling to complete
-      setFormData({});
+      setFormData(null);
       // Notify success
     } catch (error) {
       // Handle errors

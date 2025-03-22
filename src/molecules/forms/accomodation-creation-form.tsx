@@ -41,33 +41,26 @@ const AccommodationForm: React.FC = () => {
   });
 
   const [formType, setFormType] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  // useEffect(() => {
-  //   reset();
-  //   setFormData({});
-  // }, [formType]);
-
   const handleInputChange = (field, value) => {
-    // console.log('------- handleInputChange', field, value);
-
     setFormData((prev) => {
-      const newData = JSON.parse(JSON.stringify(prev)); // Deep clone
-      const keys = field.split('.'); // e.g. "priceRange.budget" -> ["priceRange", "budget"]
+      const newData = JSON.parse(JSON.stringify(prev));
+      const keys = field.split('.');
       let current = newData;
 
       keys.forEach((key, index) => {
         if (index === keys.length - 1) {
-          current[key] = value; // Set value at the final key
+          current[key] = value;
         } else {
           if (!current[key] || typeof current[key] !== 'object') {
-            current[key] = {}; // Ensure nested object exists
+            current[key] = {};
           }
-          current = current[key]; // Move deeper
+          current = current[key];
         }
       });
-      return newData; // Return a new object to trigger React re-render
+      return newData;
     });
   };
 
@@ -79,26 +72,21 @@ const AccommodationForm: React.FC = () => {
         _id: `drafts.${generateId()}`,
         ...newData,
       };
-
-      console.log('-------Final Data', newData1);
       await sanityClient.create(newData1);
 
-      // Delay modal slightly to ensure scroll happens first
       document.querySelector('.scrollable-container')?.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => {
         setShowModal(true);
       }, 300); // Delay to allow scrolling to complete
 
       reset();
-      setFormData({});
+      setFormData(null);
       setFormType('');
     } catch (error) {
       console.error('Submission failed:', error);
       alert('An error occurred while submitting. Please try again.');
     }
   };
-
-  console.log('-------new Data', formData);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -857,7 +845,6 @@ const PriceRange: React.FC<PriceRangeProps> = ({ formType, handleInputChange }) 
     setSelectedPriceRanges(updatedSelections);
     handleInputChange('priceRange', updatedSelections); // Update parent state
   };
-  console.log('--------', Object.keys(selectedPriceRanges).length);
   return (
     <div className="mb-4">
       <label className="font-semibold block mb-2">Price Range</label>
