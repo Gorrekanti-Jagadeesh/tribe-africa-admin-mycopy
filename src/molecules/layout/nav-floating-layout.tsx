@@ -44,7 +44,9 @@ const NavFloatingLayout: React.FC<{
                     <p
                       key={index}
                       onClick={() => {
-                        const subcategory = typeof item === 'object' ? item?.value : toKebabCase(item);
+                        if (!item) return;
+                        const subcategory =
+                          typeof item === 'object' ? (item as { value: string })?.value : toKebabCase(item as string);
                         console.log(
                           'After work route',
                           `/${country}/${pageType}/${toKebabCase(each.category)}/afterwork/${subcategory}`
@@ -66,8 +68,7 @@ const NavFloatingLayout: React.FC<{
                         }
                       }}
                     >
-                      {typeof item === 'object' ? item?.title : item}{' '}
-                      {/* Print title if object, otherwise print string */}
+                      {item && (typeof item === 'object' ? (item as { title: string })?.title : (item as string))}{' '}
                     </p>
                   ))}
               </div>

@@ -9,6 +9,8 @@ import Modal from '@molecules/modal';
 const BlogPageScreen = ({ country, data, banner, blogCategory }) => {
   const [openModal, setOpenModal] = useState(false);
 
+  console.log('hello');
+
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
       <div className="flex flex-col gap-4">
