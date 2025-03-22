@@ -49,7 +49,7 @@ export const Countries = [
 ];
 export const CountriesGeoData = {
   algeria: {
-    center: [2.6328, 28.0339],
+    center: [2.6328, 28.03390],
     markers: [
       { name: 'Algiers', coordinates: [3.0588, 36.7323], category: 'Cities' },
       { name: 'Oran', coordinates: [-0.6299, 35.6971], category: 'Cities' },
