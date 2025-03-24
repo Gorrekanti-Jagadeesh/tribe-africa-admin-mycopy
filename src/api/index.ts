@@ -165,9 +165,9 @@ export const uploadImage = async (file: UploadBody | string) => {
         imageFile = base64ToBlob(file);
       }
     } else {
-      // Convert UploadBody to Blob if it's a Buffer
-      if (Buffer.isBuffer(file)) {
-        imageFile = new Blob([file]);
+      // Convert UploadBody to Blob if it's an ArrayBuffer
+      if (file instanceof ArrayBuffer) {
+        imageFile = new Blob([new Uint8Array(file)]);
       } else {
         // Assume it's already a File or Blob
         imageFile = file as File | Blob;

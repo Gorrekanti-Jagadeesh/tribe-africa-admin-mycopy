@@ -7,8 +7,19 @@ import { Loading } from '@/atoms/common/loading';
 
 const FindABusinessContainer = () => {
   const { country, main_category, sub_category } = useParams();
-  // console.log('this is log details...', country, main_category, sub_category);
+  console.log('this is log details...1', country, main_category, sub_category);
   const fetchFindABusinessData = async () => {
+    if (main_category == 'wellnessbeauty') {
+      const data =
+        await sanity.GET(`*[_type == "businessType" && businessAddress.country == "${fromKebabCase(country)}" && businessCategory == "${main_category}" && businessSubCategory == "${sub_category}"]{
+      _id,
+  businessName,
+  "address":businessAddress
+      "businessContactInformation":businessContactInformation,
+      "image": businessLogo
+      }`);
+      return data;
+    }
     // Fetching data from the API
     const data = await sanity.GET(
       query.BUSINESS.NETWORK.FIND_A_BUSINESS_DATA(fromKebabCase(country), main_category, sub_category)
