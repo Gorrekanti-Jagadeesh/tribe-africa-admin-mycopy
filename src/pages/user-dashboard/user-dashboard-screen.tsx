@@ -1,10 +1,14 @@
 import { sanity } from '@/utils/sanity';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Loading } from '@/atoms/common/loading';
 import Modal from '@/molecules/modal';
+import Button from '@/atoms/custom-button/button';
+import { PortableText } from '@portabletext/react';
+import { sanityImageUrlBuilder } from '@/api';
+import { toKebabCase } from '@/utils/common';
 
 const UserDashboardScreen = () => {
   const [activeTab, setActiveTab] = useState('Advertisements');
@@ -13,6 +17,8 @@ const UserDashboardScreen = () => {
 
   const tabs = ['Advertisements', 'Events', 'Business', 'Hotels', 'Payments'];
   const email: string = JSON.parse(Cookies.get('emailUser') || '{}').email;
+
+  const navigation = useNavigate();
 
   const {
     data: userSubmissionsData,
@@ -224,17 +230,64 @@ const UserDashboardScreen = () => {
 
         {activeTab === 'Events' && (
           <div>
-            {sampleData.Events.map((event) => (
-              <div key={event.id} className="p-4 border rounded mb-2">
-                <h2 className="text-lg font-semibold">{event.title}</h2>
-                <p className="text-gray-600">
-                  Event Start Date: {event.eventStartDate} {event.eventStartTime}
-                </p>
-                <p className="text-gray-600">
-                  Event End Date: {event.eventEndDate} {event.eventEndTime}
-                </p>
-              </div>
-            ))}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+              {sampleData.Events.map((item) => (
+                <div
+                  className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
+                  key={item._id}
+                  onClick={() =>
+                    navigation(`/events/${toKebabCase(item.category)}/${toKebabCase(item.type)}/${item._id}`)
+                  }
+                >
+                  <div
+                    className="aspect-video bg-cover group relative overflow-auto"
+                    style={{
+                      backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
+                    }}
+                  >
+                    <div className="h-full bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
+                      <div className="text-white text-xs text-center">
+                        <PortableText value={item.description} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-sm flex flex-col gap-2 m-2">
+                    <p id="title" className="font-semibold text-lg">
+                      {item.title}
+                    </p>
+                    <p>
+                      <strong> Event By:</strong> {item.eventBy}
+                    </p>
+                    <p>
+                      <strong> Start Date & Time:</strong> {item.eventStartDate}, {item.eventStartTime}
+                    </p>
+                    <p>
+                      <strong> End Date & Time:</strong> {item.eventEndDate}, {item.eventEndTime}
+                    </p>
+                    <p>
+                      <strong> Location:</strong> {item.venue}, {item.city}
+                    </p>
+                    <p>
+                      <strong> Country: </strong>
+                      {item.country}
+                    </p>
+
+                    <p>
+                      <strong>Tel:</strong>
+                      {item.countryCode} {item.phone}
+                    </p>
+                    {item.website && (
+                      <a href={item.website} target="_blank">
+                        <p>
+                          <strong> Website:</strong> {item.website.slice(0, 35)}
+                        </p>
+                      </a>
+                    )}
+                    <Button>{item.isEventFree ? 'FREE' : `General : ${item.ticketPrices.general}`}</Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {activeTab === 'Business' && (
