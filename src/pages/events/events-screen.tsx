@@ -7,23 +7,48 @@ import EventForm from '../../molecules/forms/event-form';
 import { useNavigate } from 'react-router';
 import { sanityImageUrlBuilder } from '@api/index';
 import { PortableText } from '@portabletext/react';
+import { TypedObject } from '@sanity/block-tools';
 
 interface EventsScreenProps {
   heading: string;
   image: string;
   data: {
     title: string;
-    coverPhoto: string;
-    description: [];
-    eventTimings: string;
-    location: string;
+    eventStartDate: string;
+    eventEndDate: string;
+    eventStartTime: string;
+    eventEndTime: string;
+    email: string;
+    venue: string;
+    city: string;
+    countryCode: string;
+    isEventFree: boolean;
+    ticketPrices: { general: string; earlyBird: string; vip: string };
     country: string;
     website: string;
     phone: string;
-    whatsapp: string;
-    amount: string;
+    socialMedia: { instagram: string; twitter: string; facebook: string; other: string };
     category: string;
-    type: string;
+    organizer: {
+      organizerName: string;
+      organizerEmergencyPhone: string;
+      organizerRole: string;
+      organizerEmail: string;
+      organizerPhone: string;
+      organizerCountryCode: string;
+      organizerDisplayName: string;
+      organizerEmergencyCountryCode: string;
+      type: string;
+    };
+
+    eventBy: string;
+    description: TypedObject | TypedObject[];
+    aboutEvent: string;
+    confirmDetails: boolean;
+    agreeToFeature: boolean;
+    rightsToContent: boolean;
+    businessPhoto: File;
+    coverPhoto: string | [];
     _id: string;
   }[];
 }
@@ -31,6 +56,8 @@ interface EventsScreenProps {
 const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigate();
+
+  console.log(data, 'ee');
 
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
@@ -69,27 +96,32 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
                   {item.title}
                 </p>
                 <p>
-                  <strong> Date & Time:</strong> {item.eventTimings}
+                  <strong> Event By:</strong> {item.eventBy}
                 </p>
                 <p>
-                  <strong> Location:</strong> {item.location}
+                  <strong> Start Date & Time:</strong> {item.eventStartDate}, {item.eventStartTime}
+                </p>
+                <p>
+                  <strong> End Date & Time:</strong> {item.eventEndDate}, {item.eventEndTime}
+                </p>
+                <p>
+                  <strong> Location:</strong> {item.venue}, {item.city}
                 </p>
                 <p>
                   <strong> Country: </strong>
                   {item.country}
                 </p>
-                <p>
-                  <strong> Website:</strong> {item.website}
-                </p>
+
                 <p>
                   <strong>Tel:</strong>
-                  {item.phone}
+                  {item.countryCode} {item.phone}
                 </p>
-                <p>
-                  <strong>Whats App:</strong>
-                  {item.whatsapp}
-                </p>
-                <Button>{item.amount}</Button>
+                {item.website && (
+                  <p>
+                    <strong> Website:</strong> {item.website}
+                  </p>
+                )}
+                <Button>{item.ticketPrices.general}</Button>
               </div>
             </div>
           ))}

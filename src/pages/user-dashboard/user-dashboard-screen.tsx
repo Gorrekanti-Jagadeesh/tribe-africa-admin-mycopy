@@ -12,7 +12,7 @@ const UserDashboardScreen = () => {
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
   const tabs = ['Advertisements', 'Events', 'Business', 'Hotels', 'Payments'];
-  const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
+  const email: string = JSON.parse(Cookies.get('emailUser') || '{}').email;
 
   const {
     data: userSubmissionsData,
@@ -38,12 +38,20 @@ const UserDashboardScreen = () => {
       }`),
   });
 
+  const {
+    data: eventsData,
+    error: eventsError,
+    isLoading: eventsLoading,
+  } = useQuery({
+    queryKey: ['user-events', email],
+    queryFn: () => sanity.GET(`*[_type == "event"  && email == "${email}"]`),
+  });
+
+  console.log(eventsData, 'erer');
+
   const sampleData = {
     Advertisements: userSubmissionsData,
-    Events: [
-      { id: 1, name: 'Event 1', date: '2025-02-10' },
-      { id: 2, name: 'Event 2', date: '2025-03-15' },
-    ],
+    Events: eventsData,
     Business: [
       { id: 1, name: 'Business 1', category: 'Retail' },
       { id: 2, name: 'Business 2', category: 'Food' },
@@ -58,11 +66,11 @@ const UserDashboardScreen = () => {
     ],
   };
 
-  if (userSubmissionsLoading) {
+  if (userSubmissionsLoading || eventsLoading) {
     return <Loading />;
   }
 
-  if (userSubmissionsError) {
+  if (userSubmissionsError || eventsError) {
     return 'Something is wrong';
   }
 
@@ -218,8 +226,13 @@ const UserDashboardScreen = () => {
           <div>
             {sampleData.Events.map((event) => (
               <div key={event.id} className="p-4 border rounded mb-2">
-                <h2 className="text-lg font-semibold">{event.name}</h2>
-                <p className="text-gray-600">Date: {event.date}</p>
+                <h2 className="text-lg font-semibold">{event.title}</h2>
+                <p className="text-gray-600">
+                  Event Start Date: {event.eventStartDate} {event.eventStartTime}
+                </p>
+                <p className="text-gray-600">
+                  Event End Date: {event.eventEndDate} {event.eventEndTime}
+                </p>
               </div>
             ))}
           </div>
