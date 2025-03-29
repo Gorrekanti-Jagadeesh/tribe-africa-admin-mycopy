@@ -124,7 +124,7 @@ export const CountriesGeoData: Record<string, CountryDataType> = {
         subCategory: 'Soar through sky',
       },
       { name: 'Tipaza', coordinates: [2.4496, 36.5897], category: 'Action Enthusiasts', subCategory: 'Surf the waves' },
-      { name: 'Beni Hammad Fort', coordinates: [4.7667, 35.8333], category: 'Nature', subCategory: 'Nature1' },
+      { name: 'Beni Hammad Fort', coordinates: [4.7667, 35.83333], category: 'Nature', subCategory: 'Nature1' },
       { name: 'El Kala National Park', coordinates: [8.4667, 36.8833], category: 'Nature', subCategory: 'Nature1' },
       { name: 'Chréa National Park', coordinates: [2.8172, 36.4628], category: 'Nature', subCategory: 'Nature2' },
       { name: 'Ahaggar National Park', coordinates: [5.8735, 23.2856], category: 'Nature', subCategory: 'Nature2' },
