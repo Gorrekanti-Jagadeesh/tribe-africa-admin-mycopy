@@ -53,7 +53,16 @@ const UserDashboardScreen = () => {
     queryFn: () => sanity.GET(`*[_type == "event"  && email == "${email}"]`),
   });
 
-  console.log(eventsData, 'erer');
+  const {
+    data: accommodationData,
+    error: accommodationError,
+    isLoading: accommodationLoading,
+  } = useQuery({
+    queryKey: ['user-accommodations', email],
+    queryFn: () => sanity.GET(`*[_type == "accommodation" && contact.email == "${email}" ]`),
+  });
+
+  console.log(accommodationData);
 
   const sampleData = {
     Advertisements: userSubmissionsData,
@@ -62,10 +71,7 @@ const UserDashboardScreen = () => {
       { id: 1, name: 'Business 1', category: 'Retail' },
       { id: 2, name: 'Business 2', category: 'Food' },
     ],
-    Hotels: [
-      { id: 1, name: 'Hotel 1', location: 'City A' },
-      { id: 2, name: 'Hotel 2', location: 'City B' },
-    ],
+    Hotels: accommodationData,
     Payments: [
       { id: 1, amount: '₹1500', status: 'Paid', date: '2025-01-15' },
       { id: 2, amount: '₹2000', status: 'Pending', date: '2025-01-18' },
@@ -291,7 +297,7 @@ const UserDashboardScreen = () => {
           </div>
         )}
         {activeTab === 'Business' && (
-          <div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
             {sampleData.Business.map((business) => (
               <div key={business.id} className="p-4 border rounded mb-2">
                 <h2 className="text-lg font-semibold">{business.name}</h2>
@@ -301,11 +307,19 @@ const UserDashboardScreen = () => {
           </div>
         )}
         {activeTab === 'Hotels' && (
-          <div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
             {sampleData.Hotels.map((hotel) => (
               <div key={hotel.id} className="p-4 border rounded mb-2">
+                <img src={sanityImageUrlBuilder(hotel.images[0]).url()} className="bg-cover mb-3" />
                 <h2 className="text-lg font-semibold">{hotel.name}</h2>
-                <p className="text-gray-600">Location: {hotel.location}</p>
+                <p>
+                  <strong> Type: </strong>
+                  {hotel.accommodation_type}
+                </p>
+                <p>
+                  <b>Location:</b> {hotel.address.street}, {hotel.address.region}, {hotel.address.city},{' '}
+                  {hotel.address.country}
+                </p>
               </div>
             ))}
           </div>

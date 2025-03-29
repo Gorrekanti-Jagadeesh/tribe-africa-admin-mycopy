@@ -1,12 +1,10 @@
 import React from 'react';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StarRating } from '../rating/star-rating';
 import { useNavigate, useParams } from 'react-router-dom';
 import { accommodationCardProps } from '@/types';
 import { sanityImageUrlBuilder } from '@api/index';
 import { toKebabCase } from '@utils/common';
-import { getAverageOfObjectValues } from '@utils/common';
 
 const AccommodationCard: React.FC<{
   data: accommodationCardProps;
