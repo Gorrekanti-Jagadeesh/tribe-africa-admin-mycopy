@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler, Controller, Path } from 'react-hook-form';
-import FileUploadWithPreview from '@atoms/input-elements/file-upload-with-preview';
-import DynamicFields from '@atoms/input-elements/dynamic-fields';
 import Checkbox from '@/atoms/input-elements/checkbox';
 import Button from '@/atoms/custom-button/button';
-import { RichTextEditor } from '@/atoms/input-elements/rich-text-editor';
 import CustomInput from '@/atoms/input-elements/custom-input';
-import {
-  africanCountriesPhoneCodes,
-  afterWorkBusinessType,
-  afterWorkClubsAndSpecialGroupType,
-  afterWorkRestaurantsType,
-  Countries,
-} from '@/data';
-import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
+import { afterWorkBusinessType, afterWorkRestaurantsType } from '@/data';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
-import { sanity, processContent, splitRichText } from '@/utils/sanity';
-import { useQuery } from '@tanstack/react-query';
 import { uploadImage } from '@api/index';
 import sanityClient from '@/sanityClient';
 import { generateId } from '@utils/common';
@@ -165,10 +153,10 @@ const AfterWorkFrom: React.FC = () => {
 
   const typeOfBusiness = watch('businessType');
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['after-work-form'],
-    queryFn: () => sanity.GET(`*[_type == "afterWorkListing"]`),
-  });
+  // const { data, error, isLoading } = useQuery({
+  //   queryKey: ['after-work-form'],
+  //   queryFn: () => sanity.GET(`*[_type == "afterWorkListing"]`),
+  // });
 
   const onAfterFormSubmit: SubmitHandler<AfterWorkFormInputs> = async (data) => {
     try {

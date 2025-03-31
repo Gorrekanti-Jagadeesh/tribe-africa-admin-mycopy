@@ -14,13 +14,11 @@ import {
   Edit,
   Search,
   MoreVertical,
-  CreditCard,
 } from 'lucide-react';
-import { Controller, useForm, FieldValues } from 'react-hook-form';
-import { priceRangeOptions } from '@/data/amanitieConfig';
+import { useForm, FieldValues } from 'react-hook-form';
 import SectionTitle from './SectionTitle';
 import { sanityImageUrlBuilder } from '@api/index';
-import { getAmenitiesConfig, getAccommodationLabel, getAccommodationRoomType } from '@/data/amanitieConfig';
+// import { getAmenitiesConfig, getAccommodationLabel, getAccommodationRoomType } from '@/data/amanitieConfig';
 
 // Define missing types
 interface ReviewProps {
@@ -81,22 +79,22 @@ interface AfterWorkDetailsScreenProps {
 }
 
 const AfterWorkDetailsScreen: React.FC<AfterWorkDetailsScreenProps> = ({
-  reviews,
+  // reviews,
   hostel,
-  onSubmit,
-  control,
-  isSubmitting,
-  isModalOpen,
-  setIsModalOpen,
+  // onSubmit,
+  // control,
+  // isSubmitting,
+  // isModalOpen,
+  // setIsModalOpen,
 }) => {
-  const { getValues } = useForm();
+  // const { getValues } = useForm();
 
   if (!hostel) return <>Data not received yet</>;
-  const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
+  // const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [expanded, setExpanded] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
   const [allImage, setAllImage] = useState<string[]>([]);
 
   // const toggleExpanded = () => setExpanded(!expanded);

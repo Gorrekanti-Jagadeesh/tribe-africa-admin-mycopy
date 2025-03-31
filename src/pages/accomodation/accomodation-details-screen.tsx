@@ -14,9 +14,8 @@ import {
   Edit,
   Search,
   MoreVertical,
-  CreditCard,
 } from 'lucide-react';
-import { Controller, useForm, Control, FieldValues } from 'react-hook-form';
+import { Control, FieldValues } from 'react-hook-form';
 import { priceRangeOptions } from '@/data/amanitieConfig';
 import SectionTitle from './SectionTitle';
 import { sanityImageUrlBuilder } from '@api/index';
@@ -108,18 +107,18 @@ interface AccomodationDetailsScreenProps {
 }
 
 const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
-  reviews,
+  // reviews,
   hostel,
-  onSubmit,
-  control,
-  isSubmitting,
-  isModalOpen,
-  setIsModalOpen,
+  // onSubmit,
+  // control,
+  // isSubmitting,
+  // isModalOpen,
+  // setIsModalOpen,
 }) => {
-  const { getValues } = useForm();
+  // const { getValues } = useForm();
 
   if (!hostel) return <>Data not received yet</>;
-  const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
+  // const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -144,12 +143,12 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
       .filter(Boolean)
       .join(', ') || 'N/A';
 
-  const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
+  // const toggleSection = (section: string) => {
+  //   setOpenSections((prev) => ({
+  //     ...prev,
+  //     [section]: !prev[section],
+  //   }));
+  // };
 
   const openImageModal = (image: string, index: number, allImages: []) => {
     setSelectedImage(image);

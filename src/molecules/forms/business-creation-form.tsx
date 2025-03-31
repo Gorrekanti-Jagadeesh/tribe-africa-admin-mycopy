@@ -3,15 +3,12 @@ import Checkbox from '@/atoms/input-elements/checkbox';
 import CustomInput from '@/atoms/input-elements/custom-input';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-
-import { CustomSelect } from '@/atoms/input-elements/cutom-select';
 import DateInput from '@/atoms/input-elements/date-input';
 import Input from '@/atoms/input-elements/input';
 import sanityClient from '@/sanityClient';
 import { deepMerge } from '@/utils/common';
 import { uploadImage } from '@api/index';
 import { generateId } from '@utils/common';
-import { initializeApp } from 'firebase/app';
 
 type BusinessForm = {
   businessName: string;
@@ -100,7 +97,6 @@ const BusinessFormComponent = () => {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
     control,
     reset,

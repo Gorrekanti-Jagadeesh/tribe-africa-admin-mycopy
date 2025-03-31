@@ -78,11 +78,11 @@ const UserDashboardScreen = () => {
     ],
   };
 
-  if (userSubmissionsLoading || eventsLoading) {
+  if (userSubmissionsLoading || eventsLoading || accommodationLoading) {
     return <Loading />;
   }
 
-  if (userSubmissionsError || eventsError) {
+  if (userSubmissionsError || eventsError || accommodationError) {
     return 'Something is wrong';
   }
 

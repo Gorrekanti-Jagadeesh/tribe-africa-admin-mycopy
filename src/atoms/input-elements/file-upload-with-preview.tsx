@@ -10,7 +10,7 @@ const FileUploadWithPreview = ({
 }: {
   control: Control;
   maxFilesLength?: number;
-  setValue: (name: string, value: any) => void;
+  setValue: (name: string, value: File | string) => void;
   fieldName: string;
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

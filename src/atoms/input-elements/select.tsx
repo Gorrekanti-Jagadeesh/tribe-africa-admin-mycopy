@@ -14,7 +14,7 @@ export const Select = forwardRef<
     value?: string | number; // Accept value as a prop
     props?: React.HTMLAttributes<HTMLSelectElement>;
   }
->(({ options, name, onChange, placeholder, error, className, required, formType, value, ...props }, ref) => {
+>(({ options, name, onChange, placeholder, error, className, required, formType, ...props }, ref) => {
   const [selectedValue, setSelectedValue] = useState<string | number | ''>('');
 
   // Reset selected value when formType changes
