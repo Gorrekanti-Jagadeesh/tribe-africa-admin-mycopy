@@ -13,6 +13,7 @@ import UnderlineHeading from '@/atoms/heading/underline-heading';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
 import CustomInput from '@/atoms/input-elements/custom-input';
 import MobileNumberInput from '@/atoms/input-elements/contact-custom-input';
+import Cookies from 'js-cookie';
 
 export type EventFormData = {
   title: string;
@@ -53,6 +54,7 @@ export type EventFormData = {
   rightsToContent: boolean;
   businessPhoto: File;
   coverPhoto: File;
+  userid: string;
 };
 
 const categories = eventTypes;
@@ -83,6 +85,28 @@ const EventForm: React.FC = () => {
     try {
       // Display loader
       setLoader(true);
+
+      // Get userId from cookies
+      const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
+      console.log('User cookie found:', !!userCookie);
+
+      if (!userCookie) {
+        alert('User not found. Please login again.');
+        return;
+      }
+
+      // Parse the user data from the cookie
+      const userData = JSON.parse(userCookie);
+      console.log('User data from cookie:', userData);
+
+      // Extract the userId - look for uid field in the user data
+      const userId = userData.uid;
+      console.log('User ID from cookie:', userId);
+
+      if (!userId) {
+        alert('User ID not found in cookie. Please login again.');
+        return;
+      }
 
       // Convert RichText fields to Portable Text format
       const description = await processContent(splitRichText(data.description));
@@ -120,7 +144,7 @@ const EventForm: React.FC = () => {
       };
 
       // Submit to Sanity
-      await sanityClient.create({
+      const documentData = {
         _type: 'event', // Sanity schema type
         _id: `drafts.${generateId()}`, // Unique ID for draft
         title: data.title,
@@ -155,7 +179,15 @@ const EventForm: React.FC = () => {
         agreeToFeature: data.agreeToFeature,
         email: data.email,
         rightsToContent: data.rightsToContent,
-      });
+        userid: userId, // Using lowercase 'userid' to match Sanity schema
+        status: 'pending',
+      };
+
+      console.log('Document data being sent to Sanity:', documentData);
+
+      // Submit to Sanity
+      const result = await sanityClient.create(documentData);
+      console.log('Sanity create result:', result);
 
       // Notify success
       alert('Event submitted successfully!');

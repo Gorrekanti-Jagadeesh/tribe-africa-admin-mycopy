@@ -19,6 +19,7 @@ import NotFound from '@molecules/common/not-found';
 import MustSeeAndDoDetails from '../pages/must-see-and-do/must-see-and-do-details-screen';
 import EventDetailsPage from '@molecules/events/events-view';
 import AccommodationForm from '@molecules/forms/accomodation-creation-form';
+import NotificationsPage from '../pages/notifications/notifications';
 
 import CountryEventsPage from '../pages/events/business-events';
 import FindABusinessLinksContainer from '../pages/find-a-business/find-a-business-links-container';
@@ -44,6 +45,11 @@ const appRoutes: RouteConfig[] = [
     name: 'Home',
     path: '/',
     element: <HomeContainer />,
+  },
+  {
+    name: 'Notifications',
+    path: '/notifications',
+    element: <NotificationsPage />,
   },
   {
     name: 'Business Page',
