@@ -666,17 +666,17 @@ const SeatingInfo = ({
   );
 };
 
-const formatLanguages = (languages: Record<string, boolean | string>) => {
-  return Object.entries(languages)
-    .filter(([key, value]) => value === true || (key === 'other' && value))
-    .map(([key, value]) => (key === 'other' ? value : key.charAt(0).toUpperCase() + key.slice(1)))
-    .join(', ');
-};
+// const formatLanguages = (languages: Record<string, boolean | string>) => {
+//   return Object.entries(languages)
+//     .filter(([key, value]) => value === true || (key === 'other' && value))
+//     .map(([key, value]) => (key === 'other' ? value : key.charAt(0).toUpperCase() + key.slice(1)))
+//     .join(', ');
+// };
 
 // Tailwind Badge Style
 
 // Tailwind Badge Style
-const badgeStyle = 'bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-2 mb-1';
+// const badgeStyle = 'bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-2 mb-1';
 const HotelDescription = ({ title, description }: { title: string; description?: string }) => {
   return (
     <div className="mx-auto p-4 m-10">
@@ -762,7 +762,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, items })
       {isOpen && (
         <div className="bg-gray-50 px-3 py-2">
           {Object.entries(items)
-            .filter(([_each, value]) => value === true) // Only include `true` values
+            .filter(([_, value]) => value === true) // Only include `true` values
             .map(([key]) => (
               <div key={key} className="py-1.5 px-2 text-sm text-gray-600">
                 {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
