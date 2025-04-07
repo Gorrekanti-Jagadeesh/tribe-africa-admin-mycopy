@@ -759,7 +759,7 @@ const RoomBathroomDetails = ({ accomodationLabel, data }) => {
 
   const formatBooleanFields = (fields) => {
     return Object.entries(fields || {})
-      .filter(([_, value]) => value === true)
+      .filter(([, value]) => value === true)
       .map(([key]) => toTitleCase(key))
       .join(', ');
   };
@@ -921,7 +921,7 @@ const formatLanguages = (languages: Record<string, boolean | string>) => {
 // Tailwind Badge Style
 
 // Tailwind Badge Style
-const badgeStyle = 'bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-2 mb-1';
+// const badgeStyle = 'bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full mr-2 mb-1';
 const HotelDescription = ({ title, description, highlights, languages }) => {
   return (
     <div className="mx-auto p-4 m-20">

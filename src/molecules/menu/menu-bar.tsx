@@ -20,7 +20,6 @@ interface Approval {
 export const MenuBar = ({ purpose, country }: { purpose: string | undefined; country: string | undefined }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Approval[]>([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchNotifications = async () => {
@@ -44,11 +43,8 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
       });
 
       setNotifications(notificationData);
-      console.log(notificationData);
     } catch (error) {
       console.error('Error fetching notifications:', error);
-    } finally {
-      setLoading(false);
     }
   };
 

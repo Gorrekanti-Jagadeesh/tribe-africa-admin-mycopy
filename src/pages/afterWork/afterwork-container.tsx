@@ -3,7 +3,6 @@ import AfterWorkScreen from './afterwork-screen';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
 import { fromKebabCase } from '@utils/common';
-import sanityClient from '@/sanityClient';
 
 const AfterWorkContainer = () => {
   const { country, sub_category, category } = useParams();
