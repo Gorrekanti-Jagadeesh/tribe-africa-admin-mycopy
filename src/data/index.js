@@ -110,7 +110,7 @@ export const CountriesGeoData = {
       { name: 'El Kala National Park', coordinates: [8.4667, 36.8833], category: 'Nature', subCategory: 'Nature1' },
       { name: 'Chréa National Park', coordinates: [2.8172, 36.4628], category: 'Nature', subCategory: 'Nature2' },
       { name: 'Ahaggar National Park', coordinates: [5.8735, 23.2856], category: 'Nature', subCategory: 'Nature2' },
-      { name: 'Casbah of Algiers', coordinates: [3.0588, 36.7665], category: 'Historical & Cultural' },
+      { name: 'Casbah of Algiers', coordinates: [3.0588, 36.76651], category: 'Historical & Cultural' },
       { name: 'Mzab Valley', coordinates: [3.6667, 32.4911], category: 'Historical & Cultural' },
       { name: 'Sidi Okba Mosque', coordinates: [5.743, 34.7059], category: 'Sacred Sites' },
       { name: "Qal'a of Beni Hammad", coordinates: [4.7782, 35.863], category: 'Sacred Sites' },
