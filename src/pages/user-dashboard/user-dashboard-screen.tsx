@@ -8,14 +8,14 @@ import Modal from '@/molecules/modal';
 import Button from '@/atoms/custom-button/button';
 import { PortableText } from '@portabletext/react';
 import { sanityImageUrlBuilder } from '@/api';
-import { toKebabCase } from '@/utils/common';
+import { fromKebabCase, toKebabCase } from '@/utils/common';
 
 const UserDashboardScreen = () => {
   const [activeTab, setActiveTab] = useState('Advertisements');
   const [selectedAd, setSelectedAd] = useState(null);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
-  const tabs = ['Advertisements', 'Events', 'Business', 'Hotels', 'Payments'];
+  const tabs = ['Advertisements', 'Events', 'Business', 'Accommodations', 'Payments'];
   const email: string = JSON.parse(Cookies.get('emailUser') || '{}').email;
 
   const navigation = useNavigate();
@@ -59,10 +59,10 @@ const UserDashboardScreen = () => {
     isLoading: accommodationLoading,
   } = useQuery({
     queryKey: ['user-accommodations', email],
-    queryFn: () => sanity.GET(`*[_type == "accommodation" && contact.email == "${email}" ]`),
+    queryFn: () => sanity.GET(`*[_type == "accomodationList" && contact.email == "${email}"]`),
   });
 
-  console.log(accommodationData);
+  console.log(accommodationData, 'llllo');
 
   const sampleData = {
     Advertisements: userSubmissionsData,
@@ -71,7 +71,7 @@ const UserDashboardScreen = () => {
       { id: 1, name: 'Business 1', category: 'Retail' },
       { id: 2, name: 'Business 2', category: 'Food' },
     ],
-    Hotels: accommodationData,
+    Accommodations: accommodationData,
     Payments: [
       { id: 1, amount: '₹1500', status: 'Paid', date: '2025-01-15' },
       { id: 2, amount: '₹2000', status: 'Pending', date: '2025-01-18' },
@@ -306,22 +306,56 @@ const UserDashboardScreen = () => {
             ))}
           </div>
         )}
-        {activeTab === 'Hotels' && (
+        {activeTab === 'Accommodations' && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
-            {sampleData.Hotels.map((hotel) => (
-              <div key={hotel.id} className="p-4 border rounded mb-2">
-                <img src={sanityImageUrlBuilder(hotel.images[0]).url()} className="bg-cover mb-3" />
-                <h2 className="text-lg font-semibold">{hotel.name}</h2>
-                <p>
-                  <strong> Type: </strong>
-                  {hotel.accommodation_type}
-                </p>
-                <p>
-                  <b>Location:</b> {hotel.address.street}, {hotel.address.region}, {hotel.address.city},{' '}
-                  {hotel.address.country}
-                </p>
-              </div>
-            ))}
+            {sampleData.Accommodations.map((hotel) => {
+              const imageKey = `uploadedPhotos${hotel.accommodation_type.replace(/-./g, (x) => x[1].toUpperCase()).replace(/^\w/, (c) => c.toLowerCase())}`;
+              const imageData = hotel?.[imageKey]?.exterior?.[0];
+
+              return (
+                <div key={hotel._id} className="p-4 border rounded mb-2 space-y-1">
+                  {imageData ? (
+                    <img
+                      src={sanityImageUrlBuilder(imageData).url()}
+                      alt="Accommodation"
+                      className="bg-cover mb-3 w-full h-48 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gray-200 mb-3 flex items-center justify-center rounded text-gray-500 text-sm">
+                      No image
+                    </div>
+                  )}
+
+                  <h2 className="text-lg font-semibold">{hotel.name}</h2>
+                  <p>
+                    <strong> Accommodation Type: </strong>
+                    {fromKebabCase(hotel.accommodation_type)}
+                  </p>
+                  <p>
+                    <b>Location:</b> {hotel.address.street}, {hotel.address.region}, {hotel.address.city},{' '}
+                    {hotel.address.country}
+                  </p>
+                  <p>
+                    <b>Contact:</b> {hotel.contact.phoneNumber}
+                  </p>
+                  <p>
+                    <b>Email:</b> {hotel.contact.email}
+                  </p>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        navigation(
+                          `/${toKebabCase(hotel.address.country)}/business/accommodation/${hotel.accommodation_type}/${hotel._id}`
+                        );
+                      }}
+                      className="w-full my-2"
+                    >
+                      View {fromKebabCase(hotel.accommodation_type)}
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
         {activeTab === 'Payments' && (

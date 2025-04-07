@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate, useParams } from 'react-router-dom';
 import { accommodationCardProps } from '@/types';
 import { sanityImageUrlBuilder } from '@api/index';
-import { toKebabCase } from '@utils/common';
+import { fromKebabCase, toKebabCase } from '@utils/common';
 
 const AccommodationCard: React.FC<{
   data: accommodationCardProps;
@@ -47,7 +47,7 @@ const AccommodationCard: React.FC<{
               );
             }}
           >
-            View Hotel
+            View {fromKebabCase(subCategory)}
           </button>
         </div>
       </div>

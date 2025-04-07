@@ -15,7 +15,7 @@ import {
   Search,
   MoreVertical,
 } from 'lucide-react';
-import { useForm, FieldValues } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import SectionTitle from './SectionTitle';
 import { sanityImageUrlBuilder } from '@api/index';
 // import { getAmenitiesConfig, getAccommodationLabel, getAccommodationRoomType } from '@/data/amanitieConfig';
@@ -236,7 +236,7 @@ const AfterWorkDetailsScreen: React.FC<AfterWorkDetailsScreenProps> = ({
                 {/* Star Ratings & Reviews */}
                 <div className="flex items-center">
                   <div className="flex">
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(5)].map((_each, i) => (
                       <Star
                         key={i}
                         size={28}
@@ -462,131 +462,131 @@ const AfterWorkDetailsScreen: React.FC<AfterWorkDetailsScreenProps> = ({
 
 export default AfterWorkDetailsScreen;
 
-const LocationDetails = ({
-  distanceToKeyLocations,
-  location,
-}: {
-  distanceToKeyLocations?: {
-    nearestAirport?: string;
-    taxiStands?: string;
-    cityCenter?: string;
-    localMarkets?: string;
-    popularRestaurants?: string;
-    trainBusStation?: string;
-  };
-  location?: {
-    latitude?: string;
-    longitude?: string;
-  };
-}) => {
-  const mapUrl = `https://www.google.com/maps?q=${location?.latitude},${location?.longitude}&output=embed`;
+// const LocationDetails = ({
+//   distanceToKeyLocations,
+//   location,
+// }: {
+//   distanceToKeyLocations?: {
+//     nearestAirport?: string;
+//     taxiStands?: string;
+//     cityCenter?: string;
+//     localMarkets?: string;
+//     popularRestaurants?: string;
+//     trainBusStation?: string;
+//   };
+//   location?: {
+//     latitude?: string;
+//     longitude?: string;
+//   };
+// }) => {
+//   const mapUrl = `https://www.google.com/maps?q=${location?.latitude},${location?.longitude}&output=embed`;
 
-  return (
-    <div className="mt-6 p-4 bg-white">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
-        {/* Distance to Key Locations */}
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
-            Distance to Key Locations
-          </h2>
-          <div className="mt-3">
-            <p className="text-base text-gray-800">
-              <span className="font-semibold">Nearest Airport:</span> {distanceToKeyLocations?.nearestAirport}
-            </p>
-            <p className="text-base text-gray-800 mt-2">
-              <span className="font-semibold">Taxi Stands:</span> {distanceToKeyLocations?.taxiStands}
-            </p>
-            <p className="text-base text-gray-800 mt-2">
-              <span className="font-semibold">City/Town Center:</span> {distanceToKeyLocations?.cityCenter}
-            </p>
-            <p className="text-base text-gray-800 mt-2">
-              <span className="font-semibold">Local Markets/Shopping Areas:</span>{' '}
-              {distanceToKeyLocations?.localMarkets}
-            </p>
-            <p className="text-base text-gray-800 mt-2">
-              <span className="font-semibold">Popular Restaurants/Bars:</span>{' '}
-              {distanceToKeyLocations?.popularRestaurants}
-            </p>
-            <p className="text-base text-gray-800 mt-2">
-              <span className="font-semibold">Train/Bus Station:</span> {distanceToKeyLocations?.trainBusStation}
-            </p>
-          </div>
-        </div>
+//   return (
+//     <div className="mt-6 p-4 bg-white">
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
+//         {/* Distance to Key Locations */}
+//         <div>
+//           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+//             Distance to Key Locations
+//           </h2>
+//           <div className="mt-3">
+//             <p className="text-base text-gray-800">
+//               <span className="font-semibold">Nearest Airport:</span> {distanceToKeyLocations?.nearestAirport}
+//             </p>
+//             <p className="text-base text-gray-800 mt-2">
+//               <span className="font-semibold">Taxi Stands:</span> {distanceToKeyLocations?.taxiStands}
+//             </p>
+//             <p className="text-base text-gray-800 mt-2">
+//               <span className="font-semibold">City/Town Center:</span> {distanceToKeyLocations?.cityCenter}
+//             </p>
+//             <p className="text-base text-gray-800 mt-2">
+//               <span className="font-semibold">Local Markets/Shopping Areas:</span>{' '}
+//               {distanceToKeyLocations?.localMarkets}
+//             </p>
+//             <p className="text-base text-gray-800 mt-2">
+//               <span className="font-semibold">Popular Restaurants/Bars:</span>{' '}
+//               {distanceToKeyLocations?.popularRestaurants}
+//             </p>
+//             <p className="text-base text-gray-800 mt-2">
+//               <span className="font-semibold">Train/Bus Station:</span> {distanceToKeyLocations?.trainBusStation}
+//             </p>
+//           </div>
+//         </div>
 
-        {/* Map Location */}
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
-            Map Location
-          </h2>
-          <div className="mt-3">
-            <iframe src={mapUrl} className="w-full h-60 rounded-lg shadow-md" allowFullScreen loading="lazy"></iframe>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//         {/* Map Location */}
+//         <div>
+//           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+//             Map Location
+//           </h2>
+//           <div className="mt-3">
+//             <iframe src={mapUrl} className="w-full h-60 rounded-lg shadow-md" allowFullScreen loading="lazy"></iframe>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-const RoomBathroomDetails = ({ accomodationLabel, data }: { accomodationLabel: string; data: any }) => {
-  const toTitleCase = (str: string) => {
-    return str
-      .replace(/([A-Z])/g, ' $1') // Add space before capital letters
-      .trim()
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // Convert first letter to uppercase
-  };
+// const RoomBathroomDetails = ({ accomodationLabel, data }: { accomodationLabel: string; data: any }) => {
+//   const toTitleCase = (str: string) => {
+//     return str
+//       .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+//       .trim()
+//       .replace(/\b\w/g, (char) => char.toUpperCase()); // Convert first letter to uppercase
+//   };
 
-  const formatBooleanFields = (fields: Record<string, boolean>) => {
-    return Object.entries(fields)
-      .filter(([_, value]) => value === true)
-      .map(([key]) => toTitleCase(key))
-      .join(', ');
-  };
+//   const formatBooleanFields = (fields: Record<string, boolean>) => {
+//     return Object.entries(fields)
+//       .filter(([_each, value]) => value === true)
+//       .map(([key]) => toTitleCase(key))
+//       .join(', ');
+//   };
 
-  const formatTextFields = (fields: Record<string, any>, excludedKeys: string[] = []) => {
-    return Object.entries(fields)
-      .filter(([key, value]) => value && typeof value !== 'object' && !excludedKeys.includes(key))
-      .map(([key, value]) => ({
-        key: toTitleCase(key),
-        value: value,
-      }));
-  };
+//   const formatTextFields = (fields: Record<string, any>, excludedKeys: string[] = []) => {
+//     return Object.entries(fields)
+//       .filter(([key, value]) => value && typeof value !== 'object' && !excludedKeys.includes(key))
+//       .map(([key, value]) => ({
+//         key: toTitleCase(key),
+//         value: value,
+//       }));
+//   };
 
-  const formatObjectFields = (fields: Record<string, any>) => {
-    return Object.entries(fields)
-      .map(([key, value]) => {
-        if (typeof value === 'object' && value !== null) {
-          const booleanFields = formatBooleanFields(value);
-          if (booleanFields) {
-            return {
-              key: toTitleCase(key),
-              value: booleanFields,
-            };
-          }
-        }
-        return null;
-      })
-      .filter(Boolean);
-  };
+//   const formatObjectFields = (fields: Record<string, any>) => {
+//     return Object.entries(fields)
+//       .map(([key, value]) => {
+//         if (typeof value === 'object' && value !== null) {
+//           const booleanFields = formatBooleanFields(value);
+//           if (booleanFields) {
+//             return {
+//               key: toTitleCase(key),
+//               value: booleanFields,
+//             };
+//           }
+//         }
+//         return null;
+//       })
+//       .filter(Boolean);
+//   };
 
-  // Combine text and object fields into one array
-  const allFields = [...formatTextFields(data), ...formatObjectFields(data)];
+//   // Combine text and object fields into one array
+//   const allFields = [...formatTextFields(data), ...formatObjectFields(data)];
 
-  return (
-    <div className="p-4 mt-4 bg-white shadow rounded-lg">
-      <h2 className="text-2xl font-bold flex items-center border-b-4 border-orange-400 pb-2">
-        {accomodationLabel} Room & Bathroom Details
-      </h2>
-      <div className="grid grid-cols-2 gap-0 mt-4">
-        {allFields.map(({ key, value }) => (
-          <div key={key} className="flex-start">
-            <span className="font-bold">{key + '  '}:</span>
-            <span className="font-normal">{'  ' + value}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="p-4 mt-4 bg-white shadow rounded-lg">
+//       <h2 className="text-2xl font-bold flex items-center border-b-4 border-orange-400 pb-2">
+//         {accomodationLabel} Room & Bathroom Details
+//       </h2>
+//       <div className="grid grid-cols-2 gap-0 mt-4">
+//         {allFields.map(({ key, value }) => (
+//           <div key={key} className="flex-start">
+//             <span className="font-bold">{key + '  '}:</span>
+//             <span className="font-normal">{'  ' + value}</span>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
 
 const OwnerContactDetails = ({
   ownerContactDetails,
@@ -762,7 +762,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, items })
       {isOpen && (
         <div className="bg-gray-50 px-3 py-2">
           {Object.entries(items)
-            .filter(([_, value]) => value === true) // Only include `true` values
+            .filter(([_each, value]) => value === true) // Only include `true` values
             .map(([key]) => (
               <div key={key} className="py-1.5 px-2 text-sm text-gray-600">
                 {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}

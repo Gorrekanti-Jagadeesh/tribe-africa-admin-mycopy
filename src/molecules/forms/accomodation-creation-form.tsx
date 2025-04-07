@@ -82,6 +82,8 @@ const AccommodationForm: React.FC = () => {
       reset();
       setFormData(null);
       setFormType('');
+
+      alert('Accommodation form submitted successfully');
     } catch (error) {
       console.error('Submission failed:', error);
       alert('An error occurred while submitting. Please try again.');
@@ -1189,6 +1191,7 @@ const AccordionSection: React.FC<{
   const [otherSpecifyValues, setOtherSpecifyValues] = useState<{ [key: string]: string }>({}); // Stores "Other (Specify)" values
 
   const register = useContext(FormContext);
+  console.log(selectedOptions, otherSpecifyValues);
 
   useEffect(() => {
     setOtherSpecify('');

@@ -3,7 +3,6 @@ import AccomodationScreen from './accomodation-screen';
 import { useQuery } from '@tanstack/react-query';
 import { sanity } from '@utils/sanity';
 import { fromKebabCase } from '@utils/common';
-import sanityClient from '@/sanityClient';
 
 const AccomodationContainer = () => {
   const { country, sub_category, category } = useParams();
@@ -17,18 +16,20 @@ const AccomodationContainer = () => {
   // });
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['accommodationListData'],
+    queryKey: ['accommodationListData', sub_category, country],
     queryFn: async () => {
       try {
-        const response =
-          await sanity.GET(`*[_type == "accomodationList" && address.country == "${fromKebabCase(country)}" && accommodation_type == "${sub_category}"]{
-          _id, 
-          name, 
-          "phone_no": contact.phoneNumber, 
-          "website": contact.website, 
-          amount, 
-          "images": uploadedPhotoshotel.exterior[0],
-        }`);
+        const dynamicImageKey = `uploadedPhotos${sub_category.replace(/-./g, (x) => x[1].toUpperCase()).replace(/^\w/, (c) => c.toLowerCase())}`;
+        const query = `*[_type == "accomodationList" && address.country == "${fromKebabCase(country)}" && accommodation_type == "${sub_category}"]{
+        _id, 
+        name, 
+        "phone_no": contact.phoneNumber, 
+        "website": contact.website, 
+        amount, 
+        "images": ${dynamicImageKey}.exterior[0]
+      }`;
+
+        const response = await sanity.GET(query);
         console.log('Sanity Data:', response);
         return response;
       } catch (err) {
@@ -37,6 +38,7 @@ const AccomodationContainer = () => {
       }
     },
   });
+
   // const { data, error, isLoading } = useQuery({
   //   queryKey: ['accommodationListData'],
   //   queryFn: async () => await sanityClient.fetch(`*[_type == "accomodationList"]`),
