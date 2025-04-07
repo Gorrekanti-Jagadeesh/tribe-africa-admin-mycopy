@@ -762,7 +762,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, items })
       {isOpen && (
         <div className="bg-gray-50 px-3 py-2">
           {Object.entries(items)
-            .filter(([_, value]) => value === true) // Only include `true` values
+            .filter(([, value]) => value === true) // Only include `true` values
             .map(([key]) => (
               <div key={key} className="py-1.5 px-2 text-sm text-gray-600">
                 {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}

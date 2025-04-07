@@ -140,17 +140,17 @@ const NotificationsPage = () => {
     getAllDocuments();
   }, []);
 
-  const getStatusColor = (status: string) => {
-    const statusLower = status.toLowerCase();
-    switch (statusLower) {
-      case 'approved':
-        return 'text-green-700 bg-green-50 border-green-200';
-      case 'rejected':
-        return 'text-red-700 bg-red-50 border-red-200';
-      default:
-        return 'text-gray-700 bg-gray-50 border-gray-200';
-    }
-  };
+  // const getStatusColor = (status: string) => {
+  //   const statusLower = status.toLowerCase();
+  //   switch (statusLower) {
+  //     case 'approved':
+  //       return 'text-green-700 bg-green-50 border-green-200';
+  //     case 'rejected':
+  //       return 'text-red-700 bg-red-50 border-red-200';
+  //     default:
+  //       return 'text-gray-700 bg-gray-50 border-gray-200';
+  //   }
+  // };
 
   const filteredNotifications =
     filter === 'all'
