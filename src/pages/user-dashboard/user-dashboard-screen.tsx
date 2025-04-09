@@ -9,6 +9,7 @@ import Button from '@/atoms/custom-button/button';
 import { PortableText } from '@portabletext/react';
 import { sanityImageUrlBuilder } from '@/api';
 import { fromKebabCase, toKebabCase } from '@/utils/common';
+import PaymentSheet from '@/hooks/usePayment';
 
 const UserDashboardScreen = () => {
   const [activeTab, setActiveTab] = useState('Advertisements');
@@ -40,8 +41,7 @@ const UserDashboardScreen = () => {
         item->{
           _id,
           title  
-        }
-      }`),
+      }}`),
   });
 
   const {
@@ -61,8 +61,6 @@ const UserDashboardScreen = () => {
     queryKey: ['user-accommodations', email],
     queryFn: () => sanity.GET(`*[_type == "accomodationList" && contact.email == "${email}"]`),
   });
-
-  console.log(accommodationData, 'llllo');
 
   const sampleData = {
     Advertisements: userSubmissionsData,
@@ -187,7 +185,6 @@ const UserDashboardScreen = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-[40%] text-center">
               <h2 className="text-xl font-semibold mb-4">Confirm Payment</h2>
-
               {/* Ad Details */}
               <div className="mb-4 text-left">
                 <p className="text-lg font-medium">
@@ -209,27 +206,16 @@ const UserDashboardScreen = () => {
                   📅 <span className="font-semibold">Active Days:</span> {selectedAd?.days} days
                 </p>
               </div>
-
               {/* Payment Amount */}
               <p className="text-lg font-medium mb-4">
                 💰 <span className="font-semibold">Amount:</span> {selectedAd?.amount}
               </p>
-
-              {/* Buttons */}
-              <div className="flex justify-center gap-4">
-                <button
-                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                  onClick={confirmPayment}
-                >
-                  Pay Now
-                </button>
-                <button
-                  className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                  onClick={() => setShowPaymentPopup(false)}
-                >
-                  Cancel
-                </button>
-              </div>
+              {/* <PaymentElement /> */}
+              <PaymentSheet
+                amount={Number(selectedAd?.amount.slice(1))}
+                onCancel={() => setShowPaymentPopup(false)}
+                onPaymentSuccess={confirmPayment}
+              />
             </div>
           </div>
         </Modal>
