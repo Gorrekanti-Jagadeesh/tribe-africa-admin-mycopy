@@ -82,7 +82,7 @@ export const CountriesGeoData = {
       },
       {
         name: 'Tamanrasset',
-        coordinates: [5.5228, 22.785],
+        coordinates: [5.5228, 22.7855],
         category: 'Action Enthusiasts',
         subCategory: 'Dive into History',
       },
