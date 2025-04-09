@@ -1,4 +1,5 @@
 export interface AccommodationFormInputs {
+  userId: string; // added for the purpose of notification
   accommodation_type: string;
   name: string;
   brand?: string;

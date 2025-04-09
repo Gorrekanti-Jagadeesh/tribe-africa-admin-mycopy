@@ -12,14 +12,15 @@ interface ApprovalStatus {
   approvedAt: Date;
   title?: string;
   description?: string;
-  category?: string;
-  city?: string;
   country?: string;
-  eventBy?: string;
+  city?: string;
+  name?: string;
   type?: string;
-  venue?: string;
-  userId?: string;
+  userid?: string;
+  accommodation_type?: string;
   read?: boolean;
+  blogType?: string;
+  author?: string;
 }
 
 const NotificationsPage = () => {
@@ -69,14 +70,15 @@ const NotificationsPage = () => {
             approvedAt: data.timestamp?.toDate() || new Date(),
             title: data.title || `${data.documentType} notification`,
             description: data.description || data.reason,
-            category: data.category,
-            city: data.city,
             country: data.country,
-            eventBy: data.eventBy,
+            city: data.city,
+            name: data.name,
             type: data.type,
-            venue: data.venue,
-            userId: data.userId,
+            userid: data.userid,
+            accommodation_type: data.accommodation_type,
             read: data.read || false,
+            blogType: data.blogType,
+            author: data.author,
           });
         }
       });
@@ -139,18 +141,6 @@ const NotificationsPage = () => {
   useEffect(() => {
     getAllDocuments();
   }, []);
-
-  // const getStatusColor = (status: string) => {
-  //   const statusLower = status.toLowerCase();
-  //   switch (statusLower) {
-  //     case 'approved':
-  //       return 'text-green-700 bg-green-50 border-green-200';
-  //     case 'rejected':
-  //       return 'text-red-700 bg-red-50 border-red-200';
-  //     default:
-  //       return 'text-gray-700 bg-gray-50 border-gray-200';
-  //   }
-  // };
 
   const filteredNotifications =
     filter === 'all'
@@ -288,9 +278,7 @@ const NotificationsPage = () => {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-base font-semibold text-gray-900">
-                            {notification.title || `${notification.documentType} notification`}
-                          </h3>
+                          <h3 className="text-base font-semibold text-gray-900">{`${notification.documentType}`}</h3>
                           <span
                             className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full ${
                               notification.status === 'approved'
@@ -312,39 +300,78 @@ const NotificationsPage = () => {
                           </p>
                         )}
 
-                        {/* Details section */}
-                        {(notification.category || notification.type || notification.venue || notification.city) && (
-                          <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-500">
-                            {notification.category && (
-                              <span className="flex items-center gap-1">
-                                <span className="font-medium">Category:</span>
-                                {notification.category}
-                              </span>
-                            )}
+                        {/* Details section based on document type */}
+                        <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-500">
+                          {notification.documentType === 'event' && (
+                            <>
+                              {notification.title && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Title:</span>
+                                  {notification.title}
+                                </span>
+                              )}
+                              {notification.type && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Type:</span>
+                                  {notification.type}
+                                </span>
+                              )}
+                              {notification.city && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Location:</span>
+                                  {notification.city}
+                                  {notification.country ? `, ${notification.country}` : ''}
+                                </span>
+                              )}
+                            </>
+                          )}
 
-                            {notification.type && (
-                              <span className="flex items-center gap-1">
-                                <span className="font-medium">Type:</span>
-                                {notification.type}
-                              </span>
-                            )}
+                          {notification.documentType === 'accomodationList' && (
+                            <>
+                              {notification.name && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Name:</span>
+                                  {notification.name}
+                                </span>
+                              )}
+                              {notification.accommodation_type && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Type:</span>
+                                  {notification.accommodation_type}
+                                </span>
+                              )}
+                            </>
+                          )}
 
-                            {notification.venue && (
-                              <span className="flex items-center gap-1">
-                                <span className="font-medium">Venue:</span>
-                                {notification.venue}
-                              </span>
-                            )}
-
-                            {notification.city && (
-                              <span className="flex items-center gap-1">
-                                <span className="font-medium">Location:</span>
-                                {notification.city}
-                                {notification.country ? `, ${notification.country}` : ''}
-                              </span>
-                            )}
-                          </div>
-                        )}
+                          {notification.documentType === 'blog' && (
+                            <>
+                              {notification.title && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Title:</span>
+                                  {notification.title}
+                                </span>
+                              )}
+                              {notification.author && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Author:</span>
+                                  {notification.author}
+                                </span>
+                              )}
+                              {notification.blogType && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Type:</span>
+                                  {notification.blogType}
+                                </span>
+                              )}
+                              {notification.country && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Country:</span>
+                                  {notification.country}
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
 
                       {/* Time and read status */}
