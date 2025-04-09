@@ -38,9 +38,8 @@ interface EventsScreenProps {
       organizerCountryCode: string;
       organizerDisplayName: string;
       organizerEmergencyCountryCode: string;
-      type: string;
     };
-
+    type: string;
     eventBy: string;
     description: TypedObject | TypedObject[];
     aboutEvent: string;
@@ -56,8 +55,6 @@ interface EventsScreenProps {
 const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigate();
-
-  console.log(data, 'ee');
 
   return (
     <div className="p-2 md:p-4 max-w-6xl m-auto">
@@ -85,8 +82,8 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
                   backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
                 }}
               >
-                <div className="absolute top-0 left-0 right-0 bottom-0 bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
-                  <div className="text-white">
+                <div className="h-full bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
+                  <div className="text-white text-xs text-center">
                     <PortableText value={item.description} />
                   </div>
                 </div>
@@ -117,11 +114,13 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
                   {item.countryCode} {item.phone}
                 </p>
                 {item.website && (
-                  <p>
-                    <strong> Website:</strong> {item.website}
-                  </p>
+                  <a href={item.website} target="_blank">
+                    <p>
+                      <strong> Website:</strong> {item.website.slice(0, 35)}
+                    </p>
+                  </a>
                 )}
-                <Button>{item.ticketPrices.general}</Button>
+                <Button>{item.isEventFree ? 'FREE' : `General : ${item.ticketPrices.general}`}</Button>
               </div>
             </div>
           ))}

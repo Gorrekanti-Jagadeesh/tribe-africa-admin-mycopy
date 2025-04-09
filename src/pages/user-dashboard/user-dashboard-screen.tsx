@@ -235,65 +235,63 @@ const UserDashboardScreen = () => {
         </Modal>
 
         {activeTab === 'Events' && (
-          <div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
-              {sampleData.Events.map((item) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+            {sampleData.Events.map((item) => (
+              <div
+                className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
+                key={item._id}
+                onClick={() =>
+                  navigation(`/events/${toKebabCase(item.category)}/${toKebabCase(item.type)}/${item._id}`)
+                }
+              >
                 <div
-                  className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
-                  key={item._id}
-                  onClick={() =>
-                    navigation(`/events/${toKebabCase(item.category)}/${toKebabCase(item.type)}/${item._id}`)
-                  }
+                  className="aspect-video bg-cover group relative overflow-auto"
+                  style={{
+                    backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
+                  }}
                 >
-                  <div
-                    className="aspect-video bg-cover group relative overflow-auto"
-                    style={{
-                      backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
-                    }}
-                  >
-                    <div className="h-full bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
-                      <div className="text-white text-xs text-center">
-                        <PortableText value={item.description} />
-                      </div>
+                  <div className="h-full bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
+                    <div className="text-white text-xs text-center">
+                      <PortableText value={item.description} />
                     </div>
                   </div>
-                  <div className="text-sm flex flex-col gap-2 m-2">
-                    <p id="title" className="font-semibold text-lg">
-                      {item.title}
-                    </p>
-                    <p>
-                      <strong> Event By:</strong> {item.eventBy}
-                    </p>
-                    <p>
-                      <strong> Start Date & Time:</strong> {item.eventStartDate}, {item.eventStartTime}
-                    </p>
-                    <p>
-                      <strong> End Date & Time:</strong> {item.eventEndDate}, {item.eventEndTime}
-                    </p>
-                    <p>
-                      <strong> Location:</strong> {item.venue}, {item.city}
-                    </p>
-                    <p>
-                      <strong> Country: </strong>
-                      {item.country}
-                    </p>
-
-                    <p>
-                      <strong>Tel:</strong>
-                      {item.countryCode} {item.phone}
-                    </p>
-                    {item.website && (
-                      <a href={item.website} target="_blank">
-                        <p>
-                          <strong> Website:</strong> {item.website.slice(0, 35)}
-                        </p>
-                      </a>
-                    )}
-                    <Button>{item.isEventFree ? 'FREE' : `General : ${item.ticketPrices.general}`}</Button>
-                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="text-sm flex flex-col gap-2 m-2">
+                  <p id="title" className="font-semibold text-lg">
+                    {item.title}
+                  </p>
+                  <p>
+                    <strong> Event By:</strong> {item.eventBy}
+                  </p>
+                  <p>
+                    <strong> Start Date & Time:</strong> {item.eventStartDate}, {item.eventStartTime}
+                  </p>
+                  <p>
+                    <strong> End Date & Time:</strong> {item.eventEndDate}, {item.eventEndTime}
+                  </p>
+                  <p>
+                    <strong> Location:</strong> {item.venue}, {item.city}
+                  </p>
+                  <p>
+                    <strong> Country: </strong>
+                    {item.country}
+                  </p>
+
+                  <p>
+                    <strong>Tel:</strong>
+                    {item.countryCode} {item.phone}
+                  </p>
+                  {item.website && (
+                    <a href={item.website} target="_blank">
+                      <p>
+                        <strong> Website:</strong> {item.website.slice(0, 35)}
+                      </p>
+                    </a>
+                  )}
+                  <Button>{item.isEventFree ? 'FREE' : `General : ${item.ticketPrices.general}`}</Button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
         {activeTab === 'Business' && (
