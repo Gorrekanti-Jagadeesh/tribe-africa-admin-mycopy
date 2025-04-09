@@ -13,6 +13,7 @@ import { deepMerge } from '@/utils/common';
 import { generateId } from '@utils/common';
 import { GetCoordinateOnMap } from '../maps/leaflet-map';
 import { uploadImage } from '@api/index';
+import Cookies from 'js-cookie';
 
 import {
   amenitiesMapping,
@@ -67,9 +68,22 @@ const AccommodationForm: React.FC = () => {
   const onSubmit: SubmitHandler<AccommodationFormInputs> = async (data) => {
     try {
       var newData = deepMerge(data, formData);
+      // Get userId from cookies
+      const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
+      if (!userCookie) {
+        alert('User not found. Please login again.');
+        return;
+      }
+      const userData = JSON.parse(userCookie);
+      const userId = userData.uid;
+      if (!userId) {
+        alert('User ID not found in cookie. Please login again.');
+        return;
+      }
       var newData1 = {
         _type: 'accomodationList',
         _id: `drafts.${generateId()}`,
+        userId: userId, // Add userId to the data
         ...newData,
       };
       await sanityClient.create(newData1);
@@ -1191,7 +1205,7 @@ const AccordionSection: React.FC<{
   const [otherSpecifyValues, setOtherSpecifyValues] = useState<{ [key: string]: string }>({}); // Stores "Other (Specify)" values
 
   const register = useContext(FormContext);
-  console.log(selectedOptions, otherSpecifyValues);
+  // console.log(selectedOptions, otherSpecifyValues);
 
   useEffect(() => {
     setOtherSpecify('');

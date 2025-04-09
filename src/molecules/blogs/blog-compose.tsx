@@ -12,7 +12,7 @@ import { Loading } from '@/atoms/common/loading';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 import CustomInput from '@/atoms/input-elements/custom-input';
 import { CustomSelect } from '@/atoms/input-elements/cutom-select';
-
+import Cookies from 'js-cookie';
 interface BlogComposeProps {
   className: string;
 }
@@ -48,6 +48,7 @@ type BlogFormData = {
   confirmDetails: boolean;
   agreeToFeature: boolean;
   rightsToContent: boolean;
+  userId: string;
 };
 
 const categories = [
@@ -97,10 +98,31 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
       const headerPhotoUrl = await uploadImage(data.coverPhoto);
       const authorPhotoUrl = await uploadImage(data.authorPhoto);
 
-      // Submit to Sanity
-      await sanityClient.create({
+      const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
+      console.log('User cookie found:', !!userCookie);
+
+      if (!userCookie) {
+        alert('User not found. Please login again.');
+        return;
+      }
+
+      // Parse the user data from the cookie
+      const userData = JSON.parse(userCookie);
+      console.log('User data from cookie:', userData);
+
+      // Extract the userId - look for uid field in the user data
+      const userId = userData.uid;
+      console.log('User ID from cookie:', userId);
+
+      if (!userId) {
+        alert('User ID not found in cookie. Please login again.');
+        return;
+      }
+
+      const blogData = {
         _type: 'blog', // Sanity schema type
         _id: `drafts.${generateId()}`, // Unique ID
+        userId: userId,
         ...data,
         content,
         coverPhoto: {
@@ -111,7 +133,11 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
           _type: 'image',
           asset: { _ref: authorPhotoUrl._id },
         },
-      });
+      };
+
+      // Submit to Sanity
+      await sanityClient.create(blogData);
+      console.log(blogData, 'data');
 
       alert('Submitted successfully!');
     } catch (error) {

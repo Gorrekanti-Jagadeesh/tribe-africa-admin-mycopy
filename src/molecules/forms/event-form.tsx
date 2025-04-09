@@ -54,7 +54,7 @@ export type EventFormData = {
   rightsToContent: boolean;
   businessPhoto: File;
   coverPhoto: File;
-  userid: string;
+  userId: string;
 };
 
 const categories = eventTypes;
@@ -179,7 +179,7 @@ const EventForm: React.FC = () => {
         agreeToFeature: data.agreeToFeature,
         email: data.email,
         rightsToContent: data.rightsToContent,
-        userid: userId, // Using lowercase 'userid' to match Sanity schema
+        userId: userId, // Using lowercase 'userid' to match Sanity schema
         status: 'pending',
       };
 
