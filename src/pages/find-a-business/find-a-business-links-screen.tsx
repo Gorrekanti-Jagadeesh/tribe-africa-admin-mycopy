@@ -192,7 +192,14 @@ const FindABusinessLinksScreen: React.FC<{ country: string }> = ({ country }) =>
     <div className="p-2 md:p-4 m-auto">
       <div className="flex mb-4">
         <h1 className="text-4xl font-bold">Find A Business in {fromKebabCase(country)}</h1>
-        <Button className="ms-auto">List your Business</Button>
+        <Button
+          className="ms-auto"
+          onClick={() => {
+            navigation('/business-form');
+          }}
+        >
+          List your Business
+        </Button>
       </div>
       <div className="flex">
         <div className="md:columns-5">

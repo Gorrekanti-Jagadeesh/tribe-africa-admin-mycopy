@@ -9,8 +9,10 @@ import sanityClient from '@/sanityClient';
 import { deepMerge } from '@/utils/common';
 import { uploadImage } from '@api/index';
 import { generateId } from '@utils/common';
+import Cookies from 'js-cookie';
 
 type BusinessForm = {
+  userId: string;
   businessName: string;
   businessMotive: string;
   businessLogo: File;
@@ -68,6 +70,7 @@ type BusinessForm = {
   dateOfSubmit: string;
 };
 var initialState = {
+  userId: '',
   businessName: '',
   businessMotive: '',
   businessLogo: null as unknown as File,
@@ -111,19 +114,26 @@ const BusinessFormComponent = () => {
   };
 
   const onBusinessFormSubmit: SubmitHandler<BusinessForm> = async (data) => {
+    const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
+    const userId = userCookie ? JSON.parse(userCookie).uid : '';
+    console.log('userId', userId);
+
     try {
       // Display loader
       var newData = deepMerge(formData, data);
       var newData1 = {
-        _type: 'businessType',
+        _type: 'findABusiness',
         _id: `drafts.${generateId()}`,
         ...newData,
+        userId: userId,
         paymentMethods: formData.paymentMethods,
         businessCategory: selectedCategory,
         businessSubCategory: selectedSubCategory,
         businessSubChildCategory: selectedChild,
       };
       await sanityClient.create(newData1);
+      console.log('newData1', newData1);
+
       setTimeout(() => {
         setShowModal(true);
       }, 300); // Delay to allow scrolling to complete

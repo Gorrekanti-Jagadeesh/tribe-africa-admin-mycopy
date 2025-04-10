@@ -21,6 +21,8 @@ interface ApprovalStatus {
   read?: boolean;
   blogType?: string;
   author?: string;
+  businessCategory?: string;
+  businessSubCategory?: string;
 }
 
 const NotificationsPage = () => {
@@ -79,6 +81,8 @@ const NotificationsPage = () => {
             read: data.read || false,
             blogType: data.blogType,
             author: data.author,
+            businessCategory: data.businessCategory,
+            businessSubCategory: data.businessSubCategory,
           });
         }
       });
@@ -159,6 +163,25 @@ const NotificationsPage = () => {
       return `${Math.floor(diff / (60 * 24))}d`;
     } else {
       return date.toLocaleDateString();
+    }
+  };
+
+  const formatDocumentType = (type: string) => {
+    switch (type) {
+      case 'findABusiness':
+        return 'Business Listing';
+      case 'accomodationList':
+        return 'Accommodation';
+      case 'blog':
+        return 'Blog Post';
+      case 'event':
+        return 'Event';
+      default:
+        // Convert camelCase to Title Case with spaces
+        return type
+          .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+          .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+          .trim();
     }
   };
 
@@ -278,7 +301,9 @@ const NotificationsPage = () => {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-base font-semibold text-gray-900">{`${notification.documentType}`}</h3>
+                          <h3 className="text-base font-semibold text-gray-900">
+                            {formatDocumentType(notification.documentType)}
+                          </h3>
                           <span
                             className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full ${
                               notification.status === 'approved'
@@ -367,6 +392,33 @@ const NotificationsPage = () => {
                                 <span className="flex items-center gap-1">
                                   <span className="font-medium">Country:</span>
                                   {notification.country}
+                                </span>
+                              )}
+                            </>
+                          )}
+
+                          {notification.documentType === 'findABusiness' && (
+                            <>
+                              {notification.title && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Business Name:</span>
+                                  {notification.title}
+                                </span>
+                              )}
+                              {notification.businessCategory && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Category:</span>
+                                  {notification.businessCategory
+                                    .replace(/_/g, ' ')
+                                    .replace(/\b\w/g, (l) => l.toUpperCase())}
+                                </span>
+                              )}
+                              {notification.businessSubCategory && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Subcategory:</span>
+                                  {notification.businessSubCategory
+                                    .replace(/_/g, ' ')
+                                    .replace(/\b\w/g, (l) => l.toUpperCase())}
                                 </span>
                               )}
                             </>

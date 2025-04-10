@@ -211,11 +211,11 @@ const appRoutes: RouteConfig[] = [
     path: '/candidate-form',
     element: <CandidateForm />,
   },
-  {
-    name: 'Tribe africa pages - create business form',
-    path: '/create-business-form',
-    element: <CreateBusinessForm />,
-  },
+  // {
+  //   name: 'Tribe africa pages - create business form',
+  //   path: '/create-business-form',
+  //   element: <CreateBusinessForm />,
+  // },       old business form
   {
     name: 'Tribe africa pages - Proffessional form',
     path: '/proffessional-form',
