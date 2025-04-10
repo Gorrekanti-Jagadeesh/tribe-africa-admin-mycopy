@@ -45,7 +45,7 @@ const EventsPage = () => {
   if (eventImageError || eventsError) {
     return 'An error occurred...';
   }
-  console.log(eventsData, 'eventsData123123');
+
   return (
     <EventsScreen
       heading={`${customEventType} events`}
