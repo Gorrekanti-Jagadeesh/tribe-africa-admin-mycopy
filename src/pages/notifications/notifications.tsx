@@ -31,6 +31,7 @@ const NotificationsPage = () => {
   const [notifications, setNotifications] = useState<ApprovalStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
+  const [documentTypeFilter, setDocumentTypeFilter] = useState<string>('all');
   const navigate = useNavigate();
 
   const getAllDocuments = async () => {
@@ -155,6 +156,11 @@ const NotificationsPage = () => {
       ? notifications
       : notifications.filter((notification) => notification.status.toLowerCase() === filter.toLowerCase());
 
+  const filteredByDocumentType =
+    documentTypeFilter === 'all'
+      ? filteredNotifications
+      : filteredNotifications.filter((notification) => notification.documentType === documentTypeFilter);
+
   const formatDate = (date: Date) => {
     const now = new Date();
     const diff = Math.floor((now.getTime() - date.getTime()) / 1000 / 60); // minutes
@@ -238,6 +244,32 @@ const NotificationsPage = () => {
                 </svg>
               </div>
             </div>
+
+            <div className="relative inline-block text-left">
+              <select
+                value={documentTypeFilter}
+                onChange={(e) => setDocumentTypeFilter(e.target.value)}
+                className="appearance-none bg-white border border-gray-300 text-sm rounded-lg pl-4 pr-10 py-1.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
+              >
+                <option value="all">All types</option>
+                <option value="event">Events</option>
+                <option value="accomodationList">Accommodations</option>
+                <option value="blog">Blogs</option>
+                <option value="findABusiness">Businesses</option>
+                <option value="advertisement">Advertisements</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -248,7 +280,7 @@ const NotificationsPage = () => {
           <div className="flex justify-center items-center h-40">
             <div className="animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-opacity-50 border-t-orange-500"></div>
           </div>
-        ) : filteredNotifications.length === 0 ? (
+        ) : filteredByDocumentType.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 px-4">
             <div className="bg-orange-50 rounded-full p-4 mb-2 text-orange-500 shadow-sm">
               <svg
@@ -271,7 +303,7 @@ const NotificationsPage = () => {
           </div>
         ) : (
           <div className="space-y-1.5">
-            {filteredNotifications.map((notification) => (
+            {filteredByDocumentType.map((notification) => (
               <div
                 key={notification.id}
                 className={`group relative p-4 transition-all duration-200 rounded-lg border ${
@@ -464,11 +496,11 @@ const NotificationsPage = () => {
       </div>
 
       {/* Footer for larger screens */}
-      {filteredNotifications.length > 5 && (
+      {filteredByDocumentType.length > 5 && (
         <div className="border-t border-gray-200 py-2 px-8 bg-gray-50 mt-1">
           <div className="flex justify-between items-center">
             <p className="text-xs text-gray-600 font-medium">
-              Showing {filteredNotifications.length} notification{filteredNotifications.length !== 1 ? 's' : ''}
+              Showing {filteredByDocumentType.length} notification{filteredByDocumentType.length !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
