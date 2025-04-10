@@ -23,6 +23,8 @@ interface ApprovalStatus {
   author?: string;
   businessCategory?: string;
   businessSubCategory?: string;
+  adType?: string;
+  page?: string;
 }
 
 const NotificationsPage = () => {
@@ -83,6 +85,8 @@ const NotificationsPage = () => {
             author: data.author,
             businessCategory: data.businessCategory,
             businessSubCategory: data.businessSubCategory,
+            adType: data.adType,
+            page: data.page,
           });
         }
       });
@@ -419,6 +423,23 @@ const NotificationsPage = () => {
                                   {notification.businessSubCategory
                                     .replace(/_/g, ' ')
                                     .replace(/\b\w/g, (l) => l.toUpperCase())}
+                                </span>
+                              )}
+                            </>
+                          )}
+
+                          {notification.documentType === 'advertisement' && (
+                            <>
+                              {notification.adType && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Ad Type:</span>
+                                  {notification.adType}
+                                </span>
+                              )}
+                              {notification.page && (
+                                <span className="flex items-center gap-1">
+                                  <span className="font-medium">Page:</span>
+                                  {notification.page}
                                 </span>
                               )}
                             </>

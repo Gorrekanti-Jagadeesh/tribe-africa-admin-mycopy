@@ -24,6 +24,7 @@ type FormData = {
   countryCode: string;
   phone: string;
   countries: { label: string; value: string }[]; // Array of objects
+  userId: string;
 };
 
 const AdvertisementForm: React.FC = () => {
@@ -99,6 +100,9 @@ const AdvertisementForm: React.FC = () => {
   const selectedAdTypeOption = adTypes.find((cat) => cat.value === selectedAdType);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
+    const userId = userCookie ? JSON.parse(userCookie).uid : '';
+    console.log(userId, 'userId');
     try {
       // Handle image uploads
       if (selectedAdTypeOption.items.length === 0) {
@@ -106,12 +110,13 @@ const AdvertisementForm: React.FC = () => {
         return;
       }
       setLoader(true);
-
+      console.log(data, 'data');
       // Submit to Sanity
       await sanityClient.create({
         _type: 'advertisement', // Sanity schema type
         _id: `drafts.${generateId()}`, // Unique ID
         ...data,
+        userId: userId,
         countries: data.countries.map((country) => country.value), // Extracting only values
         item: {
           _type: 'reference',
