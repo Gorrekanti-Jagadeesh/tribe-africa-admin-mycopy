@@ -32,6 +32,9 @@ import AfterWorkFrom from '@/molecules/forms/after-work-form';
 import AfterWorkContainer from '@/pages/afterWork/afterwork-container';
 import AfterWorkDetailsContainer from '@/pages/afterWork/afterwork-details-container';
 import BusinessFormComponent from '@/molecules/forms/business-creation-form';
+import ReligiousFormComponent from '@/molecules/forms/religious-create';
+import VolFormComponent from '@/molecules/forms/vol-create-form';
+import ExeFormComponent from '@/molecules/forms/Exe-create-form';
 
 export interface RouteConfig {
   name: string;
@@ -189,6 +192,21 @@ const appRoutes: RouteConfig[] = [
     name: 'Business form',
     path: '/business-form',
     element: <BusinessFormComponent />,
+  },
+  {
+    name: 'Religious form',
+    path: '/religious-form',
+    element: <ReligiousFormComponent />,
+  },
+  {
+    name: 'Vol form',
+    path: '/vol-form',
+    element: <VolFormComponent />,
+  },
+  {
+    name: 'Exe form',
+    path: '/exe-form',
+    element: <ExeFormComponent />,
   },
   {
     name: 'find a business screen',

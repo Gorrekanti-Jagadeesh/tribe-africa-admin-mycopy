@@ -147,8 +147,15 @@ const data = [
   },
   {
     mainCat: 'Religious Institutions',
+    id: 'religiousinstitutions',
     hasSubCategory: true,
-    subItems: ['Churches', 'Mosques', 'Synagogues', 'Bahai Temples', 'Hindu Temples', 'Other'],
+    subItems: [
+      { name: 'Churches', id: 'churches' },
+      { name: 'Mosques', id: 'mosques' },
+      { name: 'Synagogues', id: 'synagogues' },
+      { name: 'Bahai Temples', id: 'bahaitemple' },
+      { name: 'Hindu Temples', id: 'hindutemple' },
+    ],
   },
 
   {
@@ -180,6 +187,7 @@ const data = [
   },
   {
     mainCat: 'Wellness & Beauty',
+    id: 'wellnessbeauty',
     hasSubCategory: true,
     subItems: ['Spas', 'Gyms', 'Beauty Salons', 'Hair Salons', 'Other'],
   },
@@ -192,7 +200,9 @@ const FindABusinessLinksScreen: React.FC<{ country: string }> = ({ country }) =>
     <div className="p-2 md:p-4 m-auto">
       <div className="flex mb-4">
         <h1 className="text-4xl font-bold">Find A Business in {fromKebabCase(country)}</h1>
-        <Button className="ms-auto">List your Business</Button>
+        <Button className="ms-auto" onClick={() => navigation('/business-form')}>
+          List your Business
+        </Button>{' '}
       </div>
       <div className="flex">
         <div className="md:columns-5">
@@ -212,7 +222,10 @@ const FindABusinessLinksScreen: React.FC<{ country: string }> = ({ country }) =>
                           navigation(
                             `/${toKebabCase(country)}/business/${toKebabCase(category.id)}/afterwork/${sub.id}`
                           );
-                        } else if (category.mainCat == 'Clubs & Special Groups') {
+                        } else if (
+                          category.mainCat == 'Clubs & Special Groups' ||
+                          category.mainCat == 'Religious Institutions'
+                        ) {
                           console.log(
                             '---nikhil clicked',
                             `/${toKebabCase(country)}/business/find-a-business/${toKebabCase(category.id)}/${sub.id}`
@@ -222,7 +235,7 @@ const FindABusinessLinksScreen: React.FC<{ country: string }> = ({ country }) =>
                           );
                         } else {
                           navigation(
-                            `/${country}/business/find-a-business/${toKebabCase(category.mainCat)}/${toKebabCase(sub)}`
+                            `/${country}/business/find-a-business/${toKebabCase(category.id ?? category.mainCat)}/${toKebabCase(sub)}`
                           );
                         }
                       }}

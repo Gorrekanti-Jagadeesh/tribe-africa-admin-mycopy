@@ -37,7 +37,7 @@ export const FloatingSibling: React.FC<FloatingSiblingProps> = ({
         if (formType == 1) {
           navigation(`/${country}/${pageType}/${toKebabCase(mainCategory)}${afterWorkPath}/${mainCategory}`);
         } else {
-          navigation(`/${country}/${pageType}/find-a-business/${toKebabCase(mainCategory)}/${mainCategory}`);
+          navigation(`/${country}/${pageType}/find-a-business/${toKebabCase(mainCategory)}/`);
         }
         return;
       }

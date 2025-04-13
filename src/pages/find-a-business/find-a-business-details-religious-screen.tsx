@@ -43,13 +43,6 @@ type findAbusinessDetails = {
     saturday?: { start: string; end: string };
     sunday?: { start: string; end: string };
   };
-  paymentMethods: {
-    cash: boolean;
-    credit_debit_cards: boolean;
-    digital_wallets: boolean;
-    bank_transfers: boolean;
-    other?: string; // If "Other" is selected, specify the method
-  };
   ownerContactInformation: {
     name?: string;
     role?: string;
@@ -66,7 +59,7 @@ type findAbusinessDetails = {
 interface data {
   data: findAbusinessDetails;
 }
-const FindaBusinessDetailsScreen: React.FC<data> = ({ data }) => {
+const FindaBusinessDetailsTypeScreen: React.FC<data> = ({ data }) => {
   // const socialLinks = [
   //   { href: 'https://facebook.com', icon: faFacebookF },
   //   { href: 'https://twitter.com', icon: faTwitter },
@@ -235,20 +228,6 @@ const FindaBusinessDetailsScreen: React.FC<data> = ({ data }) => {
                 ))}
               </div>
             </div>
-
-            {/* Payment Methods */}
-            <div className="sm:py-8 border-t">
-              <h2 className="text-lg font-bold mb-4">Payment Methods Accepted</h2>
-              <div className="flex space-x-4">
-                {Object.entries(data?.paymentMethods || {})
-                  .filter(([_, isAccepted]) => isAccepted) // Only include accepted methods
-                  .map(([method]) => (
-                    <div key={method} className="bg-gray-200 px-4 py-2 rounded-lg capitalize">
-                      {method.replace(/_/g, ' ')} {/* Format method names */}
-                    </div>
-                  ))}
-              </div>
-            </div>
           </div>
         </div>
 
@@ -275,4 +254,4 @@ const FindaBusinessDetailsScreen: React.FC<data> = ({ data }) => {
   );
 };
 
-export default FindaBusinessDetailsScreen;
+export default FindaBusinessDetailsTypeScreen;
