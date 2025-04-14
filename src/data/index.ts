@@ -132,7 +132,7 @@ export const CountriesGeoData: Record<string, CountryDataType> = {
       { name: 'Mzab Valley', coordinates: [3.6667, 32.4911], category: 'Historical & Cultural' },
       { name: 'Sidi Okba Mosque', coordinates: [5.743, 34.7059], category: 'Sacred Sites' },
       { name: "Qal'a of Beni Hammad", coordinates: [4.7782, 35.863], category: 'Sacred Sites' },
-      { name: 'Sidi Abderrahmane', coordinates: [3.046, 36.7809], category: 'Sacred Sites' },
+      { name: 'Sidi Abderrahmane', coordinates: [3.0460, 36.7809], category: 'Sacred Sites' },
     ],
     scale: 2100,
   },
