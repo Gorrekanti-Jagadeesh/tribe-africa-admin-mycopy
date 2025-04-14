@@ -1,5 +1,7 @@
+import Button from '@/atoms/custom-button/button';
 import DualHeading from '../../atoms/heading/dual-heading';
 import OverLayCard from '@atoms/card/overlay-card';
+import { useNavigate } from 'react-router';
 
 interface Item {
   title: string;
@@ -15,9 +17,26 @@ interface MustSeeAndDoScreenProps {
 }
 
 const MustSeeAndDoScreen: React.FC<MustSeeAndDoScreenProps> = ({ category, data }) => {
+  const navigation = useNavigate();
+
   return (
-    <div className="max-w-6xl m-auto">
-      <DualHeading className="text-left max-w-6xl my-4">{category}</DualHeading>
+    <div className="p-2 md:p-4 max-w-6xl m-auto">
+      <div className="flex mb-10">
+        <DualHeading>{category}</DualHeading>
+        <Button
+          className="ms-auto"
+          onClick={() => {
+            if (category == 'Voluntourism') {
+              navigation('/vol-form');
+            } else if (category == 'Excursions') {
+              navigation('/exe-form');
+            } else {
+            }
+          }}
+        >
+          {`List your ${category}`}
+        </Button>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 w-full gap-6 ">
         {data.map((each) => (
           <div key={each._id}>

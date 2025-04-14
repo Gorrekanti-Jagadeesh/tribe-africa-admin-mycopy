@@ -59,9 +59,8 @@ const NavFloatingLayout: React.FC<{
                               `/${country}/${pageType}/${toKebabCase(each.category)}/afterwork/${subcategory}`
                             );
                           } else {
-                            navigation(
-                              `/${country}/${pageType}/find-a-business/${toKebabCase(each.category)}/${subcategory}`
-                            );
+                            console.log('--------fgghf', each.category, subcategory);
+                            navigation(`/${country}/${pageType}/find-a-business/${each.category}/${subcategory}`);
                           }
                         } else {
                           navigation(`/${country}/${pageType}/${toKebabCase(each.category)}/${subcategory}`);
