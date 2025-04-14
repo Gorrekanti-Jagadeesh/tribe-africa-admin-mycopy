@@ -98,14 +98,18 @@ Tribe Africa Admin is a comprehensive management platform that powers Tribe Afri
 
    ```env
    # Sanity.io Configuration
-   VITE_SANITY_PROJECT_ID=your_sanity_project_id
-   VITE_SANITY_DATASET=your_sanity_dataset
+   VITE_SANITY_PROJECT_ID = "set_me"
+   VITE_SANITY_DATASET = "set_me"
+   VITE_SANITY_TOKEN = "set_me"
+   VITE_SANITY_IMAGE_URL_PREFIX = https://cdn.sanity.io/images
 
-   # Firebase Configuration
-   VITE_FIREBASE_CONFIG=your_firebase_config
+   # Currency converter API key for 'exchangerate'
+   VITE_CURRENCY_API_KEY = "set_me"
+   VITE_WEATHER_API_KEY = "set_me"
 
-   # Stripe Configuration
-   VITE_STRIPE_PUBLIC_KEY=your_stripe_public_key
+   #Stripe Payment:
+   VITE_STRIPE_API_KEY_DEV="set_me"
+   VITE_STRIPE_SERVER_URL_DEV="set_me"
    ```
 
 4. **Start Development Server**
