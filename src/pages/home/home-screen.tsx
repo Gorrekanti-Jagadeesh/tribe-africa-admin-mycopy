@@ -35,6 +35,7 @@ const HomeScreen = ({ props }) => {
     <div className="max-w-screen-2xl m-auto">
       <HomeHeader />
       <div className="relative">
+        XDECRFTGYHUJIK
         <Explore data={exploreData} loading={exploreLoading} error={exploreError} />
         <CharmingHotels data={hotelsData} loading={hotelsLoading} error={hotelsError} />
         <HolidayDestination data={destinationsData} loading={destinationsLoading} error={destinationsError} />
