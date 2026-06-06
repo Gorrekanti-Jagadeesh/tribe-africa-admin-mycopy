@@ -183,7 +183,7 @@ const UserDashboardScreen = () => {
 
         <Modal isOpen={showPaymentPopup} setIsOpen={setShowPaymentPopup}>
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[40%] text-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[50%] lg:w-[40%] text-center">
               <h2 className="text-xl font-semibold mb-4">Confirm Payment</h2>
               {/* Ad Details */}
               <div className="mb-4 text-left">

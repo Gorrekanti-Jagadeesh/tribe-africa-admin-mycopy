@@ -30,7 +30,7 @@ const DroppingNav: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
         <Close
           className="ms-auto block md:hidden"
           theme="light"
-          size="6"
+          size="10"
           onClick={(e) => {
             e.stopPropagation();
             setOpen(false);

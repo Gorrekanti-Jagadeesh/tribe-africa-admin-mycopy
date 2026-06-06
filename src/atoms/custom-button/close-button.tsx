@@ -14,7 +14,7 @@ const Close: React.FC<CloseProps> = ({ theme = 'dark', size = '6', className, on
     <button
       {...buttonProps}
       className={`
-        rounded-full w-${size} h-${size}
+        rounded-full w-${size} h-${size} min-w-[44px] min-h-[44px] flex items-center justify-center
         ${theme === 'light' ? 'bg-slate-200 text-black' : ''}
         ${theme === 'dark' ? 'bg-gray-800 text-white' : ''}
         ${className}

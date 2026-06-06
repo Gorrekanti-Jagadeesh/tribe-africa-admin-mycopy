@@ -39,7 +39,7 @@ const AfterWorkCard: React.FC<{
             <span className="font-bold text-lg mx-2">{data.amount}</span>
           </div>
           <button
-            className="w-fit ms-auto bg-brand-orange hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
+            className="w-fit ms-auto bg-brand-orange hover:bg-[#E05A00] text-white font-semibold p-2 rounded-md transition-colors"
             onClick={() => {
               navigate(
                 `/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/afterwork/${toKebabCase(subCategory)}/${_id}`,

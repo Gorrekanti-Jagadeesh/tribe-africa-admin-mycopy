@@ -45,7 +45,7 @@ const HomeScreen = ({ props }) => {
       <Footer />
 
       {/* Fixed chatbot */}
-      <div className="fixed bottom-4 right-4 z-20">
+      <div className="fixed bottom-16 md:bottom-4 right-4 z-20">
         <Chatbot />
       </div>
     </div>
