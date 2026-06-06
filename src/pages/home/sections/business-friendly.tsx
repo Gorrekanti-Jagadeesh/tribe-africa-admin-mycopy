@@ -28,39 +28,59 @@ const BusinessFriendly: React.FC<{ data: BusinessFreindlyFields[]; loading; erro
         <p className="font-poppins text-2xl text-gray-600 mt-1">Great work-life balance</p>
       </div>
 
-      <div className="relative flex sm:flex-col items-center">
-        <div className="w-full flex flex-col md:flex-row relative items-center gap-4 my-4">
-          {/* Image on left — Figma mirrors Working Remotely */}
-          <div className="w-full md:w-3/5 overflow-hidden rounded-[10px] shadow-lg -z-0">
+      <div className="relative">
+        <div className="w-full my-4">
+          {/* Mobile text card — visible only on < md */}
+          <div className="block md:hidden bg-white rounded-[10px] shadow-xl mb-4 p-4">
+            <h2 className="font-poppins font-semibold text-lg text-black">{data[currentIndex].title}</h2>
+            <p className="font-poppins text-sm text-gray-600 mt-1 line-clamp-4">{data[currentIndex].description}</p>
+            <a
+              href={`blogs/${data[currentIndex]._id}`}
+              className="ms-auto block text-right text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
+            >
+              Know more
+            </a>
+          </div>
+
+          {/* Image + desktop text overlay */}
+          <div className="relative w-full overflow-hidden rounded-[10px] shadow-lg">
             <img
               src={sanityImageUrlBuilder(data[currentIndex].image).url()}
               alt={data[currentIndex].title}
               className="w-full object-cover object-center"
               style={{ aspectRatio: '642/489' }}
             />
-          </div>
-
-          {/* Text card on right — Figma: white, radius=10, shadow, no border */}
-          <div className="absolute right-0 w-full md:w-3/5 opacity-80 md:opacity-100 bg-white rounded-[10px] shadow-xl z-10">
-            <div className="p-4 md:p-6 flex flex-col gap-2">
-              <h2 className="font-poppins font-semibold text-[20px] leading-[30px] text-black">
-                {data[currentIndex].title}
-              </h2>
-              <p className="font-poppins font-normal text-[16px] leading-[24px] text-gray-600 line-clamp-4">
-                {data[currentIndex].description}
-              </p>
-              <a
-                href={`blogs/${data[currentIndex]._id}`}
-                className="ms-auto text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
-              >
-                Know more
-              </a>
+            {/* Desktop overlay on the right side */}
+            <div className="hidden md:block absolute right-0 top-0 h-full w-3/5 p-6 flex flex-col justify-center bg-white/90 rounded-r-[10px]">
+              <div className="flex flex-col gap-2">
+                <h2 className="font-poppins font-semibold text-[20px] leading-[30px] text-black">
+                  {data[currentIndex].title}
+                </h2>
+                <p className="font-poppins font-normal text-[16px] leading-[24px] text-gray-600 line-clamp-4">
+                  {data[currentIndex].description}
+                </p>
+                <a
+                  href={`blogs/${data[currentIndex]._id}`}
+                  className="ms-auto text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
+                >
+                  Know more
+                </a>
+              </div>
             </div>
           </div>
         </div>
 
-        <LeftButton onClick={() => setCurrentIndex(currentIndex - 1)} disabled={currentIndex === 0} />
-        <RightButton onClick={() => setCurrentIndex(currentIndex + 1)} disabled={currentIndex === data.length - 1} />
+        <div className="flex justify-between mt-4 gap-4 md:absolute md:bottom-1/2 md:translate-y-1/2 md:w-full md:pointer-events-none">
+          <div className="md:pointer-events-auto md:-translate-x-8">
+            <LeftButton onClick={() => setCurrentIndex(currentIndex - 1)} disabled={currentIndex === 0} />
+          </div>
+          <div className="md:pointer-events-auto md:translate-x-8">
+            <RightButton
+              onClick={() => setCurrentIndex(currentIndex + 1)}
+              disabled={currentIndex === data.length - 1}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ const BusinessScreen = ({ props }) => {
         <AdvertisementForm />
       </Modal>
       {/* Top orange banner */}
-      <div className="bg-brand-orange px-4 py-3 text-white font-poppins text-xl text-center">
+      <div className="bg-brand-orange px-4 py-3 text-white font-poppins text-sm md:text-xl text-center">
         <p>Getting there - Book Flight and accommodation</p>
       </div>
 
@@ -101,8 +101,8 @@ const BusinessScreen = ({ props }) => {
           {/* Dark overlay */}
           <div className="absolute inset-0 bg-black/60" />
           {/* Stats overlay — bottom-left */}
-          <div className="absolute bottom-0 left-0 p-6 md:p-10 flex flex-col gap-3 text-white">
-            <p className="font-poppins font-semibold text-2xl">
+          <div className="absolute bottom-0 left-0 p-4 md:p-10 flex flex-col gap-1 md:gap-3 text-white">
+            <p className="font-poppins font-semibold text-sm md:text-2xl">
               Weather:{' '}
               {weatherLoading
                 ? 'Loading...'
@@ -110,8 +110,12 @@ const BusinessScreen = ({ props }) => {
                   ? `${weatherData.temperature} °F / ${weatherData.condition}`
                   : 'No data available'}
             </p>
-            <p className="font-poppins font-semibold text-2xl">Internet speed: {landingData.internetSpeed}</p>
-            <p className="font-poppins font-semibold text-2xl">Time: {weatherData ? weatherData.time : 'Loading...'}</p>
+            <p className="font-poppins font-semibold text-sm md:text-2xl">
+              Internet speed: {landingData.internetSpeed}
+            </p>
+            <p className="font-poppins font-semibold text-sm md:text-2xl">
+              Time: {weatherData ? weatherData.time : 'Loading...'}
+            </p>
           </div>
         </div>
       </div>
@@ -154,23 +158,22 @@ const BusinessScreen = ({ props }) => {
               </p>
               {/* Reviews card — Figma: Rectangle 358 bg=#D9D9D9, text 24px Poppins 500 black */}
               <div className="rounded-[10px] p-4" style={{ backgroundColor: '#D9D9D9' }}>
-                <p className="font-poppins font-semibold text-2xl text-black mb-2">Reviews</p>
+                <p className="font-poppins font-semibold text-lg md:text-2xl text-black mb-2">Reviews</p>
                 <ul className="space-y-1">
                   {agencyData.agencyReviews.map((each: string, index: number) => (
-                    <li key={index} className="font-poppins font-medium text-2xl text-black">
+                    <li key={index} className="font-poppins font-medium text-base md:text-2xl text-black">
                       {each}
                     </li>
                   ))}
                 </ul>
               </div>
-              {/* "For More information:" — Figma: 32px Poppins 500 white */}
-              <div className="flex items-center justify-end gap-4">
-                <span className="font-poppins font-medium text-[32px] leading-tight text-white">
+              {/* "For More information:" — responsive layout */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 mt-2">
+                <span className="font-poppins font-medium text-xl md:text-[32px] leading-tight text-white">
                   For More information:
                 </span>
-                {/* Contact button — Figma: 310×58, bg=#FF6600, radius=10, 24px Poppins 600 */}
                 <Button
-                  className="text-2xl font-semibold px-8 py-3 shrink-0"
+                  className="text-lg md:text-2xl font-semibold px-6 md:px-8 py-3 shrink-0 w-fit"
                   onClick={() => agencyData.agencyWebsite && window.open(agencyData.agencyWebsite, '_blank')}
                 >
                   Contact AAPI

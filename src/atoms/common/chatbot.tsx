@@ -50,7 +50,7 @@ const Chatbot = () => {
       {/* Drop-up chat window */}
       {isOpen && (
         <div
-          className="absolute bottom-full mb-3 right-0 w-[300px] rounded-[10px] overflow-hidden shadow-2xl border border-brand-orange flex flex-col bg-white"
+          className="absolute bottom-full mb-3 right-0 w-[min(300px,calc(100vw-2rem))] rounded-[10px] overflow-hidden shadow-2xl border border-brand-orange flex flex-col bg-white"
           style={{ height: '420px' }}
         >
           {/* Header */}

@@ -24,10 +24,14 @@ const BlogPageScreen = ({ country, data, banner, blogCategory }) => {
         </div>
 
         {/* Banner */}
-        <div className="bg-gray-100 rounded-[10px] flex justify-center items-center p-8 gap-4 overflow-hidden">
-          <img className="rounded-[10px] object-cover w-64 h-64 shrink-0" src={banner} alt="Blog banner" />
-          <div className="bg-white rounded-[10px] p-4 max-h-64 overflow-auto shadow-sm flex flex-col gap-3 min-w-0">
-            <h4 className="font-poppins font-semibold text-xl">Top Businesses in 2024</h4>
+        <div className="bg-gray-100 rounded-[10px] flex flex-col sm:flex-row justify-center items-center p-4 sm:p-8 gap-4">
+          <img
+            className="rounded-[10px] object-cover w-full sm:w-48 md:w-64 aspect-square sm:h-48 md:h-64 sm:shrink-0"
+            src={banner}
+            alt="Blog banner"
+          />
+          <div className="bg-white rounded-[10px] p-4 max-h-64 overflow-auto shadow-sm flex flex-col gap-3 w-full min-w-0">
+            <h4 className="font-poppins font-semibold text-lg md:text-xl">Top Businesses in 2024</h4>
             <div className="flex flex-col gap-2">
               {[1, 2, 3, 4, 5].map((item, index) => (
                 <p key={index} className="font-poppins text-sm text-gray-600">

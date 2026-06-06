@@ -27,19 +27,19 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
 
   const HotelView = ({ data }: { data: HotelFields }) => {
     return (
-      <div id="hotel-view" className="grid justify-center md:flex gap-4 p-2 md:p-6 my-4">
-        <div id="collage" className="flex md:grid md:grid-cols-2 gap-4 md:w-4/6 max-w-xl overflow-auto">
+      <div id="hotel-view" className="flex flex-col md:flex-row gap-4 p-3 md:p-6">
+        <div id="collage" className="grid grid-cols-2 gap-2 md:gap-4 md:w-4/6 max-w-xl">
           {data.images.map((image, idx) => (
             <img
               key={idx}
               src={image.asset.url}
               alt={`Hotel Image ${idx}`}
-              className="aspect-square w-full m-auto rounded-[10px] min-w-60 md:min-w-0 object-cover"
+              className="w-full aspect-square rounded-[10px] object-cover"
             />
           ))}
         </div>
         <div id="hotel-content" className="flex flex-grow flex-col gap-3">
-          <h3 className="font-poppins font-bold text-2xl">{data.name}</h3>
+          <h3 className="font-poppins font-bold text-xl md:text-2xl">{data.name}</h3>
           <p className="text-sm text-slate-100">{data.country}</p>
           <div className="space-y-1 text-sm">
             <p>Address: {data.address}</p>
@@ -48,7 +48,7 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
             <p>Website: {data.website}</p>
           </div>
           <button
-            className="bg-brand-orange text-white font-poppins font-semibold px-8 py-3 rounded-[10px] ms-auto mt-auto w-fit hover:bg-[#E05A00] transition-colors"
+            className="bg-brand-orange text-white font-poppins font-semibold px-6 md:px-8 py-3 rounded-[10px] mt-auto w-full md:w-fit hover:bg-[#E05A00] transition-colors"
             onClick={() => data.website && window.open(data.website, '_blank')}
           >
             Book Hotel

@@ -44,8 +44,8 @@ const HomeScreen = ({ props }) => {
       </div>
       <Footer />
 
-      {/* Fixed chatbot — offset right by 86px (social sidebar width) + 8px gap */}
-      <div className="fixed bottom-4 z-20" style={{ right: '102px' }}>
+      {/* Fixed chatbot */}
+      <div className="fixed bottom-4 right-4 z-20">
         <Chatbot />
       </div>
     </div>

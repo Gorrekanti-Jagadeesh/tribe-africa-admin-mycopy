@@ -9,10 +9,10 @@ export const LeftButton = ({ onClick, disabled }) => {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`absolute -left-8 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
+      className={`absolute -left-6 md:-left-8 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
         disabled ? 'opacity-40 cursor-not-allowed' : 'hover:shadow-lg hover:scale-105'
       }`}
-      style={{ width: '60px', height: '61px', padding: '14px' }}
+      style={{ width: '44px', height: '44px', padding: '12px' }}
     >
       <FontAwesomeIcon icon={faChevronLeft} className="text-gray-700 text-base" />
     </button>
@@ -24,10 +24,10 @@ export const RightButton = ({ onClick, disabled }) => {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`absolute -right-8 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
+      className={`absolute -right-6 md:-right-8 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
         disabled ? 'opacity-40 cursor-not-allowed' : 'hover:shadow-lg hover:scale-105'
       }`}
-      style={{ width: '60px', height: '61px', padding: '14px' }}
+      style={{ width: '44px', height: '44px', padding: '12px' }}
     >
       <FontAwesomeIcon icon={faChevronRight} className="text-gray-700 text-base" />
     </button>
@@ -51,21 +51,24 @@ export const CommonCarousel = ({ data, component }) => {
   const isPrevDisabled = currentIndex === 0;
 
   useEffect(() => {
-    if (screenWidth < 1024) setItemsPerPage(2);
+    if (screenWidth < 640) setItemsPerPage(1);
+    else if (screenWidth < 1024) setItemsPerPage(2);
     else setItemsPerPage(3);
   }, [screenWidth]);
 
+  const itemWidthClass = itemsPerPage === 1 ? 'w-full' : itemsPerPage === 2 ? 'w-1/2' : 'w-1/3';
+
   return (
     <div>
-      {/* px-10 gives room for the 60px absolute-positioned nav buttons */}
-      <div className="relative w-full flex px-10">
+      {/* px-8 md:px-10 gives room for the absolute-positioned nav buttons */}
+      <div className="relative w-full flex px-8 md:px-10">
         <div className="flex overflow-hidden w-full">
           <div
             className="w-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
           >
             {data.map((item, index: number) => (
-              <div key={index} className="w-1/2 lg:w-1/3 flex-shrink-0 px-2 cursor-pointer" onClick={item.onClick}>
+              <div key={index} className={`${itemWidthClass} flex-shrink-0 px-2 cursor-pointer`} onClick={item.onClick}>
                 {component(item)}
               </div>
             ))}

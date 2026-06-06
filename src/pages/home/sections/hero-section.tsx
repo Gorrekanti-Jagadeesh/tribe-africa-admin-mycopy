@@ -83,7 +83,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ video, image }) => {
         </div>
 
         {/* Hero video */}
-        <div className="bg-slate-800 relative bottom-8 rounded-[10px]" style={{ zIndex: '-1' }}>
+        <div className="bg-slate-800 relative bottom-0 md:bottom-8 rounded-[10px]" style={{ zIndex: '-1' }}>
           <video autoPlay={true} loop={true} muted={true} className="rounded-[10px] w-full">
             <source src={video} type="video/mp4" />
             Your browser does not support the video tag.

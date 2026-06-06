@@ -63,9 +63,12 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
       )}
 
       {country != undefined && (
-        <div className="mx-3 flex gap-2 items-center">
-          <img src={flags[country]} className="w-[49px] h-[49px] rounded-full object-cover border border-gray-300" />
-          <p className="font-poppins font-medium text-xl">
+        <div className="mx-2 flex gap-1.5 items-center min-w-0">
+          <img
+            src={flags[country]}
+            className="w-8 h-8 md:w-[49px] md:h-[49px] rounded-full object-cover border border-gray-300 shrink-0"
+          />
+          <p className="font-poppins font-medium text-sm md:text-xl truncate">
             {purpose !== 'holiday' ? 'Business' : 'Holiday'} in {fromKebabCase(country)}
           </p>
         </div>
