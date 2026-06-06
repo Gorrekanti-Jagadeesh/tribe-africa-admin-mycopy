@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import { LeftButton, RightButton } from '@molecules/carousel/common-carousel';
 import { sanityImageUrlBuilder } from '@api/index';
 import { Loading } from '@atoms/common/loading';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 interface workingRemotelyFields {
   image: string;
   title: string;
   description: string;
   _id: string;
-  homeBusinessBlog: string;
-  blogType: string;
 }
 
 const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error }> = ({ data, loading, error }) => {
@@ -19,70 +18,99 @@ const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error 
   if (error) return <>Error fetching data..</>;
   if (!data.length) return null;
 
+  const prev = () => setCurrentIndex((i) => Math.max(i - 1, 0));
+  const next = () => setCurrentIndex((i) => Math.min(i + 1, data.length - 1));
+
   return (
     <div className="w-full max-w-8xl m-auto px-4 py-8">
-      {/* Figma: "Great For Working Remotely" 64px Rufina, color=#403025 */}
       <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-[#403025] mb-1">
         Great For Working Remotely
       </h2>
-      {/* Figma: "Best Digital Nomad Destinations in africa" 24px Poppins 400 */}
-      <p className="font-poppins text-2xl text-black mb-6">Best Digital Nomad Destinations in africa</p>
+      <p className="font-poppins text-lg md:text-2xl text-black mb-6">Best Digital Nomad Destinations in africa</p>
 
-      <div className="relative">
-        {/* Mobile: text card above image; Desktop: text card overlays left side of image */}
-        <div className="w-full my-4">
-          {/* Mobile text card (visible only on < md) */}
-          <div className="block md:hidden bg-white rounded-[10px] shadow-xl mb-4 p-4">
-            <h2 className="font-poppins font-semibold text-lg text-black">{data[currentIndex].title}</h2>
-            <p className="font-poppins text-sm text-gray-600 mt-1 line-clamp-4">{data[currentIndex].description}</p>
-            <a
-              href={`blogs/${data[currentIndex]._id}`}
-              className="ms-auto block text-right text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
-            >
-              Know more
-            </a>
-          </div>
+      {/* Mobile: stacked card + image */}
+      <div className="block md:hidden">
+        <div className="bg-white rounded-[10px] shadow-xl mb-4 p-4 border border-gray-100">
+          <h2 className="font-poppins font-semibold text-lg text-black">{data[currentIndex].title}</h2>
+          <p className="font-poppins text-sm text-gray-600 mt-1 line-clamp-4">{data[currentIndex].description}</p>
+          <a
+            href={`blogs/${data[currentIndex]._id}`}
+            className="block text-right text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
+          >
+            Know more
+          </a>
+        </div>
+        <div className="w-full rounded-[10px] overflow-hidden shadow-lg">
+          <img
+            src={sanityImageUrlBuilder(data[currentIndex].image).url()}
+            alt={data[currentIndex].title}
+            className="w-full object-cover block"
+            style={{ aspectRatio: '642/489' }}
+          />
+        </div>
+        <div className="flex justify-between mt-3">
+          <button
+            onClick={prev}
+            disabled={currentIndex === 0}
+            className="w-10 h-10 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center disabled:opacity-30"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} className="text-gray-700 text-sm" />
+          </button>
+          <button
+            onClick={next}
+            disabled={currentIndex === data.length - 1}
+            className="w-10 h-10 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center disabled:opacity-30"
+          >
+            <FontAwesomeIcon icon={faChevronRight} className="text-gray-700 text-sm" />
+          </button>
+        </div>
+      </div>
 
-          {/* Image + desktop overlay */}
-          <div className="relative w-full overflow-hidden rounded-[10px] shadow-lg">
-            <img
-              src={sanityImageUrlBuilder(data[currentIndex].image).url()}
-              alt={data[currentIndex].title}
-              className="w-full object-cover object-center"
-              style={{ aspectRatio: '642/489' }}
-            />
-            {/* Desktop text overlay — hidden on mobile */}
-            <div className="hidden md:block absolute left-0 top-0 h-full w-3/5 p-6 flex flex-col justify-center bg-white/90 rounded-l-[10px]">
-              <div className="flex flex-col gap-2">
-                <h2 className="font-poppins font-semibold text-[20px] leading-[30px] text-black">
-                  {data[currentIndex].title}
-                </h2>
-                <p className="font-poppins font-normal text-[16px] leading-[24px] text-gray-600 line-clamp-4">
-                  {data[currentIndex].description}
-                </p>
-                <a
-                  href={`blogs/${data[currentIndex]._id}`}
-                  className="ms-auto text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
-                >
-                  Know more
-                </a>
-              </div>
-            </div>
-          </div>
+      {/* Desktop: image right 65%, text card overlays left, arrows in px-12 gutter */}
+      <div className="hidden md:block relative px-12">
+        {/* Image — right-aligned 65% */}
+        <div className="w-[65%] ml-auto rounded-[10px] overflow-hidden shadow-lg">
+          <img
+            src={sanityImageUrlBuilder(data[currentIndex].image).url()}
+            alt={data[currentIndex].title}
+            className="w-full object-cover block"
+            style={{ aspectRatio: '642/489' }}
+          />
         </div>
 
-        {/* Nav arrows — pushed outside content with negative margin on desktop */}
-        <div className="flex justify-between mt-4 gap-4 md:absolute md:bottom-1/2 md:translate-y-1/2 md:w-full md:pointer-events-none">
-          <div className="md:pointer-events-auto md:-translate-x-8">
-            <LeftButton onClick={() => setCurrentIndex(currentIndex - 1)} disabled={currentIndex === 0} />
-          </div>
-          <div className="md:pointer-events-auto md:translate-x-8">
-            <RightButton
-              onClick={() => setCurrentIndex(currentIndex + 1)}
-              disabled={currentIndex === data.length - 1}
-            />
-          </div>
+        {/* Text card — absolute, overlays left portion of image */}
+        <div className="absolute left-12 top-1/2 -translate-y-1/2 w-[52%] bg-white rounded-[10px] shadow-xl z-10 p-6 flex flex-col gap-2">
+          <h2 className="font-poppins font-semibold text-[20px] leading-[30px] text-black">
+            {data[currentIndex].title}
+          </h2>
+          <p className="font-poppins text-[15px] leading-[24px] text-gray-600 line-clamp-5">
+            {data[currentIndex].description}
+          </p>
+          <a
+            href={`blogs/${data[currentIndex]._id}`}
+            className="self-end text-brand-orange font-poppins font-medium text-sm hover:underline mt-1"
+          >
+            Know more
+          </a>
         </div>
+
+        {/* Left arrow — in px-12 gutter */}
+        <button
+          onClick={prev}
+          disabled={currentIndex === 0}
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-11 h-11 bg-white rounded-full shadow-md flex items-center justify-center disabled:opacity-30 hover:shadow-lg transition-all z-20"
+        >
+          <FontAwesomeIcon icon={faChevronLeft} className="text-gray-700" />
+        </button>
+
+        {/* Right arrow — in px-12 gutter */}
+        <button
+          onClick={next}
+          disabled={currentIndex === data.length - 1}
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-11 h-11 bg-white rounded-full shadow-md flex items-center justify-center disabled:opacity-30 hover:shadow-lg transition-all z-20"
+        >
+          <FontAwesomeIcon icon={faChevronRight} className="text-gray-700" />
+        </button>
       </div>
     </div>
   );
