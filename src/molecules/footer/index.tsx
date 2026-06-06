@@ -12,7 +12,6 @@ import {
   faInstagram,
   faLinkedinIn,
   faYoutube,
-  faTiktok,
   faSpotify,
 } from '@fortawesome/free-brands-svg-icons';
 
@@ -21,10 +20,6 @@ const footerLinks = {
     { label: 'About us', url: '' },
     { label: 'Resources & Policies', url: '' },
     { label: 'Trust & Safety', url: '' },
-  ],
-  business: [
-    { label: 'Invest with us', url: '' },
-    { label: 'Advertise with us', url: '' },
   ],
   join: [
     { label: 'Add your business', url: '' },
@@ -115,7 +110,6 @@ const Footer = () => {
             { href: 'https://instagram.com', icon: faInstagram, label: 'Instagram' },
             { href: 'https://linkedin.com', icon: faLinkedinIn, label: 'LinkedIn' },
             { href: 'https://youtube.com', icon: faYoutube, label: 'YouTube' },
-            { href: 'https://tiktok.com', icon: faTiktok, label: 'TikTok' },
             { href: 'https://spotify.com', icon: faSpotify, label: 'Spotify' },
           ].map((link) => (
             <a

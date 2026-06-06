@@ -25,7 +25,7 @@ export const LinkList = ({
               {disable ? (
                 <span className="text-gray-400 cursor-not-allowed">{link.label}</span>
               ) : link.onClick ? (
-                <button onClick={link.onClick} className="hover:underline text-left">
+                <button onClick={link.onClick} className="no-underline hover:underline text-left text-inherit">
                   {link.label}
                 </button>
               ) : (

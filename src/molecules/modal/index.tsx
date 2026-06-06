@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import Close from '@atoms/custom-button/close-button';
 
 interface ModalProps {
@@ -20,22 +21,12 @@ const Modal: React.FC<ModalProps> = ({
   closeButtonClasses,
   children,
 }) => {
-  return (
-    <div className={`inline-block ${containerClasses}`}>
-      {/* Trigger Button */}
-      {trigger && (
-        <span onClick={() => setIsOpen(true)} className="cursor-pointer">
-          {trigger}
-        </span>
-      )}
-
-      {/* Modal Background */}
-      {isOpen && (
+  const overlay = isOpen
+    ? createPortal(
         <div
           className="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity z-50 flex justify-center items-center"
           onClick={() => setIsOpen(false)}
         >
-          {/* Modal Container */}
           <div className="w-full h-full py-4 overflow-auto bg-transparent">
             <div className={`relative max-w-5xl m-auto ${customClasses}`} onClick={(e) => e.stopPropagation()}>
               <Close
@@ -47,9 +38,22 @@ const Modal: React.FC<ModalProps> = ({
               <span className="z-0">{children}</span>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        </div>,
+        document.body
+      )
+    : null;
+
+  if (!trigger) return overlay;
+
+  return (
+    <>
+      <div className={`inline-block ${containerClasses}`}>
+        <span onClick={() => setIsOpen(true)} className="cursor-pointer">
+          {trigger}
+        </span>
+      </div>
+      {overlay}
+    </>
   );
 };
 
