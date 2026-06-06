@@ -21,10 +21,16 @@ const Button: React.FC<customeBtnProps> = ({
 }) => {
   return (
     <button
-      className={`border bg-orange-500 text-white p-2 rounded hover:bg-white hover:text-black hover:border hover:border-orange-400 duration-300 disabled:bg-gray-500 ${className}`}
+      className={`bg-brand-orange text-white font-poppins font-semibold text-base px-6 py-2.5 rounded-[10px] transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed ${className}`}
+      style={{ ...style }}
       type={type}
       onClick={onClick}
-      style={style}
+      onMouseEnter={(e) => {
+        if (!disabled) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#E05A00';
+      }}
+      onMouseLeave={(e) => {
+        if (!disabled) (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#FF6600';
+      }}
       {...props}
       title={title}
       disabled={disabled}

@@ -25,34 +25,29 @@ const AccomodationScreen: React.FC<AccomodationScreenProps> = ({
   const navigate = useNavigate();
 
   if (isLoading) return <Loading />;
-  if (error) return <div>Error loading data</div>;
-  if (!data) return <div>Data not loaded yet..</div>;
-
-  const handleNavigation = () => {
-    console.log('Navigating to /form'); // Debug log
-    navigate('/form');
-  };
+  if (error) return <div className="p-8 font-poppins text-xl">Error loading data</div>;
+  if (!data) return <div className="p-8 font-poppins text-xl">Data not loaded yet..</div>;
 
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
-      <div>
-        <div className="flex mb-4">
-          <h1 className="text-4xl font-bold">{fromKebabCase(subCategory)}</h1>
-          <Button className="ms-auto" onClick={handleNavigation}>
-            List your accommodation
-          </Button>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
-          {data.map((item) => (
-            <AccommodationCard
-              key={item._id}
-              data={item}
-              country={country}
-              category={category}
-              subCategory={subCategory}
-            />
-          ))}
-        </div>
+    <div className="px-4 py-6 max-w-8xl m-auto">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <h1 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-black">
+          {fromKebabCase(subCategory)}
+        </h1>
+        <Button className="shrink-0 text-lg md:text-2xl px-8 md:px-10 py-3 md:py-4" onClick={() => navigate('/form')}>
+          List your accommodation
+        </Button>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {data.map((item) => (
+          <AccommodationCard
+            key={item._id}
+            data={item}
+            country={country}
+            category={category}
+            subCategory={subCategory}
+          />
+        ))}
       </div>
     </div>
   );

@@ -5,9 +5,15 @@ export default {
     extend: {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
-        // scrollbar: ['rounded'],
+        rufina: ['Rufina', 'serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        'brand-orange': '#FF6600',
+      },
+      maxWidth: {
+        '8xl': '1316px',
       },
     },
   },
-  // plugins: [require('tailwind-scrollbar')],
 };

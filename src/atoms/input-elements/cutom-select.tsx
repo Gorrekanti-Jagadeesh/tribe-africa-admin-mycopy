@@ -50,8 +50,8 @@ export const CustomSelect = forwardRef<
           onFocus={handleFocus}
           value={value}
           defaultValue={defaultValue}
-          className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
-          ${error ? 'border-red-500' : 'border-gray-400'}  appearance-none ${customInputClasses}`}
+          className={`p-2 text-sm block w-full h-10 bg-transparent border outline-none rounded-md focus:border-brand-orange
+          ${error ? 'border-red-500' : 'border-gray-400'} appearance-none pr-8 ${customInputClasses}`}
           {...props}
         >
           <option value="" disabled selected={Boolean(!defaultValue)}>
@@ -67,11 +67,11 @@ export const CustomSelect = forwardRef<
           <label
             htmlFor={name}
             className={`absolute duration-300 top-10 text-sm left-2.5 origin-0 z-10 bg-white transition-all cursor-text
-          ${isFocused ? '-translate-y-5 scale-75 text-orange-500 px-2 left-0' : 'text-gray-400'}`}
+          ${isFocused ? '-translate-y-5 scale-75 text-brand-orange px-2 left-0' : 'text-gray-400'}`}
           >
             {placeholder}
           </label>
-          <span className="absolute right-[52%] top-10 pointer-events-none text-gray-600 text-xs" aria-hidden="true">
+          <span className="absolute right-3 top-10 pointer-events-none text-gray-600 text-xs" aria-hidden="true">
             ▼
           </span>
         </div>

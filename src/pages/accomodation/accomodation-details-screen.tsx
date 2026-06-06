@@ -353,7 +353,7 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
 
       <main className="flex-1">
         <div className="flex border-t border-gray-300 w-full">
-          <div className="w-64 bg-white border-r-4 border-orange-400 min-h-screen">
+          <div className="w-64 bg-white border-r-4 border-brand-orange min-h-screen">
             <div className="divide-y mt-5">
               {amenitiesData?.generalAmenities && (
                 <CollapsibleSection
@@ -487,7 +487,7 @@ const AccomodationDetailsScreen: FC<AccomodationDetailsScreenProps> = ({
                       <Star
                         key={i}
                         size={28}
-                        className={i < Math.floor(3) ? 'text-orange-400 fill-orange-400' : 'text-gray-300'}
+                        className={i < Math.floor(3) ? 'text-brand-orange fill-brand-orange' : 'text-gray-300'}
                       />
                     ))}
                   </div>
@@ -709,7 +709,7 @@ const LocationDetails = ({ distanceToKeyLocations, location }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
         {/* Distance to Key Locations */}
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
             Distance to Key Locations
           </h2>
           <div className="mt-3">
@@ -738,7 +738,7 @@ const LocationDetails = ({ distanceToKeyLocations, location }) => {
 
         {/* Map Location */}
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
             Map Location
           </h2>
           <div className="mt-3">
@@ -795,7 +795,7 @@ const RoomBathroomDetails = ({ accomodationLabel, data }) => {
 
   return (
     <div className="p-4 mt-4 bg-white shadow rounded-lg">
-      <h2 className="text-2xl font-bold flex items-center border-b-4 border-orange-400 pb-2">
+      <h2 className="text-2xl font-bold flex items-center border-b-4 border-brand-orange pb-2">
         {accomodationLabel} Room & Bathroom Details
       </h2>
       <div className="grid grid-cols-2 gap-0 mt-4">
@@ -817,7 +817,7 @@ const OtherPolicyDetails = ({ accomodationLabel, nearbyAttractions, operatingSea
       <div className="grid grid-cols-2 gap-40">
         {/* Hostel Policies */}
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
             {accomodationLabel} Policies
           </h2>
           <div className="mt-3">
@@ -857,7 +857,7 @@ const OtherPolicyDetails = ({ accomodationLabel, nearbyAttractions, operatingSea
 
         {/* Operating Season */}
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
             Operating Season
           </h2>
           <div className="mt-3">
@@ -882,7 +882,7 @@ const OtherPolicyDetails = ({ accomodationLabel, nearbyAttractions, operatingSea
           </div>
           {/* Nearby Attractions */}
           <div className="mt-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
               Nearby Attractions
             </h2>
             <div className="mt-3">
@@ -927,7 +927,7 @@ const HotelDescription = ({ title, description, highlights, languages }) => {
     <div className="mx-auto p-4 m-20">
       {/* Title */}
       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{title}</h2>
-      <div className="border-t-4 border-orange-400 mb-6" />
+      <div className="border-t-4 border-brand-orange mb-6" />
       {/* Description */}
       <p className="text-gray-700 text-xs sm:text-sm leading-relaxed mt-4">{description}</p>
       {/* Highlights */}
@@ -1009,7 +1009,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ area, title, it
         className="w-full p-3 flex justify-between items-center hover:bg-gray-50"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-sm font-medium text-orange-400">{title}</span>
+        <span className="text-sm font-medium text-brand-orange">{title}</span>
         <ChevronDown size={16} className={`text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 

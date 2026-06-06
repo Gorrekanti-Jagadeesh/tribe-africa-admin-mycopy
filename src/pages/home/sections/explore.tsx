@@ -5,16 +5,14 @@ import { Loading } from '@atoms/common/loading';
 import HeroSection from './hero-section';
 import { sanityImageUrlBuilder } from '@api/index';
 
-// import { useTranslation } from 'react-i18next';
-
 interface dataFields {
   video: string;
-  image: []; // Array of Sanity image objects
+  image: [];
   exploreSectionImages: string;
   exploreSectionContent: string[];
 }
+
 const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading, error }) => {
-  // const { t } = useTranslation();
   if (loading) {
     return <Loading />;
   }
@@ -26,78 +24,70 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
   return (
     <>
       <HeroSection video={data?.video} image={sanityImageUrlBuilder(data?.image).url()} />
+
+      {/* Explore section — Figma: 1520×815, spiral bg, text left + images right */}
       <div
-        className="relative bg-cover bg-center text-white p-2 md:p-4"
+        className="relative bg-cover bg-center text-white py-12 px-4"
         style={{ backgroundImage: `url(${spiralBackground})` }}
       >
-        <span className="m-auto my-4 max-w-6xl grid md:flex gap-4 md:gap-8 lg:gap-28">
-          <div id="welcome-content" className="grid gap-8 animate-on-scroll">
-            <h4 className="text-4xl">
-              Explore Africa For <br />
-              <span className="text-6xl">
-                <span className="font-serif text-orange-500">Business</span> & Tourism
-              </span>
-            </h4>
-            {/* Use below if Static data translaiton with i18 is required */}
-            {/* <div id="about-africa" className="grid gap-2 text-sm">
-            <p>{t('welcomeMessage')}</p>
-            <p>
-              <br />
-            </p>
-            <p>{t('aboutAfricaPart1')}</p>
-            <p>
-              <br />
-            </p>
-            <p>{t('aboutAfricaPart2')}</p>
-            <p>
-              <br />
-            </p>
-            <p>{t('aboutAfricaPart3')}</p>
-          </div> */}
+        <div className="m-auto max-w-8xl">
+          <div className="grid md:flex gap-8 lg:gap-16 items-start animate-on-scroll">
+            {/* Left: text block */}
+            <div id="welcome-content" className="grid gap-6 md:flex-1">
+              {/* "Explore Africa For" — Figma: 36px Poppins 400 */}
+              <h4 className="font-poppins font-normal text-3xl md:text-4xl leading-tight">Explore Africa For</h4>
+              {/* "Business & Tourism" — Figma: 64px Rufina 400, #FF6600 */}
+              <h2 className="font-rufina font-normal text-5xl md:text-6xl lg:text-[64px] lg:leading-[79px] text-brand-orange -mt-4">
+                Business &amp; Tourism
+              </h2>
 
-            <div id="about-africa" className="grid gap-2 text-sm">
-              {data.exploreSectionContent.map((each, index) => (
-                <p key={index}>{each}</p>
-              ))}
-            </div>
-            <div id="welcome-footer" className="text-sm flex gap-2">
-              <span className="flex flex-wrap">
-                join <TribeAfrica className="mx-1.5" /> and be a part of the future. welcome to the tribe.
-              </span>
-            </div>
-          </div>
-
-          <div className="flex gap-3 md:flex-col m-auto md:max-w-96 animate-on-scroll">
-            <div className="flex gap-3 w-2/3 md:w-full">
-              {/* Top Left Image */}
-              <div className="w-1/2 h-full aspect-square md:aspect-auto">
-                <img
-                  src={sanityImageUrlBuilder(data?.exploreSectionImages[0]).url()}
-                  alt="Person in suit"
-                  className="w-full h-full object-cover rounded-lg shadow-lg"
-                />
+              <div id="about-africa" className="grid gap-3 text-sm leading-6 max-w-xl">
+                {data.exploreSectionContent.map((each, index) => (
+                  <p key={index}>{each}</p>
+                ))}
               </div>
 
-              {/* Top Right Image */}
-              <div className="w-1/2 h-full aspect-square md:aspect-auto">
-                <img
-                  src={sanityImageUrlBuilder(data?.exploreSectionImages[1]).url()}
-                  alt="Person in suit"
-                  className="w-full h-full object-cover rounded-lg shadow-lg"
-                />
+              <div id="welcome-footer" className="text-sm flex gap-1 flex-wrap items-center">
+                <span className="font-poppins font-bold">join</span>
+                <TribeAfrica className="mx-1" />
+                <span>and be a part of the future. welcome to the Tribe</span>
               </div>
             </div>
 
-            {/* Bottom Full-Width Image */}
-            <div className="w-1/3 md:w-full">
-              <img
-                src={sanityImageUrlBuilder(data?.exploreSectionImages[2]).url()}
-                alt="Person on boat"
-                className="w-full h-full object-cover rounded-lg shadow-lg"
-              />
+            {/* Right: image collage — Figma: top-left 208×312, top-right 221×312, bottom 442×298 */}
+            <div className="flex flex-col gap-3 w-full md:w-[480px] lg:w-[560px] md:shrink-0 animate-on-scroll">
+              <div className="flex gap-3">
+                {/* Top-left */}
+                <div className="flex-1">
+                  <img
+                    src={sanityImageUrlBuilder(data?.exploreSectionImages[0]).url()}
+                    alt="Explore Africa"
+                    className="w-full object-cover rounded-[10px] shadow-lg"
+                    style={{ aspectRatio: '208/312' }}
+                  />
+                </div>
+                {/* Top-right */}
+                <div className="flex-1">
+                  <img
+                    src={sanityImageUrlBuilder(data?.exploreSectionImages[1]).url()}
+                    alt="Explore Africa"
+                    className="w-full object-cover rounded-[10px] shadow-lg"
+                    style={{ aspectRatio: '221/312' }}
+                  />
+                </div>
+              </div>
+              {/* Bottom full-width */}
+              <div className="w-full">
+                <img
+                  src={sanityImageUrlBuilder(data?.exploreSectionImages[2]).url()}
+                  alt="Explore Africa"
+                  className="w-full object-cover rounded-[10px] shadow-lg"
+                  style={{ aspectRatio: '442/298' }}
+                />
+              </div>
             </div>
           </div>
-        </span>
+        </div>
       </div>
     </>
   );

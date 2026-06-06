@@ -51,11 +51,11 @@ const MustSeeAndDo: React.FC = () => {
   }
 
   return (
-    <div className="p-2 md:p-3">
-      <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Must see & Do</h4>
-      <div className="grid grid-cols-2 md:grid-cols-4 w-full">
+    <div className="p-3 md:p-4">
+      <h4 className="text-left text-brand-orange font-poppins font-semibold text-lg mb-3">&rarr; Must See & Do</h4>
+      <div className="grid grid-cols-2 md:grid-cols-4 w-full gap-3">
         {data.map((each) => (
-          <div key={each._id} className="m-4">
+          <div key={each._id} className="cursor-pointer">
             <OverLayCard data={each} />
           </div>
         ))}

@@ -17,11 +17,11 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
   const navigation = useNavigate();
   return (
     <div className="flex justify-between md:flex-col md:justify-start">
-      <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
+      <div className="border-2 border-brand-orange rounded-[10px] overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
         <img
           src={sanityImageUrlBuilder(category.image).url()}
           alt={category.title}
-          className="w-full h-48 aspect-square object-cover"
+          className="w-full object-cover w-full"
         />
       </div>
       <div className="text-left order-1 md:order-2 w-1/2 md:w-full">
@@ -34,7 +34,7 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
                   component={<span>{eachCategory?.label}</span>}
                   sibling={
                     <div className="min-w-40 h-full md:min-w-64 aspect-square overflow-auto text-left p-4 rounded-lg bg-white text-black">
-                      <h4 className="text-orange-500 font-semibold">&rarr; {eachCategory.label}</h4>
+                      <h4 className="text-brand-orange font-semibold">&rarr; {eachCategory.label}</h4>
                       {eachCategory?.hasSubcategories &&
                         eachCategory?.subCategories?.map((item, index) => {
                           return (
@@ -78,8 +78,8 @@ const TribeAfricaPagesNavcategoryItem: React.FC<{ category: NetworkCategory; cou
 
 const EventsNavcategoryItem: React.FC<{ category: EventCategory }> = ({ category }) => (
   <div className="flex justify-between md:flex-col md:justify-start">
-    <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
-      <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
+    <div className="border-2 border-brand-orange rounded-[10px] overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
+      <img src={category.imageUrl} alt={category.title} className="w-full object-cover w-full" />
     </div>
     <LinkList
       heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
@@ -92,8 +92,8 @@ const EventsNavcategoryItem: React.FC<{ category: EventCategory }> = ({ category
 
 const MyTribeNavcategoryItem: React.FC<{ category: NetworkCategory }> = ({ category }) => (
   <div className="flex justify-between md:flex-col md:justify-start">
-    <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
-      <img src={category.image} alt={category.title} className="w-full h-48 aspect-square object-cover" />
+    <div className="border-2 border-brand-orange rounded-[10px] overflow-hidden mb-4 order-2 md:order-1 w-1/2 md:w-full">
+      <img src={category.image} alt={category.title} className="w-full object-cover w-full" />
     </div>
     <LinkList
       heading={<h3 className="text-lg md:text-xl font-semibold">{category.title}</h3>}
@@ -155,8 +155,8 @@ const Network: React.FC<{ country: string }> = ({ country }) => {
   // console.log('-----networkData', networkData)
   return (
     <div>
-      <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">
-        <h4 className=" text-left text-orange-500 text-lg mb-4 font-semibold">&rarr; Network</h4>
+      <section className="flex flex-col p-2 md:p-3 max-w-8xl m-auto">
+        <h4 className=" text-left text-brand-orange text-lg mb-4 font-semibold">&rarr; Network</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {networkData?.map((category, index) => (
             <TribeAfricaPagesNavcategoryItem key={index} category={category} country={country} />

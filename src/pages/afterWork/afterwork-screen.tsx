@@ -34,7 +34,7 @@ const AfterWorkScreen: React.FC<AccomodationScreenProps> = ({
   };
 
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <div>
         <div className="flex mb-4">
           <h1 className="text-4xl font-bold">{fromKebabCase(subCategory)}</h1>

@@ -107,8 +107,10 @@ export const Auth = () => {
         <UserPlaceholder user={googleUser ? googleUser : emailUser} handleLogout={handleLogout} />
       ) : (
         <div className="flex gap-2">
+          {/* Figma: "Login" 20px Inter w500, no background */}
           <button
-            className="bg-white p-2 rounded hover:bg-orange-500 hover:text-white"
+            className="text-black hover:text-brand-orange transition-colors duration-200 px-2 py-2"
+            style={{ fontFamily: 'Inter, sans-serif', fontSize: '20px', fontWeight: 500 }}
             onClick={() => handleAuth('login')}
           >
             Login

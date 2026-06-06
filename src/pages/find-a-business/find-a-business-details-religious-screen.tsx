@@ -134,7 +134,7 @@ const FindaBusinessDetailsTypeScreen: React.FC<data> = ({ data }) => {
   console.log(data, 'erfer');
 
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <div className="flex flex-col justify-end items-end md:pb-8">
         <h1 className="font-bold text-2xl">{data?.businessName}</h1>
         <p>{data?.businessMotive}</p>
@@ -178,13 +178,13 @@ const FindaBusinessDetailsTypeScreen: React.FC<data> = ({ data }) => {
               </div>
             </div>
 
-            <Button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 w-full">
+            <Button className="bg-brand-orange text-white px-4 py-2 rounded-lg hover:bg-[#E05A00] w-full">
               Website
             </Button>
           </div>
 
           {/* Right Section */}
-          <div className="lg:w-2/3 md:pt-8 border-t-2 border-orange-400">
+          <div className="lg:w-2/3 md:pt-8 border-t-2 border-brand-orange">
             <div className="flex justify-between">
               {/* Contact Information */}
               <div className="mb-6">

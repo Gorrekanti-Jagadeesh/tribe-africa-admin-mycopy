@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import UnderlineHeading from '@atoms/heading/underline-heading';
-
 import Button from '@atoms/custom-button/button';
 import Modal from '../../molecules/modal';
 import EventForm from '../../molecules/forms/event-form';
@@ -57,10 +55,14 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
   const navigation = useNavigate();
 
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
-      <div className="flex flex-col md:flex-row md:items-center my-3">
-        <UnderlineHeading className="font-bold">{heading}</UnderlineHeading>
-        <Button className="md:ms-auto px-4" onClick={() => setIsOpen(true)}>
+    <div className="px-4 py-6 max-w-8xl m-auto">
+      {/* Header row */}
+      <div className="flex flex-col md:flex-row md:items-center gap-4 my-4">
+        <div>
+          <h1 className="font-poppins font-normal text-3xl md:text-4xl text-black">{heading}</h1>
+          <div className="border-b-2 border-brand-orange mt-2 w-3/4" />
+        </div>
+        <Button className="md:ms-auto shrink-0 text-lg px-6 py-3" onClick={() => setIsOpen(true)}>
           List your event
         </Button>
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -69,64 +71,68 @@ const EventsScreen: React.FC<EventsScreenProps> = ({ heading, image, data }) => 
       </div>
 
       {data && data.length ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {data.map((item) => (
             <div
-              className="w-full inline-block cursor-pointer rounded-md overflow-hidden border"
+              className="w-full cursor-pointer rounded-[10px] overflow-hidden border border-gray-200 hover:shadow-md hover:border-brand-orange transition-all duration-200"
               key={item._id}
               onClick={() => navigation(`${item._id}`)}
             >
+              {/* Cover image with hover description overlay */}
               <div
-                className="aspect-video bg-cover group relative overflow-auto"
+                className="bg-cover bg-center group relative overflow-hidden"
                 style={{
                   backgroundImage: `url(${sanityImageUrlBuilder(item.coverPhoto)})`,
+                  aspectRatio: '16/9',
                 }}
               >
-                <div className="h-full bg-black hidden group-hover:flex p-2 items-center justify-center transition-opacity duration-300">
-                  <div className="text-white text-xs text-center">
+                <div className="h-full bg-black/80 hidden group-hover:flex p-4 items-center justify-center transition-opacity duration-300">
+                  <div className="text-white font-poppins text-xs text-center">
                     <PortableText value={item.description} />
                   </div>
                 </div>
               </div>
-              <div className="text-sm flex flex-col gap-2 m-2">
-                <p id="title" className="font-semibold text-lg">
-                  {item.title}
-                </p>
-                <p>
-                  <strong> Event By:</strong> {item.eventBy}
-                </p>
-                <p>
-                  <strong> Start Date & Time:</strong> {item.eventStartDate}, {item.eventStartTime}
-                </p>
-                <p>
-                  <strong> End Date & Time:</strong> {item.eventEndDate}, {item.eventEndTime}
-                </p>
-                <p>
-                  <strong> Location:</strong> {item.venue}, {item.city}
-                </p>
-                <p>
-                  <strong> Country: </strong>
-                  {item.country}
-                </p>
 
+              {/* Event details */}
+              <div className="font-poppins text-sm flex flex-col gap-2 p-4">
+                <p className="font-semibold text-xl text-black">{item.title}</p>
                 <p>
-                  <strong>Tel:</strong>
-                  {item.countryCode} {item.phone}
+                  <strong>Event By:</strong> {item.eventBy}
+                </p>
+                <p>
+                  <strong>Start:</strong> {item.eventStartDate}, {item.eventStartTime}
+                </p>
+                <p>
+                  <strong>End:</strong> {item.eventEndDate}, {item.eventEndTime}
+                </p>
+                <p>
+                  <strong>Location:</strong> {item.venue}, {item.city}
+                </p>
+                <p>
+                  <strong>Country:</strong> {item.country}
+                </p>
+                <p>
+                  <strong>Tel:</strong> {item.countryCode} {item.phone}
                 </p>
                 {item.website && (
-                  <a href={item.website} target="_blank">
-                    <p>
-                      <strong> Website:</strong> {item.website.slice(0, 35)}
-                    </p>
+                  <a
+                    href={item.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-brand-orange hover:underline"
+                  >
+                    <strong>Website:</strong> {item.website.slice(0, 35)}
                   </a>
                 )}
-                <Button>{item.isEventFree ? 'FREE' : `General : ${item.ticketPrices.general}`}</Button>
+                <Button className="w-fit mt-1">
+                  {item.isEventFree ? 'FREE' : `General: ${item.ticketPrices.general}`}
+                </Button>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <img src={image} className="aspect-video object-cover" />
+        <img src={image} className="w-full rounded-[10px] object-cover" style={{ aspectRatio: '16/9' }} />
       )}
     </div>
   );

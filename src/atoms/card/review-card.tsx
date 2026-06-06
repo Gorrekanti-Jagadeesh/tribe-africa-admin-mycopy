@@ -16,7 +16,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow-sm flex flex-col md:flex-row">
+    <div className="border rounded-[10px] p-4 shadow-sm flex flex-col md:flex-row">
       {/* User Information */}
       <div className="flex flex-grow">
         <div className="flex-shrink-0 mr-2">
@@ -41,7 +41,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ data }) => {
       </div>
 
       {/* Ratings */}
-      <div className="w-full md:w-fit p-4 h-fit border rounded-lg border-orange-500">
+      <div className="w-full md:w-fit p-4 h-fit border rounded-[10px] border-brand-orange">
         <div className="space-y-2 min-w-56">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold whitespace-nowrap">In Total</span>

@@ -13,7 +13,7 @@ interface AuthProps {
 const AuthWrapper: React.FC<AuthProps> = ({ type, setType, handleGoogleLogin, children }) => {
   return (
     <div className="flex items-center justify-center bg-white p-2 md:p-10">
-      <div className="flex gap-10 rounded-lg overflow-hidden md:px-10">
+      <div className="flex gap-10 rounded-[10px] overflow-hidden md:px-10">
         {/* Left side - Word cloud */}
         <div className="hidden md:flex flex-1 justify-center items-center">
           <img src={brandImage} alt="Africa Word Cloud" className="object-contain" />

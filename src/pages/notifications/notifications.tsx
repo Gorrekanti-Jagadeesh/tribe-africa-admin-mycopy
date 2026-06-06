@@ -201,7 +201,7 @@ const NotificationsPage = () => {
       <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
         <div className="px-8 py-3 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-gray-900 pb-1 border-b-2 border-orange-500">Notifications</h1>
+            <h1 className="text-2xl font-bold text-gray-900 pb-1 border-b-2 border-brand-orange">Notifications</h1>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <span className="flex items-center gap-1 text-sm text-gray-600">
@@ -215,7 +215,7 @@ const NotificationsPage = () => {
               </div>
               <button
                 onClick={markAllAsRead}
-                className="px-4 py-1 text-xs font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-md shadow-sm transition"
+                className="px-4 py-1 text-xs font-medium text-white bg-brand-orange hover:bg-[#E05A00] rounded-md shadow-sm transition"
               >
                 Mark all as read
               </button>
@@ -226,7 +226,7 @@ const NotificationsPage = () => {
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 text-sm rounded-lg pl-4 pr-10 py-1.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
+                className="appearance-none bg-white border border-gray-300 text-sm rounded-lg pl-4 pr-10 py-1.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent shadow-sm"
               >
                 <option value="all">All notifications</option>
                 <option value="approved">Approved</option>
@@ -249,7 +249,7 @@ const NotificationsPage = () => {
               <select
                 value={documentTypeFilter}
                 onChange={(e) => setDocumentTypeFilter(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 text-sm rounded-lg pl-4 pr-10 py-1.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
+                className="appearance-none bg-white border border-gray-300 text-sm rounded-lg pl-4 pr-10 py-1.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent shadow-sm"
               >
                 <option value="all">All types</option>
                 <option value="event">Events</option>
@@ -278,11 +278,11 @@ const NotificationsPage = () => {
       <div className="px-8 py-4">
         {loading ? (
           <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-opacity-50 border-t-orange-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-4 border-brand-orange border-opacity-50 border-t-brand-orange"></div>
           </div>
         ) : filteredByDocumentType.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 px-4">
-            <div className="bg-orange-50 rounded-full p-4 mb-2 text-orange-500 shadow-sm">
+            <div className="bg-orange-50 rounded-full p-4 mb-2 text-brand-orange shadow-sm">
               <svg
                 className="w-8 h-8"
                 fill="none"

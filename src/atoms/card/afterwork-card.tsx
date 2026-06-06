@@ -16,7 +16,7 @@ const AfterWorkCard: React.FC<{
   const { pageType } = useParams();
   const navigate = useNavigate();
   return (
-    <div className="border rounded-lg shadow-sm overflow-hidden">
+    <div className="border rounded-[10px] shadow-sm overflow-hidden">
       <img
         src={sanityImageUrlBuilder(images).url()}
         alt={title}
@@ -24,7 +24,7 @@ const AfterWorkCard: React.FC<{
       />
       <div className="p-4">
         <h3 className="text-lg font-semibold">{title}</h3>
-        <div className="flex items-center text-orange-500 mt-1">
+        <div className="flex items-center text-brand-orange mt-1">
           {/* <StarRating rating={getAverageOfObjectValues(data?.reviews?.fields)} type="brief" />
           <span className="text-gray-500 ml-2 text-sm">{data?.reviews?.count} reviews</span> */}
         </div>
@@ -39,7 +39,7 @@ const AfterWorkCard: React.FC<{
             <span className="font-bold text-lg mx-2">{data.amount}</span>
           </div>
           <button
-            className="w-fit ms-auto bg-orange-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
+            className="w-fit ms-auto bg-brand-orange hover:bg-[#E05A00] text-white font-semibold p-2 rounded-md transition-colors"
             onClick={() => {
               navigate(
                 `/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/afterwork/${toKebabCase(subCategory)}/${_id}`,

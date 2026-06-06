@@ -116,7 +116,7 @@ export const CountriesGeoData: Record<string, CountryDataType> = {
         category: 'Action Enthusiasts',
         subCategory: 'Surf the waves',
       },
-      { name: 'Djanet', coordinates: [8.7, 24.55], category: 'Action Enthuisiasts', subCategory: 'Soar through sky' },
+      { name: 'Djanet', coordinates: [8.7, 24.550], category: 'Action Enthuisiasts', subCategory: 'Soar through sky' },
       {
         name: 'Sidi Boumediene Mosque',
         coordinates: [-1.3369, 34.8783],

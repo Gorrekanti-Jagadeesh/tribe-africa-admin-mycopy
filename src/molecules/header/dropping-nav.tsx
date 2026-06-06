@@ -19,18 +19,18 @@ const DroppingNav: React.FC<HoverNavLinkProps> = ({ id, title, content }) => {
 
   return (
     <div ref={ref} id={id} className="md:m-auto h-full w-full flex-1" onClick={() => setOpen(true)}>
-      <span className="flex gap-1.5 h-full w-full md:justify-center md:items-center cursor-pointer text-white md:text-black">
+      <span className="flex gap-1.5 h-full w-full md:justify-center md:items-center cursor-pointer text-white md:text-black font-poppins font-medium text-xl hover:text-brand-orange transition-colors duration-200">
         {title}
-        <FontAwesomeIcon icon={faChevronDown} className="w-3" />
+        <FontAwesomeIcon icon={faChevronDown} className="w-3 mt-0.5" />
       </span>
       <div
-        className={`fixed md:absolute h-screen md:h-auto left-0 top-0 md:top-auto w-full overflow-auto bg-black text-white md:rounded z-20 transition-all duration-200 ease-in
-          ${open ? 'max-h-screen p-2 border-2 border-orange-500' : 'max-h-0'}`}
+        className={`fixed md:absolute h-screen md:h-auto left-0 top-0 md:top-full w-full overflow-auto bg-black text-white md:rounded-[10px] z-20 transition-all duration-200 ease-in
+          ${open ? 'max-h-screen p-3 border-2 border-brand-orange' : 'max-h-0 overflow-hidden'}`}
       >
         <Close
           className="ms-auto block md:hidden"
           theme="light"
-          size="6"
+          size="10"
           onClick={(e) => {
             e.stopPropagation();
             setOpen(false);

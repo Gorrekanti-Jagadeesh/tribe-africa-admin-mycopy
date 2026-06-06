@@ -10,7 +10,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ children, className = '' })
     <div className={`relative w-fit ${className}`}>
       <h3 className="text-lg font-semibold text-gray-900 mb-2 relative">
         {children}
-        {/* <span className="absolute left-0 bottom-0 w-full h-1 bg-orange-500 rounded-full" /> */}
+        {/* <span className="absolute left-0 bottom-0 w-full h-1 bg-brand-orange rounded-full" /> */}
       </h3>
     </div>
   );

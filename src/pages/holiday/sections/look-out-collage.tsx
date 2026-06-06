@@ -6,7 +6,7 @@ import ColsGrid from '@molecules/layout/cols-grid';
 
 const LookOutCollage = () => {
   return (
-    <div className="max-w-6xl m-auto p-4 animate-on-scroll">
+    <div className="max-w-8xl m-auto p-4 animate-on-scroll">
       <DualHeading>Things to *Look Out* For!</DualHeading>
       <div className="mt-4">
         <ColsGrid cols={2} gap={3}>

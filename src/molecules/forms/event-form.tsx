@@ -359,14 +359,14 @@ const EventForm: React.FC = () => {
 
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-xl">Event Date(s)</label>
-                <div className="flex gap-5">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
                   <CustomInput
                     {...register('eventStartDate', { required: 'Event Start Date required' })}
                     placeholder="Start Date"
                     label="Start Date:"
                     error={errors.eventStartDate}
                     type="date"
-                    customInputClassNames="w-[150px]"
+                    customInputClassNames="w-full sm:w-[150px]"
                   />
                   <CustomInput
                     {...register('eventEndDate')}
@@ -374,14 +374,14 @@ const EventForm: React.FC = () => {
                     label="End Date"
                     error={errors.eventEndDate}
                     type="date"
-                    customInputClassNames="w-[150px]"
+                    customInputClassNames="w-full sm:w-[150px]"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-xl">Event Timings</label>
-                <div className="flex gap-5">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
                   <>
                     <CustomInput
                       {...register('eventStartTime', { required: 'Event Start Time required' })}
@@ -389,7 +389,7 @@ const EventForm: React.FC = () => {
                       label="Start Time:"
                       error={errors.eventStartTime}
                       type="time"
-                      customInputClassNames="w-[100px]"
+                      customInputClassNames="w-full sm:w-[120px]"
                     />
                     <CustomInput
                       {...register('eventEndTime', { required: 'Event End Time required' })}
@@ -397,7 +397,7 @@ const EventForm: React.FC = () => {
                       label="End Time:"
                       error={errors.eventEndTime}
                       type="time"
-                      customInputClassNames="w-[100px]"
+                      customInputClassNames="w-full sm:w-[120px]"
                     />
                   </>
                 </div>
@@ -473,7 +473,7 @@ const EventForm: React.FC = () => {
                 />
                 <select
                   {...register('country', { required: 'Please provide Country' })}
-                  className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
+                  className={`p-2 text-sm block w-full h-10 bg-transparent border outline-none rounded-md focus:border-brand-orange
           ${errors.country ? 'border-red-500' : 'border-gray-400'}`}
                 >
                   <option value="">Select Country</option>

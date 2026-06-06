@@ -112,7 +112,7 @@ const UserDashboardScreen = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl m-auto">
+    <div className="p-6 max-w-8xl m-auto">
       <Link to={'/'}>
         <h1>{'< Back'}</h1>
       </Link>
@@ -147,7 +147,7 @@ const UserDashboardScreen = () => {
                   )}
 
                   {ad.status == 'Approved' && (
-                    <button className="px-3 py-1 rounded bg-orange-500 text-white" onClick={() => handlePayment(ad)}>
+                    <button className="px-3 py-1 rounded bg-brand-orange text-white" onClick={() => handlePayment(ad)}>
                       Pay
                     </button>
                   )}
@@ -183,7 +183,7 @@ const UserDashboardScreen = () => {
 
         <Modal isOpen={showPaymentPopup} setIsOpen={setShowPaymentPopup}>
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[40%] text-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[50%] lg:w-[40%] text-center">
               <h2 className="text-xl font-semibold mb-4">Confirm Payment</h2>
               {/* Ad Details */}
               <div className="mb-4 text-left">

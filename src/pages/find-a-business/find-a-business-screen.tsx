@@ -34,7 +34,7 @@ const FindABusinessScreen: React.FC<findAbusinessProps> = ({ data, mainCategory,
   const { country } = useParams();
   const navigation = useNavigate();
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <div className="flex mb-10">
         <DualHeading>{`${fromKebabCase(mainCategory)}${subCategory ? ` - ${fromKebabCase(subCategory)}` : ''}`}</DualHeading>
         <Button

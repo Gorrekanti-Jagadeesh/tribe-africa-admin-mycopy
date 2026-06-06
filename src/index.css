@@ -23,11 +23,37 @@ body {
   animation-range: entry 0% cover 25%;
 }
 
-/* Rich text editor - quill - styling using tailwindCSS */
+/* Rich text editor — quill */
 .ql-toolbar {
   @apply bg-gray-100 border-b border-gray-300 rounded-lg;
 }
 
 .ql-container {
   @apply rounded-b-lg p-1 !important;
+}
+
+/* Brand orange utilities */
+.text-brand-orange {
+  color: #ff6600;
+}
+.bg-brand-orange {
+  background-color: #ff6600;
+}
+.border-brand-orange {
+  border-color: #ff6600;
+}
+.ring-brand-orange {
+  --tw-ring-color: #ff6600;
+}
+.hover\:bg-brand-orange:hover {
+  background-color: #ff6600;
+}
+.hover\:text-brand-orange:hover {
+  color: #ff6600;
+}
+.hover\:border-brand-orange:hover {
+  border-color: #ff6600;
+}
+.hover\:ring-brand-orange:hover {
+  --tw-ring-color: #ff6600;
 }

@@ -311,7 +311,7 @@ const CandidateForm: React.FC = () => {
       <DateInput value={formData.date} onChange={(value) => handleInputChange('date', value)} />
 
       <div className="mt-4">
-        <button type="submit" className="bg-orange-500 text-white py-2 px-4 rounded-md">
+        <button type="submit" className="bg-brand-orange text-white py-2 px-4 rounded-md">
           Submit
         </button>
       </div>

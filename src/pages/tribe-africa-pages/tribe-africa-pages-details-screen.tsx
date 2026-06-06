@@ -17,7 +17,7 @@ interface tribeAfricaPageDetails {
 
 const TribeAfricaPagesDetailsScreen: React.FC<tribeAfricaPageDetails> = ({ tribeAfricaPageDetails }) => {
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <h4>{tribeAfricaPageDetails.department}</h4>
       <TribeAfricaPagesCard
         image={tribeAfricaPageDetails.imageUrl}

@@ -24,7 +24,7 @@ interface MinistriesScreenProps {
 
 const TribeAfricaPagesScreen: React.FC<MinistriesScreenProps> = ({ data, category }) => {
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <DualHeading>{category}</DualHeading>
       {data?.map((eachItem) => {
         const imageUrl = sanityImageUrlBuilder(eachItem.image);

@@ -59,7 +59,7 @@ const QNACard: React.FC<CardProps> = ({ _id, title, content, level, author, date
   };
 
   return (
-    <div className="border rounded-lg shadow-md bg-white space-y-2">
+    <div className="border rounded-[10px] shadow-md bg-white space-y-2">
       {level === 'primary' ? (
         <>
           <div className="flex gap-2 p-2 md:p-4">
@@ -70,7 +70,7 @@ const QNACard: React.FC<CardProps> = ({ _id, title, content, level, author, date
             </div>
           </div>
           <div
-            className={`flex justify-between items-center text-center border-t border-orange-500 p-2 ${showReplies ? 'border-b' : ''}`}
+            className={`flex justify-between items-center text-center border-t border-brand-orange p-2 ${showReplies ? 'border-b' : ''}`}
           >
             <span className="text-sm w-1/3 px-2">{`Posted by ${author}`}</span>-
             <span className="text-sm w-1/3 px-2">{date}</span>-
@@ -96,7 +96,7 @@ const QNACard: React.FC<CardProps> = ({ _id, title, content, level, author, date
                 <div className="mt-2">
                   <hr />
                   <p
-                    className="text-sm text-orange-500 font-semibold cursor-pointer"
+                    className="text-sm text-brand-orange font-semibold cursor-pointer"
                     onClick={() => handleRepliesToggle(_id)}
                   >
                     {localRepliesCount} replies
