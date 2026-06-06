@@ -65,7 +65,7 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
         {/* Heading row — Figma: "Favourite Holiday Destinations" 64px Rufina white + "Advertise with us" orange CTA */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-white">
-            Favourite Holiday Destinations
+            Favourite <span className="text-brand-orange">Holiday Destinations</span>
           </h2>
           <Button
             className="shrink-0 text-lg md:text-2xl px-8 md:px-10 py-3 md:py-4"

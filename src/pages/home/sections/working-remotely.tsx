@@ -24,7 +24,7 @@ const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error 
   return (
     <div className="w-full max-w-8xl m-auto px-4 py-8">
       <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-[#403025] mb-1">
-        Great For Working Remotely
+        Great For <span className="text-brand-orange">Working Remotely</span>
       </h2>
       <p className="font-poppins text-lg md:text-2xl text-black mb-6">Best Digital Nomad Destinations in africa</p>
 

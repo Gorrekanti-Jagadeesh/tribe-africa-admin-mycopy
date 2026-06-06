@@ -63,7 +63,7 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
       {/* Figma: "Charming Hotels" 64px Rufina black + "List Your Accommodation" orange CTA */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-black">
-          Charming Hotels
+          Charming <span className="text-brand-orange">Hotels</span>
         </h2>
         <button
           onClick={() => navigate('/form')}
