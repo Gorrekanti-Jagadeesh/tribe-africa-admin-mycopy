@@ -89,12 +89,11 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
 
   return (
     <section className="flex flex-col p-2 md:p-3 max-w-8xl m-auto">
-      <div className="text-lg flex flex-col items-center md:flex-row mb-4">
-        <h4 className=" text-left text-brand-orange text-lg font-semibold">&rarr; Travel Knowledge</h4>
-        <Modal isOpen={isOpen} setIsOpen={setIsOpen} containerClasses="ms-auto">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h4 className="text-brand-orange text-lg font-semibold">&rarr; Travel Knowledge</h4>
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen} trigger={<Button>Advertise on tribe africa</Button>}>
           <EventForm />
         </Modal>
-        <Button onClick={() => setIsOpen(true)}>Advertise on tribe africa</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

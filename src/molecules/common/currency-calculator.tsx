@@ -145,7 +145,7 @@ const CurrencyCalculator: React.FC = () => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg max-w-2xl">
+    <div className="bg-white p-4 sm:p-6 rounded-lg max-w-2xl w-full">
       <div className="mb-6">
         <h2 className="text-4xl font-bold my-4">Currency Calculator</h2>
         <div className={isLoadingConversion ? 'opacity-30' : ''}>
@@ -158,7 +158,7 @@ const CurrencyCalculator: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <CurrencySelect
           currencies={currencies}
           currency={currencyX}
