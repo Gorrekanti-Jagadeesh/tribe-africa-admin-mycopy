@@ -169,7 +169,12 @@ const BusinessScreen = ({ props }) => {
                   For More information:
                 </span>
                 {/* Contact button — Figma: 310×58, bg=#FF6600, radius=10, 24px Poppins 600 */}
-                <Button className="text-2xl font-semibold px-8 py-3 shrink-0">Contact AAPI</Button>
+                <Button
+                  className="text-2xl font-semibold px-8 py-3 shrink-0"
+                  onClick={() => agencyData.agencyWebsite && window.open(agencyData.agencyWebsite, '_blank')}
+                >
+                  Contact AAPI
+                </Button>
               </div>
             </div>
           </div>

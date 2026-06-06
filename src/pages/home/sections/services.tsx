@@ -6,6 +6,7 @@ import { Loading } from '@atoms/common/loading';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import Modal from '@molecules/modal';
 import AdvertisementForm from '@molecules/forms/advertisement-form';
+import { useNavigate } from 'react-router-dom';
 
 interface serviceDataFields {
   service: string;
@@ -15,6 +16,7 @@ interface serviceDataFields {
 
 const Services: React.FC<{ data: serviceDataFields[]; loading; error }> = ({ data, loading, error }) => {
   const [isAdOpen, setIsAdOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (!data || loading) return <Loading />;
   if (error) return <>Error fetching data..</>;
@@ -60,6 +62,7 @@ const Services: React.FC<{ data: serviceDataFields[]; loading; error }> = ({ dat
           <button
             className="font-poppins font-semibold px-6 py-3 bg-brand-orange rounded-[10px] text-white m-auto hover:bg-[#E05A00] transition-colors"
             style={{ width: 'fit-content' }}
+            onClick={() => navigate('/business-form')}
           >
             List your business
           </button>

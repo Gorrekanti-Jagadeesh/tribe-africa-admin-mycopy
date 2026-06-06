@@ -36,6 +36,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
 }) => {
   const [data, setData] = useState(proffesionalData);
   const [active, setActive] = useState(null);
+  const [searchName, setSearchName] = useState('');
   const navigate = useNavigate();
   const { country } = useParams();
 
@@ -43,6 +44,14 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
     if (active != department) {
       setActive(department);
       setData(proffesionalData.filter((p) => p.proffession.toLowerCase() == department));
+    }
+  }
+
+  function handleFind() {
+    if (searchName) {
+      setData(proffesionalData.filter((p) => p.name.toLowerCase().includes(searchName.toLowerCase())));
+    } else {
+      setData(proffesionalData);
     }
   }
 
@@ -69,11 +78,14 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
               };
             })}
             searchable={true}
-            action={() => {}}
+            action={(val) => setSearchName(val)}
             buttonStyles={'p-2 md:p-4'}
           />
         </div>
-        <Button className={`border rounded-r-md rounded-l-none px-4 text-white bg-brand-orange disabled:bg-slate-400`}>
+        <Button
+          className={`border rounded-r-md rounded-l-none px-4 text-white bg-brand-orange disabled:bg-slate-400`}
+          onClick={handleFind}
+        >
           Find
         </Button>
       </div>
@@ -86,7 +98,9 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
       </div>
       <div className="flex justify-between">
         <p>All</p>
-        <Button className="">Get Listed on Tribe Africa Pages</Button>
+        <Button className="" onClick={() => navigate('/proffessional-form')}>
+          Get Listed on Tribe Africa Pages
+        </Button>
       </div>
       {data.map((proffesional) => (
         <TribeAfricaPagesCard
@@ -108,7 +122,16 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
 
               <p>{proffesional.experience}</p>
               <p>{truncateText(proffesional.description, 100)}</p>
-              <Button className="bg-brand-orange text-white mt-4">View Reviews</Button>
+              <Button
+                className="bg-brand-orange text-white mt-4"
+                onClick={() =>
+                  navigate(`/${toKebabCase(country)}/business/details/looking-to-hire-someone/${proffesional._id}`, {
+                    state: proffesional,
+                  })
+                }
+              >
+                View Reviews
+              </Button>
             </div>
           }
           footer={

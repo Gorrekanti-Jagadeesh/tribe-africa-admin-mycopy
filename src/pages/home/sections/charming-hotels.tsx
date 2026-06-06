@@ -47,7 +47,10 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
             <p>Email: {data.email}</p>
             <p>Website: {data.website}</p>
           </div>
-          <button className="bg-brand-orange text-white font-poppins font-semibold px-8 py-3 rounded-[10px] ms-auto mt-auto w-fit hover:bg-[#E05A00] transition-colors">
+          <button
+            className="bg-brand-orange text-white font-poppins font-semibold px-8 py-3 rounded-[10px] ms-auto mt-auto w-fit hover:bg-[#E05A00] transition-colors"
+            onClick={() => data.website && window.open(data.website, '_blank')}
+          >
             Book Hotel
           </button>
         </div>

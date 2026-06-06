@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube, faSpotify } from '@fortawesome/free-brands-svg-icons';
 import Button from '../../atoms/custom-button/button';
@@ -6,11 +7,14 @@ import { sanity } from '@utils/sanity';
 import { sanityImageUrlBuilder } from '@api/index';
 import { useNavigate, useParams } from 'react-router';
 import { fromKebabCase, toKebabCase } from '@utils/common';
+import Modal from '@molecules/modal';
+import BlogCompose from '@molecules/blogs/blog-compose';
 
 const Blogs = () => {
   const { country } = useParams();
   const navigation = useNavigate();
   const customCountry = country ? fromKebabCase(country) : 'Home';
+  const [isContributeOpen, setIsContributeOpen] = useState(false);
 
   const {
     data: blogData,
@@ -26,10 +30,20 @@ const Blogs = () => {
 
   return (
     <div className="p-3 md:p-4">
+      <Modal
+        isOpen={isContributeOpen}
+        setIsOpen={setIsContributeOpen}
+        containerClasses="ms-auto"
+        customClasses="w-full"
+      >
+        <BlogCompose className="bg-white overflow-auto p-4 rounded-[10px]" />
+      </Modal>
       {/* Header */}
       <div className="flex items-center mb-4 gap-3">
         <h4 className="text-brand-orange font-poppins font-semibold text-lg">&rarr; Blogs</h4>
-        <Button className="md:ms-auto">Contribute</Button>
+        <Button className="md:ms-auto" onClick={() => setIsContributeOpen(true)}>
+          Contribute
+        </Button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">

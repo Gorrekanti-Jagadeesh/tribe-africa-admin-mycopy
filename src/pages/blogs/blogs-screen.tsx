@@ -18,7 +18,9 @@ const BlogPageScreen = ({ country, data, banner, blogCategory }) => {
             </h1>
             <div className="border-b-2 border-brand-orange mt-2 w-3/4" />
           </div>
-          <Button className="shrink-0 text-lg px-8 py-3">Get Featured</Button>
+          <Button className="shrink-0 text-lg px-8 py-3" onClick={() => setOpenModal(true)}>
+            Get Featured
+          </Button>
         </div>
 
         {/* Banner */}
