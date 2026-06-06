@@ -95,8 +95,12 @@ const Blogs = () => {
             <div className="text-center">
               <p className="mb-2">Our Podcast</p>
               <div className="flex gap-4 justify-center text-2xl">
-                <FontAwesomeIcon icon={faYoutube} className="hover:text-red-500 transition-colors cursor-pointer" />
-                <FontAwesomeIcon icon={faSpotify} className="hover:text-green-500 transition-colors cursor-pointer" />
+                <a href="https://youtube.com/@tribeafrica" target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faYoutube} className="hover:text-red-500 transition-colors cursor-pointer" />
+                </a>
+                <a href="https://open.spotify.com/show/tribeafrica" target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faSpotify} className="hover:text-green-500 transition-colors cursor-pointer" />
+                </a>
               </div>
             </div>
           </div>
