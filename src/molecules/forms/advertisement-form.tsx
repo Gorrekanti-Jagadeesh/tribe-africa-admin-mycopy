@@ -202,7 +202,7 @@ const AdvertisementForm: React.FC = () => {
                     </label>
                     <select
                       {...register('item', { required: 'Event Type is required' })}
-                      className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
+                      className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-brand-orange
           ${errors.item ? 'border-red-500' : 'border-gray-400'}`}
                     >
                       <option value="">Select Your {selectedAdType}</option>

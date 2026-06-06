@@ -79,7 +79,7 @@ const DiscoverArticles: React.FC = () => {
         <header className="p-4 mb-8">
           <h1 className="text-4xl md:text-5xl flex">
             <p>
-              <span className="text-orange-500 font-serif">{fromKebabCase(subcategory).split(' ')[0]}</span>{' '}
+              <span className="text-brand-orange font-serif">{fromKebabCase(subcategory).split(' ')[0]}</span>{' '}
               {fromKebabCase(subcategory).split(' ').slice(1).join(' ')}
             </p>
             <button className="ms-auto p-2 py-0" onClick={() => navigate('/')}>

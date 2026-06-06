@@ -7,33 +7,34 @@ const Experience: React.FC = () => {
 
   const handlePlay = () => {
     setPlaying(true);
-    if (videoRef.current) {
-      videoRef.current.play();
-    }
+    if (videoRef.current) videoRef.current.play();
   };
 
-  const handleVideoEnd = () => {
-    setPlaying(false);
-  };
+  const handleVideoEnd = () => setPlaying(false);
 
   return (
-    <div className="p-2 md:p-4 grid gap-6 my-8 m-auto max-w-6xl animate-on-scroll">
-      <div className="bg-slate-800 rounded-lg relative">
+    <div className="px-4 py-8 max-w-8xl m-auto animate-on-scroll">
+      {/* Figma: "Get Ready for a Life Changing Experience" 64px Rufina black */}
+      <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-black mb-6">
+        Get Ready for a Life Changing Experience
+      </h2>
+
+      {/* Video — Figma: 1308×502, radius~7 */}
+      <div className="bg-slate-800 rounded-[7px] relative overflow-hidden">
         {!playing && (
           <button
-            className="text-white absolute top-0 bottom-0 right-0 left-0 cursor-pointer"
+            className="text-white absolute inset-0 flex items-center justify-center cursor-pointer z-10"
             onClick={handlePlay}
-            style={{ zIndex: 1 }}
           >
-            <img src={videoPlay} className="m-auto" style={{ maxWidth: '60px' }} />
+            <img src={videoPlay} className="w-16 md:w-20 opacity-90 hover:opacity-100 transition-opacity" />
           </button>
         )}
         <video
           ref={videoRef}
           loop={false}
           muted={true}
-          className="rounded-lg"
-          style={{ zIndex: 0 }}
+          className="rounded-[7px] w-full"
+          style={{ aspectRatio: '1308/502' }}
           onEnded={handleVideoEnd}
         >
           <source

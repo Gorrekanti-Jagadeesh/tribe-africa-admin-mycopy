@@ -9,15 +9,19 @@ const BlogCard = ({ data }: { data: BlogContentProps }) => {
     typeof data?.image === 'string' ? data?.image : sanityImageUrlBuilder(data?.image?.asset?._ref)?.url();
 
   return (
-    <div className="w-full relative grid gap-2">
+    <div className="w-full grid gap-3 group">
       <div
-        className="aspect-square bg-cover bg-center rounded-md relative"
+        className="w-full bg-cover bg-center rounded-[10px] overflow-hidden"
         style={{
           backgroundImage: `url(${backgroundImageUrl})`,
+          aspectRatio: '424/351',
         }}
-      ></div>
-      <p className="text-nowrap truncate">{data.title}</p>
-      <button className="bg-gray-300 p-2 px-6 rounded-lg text-sm m-auto" onClick={() => navigate(data._id)}>
+      />
+      <p className="font-poppins font-medium text-xl truncate">{data.title}</p>
+      <button
+        className="bg-brand-orange text-white font-poppins font-semibold px-6 py-2.5 rounded-[10px] text-sm w-fit hover:bg-[#E05A00] transition-colors"
+        onClick={() => navigate(data._id)}
+      >
         Know more
       </button>
     </div>

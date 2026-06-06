@@ -112,7 +112,7 @@ const UserDashboardScreen = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl m-auto">
+    <div className="p-6 max-w-8xl m-auto">
       <Link to={'/'}>
         <h1>{'< Back'}</h1>
       </Link>
@@ -147,7 +147,7 @@ const UserDashboardScreen = () => {
                   )}
 
                   {ad.status == 'Approved' && (
-                    <button className="px-3 py-1 rounded bg-orange-500 text-white" onClick={() => handlePayment(ad)}>
+                    <button className="px-3 py-1 rounded bg-brand-orange text-white" onClick={() => handlePayment(ad)}>
                       Pay
                     </button>
                   )}

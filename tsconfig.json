@@ -3,6 +3,7 @@
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "bundler",
+    "noEmit": true,
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"],

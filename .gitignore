@@ -25,3 +25,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript in-place emit artifacts (produced by tsc -b via root tsconfig.json)
+# Root-level source files that get compiled alongside src/
+firebaseDB.js
+vite.config.js
+# All emitted JS inside src/ (every .ts/.tsx has a .js shadow when noEmit is absent)
+src/**/*.js
+# TypeScript incremental build cache
+*.tsbuildinfo

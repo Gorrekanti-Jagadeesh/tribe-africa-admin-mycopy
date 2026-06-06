@@ -98,7 +98,7 @@ const MapChart: React.FC<MapChartProps> = ({ country, data }) => {
 
   return (
     <div
-      className="flex flex-col md:flex-row justify-center items-start my-12 gap-2 max-w-6xl m-auto p-2 md:p-4 animate-on-scroll"
+      className="flex flex-col md:flex-row justify-center items-start my-12 gap-2 max-w-8xl m-auto p-2 md:p-4 animate-on-scroll"
       style={{ backgroundColor: '#b34302' }}
     >
       <div className="w-[2px] bg-white mx-4 hidden md:block" style={{ height: 600 }}></div>

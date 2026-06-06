@@ -1,5 +1,4 @@
 import { HomeHeader } from '@molecules/header';
-// Components importing from sections folder
 import Explore from './sections/explore';
 import Experience from './sections/experience';
 import Services from './sections/services';
@@ -9,7 +8,6 @@ import WorkingRemotely from './sections/working-remotely';
 import BusinessFriendly from './sections/business-friendly';
 import Footer from '@molecules/footer';
 import Chatbot from '@atoms/common/chatbot';
-
 const HomeScreen = ({ props }) => {
   const {
     exploreData,
@@ -31,8 +29,9 @@ const HomeScreen = ({ props }) => {
     servicesError,
     servicesLoading,
   } = props;
+
   return (
-    <div className="max-w-screen-2xl m-auto">
+    <div className="max-w-screen-2xl m-auto overflow-x-hidden">
       <HomeHeader />
       <div className="relative">
         <Explore data={exploreData} loading={exploreLoading} error={exploreError} />
@@ -44,7 +43,9 @@ const HomeScreen = ({ props }) => {
         <Services data={servicesData} loading={servicesLoading} error={servicesError} />
       </div>
       <Footer />
-      <div className="fixed bottom-0 right-0 m-2 lg:m-4 xl:mx-12 z-20">
+
+      {/* Fixed chatbot — offset right by 86px (social sidebar width) + 8px gap */}
+      <div className="fixed bottom-4 z-20" style={{ right: '102px' }}>
         <Chatbot />
       </div>
     </div>

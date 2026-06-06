@@ -554,7 +554,7 @@ const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
         </button>
 
         <h2 className="text-xl font-semibold mb-3">Thank You for Your Submission!</h2>
-        <hr className="border-orange-500 mb-3" />
+        <hr className="border-brand-orange mb-3" />
 
         <p className="text-gray-700">
           Your information has been successfully submitted.
@@ -574,7 +574,7 @@ const SubmissionModal: React.FC<ModalProps> = ({ onClose }) => {
         <div className="mt-4 flex justify-end">
           <button
             onClick={onClose}
-            className="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600"
+            className="bg-brand-orange text-white px-4 py-2 rounded-lg shadow hover:bg-[#E05A00]"
           >
             Close
           </button>

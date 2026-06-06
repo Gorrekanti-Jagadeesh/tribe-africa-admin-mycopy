@@ -34,7 +34,7 @@ export const Select = forwardRef<
         }}
         required={required}
         {...props}
-        className={`p-2 block w-full bg-transparent border outline-none rounded-md focus:border-orange-500 
+        className={`p-2 block w-full bg-transparent border outline-none rounded-md focus:border-brand-orange 
           ${error ? 'border-red-500' : 'border-gray-400'} appearance-none`}
       >
         <option value="" disabled>
@@ -49,7 +49,7 @@ export const Select = forwardRef<
       <label
         htmlFor={name}
         className={`absolute duration-300 top-3 left-2.5 origin-0 z-10 bg-white transition-all cursor-text
-          ${selectedValue ? '-translate-y-5 scale-75 text-sm text-orange-500 px-2 left-0' : ''}`}
+          ${selectedValue ? '-translate-y-5 scale-75 text-sm text-brand-orange px-2 left-0' : ''}`}
       >
         {placeholder}
       </label>

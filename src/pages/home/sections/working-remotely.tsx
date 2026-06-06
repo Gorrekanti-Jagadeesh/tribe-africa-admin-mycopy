@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import DualHeading from '@atoms/heading/dual-heading';
 import { LeftButton, RightButton } from '@molecules/carousel/common-carousel';
 import { sanityImageUrlBuilder } from '@api/index';
 import { Loading } from '@atoms/common/loading';
+
 interface workingRemotelyFields {
   image: string;
   title: string;
@@ -15,52 +15,53 @@ interface workingRemotelyFields {
 const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error }> = ({ data, loading, error }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <>Error fetching data..</>;
-  }
-
+  if (loading) return <Loading />;
+  if (error) return <>Error fetching data..</>;
   if (!data.length) return null;
 
   return (
-    <div className="w-full max-w-6xl m-auto p-2 md:p-4">
-      <div>
-        <DualHeading>Great For *Working Remotely*</DualHeading>
-        <p className="mt-2 text-sm text-gray-600">Best digital Nomad Destinations in Africa</p>
-      </div>
+    <div className="w-full max-w-8xl m-auto px-4 py-8">
+      {/* Figma: "Great For Working Remotely" 64px Rufina, color=#403025 */}
+      <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-[#403025] mb-1">
+        Great For Working Remotely
+      </h2>
+      {/* Figma: "Best Digital Nomad Destinations in africa" 24px Poppins 400 */}
+      <p className="font-poppins text-2xl text-black mb-6">Best Digital Nomad Destinations in africa</p>
+
       <div className="relative flex sm:flex-col items-center">
-        {/* Text and Image */}
-        <div className="w-full flex flex-col md:flex-row relative items-center m-2 md:m-4">
-          {/* Text container */}
-          <div className="absolute left-0 w-full h-full md:h-fit md:w-3/5 md:mb-0 opacity-65 md:opacity-100 text-white bg-black md:text-black md:bg-white rounded-lg shadow-lg border border-orange-500">
-            <div className="p-2 md:p-6 w-full h-full flex flex-col">
-              <div className="flex-grow max-h-48 h-full overflow-hidden">
-                <h2 className="text-xl font-semibold mb-2">{data[currentIndex].title}</h2>
-                <p className="md:text-gray-600 line-clamp-4">{data[currentIndex].description}</p>
-              </div>
-              <a href={`blogs/${data[currentIndex]._id}`} className="ms-auto text-blue-500">
+        {/* Two images + text card */}
+        <div className="w-full flex flex-col md:flex-row relative items-center gap-4 my-4">
+          {/* Text card — Figma: Rectangle 346, white 757×226, radius=10, shadow, no border */}
+          <div className="absolute left-0 w-full md:w-3/5 opacity-80 md:opacity-100 bg-white rounded-[10px] shadow-xl z-10">
+            {/* Figma card: title 20px Poppins 600, subtitle 16px Poppins 400 */}
+            <div className="p-4 md:p-6 flex flex-col gap-2">
+              <h2 className="font-poppins font-semibold text-[20px] leading-[30px] text-black">
+                {data[currentIndex].title}
+              </h2>
+              <p className="font-poppins font-normal text-[16px] leading-[24px] text-gray-600 line-clamp-4">
+                {data[currentIndex].description}
+              </p>
+              <a
+                href={`blogs/${data[currentIndex]._id}`}
+                className="ms-auto text-brand-orange font-poppins font-medium text-sm hover:underline mt-2"
+              >
                 Know more
               </a>
             </div>
           </div>
 
-          {/* Image container */}
-          <div className=" w-full md:w-3/5 ms-auto overflow-hidden rounded-lg shadow-lg -z-10">
+          {/* Images — Figma: two 642×489 images side by side, radius=10 */}
+          <div className="w-full md:w-3/5 ms-auto overflow-hidden rounded-[10px] shadow-lg -z-0">
             <img
               src={sanityImageUrlBuilder(data[currentIndex].image).url()}
               alt={data[currentIndex].title}
-              className="h-64 md:h-80 lg:h-96 w-full object-cover object-center"
+              className="w-full object-cover object-center"
+              style={{ aspectRatio: '642/489' }}
             />
           </div>
         </div>
 
-        {/* Left Arrow */}
         <LeftButton onClick={() => setCurrentIndex(currentIndex - 1)} disabled={currentIndex === 0} />
-
-        {/* Right Arrow */}
         <RightButton onClick={() => setCurrentIndex(currentIndex + 1)} disabled={currentIndex === data.length - 1} />
       </div>
     </div>

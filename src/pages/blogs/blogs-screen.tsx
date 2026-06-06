@@ -1,60 +1,66 @@
 import { useState } from 'react';
 import Button from '@atoms/custom-button/button';
-import UnderlineHeading from '@atoms/heading/underline-heading';
 import BlogCard from '../../atoms/card/blog-card';
-import DualHeading from '../../atoms/heading/dual-heading';
 import BlogCompose from '@molecules/blogs/blog-compose';
 import Modal from '@molecules/modal';
 
 const BlogPageScreen = ({ country, data, banner, blogCategory }) => {
   const [openModal, setOpenModal] = useState(false);
 
-  console.log('hello');
-
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
-      <div className="flex flex-col gap-4">
-        <div id="header" className="flex mb-4">
-          <UnderlineHeading>{`${country} ${country && '-'} ${blogCategory} Articles`}</UnderlineHeading>
-          <Button className="ms-auto">Get Featured</Button>
+    <div className="px-4 py-6 max-w-8xl m-auto">
+      <div className="flex flex-col gap-6">
+        {/* Header row */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="font-poppins font-normal text-3xl md:text-4xl text-black">
+              {`${country}${country && ' — '}${blogCategory} Articles`}
+            </h1>
+            <div className="border-b-2 border-brand-orange mt-2 w-3/4" />
+          </div>
+          <Button className="shrink-0 text-lg px-8 py-3">Get Featured</Button>
         </div>
-        <div id="banner" className="bg-gray-100 flex justify-center p-12">
-          <img className="aspect-square max-w-80" src={banner} />
-          <div className="flex flex-col gap-4 bg-white p-4 max-h-48 my-auto relative right-4">
-            <h4 className="text-lg font-semibold">Top Businesses in 2024</h4>
-            <div className="overflow-auto flex flex-col gap-2">
+
+        {/* Banner */}
+        <div className="bg-gray-100 rounded-[10px] flex justify-center items-center p-8 gap-4 overflow-hidden">
+          <img className="rounded-[10px] object-cover w-64 h-64 shrink-0" src={banner} alt="Blog banner" />
+          <div className="bg-white rounded-[10px] p-4 max-h-64 overflow-auto shadow-sm flex flex-col gap-3 min-w-0">
+            <h4 className="font-poppins font-semibold text-xl">Top Businesses in 2024</h4>
+            <div className="flex flex-col gap-2">
               {[1, 2, 3, 4, 5].map((item, index) => (
-                <p key={index}>{item}</p>
+                <p key={index} className="font-poppins text-sm text-gray-600">
+                  {item}
+                </p>
               ))}
             </div>
           </div>
         </div>
-        <div className="max-w-6xl w-full m-auto">
-          {/* <Dropdown
-            iconVisible={true}
-            placeholderText="Language"
-            searchable={false}
-            options={Languages}
-            action={(value: string) => setSelectedLanguage(value)}
-            buttonStyles={'md:w-32 '}
-          /> */}
-          <div className="flex w-full">
-            <DualHeading>Recent Articles</DualHeading>
+
+        {/* Articles section */}
+        <div className="w-full">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-black">
+              Recent Articles
+            </h2>
             <Modal
               isOpen={openModal}
               setIsOpen={setOpenModal}
               containerClasses="ms-auto"
               trigger={
-                <button onClick={() => setOpenModal(true)} className="ms-auto underline">
-                  write a blog
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="font-poppins font-medium text-brand-orange hover:underline"
+                >
+                  Write a blog
                 </button>
               }
               customClasses="w-full"
             >
-              <BlogCompose className="bg-white overflow-auto p-4 rounded-lg" />
+              <BlogCompose className="bg-white overflow-auto p-4 rounded-[10px]" />
             </Modal>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 w-full overflow-auto">
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {data.map((item, index) => (
               <BlogCard data={item} key={index} />
             ))}

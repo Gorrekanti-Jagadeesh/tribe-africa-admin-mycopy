@@ -15,31 +15,30 @@ const AccommodationCard: React.FC<{
   const { images, title, _id } = data;
   const { pageType } = useParams();
   const navigate = useNavigate();
+
   return (
-    <div className="border rounded-lg shadow-sm overflow-hidden">
+    <div className="border rounded-[10px] shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <img
         src={sanityImageUrlBuilder(images).url()}
         alt={title}
-        className="w-full aspect-video rounded-lg h-48 object-cover"
+        className="w-full object-cover"
+        style={{ aspectRatio: '16/9', height: '200px' }}
       />
       <div className="p-4">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <div className="flex items-center text-orange-500 mt-1">
-          {/* <StarRating rating={getAverageOfObjectValues(data?.reviews?.fields)} type="brief" />
-          <span className="text-gray-500 ml-2 text-sm">{data?.reviews?.count} reviews</span> */}
-        </div>
-        <div className="flex items-center text-gray-500 text-sm mt-2">
+        <h3 className="font-poppins font-semibold text-xl">{title}</h3>
+        <div className="flex items-center text-brand-orange mt-1" />
+        <div className="flex items-center text-gray-500 text-sm mt-2 gap-2">
           <FontAwesomeIcon icon={faMap} />
-          <span className="ml-2">{'5 km'}</span>
+          <span className="font-poppins">5 km</span>
         </div>
-        <hr className="my-2" />
-        <div className="flex">
-          <div className="flex items-center">
-            <span className="text-sm text-gray-500">From</span>
-            <span className="font-bold text-lg mx-2">{data.amount}</span>
+        <hr className="my-3 border-gray-200" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <span className="font-poppins text-sm text-gray-500">From</span>
+            <span className="font-poppins font-bold text-xl">{data.amount}</span>
           </div>
           <button
-            className="w-fit ms-auto bg-orange-500 hover:bg-gray-700 text-white font-semibold  p-2 rounded-md"
+            className="bg-brand-orange hover:bg-[#E05A00] text-white font-poppins font-semibold px-4 py-2 rounded-[10px] transition-colors"
             onClick={() => {
               navigate(
                 `/${toKebabCase(country)}/${pageType}/${toKebabCase(category)}/${toKebabCase(subCategory)}/${_id}`,

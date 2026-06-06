@@ -38,7 +38,7 @@ const MustSeeAndDoDetails = () => {
   const { title, image, description } = data?.[0] || {};
 
   return (
-    <div className="max-w-6xl m-auto p-4">
+    <div className="max-w-8xl m-auto p-4">
       {title && <DualHeading className="my-4">{title}</DualHeading>}
       {image && (
         <img src={sanityImageUrlBuilder(image.asset._ref).url()} className="float-right max-w-96" alt={title} />

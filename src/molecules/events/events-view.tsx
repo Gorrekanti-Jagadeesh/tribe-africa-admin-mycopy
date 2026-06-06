@@ -191,7 +191,7 @@ const EventDetailsPage = () => {
 
       <div className="mt-6">
         <h3 className="text-xl font-bold mb-4">Organizer Details</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-2xl shadow">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-[10px] shadow">
           <div>
             <p className="text-sm text-gray-500">Name</p>
             <p className="text-base font-medium text-gray-900">{eventDetails.organizer?.name}</p>

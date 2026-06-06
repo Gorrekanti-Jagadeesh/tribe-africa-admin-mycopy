@@ -35,7 +35,7 @@ export const QNAScreen = () => {
       .finally(() => setIsLoading(false));
   }, []);
   return (
-    <div className="max-w-6xl m-auto p-2 md:p-4 space-y-4">
+    <div className="max-w-8xl m-auto p-2 md:p-4 space-y-4">
       <div className="flex">
         <h1 className="text-3xl font-bold">Q & A Form</h1>
         <div className="inline-block ms-auto"></div>

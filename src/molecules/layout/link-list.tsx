@@ -9,7 +9,7 @@ export const LinkList = ({
   disable = false,
 }: {
   heading: React.ReactNode;
-  links: { url?: string; label: string }[];
+  links: { url?: string; label: string; onClick?: () => void }[];
   className?: string;
   subLinksHeading?: React.ReactNode;
   subLinks?: { url: string; label: string }[];
@@ -24,6 +24,10 @@ export const LinkList = ({
             <li key={index} className="text-sm md:text-base">
               {disable ? (
                 <span className="text-gray-400 cursor-not-allowed">{link.label}</span>
+              ) : link.onClick ? (
+                <button onClick={link.onClick} className="hover:underline text-left">
+                  {link.label}
+                </button>
               ) : (
                 <a href={link.url} className="hover:underline">
                   {link.label}

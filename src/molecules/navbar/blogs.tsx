@@ -10,7 +10,6 @@ import { fromKebabCase, toKebabCase } from '@utils/common';
 const Blogs = () => {
   const { country } = useParams();
   const navigation = useNavigate();
-
   const customCountry = country ? fromKebabCase(country) : 'Home';
 
   const {
@@ -22,30 +21,24 @@ const Blogs = () => {
     queryFn: () => sanity.GET(`*[_type == "blog-categories" && country == "${customCountry}"][0]`),
   });
 
-  if (blogLoading) {
-    return 'loading';
-  }
-
-  if (blogError) {
-    return 'Error';
-  }
+  if (blogLoading) return <div className="p-4 font-poppins">Loading...</div>;
+  if (blogError) return <div className="p-4 font-poppins text-red-500">Error loading blogs</div>;
 
   return (
-    <div className="p-2 md:p-3">
-      {/* Blog Title */}
-      <div className="flex items-center mb-4">
-        <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Blogs</h4>
-        <Button className="bg-orange-500 text-white font-semibold px-4 py-2 rounded-md w-full md:w-fit md:ms-auto">
-          Contribute
-        </Button>
+    <div className="p-3 md:p-4">
+      {/* Header */}
+      <div className="flex items-center mb-4 gap-3">
+        <h4 className="text-brand-orange font-poppins font-semibold text-lg">&rarr; Blogs</h4>
+        <Button className="md:ms-auto">Contribute</Button>
       </div>
 
-      <div className="flex flex-col md:flex-row">
-        <div className="md:w-2/3 gap-4 flex flex-col">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {blogData.articles.map((each, index: number) => (
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Blog categories grid */}
+        <div className="md:w-2/3 flex flex-col gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {blogData?.articles?.map((each, index: number) => (
               <div
-                className="w-full"
+                className="w-full cursor-pointer group"
                 key={index}
                 onClick={() => {
                   country
@@ -56,31 +49,41 @@ const Blogs = () => {
                 <img
                   src={sanityImageUrlBuilder(each.categoryImage).url()}
                   alt={each.articleType}
-                  className="w-full md:h-full rounded-md mb-2"
+                  className="w-full rounded-[10px] mb-2 object-cover group-hover:ring-2 group-hover:ring-brand-orange transition-all"
+                  style={{ aspectRatio: '424/351' }}
                 />
-                <div className="text-center text-white">{each.articleType} Articles</div>
+                <div className="text-center text-white font-poppins font-medium text-sm">
+                  {each.articleType} Articles
+                </div>
               </div>
             ))}
           </div>
         </div>
-        <div className="md:ml-6 flex flex-col flex-grow gap-4">
-          <div className="bg-gray-700 text-white rounded-md aspect-video flex">
-            <p className="m-auto">Business Videos</p>
+
+        {/* Video / podcast sidebar */}
+        <div className="md:ml-4 flex flex-col flex-grow gap-3">
+          <div
+            className="bg-gray-700 text-white rounded-[10px] flex items-center justify-center font-poppins"
+            style={{ aspectRatio: '16/9' }}
+          >
+            <p>Business Videos</p>
           </div>
-          <div className="bg-gray-700 text-white rounded-md aspect-video flex">
-            <p className="m-auto">Holiday Videos</p>
+          <div
+            className="bg-gray-700 text-white rounded-[10px] flex items-center justify-center font-poppins"
+            style={{ aspectRatio: '16/9' }}
+          >
+            <p>Holiday Videos</p>
           </div>
-          <div className="bg-gray-700 text-white rounded-md aspect-video flex">
-            <div className=" gap-2 m-auto">
-              <p>Our Podcast</p>
-              <span className="text-white m-4 text-2xl relative top-1">
-                {/* Add appropriate icons */}
-                <FontAwesomeIcon icon={faYoutube} />
-              </span>
-              |
-              <span className="text-white m-4 text-2xl relative top-1">
-                <FontAwesomeIcon icon={faSpotify} />
-              </span>
+          <div
+            className="bg-gray-700 text-white rounded-[10px] flex items-center justify-center font-poppins"
+            style={{ aspectRatio: '16/9' }}
+          >
+            <div className="text-center">
+              <p className="mb-2">Our Podcast</p>
+              <div className="flex gap-4 justify-center text-2xl">
+                <FontAwesomeIcon icon={faYoutube} className="hover:text-red-500 transition-colors cursor-pointer" />
+                <FontAwesomeIcon icon={faSpotify} className="hover:text-green-500 transition-colors cursor-pointer" />
+              </div>
             </div>
           </div>
         </div>

@@ -88,9 +88,9 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
   };
 
   return (
-    <section className="flex flex-col p-2 md:p-3 max-w-6xl m-auto">
+    <section className="flex flex-col p-2 md:p-3 max-w-8xl m-auto">
       <div className="text-lg flex flex-col items-center md:flex-row mb-4">
-        <h4 className=" text-left text-orange-500 text-lg font-semibold">&rarr; Travel Knowledge</h4>
+        <h4 className=" text-left text-brand-orange text-lg font-semibold">&rarr; Travel Knowledge</h4>
         <Modal isOpen={isOpen} setIsOpen={setIsOpen} containerClasses="ms-auto">
           <EventForm />
         </Modal>
@@ -101,8 +101,8 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
         {travelCategories.map((category, index) => (
           <div key={index} className="flex flex-col">
             {category.imageUrl && (
-              <div className="border-2 border-orange-400 rounded-lg overflow-hidden mb-4 w-full">
-                <img src={category.imageUrl} alt={category.title} className="w-full h-48 aspect-square object-cover" />
+              <div className="border-2 border-brand-orange rounded-[10px] overflow-hidden mb-4 w-full">
+                <img src={category.imageUrl} alt={category.title} className="w-full object-cover w-full" />
               </div>
             )}
             <div id="about" className="text-left w-full space-y-2">
@@ -116,7 +116,7 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
                           component={<span>{subCategory.label}</span>}
                           sibling={
                             <div className="min-w-40 h-full md:min-w-64 aspect-square overflow-auto text-left p-4 rounded-lg bg-white text-black">
-                              <h4 className="text-orange-500 font-semibold">&rarr; {subCategory.label}</h4>
+                              <h4 className="text-brand-orange font-semibold">&rarr; {subCategory.label}</h4>
                               {subCategory.accommodationCategories &&
                                 subCategory.accommodationCategories.map((item, index) => (
                                   <li
@@ -168,10 +168,10 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
       >
         <div
           id="sub-layout"
-          className="p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl"
+          className="p-2 md:p-8 border border-brand-orange/30 m-2 text-left bg-white text-black rounded-[10px]"
         >
           <h4
-            className="text-orange-500 text-lg hover:underline cursor-pointer w-fit font-semibold"
+            className="text-brand-orange text-lg hover:underline cursor-pointer w-fit font-semibold"
             onClick={() => setIsContentOpen(false)}
           >
             &larr; {modalContent.title}

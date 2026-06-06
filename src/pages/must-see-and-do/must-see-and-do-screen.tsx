@@ -20,7 +20,7 @@ const MustSeeAndDoScreen: React.FC<MustSeeAndDoScreenProps> = ({ category, data 
   const navigation = useNavigate();
 
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <div className="flex mb-10">
         <DualHeading>{category}</DualHeading>
         <Button

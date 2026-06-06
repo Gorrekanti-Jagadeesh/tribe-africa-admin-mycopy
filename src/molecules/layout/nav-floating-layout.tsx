@@ -21,7 +21,7 @@ const NavFloatingLayout: React.FC<{
   const navigation = useNavigate();
   return (
     <div className="p-2 md:p-3">
-      <h4 className="text-left text-orange-500 max-w-6xl text-lg font-semibold">&rarr; {heading}</h4>
+      <h4 className="text-left text-brand-orange max-w-8xl text-lg font-semibold">&rarr; {heading}</h4>
       <div className="grid grid-cols-2 md:grid-cols-4 w-full">
         {categories.map((each, index) => (
           <FloatingSibling
@@ -38,7 +38,7 @@ const NavFloatingLayout: React.FC<{
             }
             sibling={
               <div className="min-w-40 h-full md:min-w-64 aspect-square overflow-auto text-left p-4 rounded-lg bg-white text-black">
-                <h4 className="text-orange-500 font-semibold">&rarr; {each.category}</h4>
+                <h4 className="text-brand-orange font-semibold">&rarr; {each.category}</h4>
                 {each.subcategories &&
                   each.subcategories.map((item, index) => (
                     <p

@@ -473,7 +473,7 @@ const EventForm: React.FC = () => {
                 />
                 <select
                   {...register('country', { required: 'Please provide Country' })}
-                  className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-orange-500
+                  className={`p-2 text-sm block w-1/2 h-10 bg-transparent border outline-none rounded-md focus:border-brand-orange
           ${errors.country ? 'border-red-500' : 'border-gray-400'}`}
                 >
                   <option value="">Select Country</option>

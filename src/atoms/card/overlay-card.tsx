@@ -6,7 +6,6 @@ import { sanityImageUrlBuilder } from '@api/index';
 interface CardDataProps {
   image: string;
   title?: string;
-  // isOverlay?: boolean;
   description?: string;
   onClick?: () => void;
 }
@@ -18,6 +17,7 @@ interface OverLayCardProps {
 const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const screenWidth = useScreenWidth();
+
   const handleClick = () => {
     if (screenWidth < 768 && data.description != undefined) {
       setIsOpen(true);
@@ -26,37 +26,35 @@ const OverLayCard: React.FC<OverLayCardProps> = ({ data }) => {
 
   return (
     <div>
-      {/* Card content */}
       <div
-        className="w-full inline-block cursor-pointer group relative text-center"
+        className="w-full inline-block cursor-pointer group relative"
         onClick={data.onClick ? data.onClick : handleClick}
       >
-        {/* Background image for the card */}
+        {/* Card image — Figma: 424×351 ratio, radius=10 */}
         <div
-          className="aspect-square bg-cover rounded-md relative hover:border hover: border-orange-500"
+          className="w-full bg-cover bg-center rounded-[10px] overflow-hidden relative hover:ring-2 hover:ring-brand-orange transition-all duration-200"
           style={{
             backgroundImage: `url(${typeof data.image === 'string' ? data.image : sanityImageUrlBuilder(data.image)})`,
+            aspectRatio: '424/351',
           }}
         >
-          {/* Description as overlay text */}
           {data.description != undefined && (
-            <>
-              <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 md:group-hover:opacity-100">
-                <div className="w-full h-full p-2 overflow-auto bg-black rounded-md flex justify-center items-center transition-opacity duration-300">
-                  <div className="text-white">{data.description}</div>
-                </div>
+            <div className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+              <div className="w-full h-full p-4 bg-black/80 rounded-[10px] flex items-center justify-center">
+                <p className="text-white font-poppins text-sm text-center leading-relaxed">{data.description}</p>
               </div>
-            </>
+            </div>
           )}
         </div>
-        {/* Image title */}
-        <p>{data.title}</p>
+
+        {/* Card title — Figma: 24px Poppins 500 */}
+        {data.title && <p className="mt-2 font-poppins font-medium text-xl md:text-2xl truncate">{data.title}</p>}
       </div>
 
-      {/* Description in modal for small screens */}
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} closeButtonClasses={'hidden'}>
-        <div className=" w-full p-2 aspect-square overflow-auto bg-black rounded-md flex">
-          <div className="text-white">{data.description}</div>
+      {/* Mobile modal for description */}
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} closeButtonClasses="hidden">
+        <div className="w-full p-4 bg-black rounded-[10px] flex">
+          <p className="text-white font-poppins text-sm">{data.description}</p>
         </div>
       </Modal>
     </div>

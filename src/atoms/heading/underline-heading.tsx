@@ -20,8 +20,8 @@ interface headingProps {
 const UnderlineHeading: React.FC<headingProps> = ({ children, className, borderWidth = 'w-3/4' }) => {
   return (
     <div>
-      <h1 className={`flex-grow mb-4 pb-2 text-4xl ${className}`}>{children}</h1>
-      <div className={`border-b-2 border-orange-500 -mt-6 ${borderWidth}`} />
+      <h1 className={`flex-grow mb-4 pb-2 text-3xl md:text-4xl font-poppins font-normal ${className}`}>{children}</h1>
+      <div className={`border-b-2 border-brand-orange -mt-6 ${borderWidth}`} />
     </div>
   );
 };

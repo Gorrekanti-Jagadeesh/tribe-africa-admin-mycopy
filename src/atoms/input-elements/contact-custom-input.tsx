@@ -36,7 +36,7 @@ const MobileNumberInput = <T,>({
         <div className="flex flex-col gap-2">
           <select
             {...register(countryCodeName, { required: 'Country code is required' })}
-            className={`p-2 text-sm block h-10 w-fit bg-transparent border outline-none rounded-md focus:border-orange-500
+            className={`p-2 text-sm block h-10 w-fit bg-transparent border outline-none rounded-md focus:border-brand-orange
           ${errors[0] ? 'border-red-500' : 'border-gray-400'} ${customSelectClasses}`}
           >
             <option value="" disabled selected>

@@ -13,7 +13,7 @@ export const Textarea: React.FC<{
       placeholder={placeholder}
       name={name}
       {...props}
-      className={`p-2 block w-full bg-transparent border outline-none rounded-md focus:border-orange-500
+      className={`p-2 block w-full bg-transparent border outline-none rounded-md focus:border-brand-orange
         ${error ? 'border-red-500 ' : 'border-gray-400 '}`}
       required={required}
     />

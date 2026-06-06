@@ -9,7 +9,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
       type="date"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-orange-500"
+      className="p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-brand-orange"
     />
   );
 };

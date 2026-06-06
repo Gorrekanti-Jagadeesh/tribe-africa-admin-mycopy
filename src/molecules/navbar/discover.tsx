@@ -9,12 +9,7 @@ import OverLayCard from '@atoms/card/overlay-card';
 
 const Discover: React.FC = () => {
   const [toggle, setToggle] = useState(true);
-  const [content, setContent] = useState({
-    title: '',
-    onClick: () => {},
-    data: [],
-  });
-
+  const [content, setContent] = useState({ title: '', onClick: () => {}, data: [] });
   const navigate = useNavigate();
 
   const handleToggle = (data) => {
@@ -28,26 +23,22 @@ const Discover: React.FC = () => {
     isLoading: discoverLoading,
   } = useQuery({
     queryKey: ['home-discover-section-data'],
-    queryFn: () => sanity.GET(`*[_type == "home-discover-section"]`), // Handle undefined 'country'
+    queryFn: () => sanity.GET(`*[_type == "home-discover-section"]`),
   });
 
-  if (discoverLoading) {
-    return <Loading />;
-  }
+  if (discoverLoading) return <Loading />;
+  if (discoverError) return <>Error fetching data..</>;
 
-  if (discoverError) {
-    return <>Error fetching data..</>;
-  }
   return (
-    <div className="p-2 md:p-3">
-      <h4 className="text-left text-orange-500 text-lg font-semibold">&rarr; Discover</h4>
-      <div className={`grid grid-cols-2 md:grid-cols-4 w-full ${toggle ? 'block' : 'hidden'}`}>
+    <div className="p-3 md:p-4">
+      <h4 className="text-left text-brand-orange font-poppins font-semibold text-lg mb-3">&rarr; Discover</h4>
+
+      <div className={`grid grid-cols-2 md:grid-cols-4 w-full gap-3 ${toggle ? 'block' : 'hidden'}`}>
         {discoverData.map((each) => (
           <div
-            // className="cursor-pointer w-1/3 m-2"
-            onClick={() => handleToggle({ data: each.subCategories, title: each.name })}
             key={each._id}
-            className="m-4"
+            className="cursor-pointer"
+            onClick={() => handleToggle({ data: each.subCategories, title: each.name })}
           >
             <OverLayCard
               data={{
@@ -58,20 +49,23 @@ const Discover: React.FC = () => {
           </div>
         ))}
       </div>
+
       <div
         id="sub-layout"
-        className={`p-2 md:p-8 border border-cyan-400 m-2 text-left bg-white text-black rounded-2xl ${toggle ? 'hidden' : 'block'}`}
+        className={`p-3 md:p-6 border border-brand-orange/30 m-2 text-left bg-white text-black rounded-[10px] ${toggle ? 'hidden' : 'block'}`}
       >
-        <h4 className="text-orange-500 text-lg hover:underline cursor-pointer w-fit" onClick={() => setToggle(true)}>
+        <h4
+          className="text-brand-orange font-poppins font-medium text-lg hover:underline cursor-pointer w-fit mb-4"
+          onClick={() => setToggle(true)}
+        >
           &larr; {content.title}
         </h4>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-auto px-2">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 overflow-auto px-2">
           {content.data.map((each) => (
             <div
-              // className="cursor-pointer w-1/3 m-2"
-              onClick={() => navigate(`discover/${toKebabCase(content.title)}/${toKebabCase(each.name)}`)}
               key={each._id}
-              className="m-4"
+              className="cursor-pointer"
+              onClick={() => navigate(`discover/${toKebabCase(content.title)}/${toKebabCase(each.name)}`)}
             >
               <OverLayCard
                 data={{

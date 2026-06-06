@@ -1,7 +1,6 @@
 import Footer from '../../molecules/footer';
 import { HolidayHeader } from '../../molecules/header';
 import MapChart from '../../molecules/maps/map';
-import DualHeading from '@atoms/heading/dual-heading';
 import { CommonCarousel } from '@molecules/carousel/common-carousel';
 import OverLayCard from '@atoms/card/overlay-card';
 import { sanityImageUrlBuilder } from '@api/index';
@@ -32,7 +31,7 @@ const HolidayScreen = ({ props }) => {
   } = props;
 
   if (!country || !CountriesGeoData[country]) {
-    return <div>Country data not available</div>;
+    return <div className="p-8 font-poppins text-xl">Country data not available</div>;
   }
   if (
     landingLoading ||
@@ -65,56 +64,63 @@ const HolidayScreen = ({ props }) => {
     <div>
       <HolidayHeader country={country} />
       <div>
-        {/* Adventure */}
-        <div className="max-w-6xl m-auto p-4">
-          {/* Hero section */}
-          <div className="">
-            <div className="relative">
-              <div
-                className="aspect-video bg-cover rounded-md w-full brightness-50"
-                style={{
-                  backgroundImage: `url(${sanityImageUrlBuilder(landingData.holidayLanding)})`,
-                }}
-              ></div>
-              <div className="text-white text-sm md:text-base lg:text-lg flex flex-col gap-2 lg:gap-6 p-2 md:p-4 lg:p-8 absolute bottom-0 brightness-200">
-                <p>
-                  Weather:{' '}
-                  {weatherLoading
-                    ? 'Loading...'
-                    : weatherData
-                      ? `${weatherData.temperature} °F / ${weatherData.condition}`
-                      : 'No data available'}
-                </p>
-                <p>Internet speed: {landingData.internetSpeed}</p>
-                <p>Time: {weatherData ? weatherData.time : 'Loading...'}</p>
-              </div>
+        {/* Hero section — Figma: 1303×651 radius=10, dark overlay div, stats 24px Poppins 600 */}
+        <div className="max-w-8xl m-auto px-4 py-4">
+          <div className="relative rounded-[10px] overflow-hidden" style={{ aspectRatio: '1303/651' }}>
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${sanityImageUrlBuilder(landingData.holidayLanding)})` }}
+            />
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute bottom-0 left-0 p-6 md:p-10 flex flex-col gap-3 text-white">
+              <p className="font-poppins font-semibold text-2xl">
+                Weather:{' '}
+                {weatherLoading
+                  ? 'Loading...'
+                  : weatherData
+                    ? `${weatherData.temperature} °F / ${weatherData.condition}`
+                    : 'No data available'}
+              </p>
+              <p className="font-poppins font-semibold text-2xl">Internet speed: {landingData.internetSpeed}</p>
+              <p className="font-poppins font-semibold text-2xl">
+                Time: {weatherData ? weatherData.time : 'Loading...'}
+              </p>
             </div>
           </div>
-          <DualHeading className="mb-4">Let the *Adventure* begin</DualHeading>
+        </div>
+
+        {/* Let the Adventure Begin — Figma: 48px Poppins 400 black */}
+        <div className="max-w-8xl m-auto px-4 py-4">
+          <h2 className="font-poppins font-normal text-3xl md:text-4xl lg:text-[48px] lg:leading-[72px] text-black mb-6">
+            Let the Adventure Begin
+          </h2>
+          {/* Adventure carousel — Figma: 421×400 cards, radius=10 */}
           <CommonCarousel
             data={adventuresData}
             component={(item) => <OverLayCard data={{ ...item, title: 'Excursions Coming Soon' }} />}
           />
         </div>
 
-        {/* Things to look out for */}
-        <div className="max-w-6xl m-auto p-4 animate-on-scroll">
-          <DualHeading>Things to *Look Out* For!</DualHeading>
-          <div className="mt-4">
-            <ColsGrid cols={3} gap={3}>
-              {lookOutForData.map((each) => (
-                <OverLayCard data={each} key={each._id} />
-              ))}
-            </ColsGrid>
-          </div>
+        {/* Things to Look Out For — Figma: 50px Poppins 400 */}
+        <div className="max-w-8xl m-auto px-4 py-8 animate-on-scroll">
+          <h2 className="font-poppins font-normal text-3xl md:text-4xl lg:text-[50px] text-black mb-6">
+            Things To Look Out For!
+          </h2>
+          <ColsGrid cols={3} gap={3}>
+            {lookOutForData.map((each) => (
+              <OverLayCard data={each} key={each._id} />
+            ))}
+          </ColsGrid>
         </div>
 
         {/* Map */}
         <MapChart country={country} data={mapsData} />
 
         {/* When the tribe goes out */}
-        <div className="max-w-6xl m-auto p-4">
-          <DualHeading className="mb-4">When the *Tribe* goes out!</DualHeading>
+        <div className="max-w-8xl m-auto px-4 py-8">
+          <h2 className="font-rufina font-normal text-4xl md:text-5xl lg:text-[64px] lg:leading-[79px] text-black mb-6">
+            When the <span className="text-brand-orange">Tribe</span> goes out!
+          </h2>
           <CommonCarousel data={tribeGoesOutData} component={(item) => <OverLayCard data={item} />} />
         </div>
       </div>

@@ -12,7 +12,7 @@ const LookingToHireSomeoneDetailsScreen: React.FC<{ proffesionalPersonData: Prof
   proffesionalPersonData,
 }) => {
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <DualHeading className="font-bold">{proffesionalPersonData.name}</DualHeading>
       <TribeAfricaPagesCard
         className="border-none"

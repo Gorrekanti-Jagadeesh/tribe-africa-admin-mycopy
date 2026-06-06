@@ -18,7 +18,7 @@ const StarRatingInput = forwardRef<HTMLDivElement, StarRatingInputProps>(({ valu
         <span
           key={index}
           onClick={() => handleStarClick(index + 1)}
-          className={`cursor-pointer ${index < value ? 'text-orange-500' : 'text-gray-300'}`}
+          className={`cursor-pointer ${index < value ? 'text-brand-orange' : 'text-gray-300'}`}
         >
           <img className="w-5" src={index < value ? activeStar : inactiveStar} />
         </span>

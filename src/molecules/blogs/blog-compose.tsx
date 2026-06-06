@@ -191,7 +191,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                   {...register('bio', { required: 'Please Provide Author Bio' })}
                   rows={4}
                   placeholder="Tell us a little about yourself, your experiences, and what inspires your writing."
-                  className={`p-2 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400 ${errors.bio ? 'border-red-500 ' : 'border-gray-400 '}`}
+                  className={`p-2 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-brand-orange placeholder:text-gray-400 ${errors.bio ? 'border-red-500 ' : 'border-gray-400 '}`}
                 ></textarea>
                 {errors.bio && <span className="text-red-500 text-xs">{errors.bio.message}</span>}
               </div>
@@ -301,7 +301,7 @@ const BlogCompose: React.FC<BlogComposeProps> = ({ className }) => {
                   {...register('description', { required: 'Please Provide Short summary of the blog' })}
                   rows={5}
                   placeholder="Provide a brief overview of your article’s content and key message."
-                  className={`p-2 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-orange-500 placeholder:text-gray-400 ${errors.bio ? 'border-red-500 ' : 'border-gray-400 '}`}
+                  className={`p-2 text-sm block flex-grow bg-transparent w-1/2 border outline-none rounded-md focus:border-brand-orange placeholder:text-gray-400 ${errors.bio ? 'border-red-500 ' : 'border-gray-400 '}`}
                 ></textarea>
                 {errors.description && <span className="text-red-500 text-xs">{errors.description.message}</span>}
               </div>

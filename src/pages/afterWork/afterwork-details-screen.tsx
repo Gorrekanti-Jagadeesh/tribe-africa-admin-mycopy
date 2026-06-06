@@ -181,7 +181,7 @@ const AfterWorkDetailsScreen: React.FC<AfterWorkDetailsScreenProps> = ({
 
       <main className="flex-1">
         <div className="flex border-t border-gray-300 w-full">
-          <div className="w-64 bg-white border-r-4 border-orange-400 min-h-screen">
+          <div className="w-64 bg-white border-r-4 border-brand-orange min-h-screen">
             <div className="divide-y mt-5">
               {hostel?.keyFeatures && <CollapsibleSection title="Key Features" items={hostel?.keyFeatures} />}
             </div>
@@ -240,7 +240,7 @@ const AfterWorkDetailsScreen: React.FC<AfterWorkDetailsScreenProps> = ({
                       <Star
                         key={i}
                         size={28}
-                        className={i < Math.floor(3) ? 'text-orange-400 fill-orange-400' : 'text-gray-300'}
+                        className={i < Math.floor(3) ? 'text-brand-orange fill-brand-orange' : 'text-gray-300'}
                       />
                     ))}
                   </div>
@@ -486,7 +486,7 @@ export default AfterWorkDetailsScreen;
 //       <div className="grid grid-cols-1 md:grid-cols-2 gap-40">
 //         {/* Distance to Key Locations */}
 //         <div>
-//           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+//           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
 //             Distance to Key Locations
 //           </h2>
 //           <div className="mt-3">
@@ -515,7 +515,7 @@ export default AfterWorkDetailsScreen;
 
 //         {/* Map Location */}
 //         <div>
-//           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-orange-400 pb-1">
+//           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 border-b-4 border-brand-orange pb-1">
 //             Map Location
 //           </h2>
 //           <div className="mt-3">
@@ -573,7 +573,7 @@ export default AfterWorkDetailsScreen;
 
 //   return (
 //     <div className="p-4 mt-4 bg-white shadow rounded-lg">
-//       <h2 className="text-2xl font-bold flex items-center border-b-4 border-orange-400 pb-2">
+//       <h2 className="text-2xl font-bold flex items-center border-b-4 border-brand-orange pb-2">
 //         {accomodationLabel} Room & Bathroom Details
 //       </h2>
 //       <div className="grid grid-cols-2 gap-0 mt-4">
@@ -602,7 +602,7 @@ const OwnerContactDetails = ({
 }) => {
   return (
     <div className="p-4 mt-0 bg-white shadow rounded-lg w-96">
-      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Owner Contact Details</h2>
+      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-brand-orange pb-1">Owner Contact Details</h2>
       <div className="mt-3">
         <p className="text-gray-700">
           <span className="font-semibold">Name:</span> {ownerContactDetails.name}
@@ -637,7 +637,7 @@ const OwnerContactDetails = ({
 const OperatingHours = ({ operatingHours }: { operatingHours: Record<string, { start: string; end: string }> }) => {
   return (
     <div className="p-4 mt-0 bg-white shadow rounded-lg">
-      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Operating Hours</h2>
+      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-brand-orange pb-1">Operating Hours</h2>
       <ul className="mt-2">
         {Object.entries(operatingHours || {}).map(([day, hours]) => (
           <li key={day} className="text-gray-700 capitalize">
@@ -659,7 +659,7 @@ const SeatingInfo = ({
 }) => {
   return (
     <div className="p-4 mt-0 bg-white shadow rounded-lg">
-      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-orange-400 pb-1">Seating Capacity</h2>
+      <h2 className="text-lg font-bold text-gray-900 border-b-4 border-brand-orange pb-1">Seating Capacity</h2>
       <p className="text-gray-800 mt-2 font-semibold">Indoor: {'   ' + indoorSeatingCapacity}</p>
       <p className="text-gray-800 font-semibold">Outdoor : {'    ' + outdoorSeatingCapacity}</p>
     </div>
@@ -682,7 +682,7 @@ const HotelDescription = ({ title, description }: { title: string; description?:
     <div className="mx-auto p-4 m-10">
       {/* Title */}
       <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{title}</h2>
-      <div className="border-t-4 border-orange-400 mb-6" />
+      <div className="border-t-4 border-brand-orange mb-6" />
       {/* Description */}
       <p className="text-gray-700 text-xs sm:text-sm leading-relaxed mt-4">{description}</p>
     </div>
@@ -755,7 +755,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, items })
         className="w-full p-3 flex justify-between items-center hover:bg-gray-50"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-sm font-medium text-orange-400">{title}</span>
+        <span className="text-sm font-medium text-brand-orange">{title}</span>
         <ChevronDown size={16} className={`text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 

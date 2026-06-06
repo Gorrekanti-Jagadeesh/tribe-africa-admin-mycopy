@@ -34,35 +34,44 @@ const HolidayEventsPage = () => {
   return (
     <div className="p-2 md:p-3">
       <div className="flex flex-col md:justify-between md:flex-row md:items-center">
-        <h1 className="text-lg text-orange-500 text-left font-semibold">&rarr; Holiday Events</h1>
+        <h1 className="text-lg text-brand-orange text-left font-semibold">&rarr; Holiday Events</h1>
         <div>
           <Button onClick={() => setIsOpen(true)}>List your event</Button>
         </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 w-full">
-        {eventsData[0].subCategories.map((each) => (
-          <div
-            onClick={() => navigation(`/${country}/events/entertainment/${toKebabCase(each.title)}`)}
-            className="m-4"
-          >
-            <OverLayCard
-              data={{
-                title: each.title,
-                image: sanityImageUrlBuilder(each.subCategoryImage).url(),
-              }}
-            />
-          </div>
-        ))}
-        {eventsData[1].subCategories.map((each) => (
-          <div onClick={() => navigation(`/${country}/events/sports/${toKebabCase(each.title)}`)} className="m-4">
-            <OverLayCard
-              data={{
-                title: each.title,
-                image: sanityImageUrlBuilder(each.subCategoryImage).url(),
-              }}
-            />
-          </div>
-        ))}
+      <div className="grid grid-cols-2 md:grid-cols-4 w-full gap-3">
+        {eventsData
+          ?.find((c) => c.category?.toLowerCase() === 'entertainment')
+          ?.subCategories?.map((each) => (
+            <div
+              key={each.title}
+              onClick={() => navigation(`/${country}/events/entertainment/${toKebabCase(each.title)}`)}
+              className="cursor-pointer"
+            >
+              <OverLayCard
+                data={{
+                  title: each.title,
+                  image: sanityImageUrlBuilder(each.subCategoryImage).url(),
+                }}
+              />
+            </div>
+          ))}
+        {eventsData
+          ?.find((c) => c.category?.toLowerCase() === 'sports')
+          ?.subCategories?.map((each) => (
+            <div
+              key={each.title}
+              onClick={() => navigation(`/${country}/events/sports/${toKebabCase(each.title)}`)}
+              className="cursor-pointer"
+            >
+              <OverLayCard
+                data={{
+                  title: each.title,
+                  image: sanityImageUrlBuilder(each.subCategoryImage).url(),
+                }}
+              />
+            </div>
+          ))}
       </div>
 
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>

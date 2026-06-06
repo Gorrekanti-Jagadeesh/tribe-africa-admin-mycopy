@@ -47,7 +47,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
   }
 
   return (
-    <div className="p-2 md:p-4 max-w-6xl m-auto">
+    <div className="p-2 md:p-4 max-w-8xl m-auto">
       <h1 className="text-2xl font-bold">Looking to Hire Someone In Algeria</h1>
       <div className="flex m-auto w-2/3 border rounded-lg my-6">
         <div className="flex flex-grow">
@@ -73,7 +73,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
             buttonStyles={'p-2 md:p-4'}
           />
         </div>
-        <Button className={`border rounded-r-md rounded-l-none px-4 text-white bg-orange-500 disabled:bg-slate-400`}>
+        <Button className={`border rounded-r-md rounded-l-none px-4 text-white bg-brand-orange disabled:bg-slate-400`}>
           Find
         </Button>
       </div>
@@ -108,7 +108,7 @@ const LookingToHireSomeoneScreen: React.FC<LookingToHireSomeoneScreenProps> = ({
 
               <p>{proffesional.experience}</p>
               <p>{truncateText(proffesional.description, 100)}</p>
-              <Button className="bg-orange-500 text-white mt-4">View Reviews</Button>
+              <Button className="bg-brand-orange text-white mt-4">View Reviews</Button>
             </div>
           }
           footer={
