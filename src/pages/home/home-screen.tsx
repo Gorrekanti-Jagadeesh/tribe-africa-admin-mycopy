@@ -37,7 +37,7 @@ const HomeScreen = ({ props }) => {
         <Explore data={exploreData} loading={exploreLoading} error={exploreError} />
         <CharmingHotels data={hotelsData} loading={hotelsLoading} error={hotelsError} />
         <HolidayDestination data={destinationsData} loading={destinationsLoading} error={destinationsError} />
-        <Experience />
+        <Experience video={exploreData?.video} />
         <WorkingRemotely data={workingRemotelyData} loading={workingRemotelyLoading} error={workingRemotelyError} />
         <BusinessFriendly data={BusinessFriendlyData} loading={BusinessFriendlyLoading} error={BusinessFriendlyError} />
         <Services data={servicesData} loading={servicesLoading} error={servicesError} />
