@@ -15,8 +15,8 @@ const WorkingRemotely: React.FC<{ data: workingRemotelyFields[]; loading; error 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (loading) return <Loading />;
-  if (error) return <>Error fetching data..</>;
-  if (!data.length) return null;
+  if (error) return null;
+  if (!data?.length) return null;
 
   const prev = () => setCurrentIndex((i) => Math.max(i - 1, 0));
   const next = () => setCurrentIndex((i) => Math.min(i + 1, data.length - 1));

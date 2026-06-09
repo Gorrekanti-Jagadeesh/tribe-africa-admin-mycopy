@@ -22,8 +22,8 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  if (loading) return <Loading />;
-  if (error) return <>Error fetching data..</>;
+  if (!data || loading) return <Loading />;
+  if (error) return null;
 
   const HotelView = ({ data }: { data: HotelFields }) => {
     return (
@@ -76,7 +76,7 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
       {/* Carousel — Figma: 3 cards each 420×380, radius=10 */}
       <CommonCarousel
         data={data
-          .filter((each) => each.isCharmingHotel)
+          .filter((each) => each.isCharmingHotel && each.images?.[0]?.asset?.url)
           .map((item, index) => ({
             image: item.images[0].asset.url,
             title: item.name,

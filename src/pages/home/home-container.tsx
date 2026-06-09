@@ -12,6 +12,7 @@ const HomeContainer = () => {
   } = useQuery({
     queryKey: ['explore'],
     queryFn: () => sanity.GET(query.HOME.EXPLORE),
+    retry: false,
   });
 
   // Charming Hotels
@@ -22,6 +23,7 @@ const HomeContainer = () => {
   } = useQuery({
     queryKey: ['charming_hotels'],
     queryFn: () => sanity.GET(query.HOME.CHARMING_HOTELS),
+    retry: false,
   });
 
   // Holiday destinations
@@ -32,6 +34,7 @@ const HomeContainer = () => {
   } = useQuery({
     queryKey: ['holiday_destinations'],
     queryFn: () => sanity.GET(query.HOME.HOLIDAY_DESTINATIONS),
+    retry: false,
   });
 
   const groupedDestinations =
@@ -51,6 +54,7 @@ const HomeContainer = () => {
   } = useQuery({
     queryKey: ['working_remotely'],
     queryFn: () => sanity.GET(query.HOME.WORKING_REMOTELY),
+    retry: false,
   });
 
   // Business friendly
@@ -61,6 +65,7 @@ const HomeContainer = () => {
   } = useQuery({
     queryKey: ['business_friendly'],
     queryFn: () => sanity.GET(query.HOME.BUSINESS_FRIENDLY),
+    retry: false,
   });
 
   // Premier Services
@@ -71,14 +76,15 @@ const HomeContainer = () => {
   } = useQuery({
     queryKey: ['premier_services'],
     queryFn: () => sanity.GET(query.HOME.PREMIER_SERVICES),
+    retry: false,
   });
 
   if (
-    servicesLoading &&
-    workingRemotelyLoading &&
-    BusinessFriendlyLoading &&
-    destinationsLoading &&
-    hotelsLoading &&
+    servicesLoading ||
+    workingRemotelyLoading ||
+    BusinessFriendlyLoading ||
+    destinationsLoading ||
+    hotelsLoading ||
     exploreLoading
   ) {
     return <Loading />;

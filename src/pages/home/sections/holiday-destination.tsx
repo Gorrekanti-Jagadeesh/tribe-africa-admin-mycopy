@@ -47,16 +47,17 @@ const HolidayDestination: React.FC<{ data: Destination[]; loading; error }> = ({
   };
 
   useEffect(() => {
-    if (!isHovered) {
+    const keys = Object.keys(data || {});
+    if (!isHovered && keys.length > 0) {
       const interval = setInterval(() => {
-        setActiveIndex((prev) => (prev + 1) % Object.keys(data).length);
+        setActiveIndex((prev) => (prev + 1) % keys.length);
       }, 2500);
       return () => clearInterval(interval);
     }
   }, [isHovered, data]);
 
   if (!data || loading) return <Loading />;
-  if (error) return <>Error fetching data..</>;
+  if (error || !Object.keys(data).length) return null;
 
   return (
     /* Figma: bg=#2B170A, full-width */

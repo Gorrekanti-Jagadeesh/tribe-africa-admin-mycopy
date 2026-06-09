@@ -17,13 +17,13 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
     return <Loading />;
   }
 
-  if (error) {
-    return <>Error fetching data..</>;
+  if (error || !data) {
+    return null;
   }
 
   return (
     <>
-      <HeroSection video={data?.video} image={sanityImageUrlBuilder(data?.image).url()} />
+      <HeroSection video={data?.video} image={data?.image ? sanityImageUrlBuilder(data.image).url() : ''} />
 
       {/* Explore section — Figma: 1520×815, spiral bg, text left + images right */}
       <div
@@ -42,7 +42,7 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
               </h2>
 
               <div id="about-africa" className="grid gap-3 text-sm leading-6 max-w-xl">
-                {data.exploreSectionContent.map((each, index) => (
+                {(data.exploreSectionContent || []).map((each, index) => (
                   <p key={index}>{each}</p>
                 ))}
               </div>
@@ -60,7 +60,9 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
                 {/* Top-left */}
                 <div className="flex-1">
                   <img
-                    src={sanityImageUrlBuilder(data?.exploreSectionImages[0]).url()}
+                    src={
+                      data?.exploreSectionImages?.[0] ? sanityImageUrlBuilder(data.exploreSectionImages[0]).url() : ''
+                    }
                     alt="Explore Africa"
                     className="w-full object-cover rounded-[10px] shadow-lg"
                     style={{ aspectRatio: '208/312' }}
@@ -69,7 +71,9 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
                 {/* Top-right */}
                 <div className="flex-1">
                   <img
-                    src={sanityImageUrlBuilder(data?.exploreSectionImages[1]).url()}
+                    src={
+                      data?.exploreSectionImages?.[1] ? sanityImageUrlBuilder(data.exploreSectionImages[1]).url() : ''
+                    }
                     alt="Explore Africa"
                     className="w-full object-cover rounded-[10px] shadow-lg"
                     style={{ aspectRatio: '221/312' }}
@@ -79,7 +83,7 @@ const Explore: React.FC<{ data: dataFields; loading; error }> = ({ data, loading
               {/* Bottom full-width */}
               <div className="w-full">
                 <img
-                  src={sanityImageUrlBuilder(data?.exploreSectionImages[2]).url()}
+                  src={data?.exploreSectionImages?.[2] ? sanityImageUrlBuilder(data.exploreSectionImages[2]).url() : ''}
                   alt="Explore Africa"
                   className="w-full object-cover rounded-[10px] shadow-lg"
                   style={{ aspectRatio: '442/298' }}
