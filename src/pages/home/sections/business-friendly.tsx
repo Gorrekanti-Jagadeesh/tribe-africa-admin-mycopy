@@ -14,9 +14,8 @@ interface BusinessFreindlyFields {
 const BusinessFriendly: React.FC<{ data: BusinessFreindlyFields[]; loading; error }> = ({ data, loading, error }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (!data || loading) return <Loading />;
-  if (error) return <>Error fetching data..</>;
-  if (!data.length) return null;
+  if (loading) return <Loading />;
+  if (error || !data || !data.length) return null;
 
   const prev = () => setCurrentIndex((i) => Math.max(i - 1, 0));
   const next = () => setCurrentIndex((i) => Math.min(i + 1, data.length - 1));

@@ -28,11 +28,13 @@ const Experience: React.FC<{ video?: string }> = ({ video }) => {
         Get Ready for a Life Changing Experience
       </h2>
 
-      <div className="rounded-[7px] overflow-hidden w-full bg-black">
-        <video ref={videoRef} loop muted playsInline className="w-full block">
-          {video && <source src={video} type="video/mp4" />}
-        </video>
-      </div>
+      {video && (
+        <div className="rounded-[7px] overflow-hidden w-full bg-black">
+          <video ref={videoRef} loop muted playsInline className="w-full block">
+            <source src={video} type="video/mp4" />
+          </video>
+        </div>
+      )}
     </div>
   );
 };

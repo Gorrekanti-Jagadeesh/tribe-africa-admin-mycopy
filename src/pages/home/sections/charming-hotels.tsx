@@ -22,8 +22,8 @@ const CharmingHotels: React.FC<{ data: HotelFields[]; loading; error }> = ({ dat
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  if (!data || loading) return <Loading />;
-  if (error) return null;
+  if (loading) return <Loading />;
+  if (error || !data || !data.length) return null;
 
   const HotelView = ({ data }: { data: HotelFields }) => {
     return (

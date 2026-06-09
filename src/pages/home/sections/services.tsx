@@ -18,8 +18,8 @@ const Services: React.FC<{ data: serviceDataFields[]; loading; error }> = ({ dat
   const [isAdOpen, setIsAdOpen] = useState(false);
   const navigate = useNavigate();
 
-  if (!data || loading) return <Loading />;
-  if (error) return <>Error fetching data..</>;
+  if (loading) return <Loading />;
+  if (error || !data || !data.length) return null;
 
   return (
     <div className="max-w-8xl m-auto px-4 py-8">
