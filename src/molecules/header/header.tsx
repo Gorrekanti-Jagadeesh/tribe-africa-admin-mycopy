@@ -34,13 +34,14 @@ const JSX: React.FC<HeaderProps> = ({ country, purpose, menuItems }) => {
       </Modal>
 
       {/* Mobile Header */}
-      <div className="flex gap-2 justify-between items-center md:hidden mt-2">
-        <div id="logo" className="cursor-pointer">
-          <img src={africaLogo} style={{ maxWidth: '100px' }} alt="Tribe Africa" />
+      <div className="relative flex items-center justify-center md:hidden mt-2">
+        <div id="logo" className="mx-auto">
+          <img src={africaLogo} alt="Tribe Africa" className="w-28 mx-auto" />
         </div>
+
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="border rounded-[10px] px-3 py-2 flex justify-center items-center gap-1 font-poppins font-medium text-sm"
+          className="absolute right-0 border rounded-[10px] px-3 py-2 flex justify-center items-center gap-1 font-poppins font-medium text-sm"
         >
           <IoMenu className="text-lg" />
           Menu

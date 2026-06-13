@@ -388,7 +388,7 @@ Found."
             />
 
             <label className="font-semibold mt-2">Cards Accepted</label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
               <Checkbox
                 {...register('acceptedCards.visaCard')}
                 label="Visa"

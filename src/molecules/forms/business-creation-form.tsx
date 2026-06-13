@@ -96,6 +96,10 @@ const BusinessFormComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState('');
   const [selectedChild, setSelectedChild] = useState('');
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const {
     register,
     handleSubmit,

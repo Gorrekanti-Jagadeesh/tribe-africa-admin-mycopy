@@ -44,60 +44,64 @@ export const MenuBar = ({ purpose, country }: { purpose: string | undefined; cou
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    /* Figma: Frame 41591, 1310×51 utility bar */
-    <div className="flex items-center h-[51px]">
-      {/* Country + purpose badge (when on country pages) */}
-      {country && (
-        <Modal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          trigger={
-            /* Calculator icon — Figma: 46×50 */
-            <img src={calculatorLogo} className="w-[46px] h-[50px] cursor-pointer mx-2 object-contain" />
-          }
-          customClasses="flex items-center justify-center h-screen"
-          closeButtonClasses="right-[19%] top-[33%] z-10"
-        >
-          <CurrencyCalculator />
-        </Modal>
-      )}
+    <div className="w-full bg-white rounded-2xl border border-gray-200 shadow-md px-4 py-3 flex items-center justify-between">
+      {/* Left Side */}
+      <div className="flex items-center gap-4">
+        {country && (
+          <>
+            <Modal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              trigger={
+                <div className="p-2 rounded-xl bg-orange-50 hover:bg-orange-100 cursor-pointer transition-all duration-300">
+                  <img src={calculatorLogo} className="w-8 h-8 object-contain" alt="Calculator" />
+                </div>
+              }
+              customClasses="flex items-center justify-center h-screen"
+              closeButtonClasses="right-[19%] top-[33%] z-10"
+            >
+              <CurrencyCalculator />
+            </Modal>
 
-      {country != undefined && (
-        <div className="mx-2 flex gap-1.5 items-center min-w-0">
-          <img
-            src={flags[country]}
-            className="w-8 h-8 md:w-[49px] md:h-[49px] rounded-full object-cover border border-gray-300 shrink-0"
-          />
-          <p className="font-poppins font-medium text-sm md:text-xl truncate">
-            {purpose !== 'holiday' ? 'Business' : 'Holiday'} in {fromKebabCase(country)}
-          </p>
-        </div>
-      )}
+            <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-full border border-gray-200">
+              <img
+                src={flags[country]}
+                className="w-8 h-8 rounded-full object-cover border border-gray-300"
+                alt={country}
+              />
+              <p className="font-medium text-sm md:text-base text-gray-700">
+                {purpose !== 'holiday' ? 'Business' : 'Holiday'} in{' '}
+                <span className="font-semibold text-black">{fromKebabCase(country)}</span>
+              </p>
+            </div>
+          </>
+        )}
 
-      {/* Right-side icons + auth */}
-      <div id="menu" className="ms-auto flex items-center gap-3">
-        {/* Home icon — Figma: 38×38 */}
-        <img
-          src={homeLogo}
-          className="w-[38px] h-[38px] cursor-pointer object-contain"
+        {/* Home */}
+        <div
           onClick={() => navigate('/')}
-          alt="Home"
-        />
-        {/* Notification icon — Figma: 33×41 */}
-        <div className="relative">
-          <img
-            src={notificationLogo}
-            className="w-[33px] h-[41px] cursor-pointer object-contain"
-            onClick={() => navigate('/notifications')}
-            alt="Notifications"
-          />
+          className="p-2 rounded-xl hover:bg-orange-50 hover:scale-105 transition-all duration-300 cursor-pointer"
+        >
+          <img src={homeLogo} className="w-8 h-8 md:w-9 md:h-9 object-contain" alt="Home" />
+        </div>
+
+        {/* Notifications */}
+        <div
+          className="relative p-2 rounded-xl hover:bg-orange-50 hover:scale-105 transition-all duration-300 cursor-pointer"
+          onClick={() => navigate('/notifications')}
+        >
+          <img src={notificationLogo} className="w-8 h-8 md:w-9 md:h-9 object-contain" alt="Notifications" />
+
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-poppins">
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center shadow-lg">
               {unreadCount}
             </span>
           )}
         </div>
-        {/* Auth component */}
+      </div>
+
+      {/* Right Side Login/Profile */}
+      <div className="ml-auto">
         <Auth />
       </div>
     </div>

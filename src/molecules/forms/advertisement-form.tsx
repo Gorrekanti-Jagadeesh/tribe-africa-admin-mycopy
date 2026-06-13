@@ -6,7 +6,7 @@ import { Loading } from '@/atoms/common/loading';
 import Button from '@/atoms/custom-button/button';
 import UnderlineHeading from '@/atoms/heading/underline-heading';
 import Cookies from 'js-cookie';
-import { getUserEnrollments, sanity } from '@/utils/sanity';
+import { sanity } from '@/utils/sanity';
 import { africanCountriesPhoneCodes, Countries } from '@/data';
 import Select from 'react-select';
 import { Option } from '@/types';
@@ -23,7 +23,7 @@ type FormData = {
   email: string;
   countryCode: string;
   phone: string;
-  countries: { label: string; value: string }[]; // Array of objects
+  countries: { label: string; value: string }[];
   userId: string;
 };
 
@@ -36,7 +36,9 @@ const AdvertisementForm: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const email = JSON.parse(Cookies.get('emailUser') || '{}').email;
+  const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
+  const userId = userCookie ? JSON.parse(userCookie).uid : '';
+
   const [allData, setAllData] = useState([[], [], []]);
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -51,37 +53,15 @@ const AdvertisementForm: React.FC = () => {
   };
 
   const adTypes = [
-    {
-      label: 'Hotel',
-      value: 'Hotel',
-      items: allData[0],
-    },
-    {
-      label: 'Event',
-      value: 'Event',
-      items: allData[1],
-    },
-    {
-      label: 'Business',
-      value: 'Business',
-      items: allData[2],
-    },
+    { label: 'Hotel', value: 'Hotel', items: allData[0] },
+    { label: 'Event', value: 'Event', items: allData[1] },
+    { label: 'Business', value: 'Business', items: allData[2] },
   ];
 
   const pages = [
-    {
-      label: 'Home Page ($20 per day)',
-      value: 'Home Page',
-    },
-    {
-      label: 'Business Page ($10 per day)',
-      value: 'Business Page',
-    },
-
-    {
-      label: 'Holiday Page ($10 per day)',
-      value: 'Holiday Page',
-    },
+    { label: 'Home Page ($20 per day)', value: 'Home Page' },
+    { label: 'Business Page ($10 per day)', value: 'Business Page' },
+    { label: 'Holiday Page ($10 per day)', value: 'Holiday Page' },
   ];
 
   const positions = [
@@ -100,27 +80,21 @@ const AdvertisementForm: React.FC = () => {
   const selectedAdTypeOption = adTypes.find((cat) => cat.value === selectedAdType);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const userCookie = Cookies.get('emailUser') || Cookies.get('googleUser');
-    const userId = userCookie ? JSON.parse(userCookie).uid : '';
-    console.log(userId, 'userId');
     try {
-      // Handle image uploads
       if (selectedAdTypeOption.items.length === 0) {
         alert(`Please Complete your enrolment in ${selectedAdType} for Advertising!`);
         return;
       }
       setLoader(true);
-      console.log(data, 'data');
-      // Submit to Sanity
       await sanityClient.create({
-        _type: 'advertisement', // Sanity schema type
-        _id: `drafts.${generateId()}`, // Unique ID
+        _type: 'advertisement',
+        _id: `drafts.${generateId()}`,
         ...data,
         userId: userId,
-        countries: data.countries.map((country) => country.value), // Extracting only values
+        countries: data.countries.map((country) => country.value),
         item: {
           _type: 'reference',
-          _ref: data.item, // Reference the document ID
+          _ref: data.item,
         },
         amount: `$${getPrice()}`,
         status: 'Pending',
@@ -136,42 +110,59 @@ const AdvertisementForm: React.FC = () => {
   };
 
   const getPrice = () => {
-    const positionPay = POSITION_MULTIPLIER[position] || 1; // Default to 1 if not found
-
-    if (!position || !positionPay || !countries) {
-      return 0;
-    }
+    const positionPay = POSITION_MULTIPLIER[position] || 1;
+    if (!position || !positionPay || !countries) return 0;
     return page === 'Home Page'
       ? 2 * PRICE * days * countries.length + positionPay
       : PRICE * days * countries.length + positionPay;
   };
 
   const getUserListings = async () => {
-    const hotels = await getUserEnrollments('accommodation', email);
-    const events = await getUserEnrollments('event', email);
-    const businesses = await sanity.GET(
-      `*[_type == "findABusiness" && businessContactInformation.email == "${email}"]`
-    );
+    if (!userId) {
+      console.warn('No userId found in cookie');
+      return;
+    }
 
-    const allHotelData = hotels.map((each) => ({ title: each.name, value: each._id }));
-    const allEventsData = events.map((each) => ({ title: each.title, value: each._id }));
-    const allBusinessesData = businesses.map((each) => ({ title: each.businessName, value: each._id }));
+    try {
+      const [hotels, events, businesses] = await Promise.all([
+        sanity.GET(`*[_type == "accomodationList" && userId == "${userId}"]`),
+        sanity.GET(`*[_type == "event" && userId == "${userId}"]`),
+        sanity.GET(`*[_type == "findABusiness" && userId == "${userId}"]`),
+      ]);
 
-    setAllData([allHotelData, allEventsData, allBusinessesData]);
+      console.log('hotels:', hotels, 'events:', events, 'businesses:', businesses);
+
+      const allHotelData = hotels.map((each) => ({ title: each.name, value: each._id }));
+      const allEventsData = events.map((each) => ({ title: each.title, value: each._id }));
+      const allBusinessesData = businesses.map((each) => ({ title: each.businessName, value: each._id }));
+
+      setAllData([allHotelData, allEventsData, allBusinessesData]);
+    } catch (error) {
+      console.error('Error fetching user listings:', error);
+    }
   };
-
-  console.log(allData, 'ppp', email);
 
   useEffect(() => {
     getUserListings();
   }, []);
 
   return (
+    // <div className="bg-white p-8 rounded-lg text-center">
+    //   <h2 className="text-3xl font-bold text-gray-800 mb-4">
+    //     Advertisement Submissions Temporarily Unavailable
+    //   </h2>
+
+    //   <p className="text-gray-600">
+    //     We are currently updating our advertising platform.
+    //     Please check back later.
+    //   </p>
+    // </div>
+
     <div className="flex flex-col gap-2 bg-white overflow-auto p-4 rounded-lg">
       <UnderlineHeading borderWidth="w-1/2" className="text-2xl">
         Advertisement Submission Form
       </UnderlineHeading>
-      <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh]">
+      <form onSubmit={handleSubmit(onSubmit)} className="min-h-[80vh] cursor-pointer">
         {loader ? (
           <Loading />
         ) : (
@@ -186,34 +177,32 @@ const AdvertisementForm: React.FC = () => {
                   error={errors.adType}
                 />
 
-                {selectedAdTypeOption && selectedAdTypeOption.items.length === 0 && (
+                {/* {selectedAdTypeOption && selectedAdTypeOption.items.length === 0 && (
                   <span className="text-red-500">
                     You don't have any {selectedAdType} enlistments. Please enroll{' '}
                     <span className="underline">here</span>
                   </span>
-                )}
+                )} */}
               </div>
 
               {selectedAdTypeOption && selectedAdTypeOption.items.length !== 0 && (
                 <div className="flex flex-col gap-2">
-                  <>
-                    <label className="font-semibold">
-                      All {selectedAdType}s<span className="text-red-500 text-sm">*</span>
-                    </label>
-                    <select
-                      {...register('item', { required: 'Event Type is required' })}
-                      className={`p-2 text-sm block w-full h-10 bg-transparent border outline-none rounded-md focus:border-brand-orange
-          ${errors.item ? 'border-red-500' : 'border-gray-400'}`}
-                    >
-                      <option value="">Select Your {selectedAdType}</option>
-                      {selectedAdTypeOption.items.map((type) => (
-                        <option key={type.value} value={type.value}>
-                          {type.title}
-                        </option>
-                      ))}
-                    </select>
-                  </>
-                  {errors.item && selectedAdTypeOption && <span className="text-red-500">{errors.item.message}</span>}
+                  <label className="font-semibold">
+                    All {selectedAdType}s<span className="text-red-500 text-sm">*</span>
+                  </label>
+                  <select
+                    {...register('item', { required: 'Item is required' })}
+                    className={`p-2 text-sm block w-full h-10 bg-transparent border outline-none rounded-md focus:border-brand-orange cursor-pointer
+                      ${errors.item ? 'border-red-500' : 'border-gray-400'}`}
+                  >
+                    <option value="">Select Your {selectedAdType}</option>
+                    {selectedAdTypeOption.items.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.title}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.item && <span className="text-red-500">{errors.item.message}</span>}
                 </div>
               )}
 
@@ -246,9 +235,8 @@ const AdvertisementForm: React.FC = () => {
                   control={control}
                   rules={{ required: 'Please select at least one country' }}
                   render={({ field }) => (
-                    <Select<Option, true> // Specify the Option type and that it's multi-select
+                    <Select<Option, true>
                       options={Countries}
-                      {...register('countries', { required: 'Event Category is required' })}
                       isMulti
                       className="w-full"
                       onChange={(selectedOptions) => field.onChange(selectedOptions)}
@@ -301,7 +289,7 @@ const AdvertisementForm: React.FC = () => {
                 {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
               </div>
             </div>
-            <Button className="float-right my-4 px-4" type="submit">
+            <Button className="float-right my-4 px-4 cursor-pointer" type="submit">
               Submit
             </Button>
           </>
