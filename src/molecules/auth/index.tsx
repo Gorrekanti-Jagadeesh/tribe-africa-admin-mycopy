@@ -8,6 +8,7 @@ import { signInWithGoogle } from '../../../firebaseDB';
 import AuthWrapper from './auth-wrapper';
 import { Link } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
+import { AuthType } from './types';
 
 interface User {
   email: string | null;
@@ -18,42 +19,30 @@ interface User {
 /* ================= USER POPOVER ================= */
 
 const UserPlaceholder = ({ user, handleLogout }: { user: User; handleLogout: () => void }) => {
-  const [hover, setHover] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative" onClick={() => setHover(!hover)}>
-      <div className="flex items-center gap-2 cursor-pointer">
-        <FaUserCircle className="w-8 h-8 text-gray-400 cursor-pointer" />
-      </div>
+    <div className="relative" onClick={() => setOpen(!open)}>
+      <FaUserCircle className="w-8 h-8 text-gray-400 cursor-pointer" />
 
-      {hover && (
+      {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
-          {/* <div className="p-4">
-            <h1 className="font-semibold text-gray-800">
-              {user.displayName}
-            </h1>
-          </div> */}
+          <div className="border-b px-4 py-2 font-semibold text-gray-800">{user.displayName}</div>
 
-          <div className="border-b text-sm font-semibold text-gray-800">{user.displayName}</div>
+          <Link to="/user/dashboard" className="block px-4 py-2 hover:bg-gray-100">
+            <button className="text-violet-500">Dashboard</button>
+          </Link>
 
-          <div className="border-t">
-            <Link to="/user/dashboard" className="block px-4 py-2 hover:bg-gray-100">
-              <button className="w-full text-left text-violet-500">Dashboard</button>
-            </Link>
-          </div>
-
-          <div className="border-t">
-            <button className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
+          <button className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       )}
     </div>
   );
 };
 
-/* ================= MAIN AUTH COMPONENT ================= */
+/* ================= MAIN AUTH ================= */
 
 export const Auth = () => {
   const googleUserCookie = Cookies.get('googleUser');
@@ -66,21 +55,18 @@ export const Auth = () => {
   const user = googleUser || emailUser;
   const isLogin = Boolean(user);
 
-  const [type, setType] = useState<'login' | 'register'>('login');
+  const [type, setType] = useState<AuthType>('login');
   const [isOpen, setIsOpen] = useState(false);
 
-  /* ================= LOGIN HANDLERS ================= */
+  /* ================= HANDLERS ================= */
 
   const handleGoogleLogin = async () => {
-    try {
-      const user = await signInWithGoogle();
+    const user = await signInWithGoogle();
 
-      if (user) {
-        handleEmailLoginSuccess(user);
-        setIsOpen(false);
-      }
-    } catch (error) {
-      console.error('Error during Google sign-in:', error);
+    if (user) {
+      Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
+      setGoogleUser(user);
+      setIsOpen(false);
     }
   };
 
@@ -89,7 +75,7 @@ export const Auth = () => {
     setEmailUser(user);
   };
 
-  const handleAuth = (authType: 'login' | 'register') => {
+  const handleAuth = (authType: AuthType) => {
     setType(authType);
     setIsOpen(true);
   };
@@ -105,33 +91,29 @@ export const Auth = () => {
 
   return (
     <div className="flex items-center gap-3">
-      {/* ================= DESKTOP ================= */}
+      {/* DESKTOP */}
       <div className="hidden md:flex items-center gap-3">
         {isLogin ? (
           <UserPlaceholder user={user as User} handleLogout={handleLogout} />
         ) : (
           <>
-            <button className="text-black hover:text-brand-orange px-2 py-2" onClick={() => handleAuth('login')}>
-              Login
-            </button>
+            <button onClick={() => handleAuth('login')}>Login</button>
 
             <Button onClick={() => handleAuth('register')}>Sign up</Button>
           </>
         )}
       </div>
 
-      {/* ================= MOBILE ================= */}
+      {/* MOBILE */}
       <div className="flex md:hidden items-center gap-3">
         {isLogin ? (
           <UserPlaceholder user={user as User} handleLogout={handleLogout} />
         ) : (
-          <button className="text-black hover:text-brand-orange px-2 py-2" onClick={() => handleAuth('login')}>
-            Login
-          </button>
+          <button onClick={() => handleAuth('login')}>Login</button>
         )}
       </div>
 
-      {/* ================= MODAL ================= */}
+      {/* MODAL */}
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <AuthWrapper type={type} setType={setType} handleGoogleLogin={handleGoogleLogin}>
           {type === 'login' ? (
