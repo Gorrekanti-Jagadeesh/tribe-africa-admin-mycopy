@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SANITY_DATASET,VITE_SANITY_IMAGE_URL_PREFIX,VITE_SANITY_PROJECT_ID"
 
 [[redirects]]
   from = "/*"
