@@ -150,10 +150,10 @@ const BusinessScreen = ({ props }) => {
             />
             <div className="flex-grow space-y-3">
               {/* Agency name — Figma: 40px Poppins 600 */}
-              <h1 className="font-poppins font-semibold text-2xl md:text-[40px] md:leading-tight text-white">
+              <h1 className="font-poppins p-2 text-2xl md:text-[30px] md:leading-tight text-white">
                 {agencyData.agencyName}
               </h1>
-              <p className="font-poppins font-medium text-xl md:text-2xl text-white">
+              <p className="font-poppins p-2 font-medium text-xl md:text-2xl text-white">
                 Website: {agencyData.agencyWebsite}
               </p>
               {/* Reviews card — Figma: Rectangle 358 bg=#D9D9D9, text 24px Poppins 500 black */}
