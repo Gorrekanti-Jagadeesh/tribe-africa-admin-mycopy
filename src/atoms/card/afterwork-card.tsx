@@ -17,11 +17,8 @@ const AfterWorkCard: React.FC<{
   const navigate = useNavigate();
   return (
     <div className="border rounded-[10px] shadow-sm overflow-hidden">
-      <img
-        src={sanityImageUrlBuilder(images).url()}
-        alt={title}
-        className="w-full aspect-video rounded-lg h-48 object-cover"
-      />
+      <img src={sanityImageUrlBuilder(images).url()} alt={title} className="w-full aspect-[16/9] object-cover" />
+
       <div className="p-4">
         <h3 className="text-lg font-semibold">{title}</h3>
         <div className="flex items-center text-brand-orange mt-1">

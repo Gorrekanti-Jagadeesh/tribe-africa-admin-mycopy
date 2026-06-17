@@ -286,7 +286,7 @@ const AdvertisementForm: React.FC = () => {
                   countryCodes={africanCountriesPhoneCodes}
                   label="Contact Number for Enquiry"
                 />
-                {errors.phone && <span className="text-red-500">{errors.phone.message}</span>}
+                {errors.phone && <span className="text-red-500 text-sm mt-1 leading-5">{errors.phone.message}</span>}
               </div>
             </div>
             <Button className="float-right my-4 px-4 cursor-pointer" type="submit">

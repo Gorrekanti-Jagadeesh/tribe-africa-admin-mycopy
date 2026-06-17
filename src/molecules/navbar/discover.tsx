@@ -33,7 +33,7 @@ const Discover: React.FC = () => {
     <div className="p-3 md:p-4">
       <h4 className="text-left text-brand-orange font-poppins font-semibold text-lg mb-3">&rarr; Discover</h4>
 
-      <div className={`grid grid-cols-2 md:grid-cols-4 w-full gap-3 ${toggle ? 'block' : 'hidden'}`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full gap-3 ${toggle ? 'block' : 'hidden'}`}>
         {discoverData.map((each) => (
           <div
             key={each._id}

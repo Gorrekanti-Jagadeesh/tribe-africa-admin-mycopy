@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Input from '@/atoms/input-elements/input';
 import Checkbox from '@/atoms/input-elements/checkbox';
 import DateInput from '@/atoms/input-elements/date-input';
+import CustomInput from '@/atoms/input-elements/custom-input';
 
 const CandidateForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -298,7 +299,7 @@ const CandidateForm: React.FC = () => {
       />
 
       <h3>Signature:</h3>
-      <Input
+      <CustomInput
         type="text"
         name="signature"
         placeholder="Type your full name to sign electronically"

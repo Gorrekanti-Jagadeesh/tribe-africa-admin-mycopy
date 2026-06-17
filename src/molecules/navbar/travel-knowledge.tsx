@@ -101,7 +101,11 @@ const TravelKnowledge: React.FC<{ country: string; pageType: string }> = ({ coun
           <div key={index} className="flex flex-col">
             {category.imageUrl && (
               <div className="border-2 border-brand-orange rounded-[10px] overflow-hidden mb-4 w-full">
-                <img src={category.imageUrl} alt={category.title} className="w-full object-cover w-full" />
+                <img
+                  src={category.imageUrl}
+                  alt={category.title}
+                  className="w-full h-50 sm:h-50 md:h-56 lg:h-64 object-cover"
+                />
               </div>
             )}
             <div id="about" className="text-left w-full space-y-2">
