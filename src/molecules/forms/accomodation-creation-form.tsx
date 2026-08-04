@@ -28,6 +28,7 @@ import {
   AccommodationFormInputs,
   accommodationTypes,
 } from '@/data/amanitieConfig';
+import CustomInput from '@/atoms/input-elements/custom-input';
 
 const FormContext = createContext(null);
 
@@ -302,14 +303,13 @@ const AccommodationForm: React.FC = () => {
           {/* Description */}
           <div>
             <label className="font-semibold">Description</label>
-            <Input
+            <CustomInput
               required={true}
               type="text"
               {...register('description.tagline')}
               name="description.tagline"
               maxLength={50}
-              placeholder="Tagline: Short, catchy tagline (Max 50 characters): e.g., Pure Luxury, Paradise
-Found."
+              placeholder="Tagline: Short, catchy tagline (Max 50 characters): e.g., Pure Luxury, Paradise Found."
             />
             <label className="font-semibold">Describe about the accommodation</label>
 
@@ -357,14 +357,25 @@ Found."
             <CancellationPolicy handleInputChange={handleInputChange} formType={formType} formData={formData} />
             {/* <Input type="text" {...register('policy.cancellation.description')} placeholder="Policy description" /> */}
 
-            <label className="font-semibold">House Rules</label>
-            <RichTextEditor formType={formType} onContentChange={(value) => handleInputChange('policy.rules', value)} />
-            {formType === 'vacation-rental' && <SecurityDeposit handleInputChange={handleInputChange} />}
-            <label className="font-semibold mb-4 mr-4">Check-In Time</label>
-            <input type="time" className="mr-4" {...register('policy.checkInTime')} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="flex flex-col">
+                <label className="font-semibold mb-2">Check-In Time</label>
+                <input
+                  type="time"
+                  className="w-full border border-gray-300 rounded-md p-2"
+                  {...register('policy.checkInTime')}
+                />
+              </div>
 
-            <label className="font-semibold mb-4 mr-4">Check-Out Time</label>
-            <input type="time" {...register('policy.checkOutTime')} />
+              <div className="flex flex-col">
+                <label className="font-semibold mb-2">Check-Out Time</label>
+                <input
+                  type="time"
+                  className="w-full border border-gray-300 rounded-md p-2"
+                  {...register('policy.checkOutTime')}
+                />
+              </div>
+            </div>
           </div>
 
           <div>
@@ -388,7 +399,7 @@ Found."
             />
 
             <label className="font-semibold mt-2">Cards Accepted</label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
               <Checkbox
                 {...register('acceptedCards.visaCard')}
                 label="Visa"

@@ -4,8 +4,8 @@ export const TribeAfrica = ({ className, style }: { className?: string; style?: 
   return (
     <img
       src={TAlogo}
-      alt=""
-      className={` max-h-4 m-0 inline-block relative ${className}`}
+      alt="err"
+      className={`h-4 inline-block align-middle ${className}`}
       style={{
         ...style,
         bottom: '2px',

@@ -18,42 +18,64 @@ const CustomInput: React.FC<HookInputProps> = forwardRef<HTMLInputElement, HookI
     },
     ref
   ) => {
-    const [touched, setTouched] = useState(false);
+    const [focused, setFocused] = useState(false);
 
-    const handleFocus = () => {
-      setTouched(true);
-    };
+    const hasValue = value !== undefined && value !== null && value !== '';
+
+    const isFloated = focused || hasValue;
+
     return (
-      <div className={`${className} relative group mt-2 my-4`}>
+      <div className={`${className} relative mt-5`}>
+        {/* OUTER LABEL */}
         {label && (
-          <label className="block mb-2 font-semibold">
+          <label className="block mb-1 font-semibold text-sm sm:text-base">
             {label}
-            {required && <span className="text-red-500 text-sm">*</span>}
+            {required && <span className="text-red-500 text-sm ml-1">*</span>}
           </label>
         )}
+
+        {/* FLOATING LABEL */}
         <label
-          className={`absolute left-2.5 origin-0 bg-white cursor-text transition-all
-            ${label ? 'top-11' : 'top-2.5'}
-          ${touched || error ? 'z-10 opacity-100 translate-y-[-1.25rem] scale-75 text-sm text-brand-orange px-2 left-0 duration-300' : '-z-20 opacity-0 translate-y-0 scale-100 text-gray-500 px-0 left-2.5 duration-200'}
-        `}
+          className={`
+    absolute left-3 px-1 bg-white pointer-events-none z-10
+    transition-all duration-200 origin-left leading-tight
+
+    ${isFloated ? 'top--1 text-xs text-brand-orange' : 'top-3 text-sm text-gray-400'}
+  `}
+          style={{
+            maxWidth: 'calc(100% - 1.5rem)',
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            lineHeight: 1.2,
+          }}
         >
           {placeholder}
         </label>
 
+        {/* INPUT */}
         <input
           ref={ref}
           type={type}
           name={name}
           value={value}
           defaultValue={defaultValue}
-          placeholder={!error || touched ? placeholder : ''}
-          onFocus={handleFocus}
-          className={`p-2 block flex-grow bg-transparent w-full border outline-none rounded-md focus:border-brand-orange placeholder:text-gray-500
-          ${error ? 'border-red-500 ' : 'border-gray-400 '} ${customInputClassNames}`}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className={`
+            w-full border rounded-md px-3 pb-3
+            pt-6 sm:pt-7
+            outline-none transition
+            focus:border-brand-orange
+            text-sm sm:text-base
+
+            ${error ? 'border-red-500' : 'border-gray-300'}
+            ${customInputClassNames}
+          `}
           {...props}
         />
-        {/* {error && <span className="absolute text-red-500 text-xs bottom-1 right-1">{error}</span>} */}
-        {error && <span className="text-red-500 text-xs">{error.message}*</span>}
+
+        {/* ERROR */}
+        {error && <span className="text-red-500 text-xs mt-1 block">{error.message}</span>}
       </div>
     );
   }

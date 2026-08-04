@@ -23,7 +23,7 @@ export const HomeHeader = () => {
       content: <PeaceProsperity />,
     },
     { id: 'blogs', title: 'Blogs', isNavLink: true, content: <Blogs /> },
-    { id: 'contact', title: 'Contact', isNavLink: false, content: null },
+    { id: 'contact', title: 'Contact', isNavLink: true, content: <>coming soon</> },
   ];
 
   return <Header menuItems={menuItems} />;

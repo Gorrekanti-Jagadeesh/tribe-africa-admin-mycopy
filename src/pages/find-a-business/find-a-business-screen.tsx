@@ -69,21 +69,44 @@ const FindABusinessScreen: React.FC<findAbusinessProps> = ({ data, mainCategory,
               }}
               image={imageUrl}
               content={
-                <div>
-                  <p className="m-4">
-                    <strong>Business Name : </strong> {eachBusinessType.businessName}
+                <div className="w-full text-left p-4 space-y-2 flex flex-col items-start">
+                  <p className="w-full text-left break-words">
+                    <strong>Business Name:</strong> {eachBusinessType.businessName || 'N/A'}
                   </p>
-                  <p className="m-4">
-                    <strong>Location : </strong>{' '}
-                    {`${eachBusinessType.address.town}, ${eachBusinessType.address.state}, ${eachBusinessType.address.country}`}
+
+                  <p className="w-full text-left break-words">
+                    <strong>Location:</strong>{' '}
+                    {`${eachBusinessType.address?.town || ''}, ${eachBusinessType.address?.state || ''}, ${eachBusinessType.address?.country || ''}`}
                   </p>
                 </div>
               }
               footer={
-                <div>
-                  <p>+{eachBusinessType.businessContactInformation.phoneNumber}</p>
-                  <p>{eachBusinessType.businessContactInformation.email}</p>
-                  <p>{eachBusinessType.businessContactInformation.website}</p>
+                <div className="w-full text-left p-4 border-t flex flex-col items-start space-y-2 text-sm">
+                  <div className="w-full break-words">
+                    <span className="font-semibold">Phone:</span> +
+                    {eachBusinessType.businessContactInformation?.phoneNumber || 'N/A'}
+                  </div>
+
+                  <div className="w-full break-words">
+                    <span className="font-semibold">Email:</span>{' '}
+                    {eachBusinessType.businessContactInformation?.email || 'N/A'}
+                  </div>
+
+                  <div className="w-full break-words">
+                    <span className="font-semibold">Website:</span>{' '}
+                    {eachBusinessType.businessContactInformation?.website ? (
+                      <a
+                        href={eachBusinessType.businessContactInformation.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 underline break-all"
+                      >
+                        Visit Website
+                      </a>
+                    ) : (
+                      'N/A'
+                    )}
+                  </div>
                 </div>
               }
             />

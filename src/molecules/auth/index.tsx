@@ -7,6 +7,8 @@ import Button from '@atoms/custom-button/button';
 import { signInWithGoogle } from '../../../firebaseDB';
 import AuthWrapper from './auth-wrapper';
 import { Link } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
+import { AuthType } from './types';
 
 interface User {
   email: string | null;
@@ -14,79 +16,66 @@ interface User {
   photoURL?: string;
 }
 
+/* ================= USER POPOVER ================= */
+
 const UserPlaceholder = ({ user, handleLogout }: { user: User; handleLogout: () => void }) => {
-  const [hover, setHover] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative" onClick={() => setHover(!hover)}>
-      <div className="flex items-center gap-2 cursor-pointer">
-        <img
-          src={
-            user?.photoURL
-              ? user.photoURL
-              : 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg'
-          }
-          alt="Profile"
-          className="w-8 h-8 rounded-full border border-black"
-        />
-        <span className="text-gray-700 font-mono">▼</span>
-      </div>
+    <div className="relative" onClick={() => setOpen(!open)}>
+      <FaUserCircle className="w-8 h-8 text-gray-400 cursor-pointer" />
 
-      {hover && (
+      {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
-          <div className="p-4">
-            <h1 className="font-semibold text-gray-800">{user.displayName}</h1>
-          </div>
-          <div className="border-t">
-            <Link to={'/user/dashboard'} className="block px-4 py-2 hover:bg-gray-100">
-              <button className="w-full text-left text-violet-500">Dashboard</button>
-            </Link>
-          </div>
-          <div className="border-t">
-            <button className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
+          <div className="border-b px-4 py-2 font-semibold text-gray-800">{user.displayName}</div>
+
+          <Link to="/user/dashboard" className="block px-4 py-2 hover:bg-gray-100">
+            <button className="text-violet-500">Dashboard</button>
+          </Link>
+
+          <button className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       )}
     </div>
   );
 };
 
+/* ================= MAIN AUTH ================= */
+
 export const Auth = () => {
   const googleUserCookie = Cookies.get('googleUser');
   const emailUserCookie = Cookies.get('emailUser');
 
-  const [googleUser, setGoogleUser] = useState(googleUserCookie ? JSON.parse(googleUserCookie) : null);
-  const [emailUser, setEmailUser] = useState(emailUserCookie ? JSON.parse(emailUserCookie) : null);
+  const [googleUser, setGoogleUser] = useState<User | null>(googleUserCookie ? JSON.parse(googleUserCookie) : null);
 
-  const [isLogin, setIsLogin] = useState(googleUser || emailUser);
+  const [emailUser, setEmailUser] = useState<User | null>(emailUserCookie ? JSON.parse(emailUserCookie) : null);
+
+  const user = googleUser || emailUser;
+  const isLogin = Boolean(user);
+
+  const [type, setType] = useState<AuthType>('login');
+  const [isOpen, setIsOpen] = useState(false);
+
+  /* ================= HANDLERS ================= */
 
   const handleGoogleLogin = async () => {
-    try {
-      const user = await signInWithGoogle();
-      if (user) {
-        handleEmailLoginSuccess(user);
-        setIsOpen(false);
-      }
-    } catch (error) {
-      console.error('Error during Google sign-in:', error);
+    const user = await signInWithGoogle();
+
+    if (user) {
+      Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
+      setGoogleUser(user);
+      setIsOpen(false);
     }
   };
-
-  // const handleGoogleLoginSuccess = (user: User) => {
-  //   Cookies.set('googleUser', JSON.stringify(user), { expires: 7 });
-  //   setGoogleUser(user);
-  //   setIsLogin(true);
-  // };
 
   const handleEmailLoginSuccess = (user: User) => {
     Cookies.set('emailUser', JSON.stringify(user), { expires: 7 });
     setEmailUser(user);
-    setIsLogin(true);
   };
 
-  const handleAuth = (authType: string) => {
+  const handleAuth = (authType: AuthType) => {
     setType(authType);
     setIsOpen(true);
   };
@@ -94,37 +83,40 @@ export const Auth = () => {
   const handleLogout = () => {
     Cookies.remove('emailUser');
     Cookies.remove('googleUser');
-    setGoogleUser(false);
-    setEmailUser(false);
-    setIsLogin(false);
+    setGoogleUser(null);
+    setEmailUser(null);
   };
 
-  const [type, setType] = useState('login');
-  const [isOpen, setIsOpen] = useState(false);
+  /* ================= UI ================= */
+
   return (
     <div className="flex items-center gap-3">
-      {isLogin ? (
-        <UserPlaceholder user={googleUser ? googleUser : emailUser} handleLogout={handleLogout} />
-      ) : (
-        <div className="flex gap-2">
-          {/* Figma: "Login" 20px Inter w500, no background */}
-          <button
-            className="text-black hover:text-brand-orange transition-colors duration-200 px-2 py-2"
-            style={{ fontFamily: 'Inter, sans-serif', fontSize: '20px', fontWeight: 500 }}
-            onClick={() => handleAuth('login')}
-          >
-            Login
-          </button>
-          <Button className="hidden md:inline-block" onClick={() => handleAuth('register')}>
-            Sign up
-          </Button>
-        </div>
-      )}
+      {/* DESKTOP */}
+      <div className="hidden md:flex items-center gap-3">
+        {isLogin ? (
+          <UserPlaceholder user={user as User} handleLogout={handleLogout} />
+        ) : (
+          <>
+            <button onClick={() => handleAuth('login')}>Login</button>
 
-      {/* Modal for Auth forms */}
+            <Button onClick={() => handleAuth('register')}>Sign up</Button>
+          </>
+        )}
+      </div>
+
+      {/* MOBILE */}
+      <div className="flex md:hidden items-center gap-3">
+        {isLogin ? (
+          <UserPlaceholder user={user as User} handleLogout={handleLogout} />
+        ) : (
+          <button onClick={() => handleAuth('login')}>Login</button>
+        )}
+      </div>
+
+      {/* MODAL */}
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <AuthWrapper type={type} setType={setType} handleGoogleLogin={handleGoogleLogin}>
-          {type == 'login' ? (
+          {type === 'login' ? (
             <Login setIsOpen={setIsOpen} setType={setType} onEmailLoginSuccess={handleEmailLoginSuccess} />
           ) : (
             <Signup setIsOpen={setIsOpen} />

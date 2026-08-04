@@ -1,7 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth, db, doc, setDoc } from '../../../firebaseDB';
-
 import Button from '@atoms/custom-button/button';
 
 interface User {
@@ -10,7 +9,11 @@ interface User {
   email: string | null;
 }
 
-const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen }) => {
+interface SignupProps {
+  setIsOpen: (open: boolean) => void;
+}
+
+const Signup: React.FC<SignupProps> = ({ setIsOpen }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -25,30 +28,25 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
     }
 
     try {
-      // Create a new user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user; // Firebase User object
 
-      // Get the accessToken from the Firebase user
+      const firebaseUser = userCredential.user;
+
       const accessToken = await firebaseUser.getIdToken();
 
-      // Ensure uid is not null
       if (!firebaseUser.uid) {
         throw new Error('User UID is missing');
       }
 
-      // Create a custom User object that matches your interface
       const user: User = {
-        accessToken: accessToken,
+        accessToken,
         uid: firebaseUser.uid,
         email: firebaseUser.email,
       };
 
-      const userId: string = user.uid ? user.uid : '';
+      const userId = user.uid ?? '';
 
-      // Save user details to Firestore
-      const userDocRef = doc(db, 'users', userId);
-      await setDoc(userDocRef, {
+      await setDoc(doc(db, 'users', userId), {
         displayName: `${firstName} ${lastName}`,
         email: user.email,
         uid: user.uid,
@@ -56,18 +54,13 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
         accessToken: user.accessToken,
         photoURL:
           'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg',
-        // Add any other fields you want to store
       });
 
-      // Close the signup modal
       setIsOpen(false);
     } catch (error) {
-      // Check if the error is an instance of Error before accessing the message
       if (error instanceof Error) {
-        console.error('Error during signup:', error.message);
         setError(error.message);
       } else {
-        console.error('An unknown error occurred:', error);
         setError('An unknown error occurred');
       }
     }
@@ -75,7 +68,6 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
 
   return (
     <>
-      {/* First Name */}
       <input
         type="text"
         placeholder="First Name"
@@ -84,7 +76,6 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
         className="border p-3 rounded-lg w-full mb-4"
       />
 
-      {/* Last Name */}
       <input
         type="text"
         placeholder="Last Name"
@@ -93,7 +84,6 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
         className="border p-3 rounded-lg w-full mb-4"
       />
 
-      {/* Email */}
       <input
         type="email"
         placeholder="Email"
@@ -102,16 +92,14 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
         className="border p-3 rounded-lg w-full mb-4"
       />
 
-      {/* Password */}
       <input
         type="password"
-        placeholder="Password (at least 8 characters)"
+        placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="border p-3 rounded-lg w-full mb-4"
       />
 
-      {/* Confirm Password */}
       <input
         type="password"
         placeholder="Confirm Password"
@@ -120,10 +108,8 @@ const Signup: React.FC<{ setIsOpen: (open: boolean) => void }> = ({ setIsOpen })
         className="border p-3 rounded-lg w-full mb-4"
       />
 
-      {/* Error Message */}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
-      {/* Sign Up Button */}
       <Button className="w-full mb-2" onClick={handleSignup}>
         Sign Up
       </Button>
